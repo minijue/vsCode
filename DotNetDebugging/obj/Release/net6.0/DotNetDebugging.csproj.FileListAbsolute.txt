@@ -1,0 +1,15 @@
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\DotNetDebugging.exe
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\DotNetDebugging.deps.json
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\DotNetDebugging.runtimeconfig.json
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\DotNetDebugging.dll
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\ref\DotNetDebugging.dll
+D:\WANGJUE\Git\vsCode\DotNetDebugging\bin\Release\net6.0\DotNetDebugging.pdb
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.csproj.AssemblyReference.cache
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.GeneratedMSBuildEditorConfig.editorconfig
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.AssemblyInfoInputs.cache
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.AssemblyInfo.cs
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.csproj.CoreCompileInputs.cache
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.dll
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\ref\DotNetDebugging.dll
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.pdb
+D:\WANGJUE\Git\vsCode\DotNetDebugging\obj\Release\net6.0\DotNetDebugging.genruntimeconfig.cache
