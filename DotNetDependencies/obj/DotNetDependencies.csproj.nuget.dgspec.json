@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj": {}
+    "d:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj": {}
   },
   "projects": {
-    "D:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj": {
+    "d:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj",
+        "projectUniqueName": "d:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj",
         "projectName": "DotNetDependencies",
-        "projectPath": "D:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj",
+        "projectPath": "d:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\DotNetDependencies.csproj",
         "packagesPath": "C:\\Users\\WJZLDOUDOU\\.nuget\\packages\\",
-        "outputPath": "D:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\obj\\",
+        "outputPath": "d:\\WANGJUE\\Git\\vsCode\\DotNetDependencies\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\WJZLDOUDOU\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -40,7 +40,7 @@
           "dependencies": {
             "Humanizer": {
               "target": "Package",
-              "version": "[2.7.9, )"
+              "version": "[2.14.1, )"
             }
           },
           "imports": [

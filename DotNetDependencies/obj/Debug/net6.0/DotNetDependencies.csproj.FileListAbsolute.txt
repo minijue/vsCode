@@ -57,3 +57,9 @@ D:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\zh-CN\Humanizer.resour
 D:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\zh-Hans\Humanizer.resources.dll
 D:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\zh-Hant\Humanizer.resources.dll
 D:\WANGJUE\Git\vsCode\DotNetDependencies\obj\Debug\net6.0\DotNetDependencies.csproj.CopyComplete
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\az\Humanizer.resources.dll
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\hy\Humanizer.resources.dll
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\is\Humanizer.resources.dll
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\ko-KR\Humanizer.resources.dll
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\ku\Humanizer.resources.dll
+d:\WANGJUE\Git\vsCode\DotNetDependencies\bin\Debug\net6.0\th-TH\Humanizer.resources.dll
