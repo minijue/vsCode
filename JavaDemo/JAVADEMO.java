@@ -1,23 +1,18 @@
+import java.util.Scanner;
 
 public class JAVADEMO {
     public static void main(String[] args) {
-        int x = 1;
-        switch (x) {
-            case 0:
-                System.out.println("x is less than one");
-                break;
-            case 1:
-                System.out.println("x is less than two");
-                break;
-            case 2:
-                System.out.println("x is less than three");
-                break;
-            case 3:
-                System.out.println("x is less than four");
-                break;
-            case 4:
-                System.out.println("x is less than five");
-                break;
+        Scanner sin = new Scanner(System.in);
+        String article = sin.nextLine();
+        sin.close();
+        String[] words = article.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            StringBuffer sb = new StringBuffer(words[i]);
+            System.out.print(sb.reverse());
+            if (i < words.length - 1)
+                System.out.print(" ");
+            else
+                System.out.println();
         }
     }
 }
