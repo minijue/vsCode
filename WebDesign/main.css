@@ -1,0 +1,28 @@
+.intro {
+    font-style: italic;
+    font-family: Arial;
+    font-size: 32px;
+    color: Red;
+    font-weight: 800;
+    text-transform: lowercase;
+    text-decoration: line-through;
+    text-align: right;
+}
+
+h1 {
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: Blue;
+    text-shadow: 2px 2px 1px gray,
+        5px 3px 5px beige;
+}
+
+u {
+    text-transform: capitalize;
+}
+
+p {
+    line-height: 1.8;
+    letter-spacing: 3px;
+    word-spacing: 5px;
+}
