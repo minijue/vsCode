@@ -3,10 +3,20 @@ p {
     padding: 4px 7px 4px 7px;
     width: 200px;
     box-sizing: border-box;
-    border: 3px solid black;
+    border: 3px solid azure;
+    border-radius: 100px;
+    color: white;
 }
 
 .box {
-    border: 3px solid red;
+    border: 3px outset red;
+    border-radius: 10px;
     width: 50%;
+    height: 150px;
+    padding: 100px;
+    background-color: blue;
+    background-image: url('A.jpg');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: contain;
 }
