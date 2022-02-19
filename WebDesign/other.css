@@ -3,9 +3,9 @@ p {
     padding: 4px 7px 4px 7px;
     width: 200px;
     box-sizing: border-box;
-    border: 3px solid azure;
+    border: 3px solid blue;
     border-radius: 100px;
-    color: white;
+    color: red;
 }
 
 .box {
@@ -19,4 +19,24 @@ p {
     background-repeat: no-repeat;
     background-position: right center;
     background-size: contain;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #b0d1e4;
+    ;
+}
+
+tr:nth-child(odd) {
+    background-color: #6aabd1;
 }
