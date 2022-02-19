@@ -1,0 +1,19 @@
+   input[type='text'], [type='email'], [type='tel'] {
+       border: 1px solid green;
+       width: 100%;
+       padding: 5px;
+   }
+
+   label {
+       font-weight: bold;
+       color: green;
+   }
+
+   button, input[type='button']:hover {
+       background-color: green;
+       border: none;
+       border-radius: 20px;
+       padding: 10px 20px;
+       font-weight: bold;
+       color: white;
+   }
