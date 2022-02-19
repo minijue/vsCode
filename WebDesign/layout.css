@@ -1,0 +1,54 @@
+p {
+    background-color: red;
+    border: 1px solid blue;
+    padding: 5px;
+}
+
+b {
+    background-color: yellow;
+    border: 1px dashed black;
+    display: block;
+}
+
+section {
+    display: flex;
+}
+
+article {
+    background-color: blue;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    flex: 1;
+}
+
+.special {
+    flex: 2;
+}
+
+main {
+    display: flex;
+}
+
+header, footer {
+    background-color: green;
+    color: aliceblue;
+    padding: 10px;
+    margin: 10px;
+}
+
+.content {
+    background: red;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    flex: 3;
+}
+
+.side {
+    background: red;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    flex: 1
+}
