@@ -1,56 +1,31 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Program {
+
     public static void main(String[] args) {
-        Bowling game = new Bowling();
+        int[] monthdays = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
         Scanner sc = new Scanner(System.in);
-        for (int i = 0; i < 3; i++) {
-            String input = sc.nextLine();
-            String[] values = input.split(" ");
-            String name = values[0];
-            int points = Integer.parseInt(values[1]);
-            game.addPlayer(name, points);
-        }
-        game.getWinner();
-    }
-}
+        int year = sc.nextInt();
+        int month = sc.nextInt();
+        int day = sc.nextInt();
 
-class Bowling {
-    HashMap<String, Integer> players;
-
-    Bowling() {
-        players = new HashMap<String, Integer>();
-    }
-
-    public void addPlayer(String name, int p) {
-        players.put(name, p);
-    }
-
-    void getWinner() {
-        Set<String> set = players.keySet();
-
-        Iterator<String> it = set.iterator();
-
-        Integer before = 0;
-
-        String bef = "";
-
-        while (it.hasNext()) {
-
-            String Key = it.next();
-
-            Integer func = players.get(Key);
-
-            if (func > before) {
-                before = func;
-
-                bef = Key;
-
+        if (year <= 0 || month < 1 || month > 12 || day < 0) {
+            System.out.println("Invalid date!");
+        } else {
+            if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
+                monthdays[1] = 29;
             }
-
+            if (day > monthdays[month - 1])
+                System.out.println("Invalid date!");
+            else {
+                int days = 0;
+                for (int i = 0; i < month - 1; i++) {
+                    days += monthdays[i];
+                }
+                System.out.println(days + day);
+            }
         }
-
-        System.out.println(bef);
+        sc.close();
     }
-
 }
