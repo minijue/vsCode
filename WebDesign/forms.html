@@ -1,5 +1,15 @@
 <html>
 <link rel="stylesheet" href="forms.css">
+<script>
+
+    window.onload = function () {
+        let btn = document.getElementById("myButton");
+        btn.onclick = function () {
+            console.log("Hello");
+        };
+    };
+
+</script>
 
 <body>
     <form>
@@ -33,7 +43,9 @@
             <option>Orange</option>
         </select>
         <br>
-        <button>Send</button>
+        <button id="myButton">Click me!
+
+        </button>
         <br>
         <input type="button" value="Send">
         <input type="reset" value="Reset">

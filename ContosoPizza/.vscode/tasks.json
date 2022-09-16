@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DotNetDebugging/DotNetDebugging.csproj",
+                "${workspaceFolder}/ContosoPizza.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/DotNetDebugging/DotNetDebugging.csproj",
+                "${workspaceFolder}/ContosoPizza.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/DotNetDebugging/DotNetDebugging.csproj"
+                "${workspaceFolder}/ContosoPizza.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
