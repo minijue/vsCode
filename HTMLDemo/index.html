@@ -4,6 +4,7 @@
   <head>
     <title>My Landing Page</title>
     <link href="./main.css" rel="stylesheet" type="text/css" />
+    <script src="./jquery/jquery-3.6.1.js"></script>
   </head>
   <body>
     <header>
@@ -11,6 +12,10 @@
         <h1>Awesome App</h1>
         <h2>This app will change your life!</h2>
         <a class="btn">Download Now</a>
+        <div class="submenu">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+        </div>
       </div>
     </header>
 
@@ -51,4 +56,11 @@
       </div>
     </footer>
   </body>
+  <script>
+    $(function () {
+      $(".btn").click(function () {
+        $(".submenu").slideToggle(500);
+      });
+    });
+  </script>
 </html>
