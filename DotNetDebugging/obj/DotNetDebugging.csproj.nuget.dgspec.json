@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WANGJUE\\Git\\vsCode\\DotNetDebugging\\DotNetDebugging.csproj": {}
+    "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj": {}
   },
   "projects": {
-    "D:\\WANGJUE\\Git\\vsCode\\DotNetDebugging\\DotNetDebugging.csproj": {
+    "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WANGJUE\\Git\\vsCode\\DotNetDebugging\\DotNetDebugging.csproj",
+        "projectUniqueName": "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
         "projectName": "DotNetDebugging",
-        "projectPath": "D:\\WANGJUE\\Git\\vsCode\\DotNetDebugging\\DotNetDebugging.csproj",
-        "packagesPath": "C:\\Users\\WJZLDOUDOU\\.nuget\\packages\\",
-        "outputPath": "D:\\WANGJUE\\Git\\vsCode\\DotNetDebugging\\obj\\",
+        "projectPath": "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
+        "packagesPath": "/home/wangjue/.nuget/packages/",
+        "outputPath": "/home/wangjue/files/git/vsCode/DotNetDebugging/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\WJZLDOUDOU\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/wangjue/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -52,7 +52,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/dotnet6-6.0.110/sdk/6.0.110/RuntimeIdentifierGraph.json"
         }
       }
     }
