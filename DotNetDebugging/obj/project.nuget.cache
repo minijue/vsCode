@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "vF9zB3Phe1oPzRHK/w9OAqG/HMxOeUFEEjqWI/Ry14nHRjx9d4lq38xxd5Fa1jaquYlmXd8lxkcwFJzlAxzVow==",
   "success": true,
   "projectFilePath": "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
+=======
+  "dgSpecHash": "vL4iACdlv0y8eYnHGzqXMvDrotBHG7PpR6/3Tau1ls2eyjI8aYY2QeHvroj06Ajz4lGyYa8QnSpTNYGnDu+Z9g==",
+  "success": true,
+  "projectFilePath": "/Users/wangjue/Files/Git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
+>>>>>>> 6af720c52f40655e7d78b66474909327ad2ab4e9
   "expectedPackageFiles": [],
   "logs": []
 }

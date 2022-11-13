@@ -8,11 +8,16 @@
     "net6.0": []
   },
   "packageFolders": {
+<<<<<<< HEAD
     "/home/wangjue/.nuget/packages/": {}
+=======
+    "/Users/wangjue/.nuget/packages/": {}
+>>>>>>> 6af720c52f40655e7d78b66474909327ad2ab4e9
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
       "projectName": "DotNetDebugging",
       "projectPath": "/home/wangjue/files/git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
@@ -21,6 +26,16 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/wangjue/.nuget/NuGet/NuGet.Config"
+=======
+      "projectUniqueName": "/Users/wangjue/Files/Git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
+      "projectName": "DotNetDebugging",
+      "projectPath": "/Users/wangjue/Files/Git/vsCode/DotNetDebugging/DotNetDebugging.csproj",
+      "packagesPath": "/Users/wangjue/.nuget/packages/",
+      "outputPath": "/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/wangjue/.nuget/NuGet/NuGet.Config"
+>>>>>>> 6af720c52f40655e7d78b66474909327ad2ab4e9
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -58,7 +73,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/dotnet6-6.0.110/sdk/6.0.110/RuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.102/RuntimeIdentifierGraph.json"
+>>>>>>> 6af720c52f40655e7d78b66474909327ad2ab4e9
       }
     }
   }

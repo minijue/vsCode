@@ -13,6 +13,7 @@ D:/WANGJUE/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.dll
 D:/WANGJUE/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/ref/DotNetDebugging.dll
 D:/WANGJUE/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.pdb
 D:/WANGJUE/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.genruntimeconfig.cache
+<<<<<<< HEAD
 /home/wangjue/files/git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging
 /home/wangjue/files/git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.deps.json
 /home/wangjue/files/git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.runtimeconfig.json
@@ -28,3 +29,20 @@ D:/WANGJUE/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.genruntim
 /home/wangjue/files/git/vsCode/DotNetDebugging/obj/Debug/net6.0/ref/DotNetDebugging.dll
 /home/wangjue/files/git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.pdb
 /home/wangjue/files/git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.genruntimeconfig.cache
+=======
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.deps.json
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.runtimeconfig.json
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.dll
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/ref/DotNetDebugging.dll
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/bin/Debug/net6.0/DotNetDebugging.pdb
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.csproj.AssemblyReference.cache
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.AssemblyInfoInputs.cache
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.AssemblyInfo.cs
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.csproj.CoreCompileInputs.cache
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.dll
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/ref/DotNetDebugging.dll
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.pdb
+/Users/wangjue/Files/Git/vsCode/DotNetDebugging/obj/Debug/net6.0/DotNetDebugging.genruntimeconfig.cache
+>>>>>>> 6af720c52f40655e7d78b66474909327ad2ab4e9
