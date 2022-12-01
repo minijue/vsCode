@@ -38,3 +38,5 @@ log/
 *.pid
 *.orig
 temp/
+MybatisDemo/mybatisdemo/bin/mybatis-config.xml
+MybatisDemo/mybatisdemo/bin/com/example/wangjue/mappers/DogMapper.xml
