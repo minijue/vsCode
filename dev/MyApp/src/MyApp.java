@@ -1,13 +1,14 @@
-public class MyApp {
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Student s1 = new Student();
-        s1.no = 1;
-        s1.name = "Zhang3";
-        s1.score = 60.0;
+import java.util.Scanner;
 
-        s1.display();
+public class MyApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int f = 0;
+        for (int i = 2; i <= n; i++) {
+            f *= i;
+        }
+        System.out.println(f);
+        sc.close();
     }
 }
