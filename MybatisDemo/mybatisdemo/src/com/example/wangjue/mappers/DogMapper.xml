@@ -6,4 +6,17 @@
     <select id="selectDog" resultType="com.example.wangjue.Dog">
         select * from dog
     </select>
+    <select id="selectByName" resultType="com.example.wangjue.Dog">
+        select * from dog where name like '%${Name}%'
+    </select>
+    <insert id="insertDog" parameterType="com.example.wangjue.Dog">
+        insert into dog(name, age) values(#{name}, #{age})
+    </insert>
+    <update id="updateDog">
+         <!-- parameterType="java.util.Map"> -->
+        update dog set age=#{age} where id = 1
+    </update>
+    <delete id="deleteDog">
+        delete from dog where id=#{id}
+    </delete>
 </mapper>
