@@ -2,7 +2,6 @@ package com.example.wangjue;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -15,7 +14,7 @@ public class App {
         InputStream inputStream = null;
 
         try {
-            inputStream = Resources.getResourceAsStream("mybatis-config.xml");
+            inputStream = Resources.getResourceAsStream("resource/mybatis-config.xml");
         } catch (IOException e) {
             e.printStackTrace();
         }
