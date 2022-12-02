@@ -15,6 +15,6 @@
         </environment>
     </environments>        
     <mappers>
-        <mapper resource="com/example/wangjue/mappers/DogMapper.xml"/>
+        <package name="com.mapper" />
     </mappers>
 </configuration>

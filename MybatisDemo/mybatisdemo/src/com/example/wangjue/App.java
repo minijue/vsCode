@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.mapper.DogMapper;
+
 public class App {
     public static void main(String[] args) throws Exception {
         InputStream inputStream = null;
@@ -20,7 +22,7 @@ public class App {
         }
 
         SqlSessionFactory build = new SqlSessionFactoryBuilder().build(inputStream);
-        SqlSession sqlSession = build.openSession();
+        SqlSession sqlSession = build.openSession();      
         
         // --insert into--
         // Dog dog = new Dog();
@@ -41,17 +43,20 @@ public class App {
         // --delete--
         // sqlSession.delete("dog.deleteDog", 2);
 
-        sqlSession.commit();
+        // sqlSession.commit();
 
         // query
-        List<Object> objects = sqlSession.selectList("dog.selectDog");
+        DogMapper mapper = sqlSession.getMapper(DogMapper.class);
+        //List<Object> objects = sqlSession.selectList("dog.selectDog");
+        List<Dog> objects = mapper.selectDog();
 
-        for (Object ob : objects) {
-            System.out.println((Dog) ob);
+        for (Dog ob : objects) {
+            System.out.println(ob);
         }
 
         System.out.println();
-        List<Dog> dogs = sqlSession.selectList("dog.selectByName", "Haha");
+        //List<Dog> dogs = sqlSession.selectList("dog.selectByName", "Haha");
+        List<Dog> dogs = mapper.selectByName("Haha");
         for (Dog d : dogs) {
             System.out.println(d);
         }
