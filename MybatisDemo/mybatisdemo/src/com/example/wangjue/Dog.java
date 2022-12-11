@@ -1,6 +1,8 @@
 package com.example.wangjue;
 
-public class Dog {
+import java.io.Serializable;
+
+public class Dog implements Serializable{
     private Integer id;
     private String name;
     private Integer age;

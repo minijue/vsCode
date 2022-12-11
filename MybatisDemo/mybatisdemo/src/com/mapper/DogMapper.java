@@ -7,6 +7,8 @@ import com.example.wangjue.*;
 public interface DogMapper {
     List<Dog> selectDog();
 
+    Dog selectOneDog();
+
     int insertDog(Dog dog);
     
     int updateDog(int age);

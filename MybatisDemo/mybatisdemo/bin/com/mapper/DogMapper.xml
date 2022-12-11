@@ -3,13 +3,17 @@
     PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.DogMapper">
-    <select id="selectDog" resultType="com.example.wangjue.Dog">
+    <cache/>
+    <select id="selectDog" resultType="Dog">
         select * from dog
     </select>
-    <select id="selectByName" resultType="com.example.wangjue.Dog">
+    <select id="selectOneDog" resultType="Dog">
+        select * from dog where id=1
+    </select>
+    <select id="selectByName" resultType="Dog">
         select * from dog where name like '%${Name}%'
     </select>
-    <insert id="insertDog" parameterType="com.example.wangjue.Dog">
+    <insert id="insertDog" parameterType="Dog">
         insert into dog(name, age) values(#{name}, #{age})
     </insert>
     <update id="updateDog">
