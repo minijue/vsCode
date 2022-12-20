@@ -1,87 +1,107 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
-import java.util.Scanner;
-
-
-public class App{
-    public static void main(String[] args){
-        Scanner in = new Scanner(System.in);
-        Fraction a =new Fraction(in.nextInt(),in.nextInt());
-        Fraction b = new Fraction(in.nextInt(),in.nextInt());
-        a.print();
-        b.print();
-        a.plus(b).print();
-        a.multiply(b).plus(new Fraction(5,6)).print();
-        a.print();
-        b.print();
-        in.close(); 
+public class App {
+    public static void main(String[] args) {
+        try {
+            char c = (char) System.in.read();
+            switch (c) {
+                case 'b', 'B' -> backdupDB();
+                case 'r', 'R' -> System.out.println();
+                default -> System.out.println("输入错误！");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    private static void backdupDB() {
+        String dbURL = "jdbc:sqlserver://192.168.7.10:1433;databasename=testdb; user=sa; password=sqlserverWj952; encrypt=true; trustServerCertificate=true";
+        ArrayList<Student> ss = new ArrayList<>();
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            try (Connection dbConn = DriverManager.getConnection(dbURL);
+                    Statement stmt = dbConn.createStatement()) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM student");
+                Student s = new Student();
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    s.setId(id);
+                    String name = rs.getString("name");
+                    s.setName(name);
+                    BigDecimal score = rs.getBigDecimal("score");
+                    s.setScore(score);
+
+                    ss.add(s);
+                }
+            } catch (SQLException e) {
+                System.out.print("读取数据库失败");
+            }
+
+        } catch (ClassNotFoundException e1) {
+            System.out.println("初始化失败");
+        }
+
+        try (FileOutputStream fis = new FileOutputStream("d:\\backup.dat");
+                ObjectOutputStream oos = new ObjectOutputStream(fis)) {
+                    for(Student s : ss) {
+                        oos.writeObject(s);
+                    }
+        } catch(Exception e) {
+            System.out.println("备份至文件失败");
+        }
+    }
 }
 
-class Fraction {
-    int a, b;
-    Fraction(int a1, int b1) {
-        a = a1;
-        b = b1;
+class Student implements Serializable {
+    private int id;
+    private String name;
+    private BigDecimal Score;
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
-
-    private void yunfeng()
-    {
-        int aa = Math.abs(a);
-        int bb = Math.abs(b);
-        if (a * b >= 0) {
-            a = aa;
-            b = bb;
-        }
-        else {
-            a = -aa;
-            b = bb;
-        }
-
-        for (int i = aa > bb ? bb : aa; i > 0; i--)
-        {
-            if (aa % i == 0 && bb % i == 0)
-            {
-                a /= i;
-                b /= i;
-                break;
-            }
-        }
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
-
-    void print()   {
-
-        if (b == 0)
-            System.out.println("错误，分母不能为0");
-
-        else if (a == 0)
-            System.out.println("0");
-        else {
-            yunfeng();
-            if (a != b)
-                System.out.printf("%d/%d\n", a, b);
-            else
-                System.out.println("1");
-        }
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
-
-    Fraction plus(Fraction b2) {
-        Fraction C;
-        int p = b;
-        a *= b2.b;
-        b *= b2.b;
-        b2.a *= p;
-        b2.b *= p;
-        C.a = a + b2.a;
-        C.b = b;
-        return C;
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
-
-    Fraction multiply(Fraction b2)   {
-        Fraction C;
-        C.a = a * b2.a;
-        C.b = b * b2.b;
-        return C;
+    /**
+     * @return the score
+     */
+    public BigDecimal getScore() {
+        return Score;
     }
-
+    /**
+     * @param score the score to set
+     */
+    public void setScore(BigDecimal score) {
+        Score = score;
+    }
 }
