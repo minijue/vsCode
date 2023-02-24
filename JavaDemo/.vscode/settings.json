@@ -1,0 +1,11 @@
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "MyApp/lib/mssql-jdbc-11.2.0.jre18.jar",
+    "MyApp/lib/mysql-connector-j-8.0.31.jar"
+  ],
+  "diffEditor.ignoreTrimWhitespace": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true
+}
