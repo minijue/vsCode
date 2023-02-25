@@ -1,0 +1,8 @@
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "MyApp/lib/mysql-connector-j-8.0.31.jar",
+    "MyApp/lib/mssql-jdbc-11.2.0.jre18.jar",
+    "MyApp/lib/druid-1.2.9.jar"
+  ]
+}

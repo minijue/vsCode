@@ -1,0 +1,24 @@
+ header {
+    text-align: center;
+ }
+ 
+ h3 {
+     font-size: 1.2em;
+     margin: 2em 0;
+ }
+
+ article {
+     text-indent: 2em;
+ }
+
+ footer {
+    text-align: center;
+ }
+
+ #btn1 {
+    color: red;
+ }
+
+ .btnstyle {
+    width: 50pt;
+ }
