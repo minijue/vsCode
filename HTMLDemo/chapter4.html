@@ -1,62 +1,125 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Section 4 Demo</title>
     <style>
-      a:link {
-        color: red;
+      table {
+        width: 400px;
       }
-      a:hover {
-        color: black;
+      table,
+      tr,
+      th {
+        border: 1px solid #000;
+        border-collapse: collapse;
       }
-      a:visited {
-        color: green;
+      thead,
+      tfoot,
+      tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+      tbody {
+        display: block;
+        height: 150px; 
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      td {
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <a href="http://www.ecjtu.edu.cn/" title="ECJTU" target="_blank"
-      >Example Website</a
-    >
-    <p>
-      <img src="img_blue_char.png" alt="blue chart" />
-    </p>
-    <p><img src="img_blue_msg.png" alt="blue msg" /></p>
-    <p>
-      <img src="img_blue_pin.png" alt="blue pin" width="50" height="50" />
-      <img
-        src="img_blue_pin.png"
-        alt="blue pin"
-        style="width: 50px; height: 50px"
-      />
-    </p>
-    <p>
-      <a href="https://www.baidu.com/" title="Test Home" target="_blank">
-        <img
-          src="img_blue_chart.png"
-          style="width: 60px; height: 60px; float: right"
-        />
-      </a>
-    </p>
-    <ul style="list-style-type: circle;">
-        <li>Unorder List Item 1</li>
-        <li>Unorder List Item 2</li>
-        <ol>
-            <li>One</li>
-            <li>Two</li>
-            <li>Three</li>
-        </ol>
-        <li>Unorder List Item 3</li>
-    </ul>
-    <ol type="I" start="10">
-        <li>Orderd List Item 1</li>
-        <li>Orderd List Item 2</li>
-        <li>Orderd List Item 3</li>
+    <h4>Use of Links / Images / Nested Lists / Tables</h4>
+    <ol>
+      <li>
+        <a href="https://www.bing.com" title="Bing" target="_blank">Home</a>
+      </li>
+      <li>
+        Image
+        <ul style="list-style-type: none">
+          <li>
+            <a
+              href="https://www.bing.com"
+              title="Bing logo Link"
+              target="_blank"
+              ><img src="NEW2027.JPG" alt="bing logo" width="50" height="100"
+            /></a>
+          </li>
+          <li>
+            <a
+              href="https://www.sina.com.cn"
+              title="Sina logo Link"
+              target="_blank"
+            >
+              <img src="TFER.JPG" alt="sina logl" width="50" height="50" />
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://www.bing.com" title="Bing Link" target="_blank">Link</a>
+      </li>
     </ol>
-    <dl>
-        <dt>Term 1:</dt>
-        <dd>Term 1 Description</dd>
-        <dt>Term 2:</dt>
-        <dd>Term 2 Description</dd>
-    </dl>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Score</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTML</td>
+          <td>80</td>
+          <td>Good</td>
+        </tr>
+        <tr>
+          <td>CSS</td>
+          <td>87</td>
+          <td>Great</td>
+        </tr>
+        <tr>
+          <td>JS</td>
+          <td>77</td>
+          <td>Fine</td>
+        </tr>
+        <tr>
+          <td>SQL</td>
+          <td>90</td>
+          <td>Great</td>
+        </tr>
+        <tr>
+          <td>PHP</td>
+          <td>72</td>
+          <td>Fine</td>
+        </tr>
+        <tr>
+          <td>Python</td>
+          <td>75</td>
+          <td>Fine</td>
+        </tr>
+        <tr>
+          <td>R</td>
+          <td>85</td>
+          <td>Good</td>
+        </tr>
+        <tr>
+          <td>C#</td>
+          <td>81</td>
+          <td>Good</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <th>647</th>
+          <th>Distinction</th>
+        </tr>
+      </tfoot>
+    </table>
   </body>
 </html>
