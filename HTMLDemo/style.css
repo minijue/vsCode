@@ -1,19 +1,73 @@
- header {
+ /* CSS coding */
+ header, footer {
+    display: block;
+    background-color: #daf7a6;
+    padding: 10px;
     text-align: center;
  }
- 
- h3 {
-     font-size: 1.2em;
-     margin: 2em 0;
+
+ body {
+    margin: auto;
+    width: 80%;
+ }
+
+ nav ul {
+    list-style: none;
+    background-color: #8b9e68;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+ }
+
+ nav li {
+    width: 120px;
+    border-bottom: none;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.4em;
+    display: inline-block;
+ }
+
+ nav a {
+    text-decoration: none;
+    color: #fff;
+ }
+
+ nav a:hover {
+    color: #000;
+ }
+
+ section {
+    padding: 20px 0;
+    text-align: center;
+ }
+
+ .imgclass {
+    display: inline-block;
+    border: 1px solid #000;
+    height: 150px;
  }
 
  article {
-     text-indent: 2em;
+    padding: 10px 0;
  }
 
- footer {
-    text-align: center;
+ .artclass div {
+    display: inline-block;
+    padding: 10px;
+    text-align: justify;
+    width: 46%;
  }
+
+ /* h3 {
+    font-size: 1.2em;
+    margin: 2em 0;
+ } 
+
+ article {
+    text-indent: 2em;
+ }*/
+
 
  #btn1 {
     color: red;
