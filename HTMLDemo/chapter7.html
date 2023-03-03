@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Section 7 Demo</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas1"
+      width="300"
+      height="100"
+      style="border: 1px solid #000"
+    ></canvas>
+    <script>
+      var c = document.getElementById("canvas1");
+      var ctx = c.getContext("2d");
+      ctx.moveTo(0, 0);
+      ctx.lineTo(300, 100);
+      ctx.stroke();
+    </script>
+    <br />
+    <svg width="100" height="100">
+      <circle
+        cx="50"
+        cy="50"
+        r="40"
+        stroke="red"
+        stroke-width="1"
+        fill="green"
+      />
+    </svg>
+    <br />
+    <svg width="300" height="300">
+      <rect width="300" height="100"
+      style="fill:rgb(255,0,0);stroke-width:3;stroke:rgb(0,255,0);"
+    </svg>
+    <br />
+    <audio controls loop>
+      <source src="media/test.mp3" type="audio/mp3" />
+      Text for users to say audio element not supported
+    </audio>
+    <br />
+    <video
+      width="300"
+      height="200"
+      controls
+      autoplay
+      onpause="alert('paused');"
+    >
+      <source src="media/VID_20201024_174840.mp4" type="video/mp4" />
+      Text to inform user that browser does not support video element
+    </video>
+    <br />
+    <p>Object:</p>
+    <object width="800" height="300" data="chapter5.html"></object>
+    <br />
+    <br />
+    <p>Embed:</p>
+    <embed width="400" height="300" src="chapter5.html" />
+    <br />
+    <iframe
+      width="956"
+      height="538"
+      src="https://www.bilibili.com/video/BV1sX4y197Mk?t=2.8"
+      title="bilibili video player"
+      frameborder="0"
+      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </body>
+</html>
