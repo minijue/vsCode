@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Section 6 Demo</title>
+  </head>
+  <body>
+    <h4>Form Elements</h4>
+    <form name="form1">
+      <p>Input Element: <input type="text" name="myname" /></p>
+      <p>
+        Textarea Element: <br /><textarea
+          name="mybio"
+          rows="3"
+          cols="15"
+        ></textarea>
+      </p>
+      <p>
+        Select Element:
+        <select name="browsers">
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="opera">Opera</option>
+          <option value="edge">Edge</option>
+          <option value="ie">IE</option>
+          <option value="safari">Safari</option>
+        </select>
+      </p>
+      <p>
+        Select Element with attributes: <br />
+        <select name="browsers" size="4" multiple>
+          <option value="chrome" selected>Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="opera">Opera</option>
+          <option value="edge">Edge</option>
+          <option value="ie">IE</option>
+          <option value="safari">Safari</option>
+        </select>
+      </p>
+      <p>
+        Button Element:
+        <button type="button" onclick="alert('Welcome')">Click</button>
+      </p>
+    </form>
+    <form name="form2">
+      <fieldset>
+        <legend>Personal:</legend>
+        Name: <input type="text" name="myname" /> Age:
+        <input type="text" name="myage" />
+      </fieldset>
+    </form>
+    <form name="form3" oninput="c.value=parseInt(a.value)+parseInt(b.value)">
+      <input list="browsers" />
+      <datalist id="browsers">
+        <option value="Chrome"></option>
+        <option value="Firefox"></option>
+        <option value="Opera"></option>
+      </datalist>
+      <p>
+        <input type="text" name="a" value="50" />+<input
+          type="text"
+          name="b"
+        />=<output name="c" for="a b"></output>
+      </p>
+    </form>
+
+    <form name="form4" method="post">
+      <p>Text: <input type="text" autocomplete="on" /></p>
+      <p>Password: <input type="password" /></p>
+      <p>Submit: <input type="submit" /></p>
+      <p>Reset: <input type="reset" /></p>
+      <p>
+        Radip: <input type="radio" name="gender" value="Male" />Male
+        <input type="radio" name="gender" value="Female" />Female
+        <input type="radio" name="gender" value="Others" />Others
+      </p>
+      <p>
+        Checkbox: <input type="checkbox" name="html" value="HTML" />HTML
+        <input type="checkbox" name="css" value="CSS" />CSS
+      </p>
+      <p>
+        Button:
+        <input type="button" value="Click" onclick="alert('Hello world')" />
+      </p>
+      <p>Email: <input type="email" name="mymail" /></p>
+      <p>Search Field: <input type="search" name="mysearch" /></p>
+      <p>File: <input type="file" name="myfile" /></p>
+      <p>Color: <input type="color" /></p>
+      <p>Date: <input type="date" name="date1" /></p>
+      <p>
+        Date between 2020-2023:
+        <input type="date" name="date2" max="2022-12-31" min="2020-01-01" />
+      </p>
+      <p>
+        Date-Time with no timezone: <input type="datetime-local" name="date4" />
+      </p>
+      <p>Month: <input type="month" name="month1" /></p>
+      <p>Week: <input type="week" name="week1" /></p>
+      <p>Time: <input type="time" name="time1" /></p>
+      <p>
+        Number between 1 and 100:
+        <input type="number" name="num" min="1" max="100" step="2" />
+      </p>
+      <p>Range 1-10: <input type="range" name="range1" min="1" max="10" /></p>
+      <p>
+        Telephone: <input type="tel" name="mytel" pattern="[0-9]{4}-[0-9]{8}"
+      </p>
+      <p>URL: <input type="url" name="url1" /></p>
+    </form>
+    <form name="form6">
+      <p>Value: <input type="text" name="text1" value="Sample" /></p>
+      <p>
+        Read-only: <input type="text" name="text2" value="readonly" readonly />
+      </p>
+      <p>Disabled: <input type="text" name="text3" disabled /></p>
+      <p>Size: <input type="text" name="text4" size="40" /></p>
+      <p>Maxlength: <input type="text" name="text5" maxlength="10" /></p>
+    </form>
+    <form name="form7" method="get">
+      <p>
+        Autocomplete off: <input type="text" name="text1" autocomplete="off" />
+      </p>
+      <p>Autofocus: <input type="text" name="text2" autofocus /></p>
+      <p>
+        Form Enctype:
+        <input
+          type="submit"
+          name="submit"
+          formenctype="multipart/form-data"
+          value="Submit"
+        />
+      </p>
+      <p>
+        Placeholder: <input type="text" name="text3" placeholder="Enter a Text"
+      </p>
+      <p>Required: <input type="text" name="text3" required /></p>
+    </form>
+    <p>
+      Form attribute:
+      <input type="text" name="text5" form="form7" required />
+    </p>
+  </body>
+</html>
