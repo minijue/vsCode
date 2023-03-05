@@ -11,6 +11,26 @@
     width: 80%;
  }
 
+ .imgclass {
+    display: inline-block;
+    border: 1px solid #000;
+    height: 150px;
+    width: 150px;
+ }
+
+ button {
+    width: 100%;
+    margin: auto;
+    display: block;
+    background-color: #8b9e68;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2em;
+    line-height: 40px;
+    height: 40px;
+    border-bottom: 1px solid #888;
+    padding: 0 20px;
+ }
+
  nav ul {
     list-style: none;
     background-color: #8b9e68;
@@ -20,13 +40,14 @@
  }
 
  nav li {
-    width: 120px;
-    border-bottom: none;
-    height: 50px;
-    line-height: 50px;
-    font-size: 1.4em;
-    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    border-bottom: 1px solid #888;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.2em;
+    padding: 0 20px;
  }
+
 
  nav a {
     text-decoration: none;
@@ -42,22 +63,11 @@
     text-align: center;
  }
 
- .imgclass {
-    display: inline-block;
-    border: 1px solid #000;
-    height: 150px;
- }
-
  article {
     padding: 10px 0;
  }
 
- .artclass div {
-    display: inline-block;
-    padding: 10px;
-    text-align: justify;
-    width: 46%;
- }
+
 
  /* h3 {
     font-size: 1.2em;
@@ -75,4 +85,26 @@
 
  .btnstyle {
     width: 50pt;
+ }
+
+ @media screen and (min-width: 800px) {
+    .artclass div {
+       display: inline-block;
+       padding: 10px;
+       text-align: justify;
+       width: 46%;
+    }
+
+    nav li {
+       width: 120px;
+       border-bottom: none;
+       height: 50px;
+       line-height: 50px;
+       font-size: 1.4em;
+       display: inline-block;
+    }
+
+    button {
+       display: none;
+    }
  }

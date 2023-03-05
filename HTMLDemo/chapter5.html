@@ -3,6 +3,17 @@
   <head>
     <title>Section 5 Demo</title>
     <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        if ($(window).width() > 800) $("ul").show();
+        else $("ul").hide();
+        $("button").click(function () {
+          $("ul").slideToggle();
+        });
+      });
+    </script>
   </head>
   <body>
     <header>
@@ -10,6 +21,7 @@
       <h1>Save Birds</h1>
     </header>
     <nav>
+      <button>Click for Menu</button>
       <ul>
         <li><a href="#" title="Home">Home</a></li>
         <li><a href="#" title="About">About</a></li>
