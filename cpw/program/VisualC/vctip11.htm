@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Visual C++编程技巧之十一</title>
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<p align="center"><strong><font face="Arial" size="4">Visual C++</font><font size="4">编程技巧第十一期</font></strong></p>
+
+<p align="center">转载于<font face="Arial">&quot;</font>玉海园<font face="Arial">&quot;</font>网站</p>
+
+<p><strong>一.在只读编辑框中不显示光标</strong></p>
+
+<p>问:在我的程序中有一个只读编辑框用来显示一些消息.当我点击编辑框里面时,光标在<br>
+所点的位置开始闪烁.我不想让光标在只读编辑框中闪烁,这看上去不好,因为我不想在<br>
+里面写任何东西,我该如何去做呢?<br>
+<br>
+答:<br>
+1)如果你不需要滚动显示的话,也许带有WS_EX_CLIENTEDGE的静态控件是更好的选择,<br>
+如果CEdit是必须的话,试一下成员函数HideCaret()<br>
+2)你有没有使用过CWnd::HideCaret和CWnd::ShowCaret?在你的CEdit类中重载<br>
+OnSetFocus函数,在里面调用HideCaret.<br>
+<br>
+<br>
+<strong>二.套接字</strong><br>
+问:我的程序中每次都要用到CSocket和CAsyncSocket类,可问题来了,当CSocket开始接<br>
+收数据时程序挂起(如果是堵塞至少还应该返回)当我从CAsyncSocket继承了自己的类<br>
+进行联接时同样事情发生了,我在OnConnect接收数据函数中加了一个断点,但这个函<br>
+数从来没有被调用过.<br>
+<br>
+答:<br>
+1)你没有说明程序是怎样挂起的.是不是在OnReceive()中,人们常犯的一个错误是<br>
+在OnReceive()中多次调用Receive(),另外确信你的数据缓冲区足够大,能够容纳所接<br>
+到的数据.还有一种可能是数据丢失了.<br>
+2)你最好能补充一些代码片断.不过有几条建议你先参考一下:<br>
+在CAsyncSock中调用AsyncSelect需要通知代码<br>
+CSocket可能在发送,传输及接送中堵塞了.<br>
+解决方法:我建议只使用CAsyncSocket,但最好的方法是找一个商业TCP/IP工具包.<br>
+3)试试从CSocket继承一个类,除非你一定要使用UDP传输协议.当你从OnReceive得到<br>
+通知时才接收数据.这个肯定能工作,其他你可能需要一个多线程.<br>
+<br>
+<br>
+<strong>三.建立一个子窗口</strong><br>
+问:我从应用程序向导中建立了一个MDI程序,我想自己建立第二个子窗口,我建立和打开<br>
+子窗口没有问题,但在下列代码中出现了错误:<br>
+ASSERT_VALID(pDocument);<br>
+<br>
+答:这里有一个很明显的错误,你应该象这样建立一个文档.<br>
+<br>
+void CSplytDoc::OnAddrbk()<br>
+{<br>
+CAddrDoc1* pAddrDoc = new CAddrDoc1;<br>
+pAddrDoc-&gt;PTCreateDoc();<br>
+}<br>
+<br>
+<br>
+<strong>四.信息映射事件</strong><br>
+问:程序中使用了对话框条,必须与一些变化相联系.当我想通过ClassWizard来映射一个<br>
+组合框ID时,发现该ID找不到;我也找过视类及框架类同样找不到,于是我手工在向导<br>
+生成的消息后面增加了对drop down及changed事件的映射:<br>
+ON_CBN_DROPDOWN(ID_COMBO, OnComboDropDown)<br>
+ON_CBN_EDITCHANGE(IDC_COMBO, OnComboChange)<br>
+我用debug编译时所有的工作都很正常,但到了release中却出现了错误.<br>
+<br>
+答:<br>
+1)你的方法有没有得到正确的声明,应该象下面这个样子:<br>
+afx_msg void OnComboDropDown( );<br>
+afx_msg void OnComboChange( );<br>
+2)可能肯定的说:两个事件声明是错误的,你是否忘记了参数或返回了错误的类型?<br>
+不用向导时很容易出现此类问题,此时堆中出现了无用的东西,在DEBUG中,会有额外<br>
+的代码来管理堆,而在release中,自然出现错误.简单地说,消息映射类型不正确.<br>
+<br>
+<strong>五.对话框</strong><br>
+问:有两个对话框,我想在第一个对话框里控制第二个对话框.在第二个对话框里面有两个<br>
+变量:m_text (CString),m_con(control,一个关于日历的控件),我写了下列代码,却有问<br>
+题出现:(在第一个对话框类中,有一第二个对话框的实例)<br>
+second.m_text=3D&quot;ok&quot;;//正常<br>
+second.m_con.GetDay(); //出错<br>
+UpdateData(FLASE);<br>
+让我弄不清楚的是,同样第二个对话框的两个公共变量,一样的处理,为什么第一个变量<br>
+能正常处理,而第二个变量却出现呢?<br>
+<br>
+答:<br>
+我猜想第二个对话框还没有建立,这里你的两个变量声明并不是相同的.m_text变量<br>
+是一个日期的字符串,将会与一个控件建立关联,如果控件还没有建立依然可以使用,因<br>
+为在第二个对话框建立并初始化时会与之相关联,你第二个变量本身就是一个控件,<br>
+如果对话框以及控件没有建立时肯定会出错.可能最好的方法是用向导建立COleDateTime<br>
+与控件的关联.接着你就可以使用类似下面的代码了:<br>
+m_text : [unnamed edit or static control] :: m_newDateVariable : m_con<br>
+<br>
+<br>
+<strong>六.从主线程中退出工作线程</strong><br>
+问:在一个长时间操作开始时,我建立了一个线程用AfxBeginThread()函数调用,在<br>
+控件函数里,我建立了一个对话框,里面包含了一个动画控件.除此之外,没有别的控<br>
+件了.我设置AVI循环播放,一旦我的操作完成了,我想关闭这个对话框,这该如何处理?<br>
+<br>
+答:<br>
+1)可以让工作线程发送一个用户自定义消息通知工作完成.一旦主线程得知此消息就<br>
+可以关闭对话框了.当你建立线程时,发送一个视的安全句柄.<br>
+m_workerThread = AfxBeginThread((AFX_THREADPROC) ExtractEmailsFromYahoo,<br>
+GetSafeHwnd(), THREAD_PRIORITY_NORMAL);<br>
+然后象这样通过线程发送消息:<br>
+<br>
+UINT ExtractEmailsFromYahoo(LPVOID pParam){<br>
+<br>
+::PostMessage((HWND)pParam, WM_THREADDONE, 0, 0);<br>
+<br>
+return((UINT)0);<br>
+}<br>
+<br>
+// post a message ... saying I am done<br>
+::PostMessage((HWND)pParam, WM_EXTRACTORTHREADDONE, 0, 0);<br>
+<br>
+return((UINT)0);<br>
+}<br>
+消息捕捉函数<br>
+LRESULT CYourView::OnDoneThread(WPARAM wParam, LPARAM lParam){<br>
+<br>
+// kill you dialog<br>
+return(0);<br>
+}<br>
+<br>
+// User defined messages<br>
+#ifndef WM_EXTRACTORTHREADDONE<br>
+#define WM_EXTRACTORTHREADDONE(WM_USER+5)<br>
+#endif<br>
+2)动画控件可以在任何背景下完成,你不必为长时间操作而建立新线程,你只需要调用Play()<br>
+来开始,而完成操作之后可以用Stop()来停止.<br>
+<br>
+<br>
+<strong>七.如何得知一对话框是模式对话框.</strong><br>
+问:我有一个问题,给出一个CWnd*,通过它来判断是否是一个模态对话框?<br>
+<br>
+答:<br>
+1)有一个方法可以实现(我没有真正试过),在显示你的对话框之后,调用带nIndex参数<br>
+的::SetWindowLong()函数设置GWL_USERDATA.你可以为nIndex选择不同的值分别代表<br>
+是模态还是非模态.当你需要知道当前的对话框的状态时就可以在你的EnumWindowsProc<br>
+中调用::GetWindowLong()来查询nIndex.<br>
+<br>
+2)你可以使用下列代码来查询指定窗口的类型.<br>
+long lStyle = ::GetWindowLong (pYourCWndPtr-&gt;GetSafeHwnd(), GWL_STYLE);<br>
+ASSERT(lStyle &amp; DS_SomeDialogStyle);<br>
+具体请参考MSDN中的DS_* 类型.<br>
+<br>
+3)调用CWnd::ContinueModal().如果返回非零值那么就是模态的.<br>
+<br>
+<br>
+<br>
+<strong>八.如何重新调入主菜单</strong><br>
+问:我写了一个多语言应用程序,允许程序的用户界面语言加以改变.用户可以通过点选<br>
+一个操作对话框选择不同的语言,程序马上切换到所选的语言.(当用户点击对话框中的<br>
+OK后),我使用了资源DLL来完成此目的.但我需要知道如何重新载入主菜单.<br>
+<br>
+答:这时有一些代码是我用来切换菜单的.<br>
+Here's the code I use in my WinMerge app to swap menus on the fly<br>
+<br>
+CMenu menu;<br>
+UINT idMenu = GetDocResId(); // ie: IDR_MAINFRAME, IDR_WINMERGEDOC, etc...<br>
+if ( (idMenu &gt; 0) &amp;&amp; menu.LoadMenu( idMenu ) )<br>
+{<br>
+&nbsp;&nbsp;&nbsp; CFrameWnd* pFrame = ((CFrameWnd*)AfxGetApp()-&gt;m_pMainWnd);<br>
+&nbsp;&nbsp;&nbsp; CMenu* pOldMenu = pFrame-&gt;GetMenu();<br>
+<br>
+&nbsp;&nbsp;&nbsp; if ( pFrame-&gt;SetMenu( &amp;menu ) )<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; pOldMenu-&gt;DestroyMenu();<br>
+&nbsp;&nbsp;&nbsp; pFrame-&gt;DrawMenuBar();<br>
+&nbsp;&nbsp;&nbsp; pFrame-&gt;m_hMenuDefault = menu.m_hMenu;<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; menu.Detach( );<br>
+}</p>
+</body>
+</html>

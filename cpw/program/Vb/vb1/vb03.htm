@@ -1,0 +1,236 @@
+<html>
+
+<head>
+<link REL="stylesheet" HREF="/style.css" TYPE="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>计算机世界:在VB中异步执行程序
+</title>
+<!--***********-->
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">Visual Basic</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center"><b>
+在VB 中 异 步 执 行 程 序</b> 
+<p>使 用 Visual Basic 编 写 应 用 程 序 的 开 发 人 员  
+一 定 都 遇 到 过 这 样 的 情 形： 当 你 的 应 用 程 序 要 完 成 一 个 比 较 大  
+的 任 务 时， 并 且 该 任 务 是 那 种“ 独 占 式” 的 任 务（ 比 如： 使 用 函 数  
+FileCopy 复 制 一 个 超 过50MB 的 文 件）， 如 果 不 对 程 序 作 出 特 殊 的 处  
+理， 则 用 户 将 被 迫 面 对 一 个 像 是 被“ 挂 起” 的 窗 体， 任 凭 你 用 鼠  
+标 怎 样 点 击 也 没 有 任 何 反 应， 更 糟 糕 的 是 当 你 从 屏 幕 保 护 程 序  
+切 换 回 该 程 序 时 会 看 到 程 序 的 窗 体 变 成 了 一 块“ 白 布”， 这 更 加  
+给 人 一 种“ 死 机” 的 感 觉。 如 何 避 免 这 种 尴 尬 的 界 面 出 现 呢 ？ 笔  
+者 在 实 践 中 发 现 了 一 种 简 单 的 办 法， 在 这 里 介 绍 给 大 家， 希 望  
+能 对 您 有 所 帮 助。 
+<p><font color="#ffffff">----</font>这 种 办 法 是 利 用 Visual Basic 提 供 的 创 建 
+ActiveX 部 件 的 功 能 设 计 一 个 专 门 完 成“ 大 任 务” 的ActiveX 部 件。 这  
+里 对ActiveX 部 件 作 如 下 简 单 介 绍， 以 期 适 合 不 同 的 读 者。Visual  
+Basic 所 能 设 计 的 部 件 共 有 两 种： 一 种 是 可 视 的 部 件； 另 一 种 是 不  
+可 视 的 部 件。ActiveX 控 件 和 窗 体 一 起 构 成 了 应 用 程 序 与 用 户 交  
+互 的 界 面，ActiveX 文 档 使 用 在Internet 应 用 程 序 中。 由 于 我 们 的 问 题  
+不 涉 及 到 可 视 的 部 件， 所 以 这 里 不 再 赘 述。 
+<p><font color="#ffffff">----</font>不 可 视 的 部 件 又 称 为 代 码 部 件， 包 括 
+Active DLL 部 件 和ActiveX EXE 部 件 两 种。ActiveX 部 件 的 另 一 个 名 称 是 
+ActiveX 服 务 器， 之 所 以 被 称 作 服 务 器 是 由 于ActiveX 部 件 与 使 用 它  
+们 的 应 用 程 序 之 间 的 关 系 可 以 被 类 比 为 服 务 器 程 序 与 客 户 端  
+程 序 之 间 的 关 系：ActiveX 部 件 封 装 了 特 定 的 功 能 或 业 务 规 则， 应  
+用 程 序 不 需 要 知 道ActiveX 部 件 是 如 何 实 现 这 些 功 能 或 业 务 规 则  
+的， 只 需 要 通 过ActiveX 部 件 提 供 的 编 程 接 口（API） 传 递 应 用 程 序  
+的 要 求（ 通 过 属 性 或 方 法 的 参 数）， 然 后 从 部 件 的 事 件 获 得 执 行  
+结 果。 根 据ActiveX 部 件（ActiveX 服 务 器） 的 执 行 方 式 可 以 把ActiveX 部  
+件 分 为 进 程 内 部 件 和 进 程 外 部 件， 所 谓 进 程 内 部 件 即 部 件 和 使  
+用 它 们 的 应 用 程 序 执 行 时 共 享 同 一 个 进 程； 而 进 程 外 部 件 却 执  
+行 在 自 己 的 进 程 中， 也 可 以 这 样 认 为： 进 程 外 部 件 的 执 行 不 影  
+响 使 用 它 们 的 应 用 程 序 ！ 显 然， 这 个 特 性 正 是 本 文 开 始 面 对 的  
+那 个 问 题 所 需 要 的。 在 部 件 中 只 有ActiveX EXE 部 件 是 进 程 外 部 件，  
+因 此 利 用 这 个 特 性 我 们 可 以 创 建 一 个ActiveX EXE 部 件 来 完 成“ 大  
+任 务”， 而 应 用 程 序 窗 体 只 显 示 一 些 任 务 的 提 示 信 息， 直 到ActiveX  
+EXE 部 件 的 类 的 事 件 提 示 任 务 结 束 为 止。 这 样 应 用 程 序 就 避 免  
+了 那 种 呆 板 的“ 白 布” 窗 体 的 出 现， 而 能 够 响 应 任 何 来 自 用 户 的  
+操 作 或 者 当 从 那 些 遮 盖 住 它 的 程 序 切 换 回 来 时 自 行 刷 新。 给 用  
+户 的 感 觉 是 程 序 是 在“ 异 步” 执 行。 
+<p><font color="#ffffff">----</font>下 面 我 们 通 过 例 子 来 看 如 何 实 现 这 一  
+想 法： 这 个 例 子 中， 我 们 假 设 应 用 程 序 窗 体 是 一 个 一 直 显 示 当  
+前 时 间 的 数 字 时 钟， 当 你 使 其 执 行“ 大 任 务” 直 到 任 务 的 完 成，  
+这 期 间 你 会 发 现 数 字 时 钟 窗 体 从 来 就 没 有 被“ 挂 起” 过， 仍 然 能  
+够 响 应 你 的 拖 动 操 作 和 不 停 地 显 示 时 间。 以 下 是 实 现 这 一 程 序  
+和ActiveX EXE 部 件 的 步 骤 及 源 代 码： 
+<h3>1. 创 建ActiveX EXE 部 件（BigJobServer） 
+</h3><font color="#ffffff">----</font>步 骤 一： 打 开Visual Basic 6.0 新 建 一 个VB 工  
+程， 工 程 类 型 选 择ActiveX EXE， 在 工 程 资 源 管 理 器 中 选 中 工 程1，  
+然 后 在 属 性 窗 口 中 将 其 名 称 改 为 BigJobServer。 
+<p><font color="#ffffff">----</font>步 骤 二： 为 工 程 添 加 一 个Timer 控 件 的 容  
+器 窗 体（ 添 加 窗 体 通 过 菜 单 工 程> 添 加 窗 体 完 成）。 窗 体 名 称 改 为  
+frmClock ； 在 窗 体 上 放 置 一 个Timer 控 件（ 从 工 具 箱 中 选 择Timer 控  
+件）， 名 称 改 为 timClock。 
+<p><font color="#ffffff">----</font>说 明： 添 加 该 窗 体 的 用 意 是 提 供 一 个 执  
+行 任 务 的 定 时 器（Timer 控 件） 
+<p><font color="#ffffff">----</font>步 骤 三： 设 计 实 现“ 大 任 务” 的 类 BigJob 
+（ 注： 代 码 部 件 是 通 过 各 种 类 实 现 应 用 程 序 交 给 它 的 任 务 的，  
+关 于 类 的 创 建 请 参 考《 手 册》 或MSDN 文 档）， 默 认 情 况 下 当 你 新  
+建ActiveX EXE 部 件 时Visual Basic 为 你 添 加 了 一 个 名 为Class1 的 类（ 要 增  
+加 类 通 过 菜 单 工 程> 添 加 类 模 块 完 成）， 从 工 程 资 源 管 理 器 中 选  
+中Class1， 然 后 在 属 性 窗 口 中 设 置 如 下 属 性： 
+<p><font color="#ffffff">----</font>（ 名 称）：BigJob 
+<p><font color="#ffffff">----</font>Instancing： 5 －MultiUse  
+<p><font color="#ffffff">----</font>编 写API： 为 类BigJob 添 加 方 法 和 事 件（ 通  
+过 菜 单 工 具 > 添 加 过 程 完 成） 部 分 代 码 及 程 序 说 明 如 下： 
+<pre>
+    Private frmTimeClock As frmClock  
+    ' 声 明 定 时 器 容 器 窗 体
+    Private WithEvents oTimer As Timer 
+    ' 声 明 定 时 器（ 包 括 其 事 件）
+    Public Event JobStart()    
+    ' 声 明 任 务 开 始 事 件
+    Public Event JobEnd()     
+    ' 声 明 任 务 结 束 事 件
+
+    Private Sub Class_Initialize()
+    ' － － － － 类 初 始 化 事 件 － － － －
+    ' 在 这 里 创 建 定 时 器 窗 体 frmTimeClock
+    ' 并 引 用 定 时 器 oTimer
+      Set frmTimeClock = New frmClock
+      Load frmTimeClock
+      Set oTimer = frmTimeClock.timClock
+      oTimer.Enabled = False
+    End Sub
+
+    Private Sub Class_Terminate()
+    ' 类 终 止 事 件， 
+     释 放 定 时 器 并 卸 载 定 时 器 窗 体
+      Set oTimer = Nothing
+      Unload frmTimeClock
+    End Sub
+         
+    Public Sub StartJob()
+    ' 方 法 － 通 知 执 行“ 大 任 务”
+    oTimer.Interval=100
+    ' 经 过0.1 秒 时 间 开 始 执 行 任 务
+    oTimer.Enabled = True
+    End Sub
+
+    Private Sub doBigJob()
+    ' 模 拟 的“ 大 任 务” 
+     是 这 个 空 耗 时 间 的 循 环
+    ' 显 然， 这 段 代 码 在 标 准EXE 程 序 中 
+     一 定 会 造 成“ 挂 起” 状 态!
+      Dim lngTemp As Long
+      Dim lngSum As Long
+    
+      For lngTemp = 1 To 10000000
+        lngSum = lngSum ＋ 1
+      Next
+    End Sub
+
+    Private Sub oTimer_Timer()
+    ' 定 时 器 周 期 到 时 开 始 执 行 任 务
+      oTimer.Enabled = False
+      RaiseEvent JobStart   ' 触 发“ 开 始 执 行” 事 件
+      doBigJob              ' 执 行“ 大 任 务”
+      RaiseEvent JobEnd    ' 触 发“ 任 务 结 束” 事 件
+    End Sub
+</pre>          
+<p><font color="#ffffff">----</font>现 在 保 存 工 程： 选 择 菜 单 文 件> 保 存 工  
+程， 根 据 提 示 窗 口 选 择 合 适 的 文 件 夹 保 存 所 有 工 程 资 源（ 工 程  
+文 件， 窗 体 文 件， 类 文 件）。 
+<h3>2. 使 用 并 调 试BigJobServer 部 件 
+</h3><font color="#ffffff">----</font>步 骤 一： 选 择 菜 单 运 行> 全 编 译 执 行， 可  
+以 看 到 除 了Visual Basic 进 入 运 行 工 程 的 状 态 之 外 看 不 到 任 何 窗 体  
+出 现，ActiveX EXE 部 件 的 调 试 比 较 特 殊： 需 要 在 另 一 个Visual Basic 程  
+序 中 进 行。 
+<p><font color="#ffffff">----</font>步 骤 二： 最 小 化Visual Basic， 然 后 启 动 另 一  
+个Visual Basic 的 实 例， 新 建 一 个 标 准EXE 工 程。 选 择 菜 单 工 程> 引 用 ，  
+在 可 引 用 的 部 件 中 我 们 可 以 找 到BigJobServer 部 件， 选 中 该 部 件， 按 
+“ 确 定” 按 纽 返 回， 这 样 就 建 立 了 应 用 程 序 和 部 件 服 务 器 间 的  
+联 系。 现 在 可 以 在 这 个 工 程 中 创 建BigJob 类 并 使 用 其 方 法 和 事 件  
+了。 
+<p><font color="#ffffff">----</font>步 骤 三： 在 默 认 的 窗 体Form1 上 放 置 如 下  
+控 件 并 设 置 其 属 性（ 方 法 同 前）： 
+<p>　<table border=0 width=100%> 
+<tr><td width=20%>类 型</td><td width=20%>名 称</td><td width=40%>标 题（Caption  
+属 性）</td></tr> 
+<tr><td width=20%>Label</td><td width=20%>lblTime</td><td width=40%>lblTime</td></tr> 
+<tr><td width=20%>Label</td><td width=20%>lblMessage</td><td  
+width=40%>lblMessage</td></tr> 
+<tr><td width=20%>Timer</td><td width=20%>timClock</td><td width=40%>( 无)</td></tr> 
+<tr><td width=20%>Command</td><td width=20%>cmdStart</td><td width=40%>执 行 任  
+务</td></tr> 
+</table> 
+<p><font color="#ffffff">----</font>步 骤 四： 为 该 工 程 编 写 简 单 的 代 码： 
+<pre>
+    Option Explicit
+    Dim WithEvents myJob As BigJob  
+    ' 声 明BigJob 对 像（ 包 括 事 件）
+    Private Sub Form_Load()
+    Set myJob = New BigJob ' 创 建BigJob 的 实 例
+    End Sub
+
+    Private Sub Form_Unload(Cancel As Integer)
+      Set myJob = Nothing     ' 释 放 对 像
+    End Sub
+
+    Private Sub cmdStart_Click()
+      myJob.StartJob          
+     ' 通 知 对 像 执 行 任 务
+    End Sub
+
+    Private Sub myJob_JobStart()
+    ' 在 对 像 的“ 开 始” 
+      事 件 中 给 用 户 一 些 提 示
+      lblMessage.Caption = “ 正 在 执 行 任 务 ...&quot;
+    End Sub
+
+    Private Sub myJob_JobEnd()
+    ' 在 对 像 的“ 结 束” 
+     事 件 中 给 用 户 一 些 提 示
+      lblMessage.Caption = “ 任 务 完 成 ！&quot;
+    End Sub
+
+    Private Sub timClock_Timer()
+    '“ 数 字 时 钟” 在 不 间 断 地 
+     显 示 当 前 时 间
+      lblTime.Caption = Format(Now, “HH:NN:SS&quot;)
+    End Sub
+</pre> 
+<p><font color="#ffffff">----</font>步 骤 五： 保 存 并 运 行 这 个 测 试 工 程， 会 看  
+到 如 下 结 果： 当 你 按 下“ 执 行 任 务” 按 纽 后 从 提 示 可 以 知 道 那 个  
+可 怕 的“ 大 任 务” 已 经 开 始 执 行， 直 到 程 序 提 示 任 务 结 束， 这 期  
+间 无 论 是 拖 动 窗 体 还 是 时 间 的 显 示 均 不 会 受 到 影 响。 由 此 可 见  
+程 序 被“ 挂 起” 的 尴 尬 局 面 得 到 了 解 决。 
+<h3>3. 补 充 说 明</h3> 
+<ol type=a><li>上 述 程 序 在Visual Basic 6.0 中 文 企 业 版 上 调 试 通 过。 
+<li>要 在 你 的 程 序 中 实 现 这 种 方 法， 可 以 改 进ActiveX EXE 部 件。 比 如  
+在 类BigJob 中 把doBigJob 过 程 替 换 为 你 的 具 体 任 务； 或 通 过 添 加 属  
+性 来 传 递 适 当 的 任 务 参 数 等 等。 
+<li>关 于ActiveX EXE 部 件 的 编 译 和 发 布 问 题， 请 参 考《Visual Basic 联 机  
+手 册》 或MSDN 文 档。</ol> 
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+</body> 
+</html> 

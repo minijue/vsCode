@@ -1,0 +1,124 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body stylesrc="../index1.htm" background="../res/back.gif">
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="home_idx1.htm">主页制作</a> 
+      --&gt; </b> </span>功能强大的CGI语言----PHP3</td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+      <p align="center"><b>功能强大的CGI语言----PHP3</b>
+      <p><br>
+      　　 在互连网络高速发展的今天，WEB的后台开发已日益成为开发的焦点；激烈地商业竞争，也促使人们对WEB后台程序有了更高的要求。本文将向您介绍一种新型的CGI程序编写语言PHP3，它简单易学，拥有众多的优秀特性，可让您方便快捷地编写出功能强大，运行速度快，并可同时运行于WINDOWS，UNIX，LINUX平台的WEB后台程序，特别值得一提的是，任何人在遵守GNU条约的情况下，均可免费使用并更改其源码！<br> 
+      <br> 
+      　　现有WEB后台程序，决大多数采用下列几种技术编写：PERL，C通用CGI语言直接编写（译）CGI程序或利用WEB服务器自带的API（如ISAPI，NSAPI）或采用第三方解决方案（如ASP，COLDFUSHION），虽说每类方案都有各自的强项，但均不是理想的解决之道。<br>
+      <br>
+      　　PERL编写CGI是使用最多的方法，在网络上也有很多现成的脚本可以拿来修改使用，但它却存在公认的性能问题：由于WEB服务器运行时需调用解释程序解析代码，当站点的访问人数激增时，WEB服务器的性能也必将直线下降，另外则是它的数据库连接功能非常弱，某些情况下甚至还会降低数据库的存取速度；C编译CGI和ISAPI，NSAPI技术在速度上提升很大，一段时期被多数大型网站采用，但由于其本质原因（编写复杂，数据库功能弱及API只能用于特定WEB服务器等）一直未能大规模的使用；在此两者的基础上，第三方厂商提出了较好的解决方案：如MICROSOFT的ACTIVE SERVER PAGES，ALLAIRE的COLDFUSION，它们都具有运行速度快，数据库操作功能强大等特性，受到了许多开发者的欢迎，但它们只能单纯的运行于个别平台（NT），对要求更高回应率的网站来说（大多数大中型网站均建于UNIX或LINUX平台，APACHE系列WEB服务器）还是不能顺利采用（注：目前已有人提出这两种技术在UNIX系列平台上应用的方案，但要么是不具备源技术的全部优秀功能，要么就是只能应用于个别UNIX平台）。<br> 
+      <br> 
+      　　1997年，PHP开发小组在原PHP/FI 2.0的基础上，开发出了全新的PHP3，并将其置于GNU的条约之下（和LINUX相同），免费让所有人使用和（或）更改解释器源代码。相对于传统的CGI语言，PHP3拥有下列超群的特性：<br> 
+      <br> 
+      　　一． 易学易用：PHP3的语法结构大部分借用了C，JAVA，PERL的好的语法框架，有以上编程经验的开发人员可快速的掌握投入实际使用。在PHP3的程序包中，有极其详尽的安装说明，任何人都可按照说明快速的配置好自己的WEB服务器，甚至可以在PHP3的站点上直接下载已经配置好PHP3模块的WEB服务器。<br> 
+      <br> 
+      　　让我们列出几段PHP3代码：<br>
+      <br>
+      1． Function defaulthandler ($parser,$data)<br> 
+      {<br> 
+      if (substr($data,0,1)= = "&amp;" &amp;&amp; substr($data,-1,1)= = ";"<br> 
+      {printf ('%s',htmlspecialchars ($data));<br> 
+      <br> 
+      }else<br> 
+      {printf ('%s',htmlspecialchars($data));<br> 
+      }}<br> 
+      <br> 
+      1． Class foo {<br> 
+      Function do_foo () {<br> 
+      Echo "doing foo .";<br> 
+      }}<br> 
+      $bar=new foo;<br> 
+      $bar->do_foo ();<br> 
+      1． Function test () {<br> 
+      Static $count=0;<br> 
+      $count++;<br> 
+      echo $count;}<br> 
+      <br> 
+      　　怎么样？看起来是不是很眼熟？<br>
+      <br>
+      　　二． 运行速度快：PHP3采用HTML内置标记技术（类似当前流行的ASP，后缀为PHP3），解释程序本身作为WEB服务器的一个模块运行，相当大的提高了运行时的解析速度（目前只支持APACHE WEBSERVER的模块方式，按照PHP开发小组的计划，以后将可把解释程序作为WEB服务器的一个PLUG-IN来运行），从页面表单提交的数据自动成为程序中同表单名的变量，而无需手工赋值。经测试表明，在WEB站点访问量非常大时，PHP3的解析速度相当于传统CGI程序的4倍！非常适合大中型站点的应用。<br> 
+      <br> 
+      　　三． 跨多个平台：目前PHP3可在WINDOWS，UNIX，LINUX的WEB服务器上正常运行，支持IIS，APACHE等通用WEB服务器，用户更换平台时，无需变换PHP3代码，可即拿即用。<br> 
+      <br> 
+      　　四． 极其强大的数据库支持：PHP3直接为很多数据库提供原本的连接，包括ORACLE，SYBASE，POSTGRES，MYSQL，INFORMIX，DBASE，SOLID，ACCESS等（通过SYBASE-CT驱动，更可高速的访问MICROSOFT SQL SERVER-------两者协议是兼容的）完全支持ODBC接口，这样的话，凡是支持ODBC接口的数据库，PHP3都可提供有力的支持。而且这些数据库的操作都是PHP3内部包括的，无需其它附件介入，实际应用中，可得到比任何后台技术都要快的数据库访问性能。<br> 
+      <br> 
+      　　五． 先进的扩展功能：PHP3不但内置了对文件上传，密码认证，COOKIES操作，邮件收发，动态GIF生成等功能的支持，还极有远见的提供了对GZIP文件，PDF，XML的直接支持，用户还可以编写自己的扩展模块（或从网上下载别人编写的其它模块，基库）给将来的扩展提供了极大的空间。<br> 
+      <br> 
+      　　六． 完全免费，支持：PHP3是遵守GNU条约的，任何人均可按条约免费使用并进行源码改写，使用者还可通过PHP3的站点，邮件列表等方式获得支持，这里要提一下的是：网络上已专门开设了PHP3的支持站点，代码交换站点，相当多的支持者们也开发出了许多强大的基库，让人们随意调用（在PHP3的权威站点上，有PHP3的详尽使用手册，FAQ等资料下载）<br> 
+      <br> 
+      　　由于PHP3的众多优秀功能，国外愈来愈多的站点已开始使用它来进行后台的开发（截止99年4月已有60万个站点使用开发）。国内一些有识之士也开始尝试使用，获得了非常好的效果，我们有理由相信，如此优秀的CGI语言，必将会大规模的扩散开去，成为我们开发有力的工具。<br>
+      <br>
+      　　附：PHP3的一些网络资源：<br>
+      <br>
+      1． www.php.net<br> 
+      PHP开发小组的站点，上面对PHP3的方方面面有详尽的介绍，并可下载PHP3的执行文件，源码，使用手册，FAQ等。<br> 
+      <br> 
+      2． px.sklar.com<br> 
+      专门用于进行PHP3代码交换的站点，上面按分类列出了大量PHP3的源码，内容极丰富，有些不用修改就可直接应用。<br> 
+      <br> 
+      3． www.phpbuilder.com<br> 
+      PHP3开发支持站，开发中的疑难解决，技巧，进展，邮件列表订阅，都可在此找到。<br> 
+      <br> 
+      4． php.codebase.org/content/default/index.html<br> 
+      非常棒的资源站，不但有大量的源码，技巧，还设有几个论坛讨论，一定要去看！<br> 
+      <br> 
+      5． phplib.shonline.de/<br> 
+      一个功能强大的PHP3基库，在PHP3的开发中使用最广。<br> 
+      <br> 
+      6． php.netvision.net.il/examples/<br> 
+      有大量PHP3的代码示例<br> 
+      <br> 
+      8． www.magicw3.com.cn<br> 
+      国内较早采用PHP3的服务商，上面有一些PHP3的资料。<br> 
+      <br> 
+      9． www.job.net.cn<br> 
+      中文站点，后台程序全部用PHP3写成。<br> 
+      <br> 
+      另外，在各大搜索引擎上用PHP关键字查找，也会得到不少关于PHP3的资料和站点<br> 
+      <br> 
+      <br> 
+      <br> 
+      本文操作基本适用于目前的最新版本 
+    </td> 
+  </tr> 
+  <tr> 
+    <td width="100%" align="left" valign="top">　</td> 
+  </tr> 
+</table> 
+</center></div> 
+ 
+</body> 
+ 
+</html> 

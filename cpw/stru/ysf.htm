@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>链表实现的约瑟夫问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>链表实现的约瑟夫问题</strong></p>
+
+<p>//链表式约瑟夫问题<br>
+#include &lt;stdio.h&gt;<br>
+#include &lt;malloc.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+typedef struct node_type{<br>
+&nbsp;&nbsp;&nbsp; int seq,code;<br>
+struct node_type *next;<br>
+}link;<br>
+main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,m,n,cn;<br>
+link *h,*p,*q;<br>
+printf(&quot;Input the first code m:&quot;);<br>
+scanf(&quot;%d&quot;,&amp;m);//输入初始密码<br>
+printf(&quot;Input number n:&quot;);<br>
+scanf(&quot;%d&quot;,&amp;n);//输入人数<br>
+m=m-1;//此处减一是相当于...<br>
+p=(link*)malloc(sizeof(link));<br>
+h=p;&nbsp;&nbsp;&nbsp; q=p;<br>
+printf(&quot;Input codes:&quot;);<br>
+for(i=1;i&lt;=n-1;i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; scanf(&quot;%d&quot;,&amp;cn);<br>
+p-&gt;seq=i;p-&gt;code=cn;<br>
+p=(link*)malloc(sizeof(link));<br>
+q-&gt;next=p;&nbsp;&nbsp;&nbsp; q=p;<br>
+}<br>
+scanf(&quot;%d&quot;,&amp;cn);<br>
+p-&gt;seq=n;<br>
+p-&gt;code=cn;<br>
+p-&gt;next=h;<br>
+if((n&gt;1)&amp;&amp;(m==0))<br>
+{<br>
+&nbsp;&nbsp;&nbsp; m=h-&gt;code;printf(&quot;%d &quot;,h-&gt;seq);<br>
+&nbsp;&nbsp;&nbsp; p-&gt;next=h-&gt;next;<br>
+&nbsp;&nbsp;&nbsp; free(h);<br>
+&nbsp;&nbsp;&nbsp; h=p-&gt;next;<br>
+}<br>
+p=h;<br>
+while((n&gt;1)&amp;&amp;(m!=0))<br>
+{<br>
+&nbsp;&nbsp;&nbsp; if(m&gt;1) for(i=1;i&lt;=m-1;i++)p=p-&gt;next;<br>
+&nbsp;&nbsp;&nbsp; q=p-&gt;next;<br>
+&nbsp;&nbsp;&nbsp; m=q-&gt;code;<br>
+&nbsp;&nbsp;&nbsp; printf(&quot;%d &quot;,q-&gt;seq);<br>
+&nbsp;&nbsp;&nbsp; p-&gt;next=q-&gt;next;<br>
+&nbsp;&nbsp;&nbsp; free(q);<br>
+&nbsp;&nbsp;&nbsp; n=n-1;<br>
+}<br>
+printf(&quot;%d\n&quot;,p-&gt;seq);<br>
+getch();<br>
+}</p>
+</body>
+</html>

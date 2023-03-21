@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="home_idx.htm">主页制作</a> 
+    &gt;</b> </span>使用 ADO(ActiveX Data Objects) 增加一个记录到数据库</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>使用 ADO(ActiveX Data Objects) 
+    增加一个记录到数据库</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">&lt;html&gt;&lt;head&gt;<br>
+    &lt;title&gt;ADO add record example&lt;/title&gt;<br>
+    &lt;/head&gt;<br>
+    &lt;body&gt;<br>
+    &lt;h3 align=&quot;center&quot;&gt;ADO example&lt;/h3&gt;<br>
+    &lt;td width=&quot;424&quot;&gt;&lt;form method=&quot;post&quot; name=&quot;form1&quot; 
+    action=&quot;addrecordado2.asp&quot;&gt;<br>
+    &lt;p&gt;&lt;strong&gt;First Name&lt;/strong&gt;&lt;br&gt;<br>
+    &lt;input type=&quot;text&quot; size=&quot;40&quot; 
+    name=&quot;FirstName&quot;&gt;&lt;br&gt;<br>
+    &lt;strong&gt;Last Name&lt;/strong&gt;&lt;br&gt;<br>
+    &lt;input type=&quot;text&quot; size=&quot;40&quot; 
+    name=&quot;LastName&quot;&gt;&lt;br&gt;<br>
+    &lt;strong&gt;FavoriteColor&lt;/strong&gt;&lt;br&gt;<br>
+    &lt;input type=&quot;text&quot; size=&quot;40&quot; 
+    name=&quot;FavoriteColor&quot;&gt;&lt;br&gt;<br>
+    &lt;p&gt;&lt;input type=&quot;Submit&quot; value=&quot;Submit New Example&quot; 
+    name&quot;b1&quot;&gt; &lt;/font&gt;&lt;/p&gt;<br>
+    &lt;/form&gt;<br>
+    &lt;/td&gt;<br>
+    &lt;/tr&gt;<br>
+    &lt;/table&gt;<br>
+    &lt;/center&gt;&lt;/div&gt;<br>
+    &lt;/body&gt;&lt;/html&gt; <br>
+    <br>
+    2nd The ASP page that process the information<br>
+    &lt;%@ Language = &quot;VBScript&quot;%&gt;<br>
+    &lt;%<br>
+    'Declare all local variables<br>
+    <br>
+    dim conn<br>
+    dim rs<br>
+    dim strID<br>
+    dim strconn<br>
+    <br>
+    'set a local variable to my DSN-less connection String<br>
+    strconn = &quot;DRIVER=Microsoft Access Driver (*.mdb);DBQ=&quot; &amp; 
+    Server.MapPath(&quot;adoandsqladd.mdb&quot;)<br>
+    <br>
+    'Create the Connection object <br>
+    set conn = server.createobject(&quot;adodb.connection&quot;)<br>
+    conn.open strconn<br>
+    <br>
+    <br>
+    'Create the recordset object<br>
+    set rs = server.createobject(&quot;adodb.recordset&quot;)<br>
+    'This statement opens the table so we can add a record notice the addnew <br>
+    'The 2, 2 is how the table is opened there are many ways it can be opened<br>
+    rs.open &quot;tblAdoAdd&quot;, conn, 2, 2<br>
+    <br>
+    <br>
+    'Use the addnew method of the recordset object to add a record<br>
+    rs.addnew<br>
+    'Set the table column = to my input text box from my form<br>
+    rs(&quot;FirstName&quot;) = request(&quot;FirstName&quot;) <br>
+    rs(&quot;LastName&quot;) = request(&quot;LastName&quot;)<br>
+    rs(&quot;FavoriteColor&quot;) = request(&quot;FavoriteColor&quot;) <br>
+    rs.update<br>
+    'I do a movelast here to get the ID that is automatically generated <br>
+    'I also set the value to a local variable so I can write out to the database<br>
+    rs.movelast<br>
+    strID = rs(&quot;ID&quot;)<br>
+    <br>
+    %&gt;<br>
+    <br>
+    &lt;html&gt;<br>
+    &lt;head&gt;<br>
+    &lt;title&gt;sign on summary&lt;/title&gt;<br>
+    &lt;/head&gt;<br>
+    &lt;body&gt;<br>
+    &lt;TABLE BORDER=1&gt; <br>
+    <br>
+    Your Record # is:&lt;% = strID %&gt;<br>
+    Your First Name is &lt;% = request(&quot;FirstName&quot;) %&gt;<br>
+    Your Last Name is &lt;% = request(&quot;LastName&quot;) %&gt;<br>
+    Your Favorite Color is &lt;% = request(&quot;Favoritecolor&quot;) %&gt;<br>
+    <br>
+    &lt;/body&gt;&lt;/html&gt;<br>
+    &lt;%<br>
+    <br>
+    'Always! Always set your objects to nothing. This clears them out of servers memory<br>
+    'Your network admins will like this<br>
+    <br>
+    set rs= nothing<br>
+    set conn = nothing<br>
+    %&gt;<br>
+    </td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+<br>
+</p>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>中国电脑教育报</title>
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+</head>
+
+<body leftmargin="3" style="color: rgb(0,128,128); font-size: 9pt; line-height: 17px">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt"><font color="#000000">现在的位置是： <b><a
+    href="linuxidx.htm">Unix/Linux</a> &gt;</b></font> <font color="#000000">安装UNIX常见问题</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><font color="#000000"><strong><span
+    style="font-size: 9pt">安装UNIX常见问题</span></strong></font></p>
+    <p align="center"><font color="#000000">(北京 陈刚)</font></p>
+    <p align="left"><font color="#000000">&nbsp;&nbsp;&nbsp; 1、光盘安装：N1盘启动出现BOOT：输入DEVBOOTSTR=HD(40)UNIX 
+    SROW=HD(1，0，0)。安装完出现NO OS提示，用补丁盘重新启动BOOT：FD(64)UNIX 
+    ROOT=HD(40) SWAP=HD(41)用CUSTOM将补丁盘装入再启动。<br>
+    &nbsp;&nbsp;&nbsp; 2、在SYSADMSH中重设NINODE，NFILE，NPROCESS，NCALL的值。OPSERVER 
+    RELEASE 5不再重设。<br>
+    &nbsp;&nbsp;&nbsp; 3、设时区，选N不在北美，再设BJT(北京时间)，时间－8(时区相差8个小时)，正确时间设置格式为： 
+    &nbsp; [YYMMDD]HHMM。<br>
+    &nbsp;&nbsp;&nbsp; 4、硬盘中如果有坏道，必须先扫描并作记录，以免UNIX分区头几个磁道，出现坏块，安装后无法运行。<br>
+    &nbsp;&nbsp;&nbsp; 5、建立完附加文件系统后，为保证系统正确识别，应输入以下命令(在主菜单中出现提示时按!)CHMOD 
+    755／DEV／U；CHGRP AUTH／DEV／U。<br>
+    &nbsp;&nbsp;&nbsp; 6、配置SCSI磁带机，必须先移去当前配置的标准卡式磁带驱动器，再安装。<br>
+    &nbsp;&nbsp;&nbsp; 7、设用户口令时，在COMMENT项中必须设置，而且总控用户必须设为汉字“总控”，或者＃cd／1ib;＃vi 
+    compet.d，将“总控”改为Control。<br>
+    &nbsp;&nbsp;&nbsp; 8、如果要改变系统引导进程：编辑<br>
+    &nbsp;&nbsp;&nbsp; ／ETC／DEFAULT／BOOT <br>
+    &nbsp;&nbsp;&nbsp; DEFBOOTSTR=HD(40)UNIX:UNIX装在硬盘中。<br>
+    &nbsp;&nbsp;&nbsp; AUTOBOOT=YES:自动启动，NO等待敲回车。<br>
+    &nbsp;&nbsp;&nbsp; FSCKFIX=YSE：自动检修，NO不检修。<br>
+    &nbsp;&nbsp;&nbsp; 9、既有光驱又有磁带机时，磁带机型号设为Spad，适配器号设为0，ID号设为2，LUN设为0；光驱设为默认的wd，适配器号、ID号、LUN均与磁带机相同。<br>
+    &nbsp;&nbsp;&nbsp; 10、验证设备被识别与否。用Hwconfig查看，例如并行口设置，Hwconfig 
+    name=parallel。<br>
+    &nbsp;&nbsp;&nbsp; 11、Root口令遗忘，安装后无法引导。<br>
+    &nbsp;&nbsp;&nbsp; ①用安装完系统后做的应急盘(mkdev fd)引导<br>
+    &nbsp;&nbsp;&nbsp; ②fsck－y／dev／hd0root<br>
+    &nbsp;&nbsp;&nbsp; ③mount／dev／hd0root／mnt<br>
+    &nbsp;&nbsp;&nbsp; ④cp ／mnt／etc／passwd／mnt／etc／passwd.bak<br>
+    &nbsp;&nbsp;&nbsp; cp ／mnt／tcb／files／auth／r／root<br>
+    &nbsp;&nbsp;&nbsp; ／mnt／tcb／files／auth／r／root.bak<br>
+    &nbsp;&nbsp;&nbsp; ⑤cp ／etc／passwd／mnt／etc／passwd<br>
+    &nbsp;&nbsp;&nbsp; cp ／tcb／files／auth／r／root<br>
+    &nbsp;&nbsp;&nbsp; ／mnt／tcb／files／auth／r／root<br>
+    &nbsp;&nbsp;&nbsp; ⑥umount ／mnt<br>
+    &nbsp;&nbsp;&nbsp; 
+    ⑦关机重新启动，用根用户登录，此时无口令，再将硬盘备份口令管理文件恢复。<br>
+    &nbsp;&nbsp;&nbsp; ⑧cp ／etc／passwd.bak／etc／passwd<br>
+    &nbsp;&nbsp;&nbsp; cp ／tcb／riles／auth／r／root.bak<br>
+    &nbsp;&nbsp;&nbsp; ／tcb／files／auth／r／root<br>
+    &nbsp;&nbsp;&nbsp; ⑨设新口令：Passwd。<br>
+    &nbsp;&nbsp;&nbsp; 12、用户安全级别设定：一般设为Low，如设为High，六个月要求换口令。因此初装口令不合适时， 
+    &nbsp;&nbsp;&nbsp; 可以修改，＃sysadmsh－system－configure－security－f3－low。</font></p>
+    <p align="left"><br>
+    </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

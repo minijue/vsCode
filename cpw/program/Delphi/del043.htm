@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在Delphi中使用自定义光标<br>
+      <br>
+                                郭晓云&nbsp;</p>
+      <p>　　开发者都希望自己的程序有一个友好的界面，此时，一个生动活泼、有表现力的光标就必不可少了。Windows 缺省提供22种标准光标供在程序中调用，但对一个求新求变的程序员来说，标准光标就不能满足要求了，需要使用自己的光标，那么，在程序中怎样使用自己的光标呢？<br> 
+      <br> 
+      　　●光标资源的获得<br>
+      　　要使用自定义光标，必须先得到这些光标。光标文件有两种：静态光标(.cur)和动态光标(.ani)。你可以使用现成的光标文件，比如Delphi 自带的一组光标文件(在C:Program FilesBorlandDelphi 3ImagesCursors目录中)，如果你安装了Windows98的桌面主题，则可在Windowsplus! 目录下找到许多光标文件。你也可以自己创建光标文件，比如使用Delphi自带的Image Editor 就可创建静态光标文件<br> 
+      (.cur），但Image Editor不能创建彩色光标，要创建彩色光标，必须使用其它工具，如Vc＋＋ 的资源编辑器。动态光标则必须使用专门的工具软件制作，使用动态光标可达到光标的动画效果，动态光标文件的文件结构与AVI文件结构相似，由文字描述区、信息区、时间控制区、数据区四部分构成。Windows通过按文件时间控制区中指定的时间一帧帧播放文件数据区中包含的光标或图标图像来实现动画效果。<br> 
+      <br> 
+      　　其实，分析文件结构可以发现，静态光标文件(.cur)与图标文件(.ico)结构非常类似，两种文件的主要差别仅在于文件头的文件识别码和是否存在跟踪点(Hot Spot)。文件识别码放在文件的头三个字节，图标文件为00 00 01，光标文件为00 00 02；图标文件没有跟踪点，光标文件的跟踪点信息放在文件的00 0A－00 0D 四个字节中，00 0A － 00 0B记录跟踪点的X 坐标，00 0C－00 0D 记录Y 坐标，记录顺序都是高位<br> 
+      在前，低位在后，图标文件的00 0A－00 0D 为保留位。知道了两者的差异，你就可以通过手工或编一个小程序来实现图标文件到光标文件的转换。相对于光标文件来说，图标文件要好找得多，颜色上也更丰富。<br> 
+      <br> 
+      　　除了光标文件外，你也可以创建资源文件（.res ),在资源文件中包含光标资源, 
+      Delphi 同样可在程序中调用。可使用Image Editor 或Microsoft的资源编辑器创建资源文件(推荐使用Vc＋＋的资源编辑器）。Delphi 缺省为每一个项目创建一个与项目名同名的资源文件，如你的项目名为test.dpr ，则资源文件名为test.res。但你如果把光标放在这个文件中，在程序中是无法调用的，必须创建自己的资源文件。在给光标资源命名时注意不要与已有的资源重名，创建好后，再在程序中使用编译指令＄R将资源文件加在程序中，如资源文件为my.res,则在主窗体的Implementation下加上一行{＄R my.res} 就可以了。<br> 
+      <br> 
+      　　●自定义光标在程序中的使用<br>
+      　　Delphi 使用自定义光标是通过调用Windows的API函数实现的。Delphi的Screen对象定义有一个Cursors 属性，属性声明为Property Cursors[Index:Interger]:Hcursor;Cursors属性实际记录了应用程序中使用的全部光标资源的句柄，Index 为每项资源的索引号。Delphi缺省提供的22种光标资源也在其中，Index值为－21～0。要使用自己的光标，首先可调用API函数 Loadcursorfromfile(对于光标文件）或使用Loadcursor(对于资源文件）获得相应光标的句柄，这两个函数都定义在Windows单元中，函数声明为：<br> 
+      <br> 
+      　　Function LoadCursorFromFile(lpFileName:PAnsiChar):HCURSOR;stdcall;<br> 
+      　　//lpFilename为光标文件名。(两种光标都适用，只需具体指定光标文件名就可以<br>
+      了。)<br>
+      　　Function LoadCursor(hInstance: HINST; lpCursorName: PAnsiChar): HCURSOR;&nbsp;<br>
+      stdcall;<br>
+      　　//hInstance为应用程序的句柄，lpCursorName为光标资源的名字。在资源文件中只能包含静态光标资源，资源文件不支持动态光标这种格式的资源。两个函数的详细说明可参考Delphi的Win32帮助。<br>
+      <br>
+      　　得到光标的句柄后，将这个句柄值添加到Cursors数组中，注意Index不要与已有的索引号重复，否则将覆盖已有的光标。要使用这个光标时，只要将该光标的Index赋值给元件的Cursor属性就可以了，Delphi根据这个索引号查找Cursors数组，找到该光标的句柄，并用Setcursor函数将这个句柄赋给元件。需要指出的是，程序结束时，不必调用Deletecursor函数释放光标资源，Delphi会自动释放它们。<br>
+      <br>
+      　　●程序示例<br>
+      <br>
+      　　unit Unit1;<br> 
+      　　interface<br>
+      　　uses<br>
+      　　 Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs;<br> 
+      　　type<br>
+      　　 TForm1 = class(TForm)<br> 
+      　　 procedure FormCreate(Sender: TObject);<br> 
+      　　 private<br> 
+      　　 { Private declarations }<br> 
+      　　 public<br> 
+      　　 { Public declarations }<br> 
+      　　 end;<br> 
+      　　var<br>
+      　　 Form1: TForm1;<br> 
+      　　implementation<br>
+      　　{＄R ＊.DFM}<br> 
+      　　{＄R my.res}//加载资源文件my.res<br> 
+      　　procedure TForm1.FormCreate(Sender: TObject);<br> 
+      　　const<br>
+      　　crmy1=1;<br>
+      　　crmy2=2;<br>
+      　　crmy3=3;<br>
+      　　var<br>
+      　　result1,result2,result3:integer;<br>
+      　　begin<br>
+      　　 result1:=loadcursorfromfile(′my.cur′);<br> 
+      　　 if result1&lt;>0 then //如果返回值为0，则调用失败！<br> 
+      　　 screen.cursors[crmy1]:=result1<br> 
+      　　 else<br> 
+      　　 showmessage(′加载静态光标文件出错！′);<br> 
+      　　 result2:=loadcursorfromfile(′my.ani′);<br> 
+      　　 if result2&lt;>0 then&nbsp;<br>
+      　　 screen.cursors[crmy2]:=result2<br> 
+      　　 else<br> 
+      　　 showmessage(′加载动态光标文件错误！′);<br> 
+      　　 result3:=loadcursor(Hinstance,′mycursor′);<br> 
+      　　Hinstance为定义在System单元中的一个长整变量，其值为应用程序的句柄，由Delphi自己维护。<br>
+      　　在加载资源文件的光标资源时，如果光标的名字为整数（Vc＋＋的资源编辑器给资源的缺省名就为整数），就必须使用API函数Makeintresource将整数转换为PansiChar类型，再传递给Loadcursor函数。<br>
+      　　例如：result:=Loadcursor(Hinstance,Makeintresource(101))}<br>
+      <br>
+      　　 if result3&lt;>0 then<br> 
+      　　 screen.cursors[crmy3]:=result3<br> 
+      　　 else<br> 
+      　　 showmessage(′加载资源文件中的光标资源出错！′);<br> 
+      　　//使用加载的光标，cursors[]数组为全局变量，可在程序的任何地方调用；<br>
+      　　 if result1&lt;>0 then<br> 
+      　　 screen.cursor:=crmy1;<br> 
+      　　 if result2&lt;>0 then<br> 
+      　　 form1.cursor:=crmy2;<br> 
+      　　 if result3&lt;>0 then<br> 
+      　　 screen.cursor:=crmy3;<br> 
+      　　end;<br>
+      　　end.<br>
+      　　程序在Windows95 ,Delphi3.0中调试通过。      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

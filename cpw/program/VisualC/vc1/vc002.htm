@@ -1,0 +1,283 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body stylesrc="../../../index1.htm" background="../../../res/back.gif">
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      Visual C --&gt; </b> </span>用C＋＋ Builder实现Word 97自动化</td> 
+  </tr> 
+</table> 
+</center></div><div align="center"><center> 
+ 
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF" 
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF"> 
+  <tr> 
+    <td width="15%" align="center" valign="top"><!--webbot bot="Include" 
+      U-Include="../../progmenu.htm" TAG="BODY" startspan -->
+
+<table border="1" width="13%" bordercolor="#000000" cellspacing="3" cellpadding="3" style="font-size: 9pt; border-style: solid; border-color: #FFFFFF">
+  <tr>
+    <td width="100%" align="center"><a href="../Vcidx098.htm" target="_self"><strong>Visual 
+      C</strong></a></td> 
+  </tr> 
+  <tr> 
+    <td width="100%" align="center"><a href="../../Vb/Vbidx099.htm" target="_self"><strong>VBasic</strong></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../../Vfp/Vfp_idx.htm" target="_self">VFoxpro</a></strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../../Delphi/Del_idx.htm" target="_self">Delphi</a></strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="../../powerbuild/pow_idx.htm" target="_self"><b>PowerBuilder</b></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="../../linux/linuxidx.htm" target="_self"><b>Linux</b></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../../other/oth_idx.htm" target="_self">其它</a></strong></td>
+  </tr>
+</table>
+<!--webbot bot="Include" endspan i-checksum="4316" --> 
+ 
+    </td> 
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30" 
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000" 
+    bordercolordark="#FFFFFF"> 
+      <tr> 
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font 
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank" 
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td> 
+      </tr> 
+    </table> 
+      <p align="center"><b>用C＋＋ Builder实现Word 97自动化</b></p> 
+      <p><br> 
+      ---- 要 在 应 用 程 序 中 控 制Word 97 的 运 行， 首 先 必 须 在 
+      编 制 自 动 化 客 户 程 序 时 使 其 头 文 件 中 包 含 文 件ComObj.hpp， 
+      写 入 ＃include 。 编 程 工 具C ＋ ＋ Builder 的 开 发 者 把 调 用Word 97 自 动 化 对 象 的 功 能 大 致 包 装 成 了 几 个Ole object 
+      class 函 数， 应 用 程 序 设 计 人 员 可 以 很 方 便 地 利 用 它 们。&nbsp;<br>
+      <br>
+      ＊ 设 定Ole 对 象 的 属 性：&nbsp;<br>
+      <br>
+    OlePropertyGet(propname)<br>
+    OlePropertySet(propname,value)<br>
+   其 中value 是 任 何 可 以 转 换 为Variant 型 的 值<br> 
+      ＊ 调 用Ole 对 象 的 方 法：&nbsp;<br>
+      <br>
+    OleProcedure(OleProcName,[val,...])<br>
+    OleFunction(OleFuncName,[val,...])<br>
+    其 中val 是 任 何 可 以 转 换 为Variant 型 的 值<br> 
+      ---- 可 以 通 过OleFunction(OleFuncName,[val,...]) 父 对 象 返 回 其 子 
+      对 象， 句 法 是： 子 对 象 名= 父 对 象 名. OleFunction(OleFuncName,val)。 
+      而 且 可 以 对 此 方 法 组 合 从 父 对 象 返 回 其 下 层 对 象 的 对 象。&nbsp;<br>
+      <br>
+      ---- C ＋ ＋ Builder 中 使 用OLE 自 动 化 控 制Word 97， 必 须 掌 握Word 97 的 自 动 化 对 象 及Microsoft Word Visual Basic 帮 助 文 件 
+      中 关 于Word 的 对 象 方 法 和 属 性。Word 对 象 代 表 一 个 Word 的 
+      元 素， 如 文 档、 段 落、 书 签 或 单 个 的 字 符。 集 合 是 一 个 
+      对 象， 该 对 象 包 含 其 他 数 个 对 象， 通 常 这 些 对 象 属 于 
+      相 同 的 类 型， 例 如， 一 个 集 合 对 象 中 可 包 含 文 档 中 的 
+      所 有 书 签 对 象。 通 过 使 用 属 性 和 方 法， 可 以 修 改 单 个 
+      的 对 象， 也 可 修 改 整 个 的 对 象 集 合。 属 性 是 对 象 的 一 
+      个 特 性 或 者 该 对 象 操 作 的 一 个 方 面。 例 如， 文 档 属 性 
+      包 含 名 称、 内 容、 保 存 状 态， 以 及 是 否 启 用 修 订。 要 
+      更 改 一 个 对 象 的 属 性， 可 以 修 改 属 性 的 值。 方 法 是 对 
+      象 可 以 进 行 的 动 作。&nbsp;<br>
+      <br>
+      ---- 代 表Word 97 应 用 程 序 的 自 动 化 对 象 有 两 个：Word.Application 
+      和 Word.Basic， 通 过Application 对 象 的WordBasic 属 性 可 以 允 
+      许 它 们 之 间 进 行 变 换 赋 值。 在C ＋ ＋Builder 中 通 过CreateOleObject(" …") 就 可 启 动Word 并 获 得 句 柄， 将 其 赋 
+      给Variant 变 量。 如 有 两 个Variant 型 变 量V1 和V2， WordBasic 
+      是Application 对 象 的 属 性：&nbsp;<br>
+      <br>
+    V1=CreateOleObject("Word.Application")；<br>
+    V2=V1.OleFunction("WordBasic")。<br>
+      ---- 以 下 通 过 一 个 简 单 的 例 子， 具 体 说 明 如 何 在C＋＋ 
+      Builder 中 实 现 Word 97 的 自 动 化 功 能， 其 功 能 是 打 开 或 
+      创 建 新 文 档， 并 向 当 前 活 动 中 发 送 文 字、 插 入 位 图&nbsp;<br>
+      和 画 条 直 线 等。 在C ＋ ＋ Builder 集 成 开 发 环 境IDE 下， 
+      建 立 一 项 目Project1， 其 中 包 含Form1（ 其Caption 为OLE Automation） 
+      的 单 元 文 件Unit1.cpp。 表 单Form1 的OpenDialog1 对 象 的Filter 
+      设 为 Word 文 档 或 位 图。Unit1.cpp 的 头 文 件 中 必 须 包 含"ComObj.hpp"。 代 码 如 下：&nbsp;<br>
+      <br>
+ 头 文 件Unit1.h 代 码 为：<br> 
+ ＃ifndef Unit1H<br> 
+ ＃define Unit1H<br> 
+      // － － － － － － － － － － － － －<br> 
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+ ＃include&nbsp;<br>
+      // － － － － － － － － － － － － －<br> 
+  class TForm1 : public TForm<br> 
+      {<br> 
+      __published:      // IDE －managed Components<br> 
+    TButton ＊Button1;<br> 
+    TOpenDialog ＊OpenDialog1;<br> 
+    TButton ＊Button2;<br> 
+    TMemo ＊Memo1;<br> 
+    TBevel ＊Bevel1;<br> 
+    TButton ＊Button3;<br> 
+    TLabel ＊Label1;<br> 
+    TButton ＊Button5;<br> 
+    TBevel ＊Bevel2;<br> 
+    TLabel ＊Label2;<br> 
+    TLabel ＊Label3;<br> 
+    void __fastcall Button1Click(TObject ＊Sender);<br> 
+    void __fastcall Button3Click(TObject ＊Sender);<br> 
+    void __fastcall Button2Click(TObject ＊Sender);<br> 
+    void __fastcall Button5Click(TObject ＊Sender);<br> 
+      private:// User declarations<br> 
+      public:// User declarations<br> 
+    Variant V,Vdocuments,Vdocument1,Vdocument2,Vactive;<br> 
+ / ＊ 定 义Variant 型 全 局// 变 量,&nbsp;<br>
+ 分 别 指 代Application 对 象, V 的Documents<br> 
+  对 象, Vdocuments 的Document 对 象<br> 
+ （Vdocument1,Vdocument2） 以 及<br> 
+   V 的ActiveDocument 对 象 ＊/<br> 
+    int tag; // 用 于 记 录Button3 被 点 击 的 次 数<br> 
+    __fastcall TForm1(TComponent ＊ Owner);<br> 
+    Variant __fastcall GetWordObject();<br> 
+    // 获 得Word 97 自 动 化 对 象 函 数<br> 
+    void __fastcall Add(int i);<br> 
+    // 编 辑 当 前 活 动 文 档 指 定 的段 落 文 字 的 函 数<br> 
+      };<br> 
+      // － － － － － － － － － － － － －<br> 
+      extern PACKAGE TForm1 ＊Form1;<br> 
+      // － － － － － － － － － － － － －<br> 
+ ＃endif<br> 
+      Unit1.cpp 文 件 代 码 为：<br> 
+ ＃include&nbsp;<br>
+ ＃pragma hdrstop<br> 
+ ＃include "Unit1.h"<br> 
+ ＃include&nbsp;<br>
+      // － － － － － － － － － － － － －&nbsp;<br>
+ ＃pragma package(smart_init)<br> 
+ ＃pragma resource " ＊.dfm"<br> 
+      TForm1 ＊Form1;<br> 
+      // － － － － － － － － － － － － －&nbsp;<br>
+      __fastcall TForm1::TForm1(TComponent ＊ Owner)<br> 
+    : TForm(Owner)<br> 
+      {<br> 
+      tag=1;// 令tag 的 初 值 为1，<br> 
+   其 将 随Button3 的 点 击 次 数 而 递 增<br> 
+      }<br> 
+      // － － － － － － － － － － － － －<br> 
+      Variant __fastcall TForm1::GetWordObject()<br> 
+      {<br> 
+      Variant Obj1;<br> 
+      AnsiString AppName="Word.Application" ;<br> 
+      HWND hPrevApp = ::FindWindow(NULL,&nbsp;<br>
+                  "Microsoft Word");<br> 
+ if(!hPrevApp)<br> 
+ {<br> 
+      Obj1=CreateOleObject(AppName) ;<br> 
+      //Word 没 启 动 就 启 动 它 返 回 一 自 动 化 对 象<br> 
+ }<br> 
+      else&nbsp;<br>
+      Obj1=GetActiveOleObject(AppName);&nbsp;<br>
+ // 否 则 返 回 正 在 运 行 的 实 例 自 动 化 对 象<br> 
+      Obj1.OlePropertySet("Visible",true);<br> 
+      return Obj1;<br> 
+  }<br> 
+      void __fastcall TForm1::Button1Click(TObject ＊Sender)<br> 
+      {<br> 
+ int j;<br> 
+      V=GetWordObject();<br> 
+  // 获 得Word 97 自 动 化 对 象Application<br> 
+      Vdocuments=V.OleFunction("Documents");&nbsp;<br>
+ // 通 过Application 获 取Documents 对 象<br> 
+      if (OpenDialog1 －>Execute())<br> 
+      // 使 用Documents 对 象 的Open 方 法&nbsp;<br>
+  打 开 文 件， 并 返 回Document 对 象<br> 
+      Vdocument1=Vdocuments.OleFunction<br> 
+   ("Open",OpenDialog1 －>FileName);<br> 
+      j=Vdocument1.OleFunction("ComputeStatistics",2);<br> 
+  // 计 算 打 开 文 档 的 页 数<br> 
+      Label1 －>Caption=" 文 件" ＋<br> 
+ Vdocument1.OlePropertyGet("Name")&nbsp;<br>
+  ＋" 页 数 是：" ＋IntToStr(j);<br> 
+ }<br> 
+      // － － － － － － － － － － － － －<br> 
+      void __fastcall TForm1::Button3Click(TObject ＊Sender)<br> 
+      {<br> 
+ int i,j;<br> 
+ i=tag;<br> 
+ Vactive=V.OleFunction("ActiveDocument");<br> 
+ // 获 取Application 的ActiveDocument 对 象<br> 
+ j=Vactive.OleFunction("ComputeStatistics",4);<br> 
+ // 计 算 当 前 文 档 的 段 落 数<br> 
+ // 的 的Paragraphs 集 合 对 象 增 加 一 段<br> 
+      Vactive.OleFunction("Paragraphs").OleFunction("Add");<br> 
+ i=j ＋i;// 当 前 文 档 被 编 辑 的 段 落 序 号<br> 
+ Add(i);// 调 用 编 辑 当 前 活 动 文 档<br> 
+        指 定 的 段 落 文 字 的 函 数<br> 
+ Memo1 －>Clear();// 清 除Memo1 的 内 容<br> 
+ tag=tag ＋1;<br> 
+      }<br> 
+      // － － － － － － － － － － － － － －&nbsp;<br>
+      void __fastcall TForm1::Button2Click(TObject ＊Sender)<br> 
+      {<br> 
+      V=GetWordObject();<br> 
+      Vdocuments=V.OleFunction("");<br> 
+      Vdocument2=Vdocuments.OleFunction("Add");<br> 
+ // 使 用Documents 对 象 的Add 方 法 新 建 文 档<br> 
+      Vdocument2.OlePropertySet("Password","12345");<br> 
+  // 设 置 新 建 文 档 的 口 令<br> 
+      }<br> 
+      // － － － － － － － － － － － － － －&nbsp;<br>
+      void __fastcall TForm1::Add(int i)<br> 
+      {<br> 
+      Variant V1;<br> 
+      // 设 置 被 编 辑 段 的 内 容、 字 体 大 小、<br> 
+   颜 色 及 是 否 斜 体<br> 
+      V1=((Vactive.OleFunction("Paragraphs")).<br> 
+    OleFunction("Item",i)).OleFunction("Range");<br> 
+      (V1.OleFunction("Font")).OlePropertySet("Italic",true);<br> 
+      (V1.OleFunction("Font")).OlePropertySet("Size",18);<br> 
+      (V1.OleFunction("Font")).OlePropertySet("ColorIndex",6);<br> 
+      (V1.OleFunction("Font")).OlePropertySet("Size",18);<br> 
+ V1.OlePropertySet("Text",Memo1 －>Text);<br> 
+      }<br> 
+      // － － － － － － － － － － － － －&nbsp;<br>
+      void __fastcall TForm1::Button5Click(TObject ＊Sender)<br> 
+      {<br> 
+      Variant Vshape,Vactive1,Vline;<br> 
+      Vactive1=V.OleFunction("ActiveDocument");<br> 
+      Vshape=Vactive1.OleFunction("Shapes");<br> 
+      // 获 取 当 前 活 动 文 档 的Shapes 对 象<br> 
+      // 使 用Shapes 对 象 的AddLine 方 法 化 直 线<br> 
+      Vline=Vshape.OleFunction("AddLine",90,80,400,80);<br> 
+      if (OpenDialog1 －>Execute())<br> 
+      // 使 用Shapes 对 象 的AddPicture   方 法 插 入 指 定 位 图<br> 
+      Vshape.OleFunction("AddPicture",OpenDialog1<br> 
+   －>FileName,50,50,80,100);<br> 
+      }<br> 
+      ----此 程 序 在C ＋ ＋ Builder 3 中 编 译 通 过， 运 行 该 应 用 
+      程 序 首 先 必 须 获 得 文 档， 然 后 才 可 以 编 辑 文 档。</p> 
+      <p>　 
+    </td> 
+  </tr> 
+  <tr> 
+    <td width="100%" colspan="2" align="center" valign="top">　</td> 
+  </tr> 
+</table> 
+</center></div> 
+ 
+</body> 
+ 
+</html> 

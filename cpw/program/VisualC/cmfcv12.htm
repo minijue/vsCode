@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body VLINK="#0000FF">
+
+<table border="0" width="100%" style="font-size: 9pt" cellspacing="0" cellpadding="2"
+bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" height="30" cellspacing="0" cellpadding="2"
+    style="font-size: 9pt">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><font COLOR="#FF0000"><h2 align="center"></font><font color="#000000"><span
+    style="font-size: 9pt">MFC邮递表的中文翻译</span></font><font COLOR="#FF0000"></h2>
+    </font></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font color="#000000">第十二期目录</font> <font SIZE="-1">Yu 
+    Hail 1998.11.12</font></h3>
+    <ol>
+      <li><a HREF="#vol12q1">如何改变默认的光标形状?</a> </li>
+      <li><a HREF="#vol12q2">如何用键盘滚动分割的视口?</a> </li>
+      <li><a HREF="#vol12q3">如何在线程中处理状态条?</a> </li>
+      <li><a HREF="#vol12q4">如何阻止WINDOWS关闭?</a> </li>
+    </ol>
+    <p><a NAME="vol12q1"></a></p>
+    <p><br>
+    </p>
+    <h3><font color="#000000">Q:如何改变默认的光标形状?</font></h3>
+    <p><br>
+    我试着将光标改变为其它的形状和颜色,但却没有变化.<br>
+    A:在对话框/窗口/你需要的地方加上对WM_SETCURSOR消息的处理.<br>
+    </p>
+    <pre>
+BOOL MyDialog::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+{
+    // TODO: Add your message handler code here and/or call default
+    ::SetCursor(AfxGetApp()-&gt;LoadCursor(IDC_MYCURSOR));
+    return TRUE;
+    //return CDialog::OnSetCursor(pWnd, nHitTest, message);
+}
+</pre>
+    <p>你没有成功的原因是因为窗口类光标风格不能为NULL. </p>
+    <p><a NAME="vol12q2"></a><br>
+    </p>
+    <h3><font color="#000000">Q:如何用键盘滚动分割的视口?</font></h3>
+    <p><br>
+    我的问题是当我用鼠标滚动分割窗口时,视口滚动都很正常,但用键盘时, 
+    却什么也没有发生.<br>
+    A:在你的视图继承类中加入如下两个函数,假定该类为CScrollerView:<br>
+    </p>
+    <pre>
+void CScrollerView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+        BOOL processed;
+        for (unsigned int i=0;i<nRepCnt&&processed;i++) processed="KeyScroll(nChar);" if (!processed) CScrollView::OnKeyDown(nChar, nRepCnt, nFlags); } BOOL CScrollerView::KeyScroll(UINT nChar) { switch (nChar) { case VK_UP: OnVScroll(SB_LINEUP,0,NULL); break; case VK_DOWN: OnVScroll(SB_LINEDOWN,0,NULL); break; case VK_LEFT: OnHScroll(SB_LINELEFT,0,NULL); break; case VK_RIGHT: OnHScroll(SB_LINERIGHT,0,NULL); break; case VK_HOME: OnHScroll(SB_LEFT,0,NULL); break; case VK_END: OnHScroll(SB_RIGHT,0,NULL); break; case VK_PRIOR: OnVScroll(SB_PAGEUP,0,NULL); break; case VK_NEXT: OnVScroll(SB_PAGEDOWN,0,NULL); break; default: return FALSE; // not for us // and let the default class // process it. } return TRUE; } </PRE>
+</pre>
+    <p><a NAME="vol12q3"></a><br>
+    </p>
+    <h3><font color="#000000">Q:如何在线程中处理状态条?</font></h3>
+    <pre>
+
+  在我的应用程序CWnd的继承中有指针指向状态条,用pStatusBar-&gt;SetPaneText(0,status,TRUE)
+在状态条上显示一些文本都很正常.但在第二个线程中调用该函数却不行,出现hwnd警告.
+
+A:当你传送一个CWnd的指针到另外一个线程时,m_hWnd将为空.我的办法是用PostThreadMessage
+传送消息到状态条的父类,让它对状态条进行处理.
+
+</pre>
+    <p><a NAME="vol12q4"></a><br>
+    </p>
+    <h3><font color="#000000">Q:如何阻止WINDOWS关闭?</font></h3>
+    <pre>
+
+  我有一个应用程序会不停地工作.当该程序正常运行时,该如何避免用户关掉系统?
+是不是该用WM_QUERYENDSESSION.
+ 
+A:是的,在你的主框架窗口类中使用.
+</pre>
+    <pre>
+
+// in the class header
+afx_msg BOOL OnQueryEndSession( WPARAM wReserved, LPARAM lEndReason );
+
+// in the Message Map
+ON_MESSAGE( WM_QUERYENDSESSION, OnQueryEndSession )
+
+// in the class body
+BOOL CMainFrame::OnQueryEndSession( WPARAM wReserved, LPARAM lEndReason )
+{
+    if( lEndReason =3D=3D ENDSESSION_LOGOFF ) {
+        // user is logging off
+    else
+        // Windows is going down
+
+    return( bCanExit );
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="cmfcv13.htm">前一期</a>|<a href="cmfcv11.htm">后一期</a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供!</td>
+  </tr>
+</table>
+<a href="cmfcv13.htm"><div align="center"><center>
+
+<pre></a>
+
+
+</pre>
+</center></div>
+</body>
+</html>

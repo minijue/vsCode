@@ -1,0 +1,604 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">《WIN95界面下的VC++串口通讯程序》<br>
+      <br>
+              WangXiao &lt;<a href="mailto:%20zxdyjs@public.cz.js.cn"> zxdyjs@public.cz.js.cn 
+      </a> >   
+      <p><br>
+      <br>
+      &nbsp;&nbsp;&nbsp; 在WIN32下是不建议对端口进行操作的，在WIN32中所有的设备都被看成是文件，串行口也不例外也是作为文件来进行处理的。这是我的一份关于串口编程的读书笔记，对于使用VC进行编程的同行应该有一定的帮助。<br>
+      <br>
+      &lt;&lt;Windows 95 通讯编程>> 清华 ISBM 7-302-0270-1/TP.1398<br> 
+      1.打开串口：<br> 
+  在Window 95下串行口作为文件处理，使用文件操作对串行口进行处理。<br> 
+  使用CreateFile()打开串口，CreateFile()将返回串口的句柄。<br> 
+  HANDLE CreateFile(&nbsp;<br>
+	LPCTSTR lpFileName,  	// pointer to name of the file&nbsp;<br>
+ 	DWORD dwDesiredAccess,  // access (read-write) mode&nbsp;<br>
+	DWORD dwShareMode, 	 // share mode&nbsp;<br>
+ 	LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security attributes&nbsp;<br>
+ 	DWORD dwCreationDistribution,  	// how to create&nbsp;<br>
+ 	DWORD dwFlagsAndAttributes,  	// file attributes&nbsp;<br>
+ 	HANDLE hTemplateFile 		// handle to file with attributes to copy&nbsp;<br>
+        );&nbsp;<br>
+  lpFileName:		指明串口制备，例：COM1，COM2<br> 
+  dwDesiredAccess:	指明串口存取方式，例：GENERIC_READ|GENERIC_WRITE<br> 
+  dwShareMode:		指明串口共享方式<br> 
+  lpSecurityAttributes:	指明串口的安全属性结构,NULL为缺省安全属性<br> 
+  dwCreateionDistribution: 必须为OPEN_EXISTIN<br> 
+  dwFlagAndAttributes:	对串口唯一有意义的是FILE_FLAG_OVERLAPPED<br> 
+  hTemplateFile:	必须为NULL<br> 
+      <br> 
+      <br> 
+      2.关闭串口：<br> 
+  CloseHandle(hCommDev);<br> 
+      <br> 
+      3.设置缓冲区长度：<br> 
+  BOOL SetupComm(&nbsp;<br>
+	HANDLE hFile,  		// handle of communications device&nbsp;<br>
+ 	DWORD dwInQueue,  	// size of input buffer&nbsp;<br>
+ 	DWORD dwOutQueue 	 // size of output buffer&nbsp;<br>
+ 	);&nbsp;<br>
+      <br>
+      4.COMMPROP结构：<br>
+  可使用GetCommProperties()取得COMMPROP结构，COMMPROP结构中记载了系统支持的各项设置。<br>
+  typedef struct _COMMPROP { // cmmp&nbsp;<br>
+    WORD  wPacketLength;       // packet size, in bytes&nbsp;<br>
+    WORD  wPacketVersion;      // packet version&nbsp;<br>
+    DWORD dwServiceMask;       // services implemented&nbsp;<br>
+    DWORD dwReserved1;         // reserved&nbsp;<br>
+    DWORD dwMaxTxQueue;        // max Tx bufsize, in bytes&nbsp;<br>
+    DWORD dwMaxRxQueue;        // max Rx bufsize, in bytes&nbsp;<br>
+    DWORD dwMaxBaud;           // max baud rate, in bps&nbsp;<br>
+    DWORD dwProvSubType;       // specific provider type&nbsp;<br>
+    DWORD dwProvCapabilities;  // capabilities supported&nbsp;<br>
+    DWORD dwSettableParams;    // changable parameters&nbsp;<br>
+    DWORD dwSettableBaud;      // allowable baud rates&nbsp;<br>
+    WORD  wSettableData;       // allowable byte sizes&nbsp;<br>
+    WORD  wSettableStopParity; // stop bits/parity allowed&nbsp;<br>
+    DWORD dwCurrentTxQueue;    // Tx buffer size, in bytes&nbsp;<br>
+    DWORD dwCurrentRxQueue;    // Rx buffer size, in bytes&nbsp;<br>
+    DWORD dwProvSpec1;         // provider-specific data&nbsp;<br>
+    DWORD dwProvSpec2;         // provider-specific data&nbsp;<br>
+    WCHAR wcProvChar[1];       // provider-specific data<br> 
+  } COMMPROP;&nbsp;<br>
+      <br>
+ dwMaxBaud：<br>
+ BAUD_075	 75 bps&nbsp;<br>
+ BAUD_110 	 110 bps&nbsp;<br>
+ BAUD_134_5  	 134.5 bps&nbsp;<br>
+ BAUD_150  	 150 bps&nbsp;<br>
+ BAUD_300 	 300 bps&nbsp;<br>
+ BAUD_600 	 600 bps&nbsp;<br>
+ BAUD_1200 	 1200 bps&nbsp;<br>
+ BAUD_1800 	 1800 bps&nbsp;<br>
+ BAUD_2400 	 2400 bps&nbsp;<br>
+ BAUD_4800 	 4800 bps&nbsp;<br>
+ BAUD_7200 	 7200 bps&nbsp;<br>
+ BAUD_9600 	 9600 bps&nbsp;<br>
+ BAUD_14400 	 14400 bps&nbsp;<br>
+ BAUD_19200 	 19200 bps&nbsp;<br>
+ BAUD_38400 	 38400 bps&nbsp;<br>
+ BAUD_56K 	 56K bps&nbsp;<br>
+ BAUD_57600 	 57600 bps&nbsp;<br>
+ BAUD_115200 	 115200 bps&nbsp;<br>
+ BAUD_128K 	 128K bps&nbsp;<br>
+ BAUD_USER 	 Programmable baud rates available&nbsp;<br>
+      <br>
+ dwProvSubType：<br>
+ PST_FAX 		传真设备<br> 
+ PST_LAT 		LAT协议<br> 
+ PST_MODEM 		调制解调器设备<br> 
+ PST_NETWORK_BRIDGE 	未指定的网桥<br> 
+ PST_PARALLELPORT 	并口<br> 
+ PST_RS232 		RS-232口<br> 
+ PST_RS422 		RS-422口<br> 
+ PST_RS423 		RS-432口<br> 
+ PST_RS449 		RS-449口<br> 
+ PST_SCANNER 		扫描仪设备<br> 
+ PST_TCPIP_TELNET 	TCP/IP Telnet协议<br> 
+ PST_UNSPECIFIED 	未指定<br> 
+ PST_X25 		X.25标准<br> 
+      <br> 
+ dwProvCapabilities&nbsp;<br>
+ PCF_16BITMODE 		支持特殊的16位模式<br> 
+ PCF_DTRDSR 		支持DTR(数据终端就绪)/DSR(数据设备就绪)&nbsp;<br>
+ PCF_INTTIMEOUTS 	支持区间超时&nbsp;<br>
+ PCF_PARITY_CHECK 	支持奇偶校验<br> 
+ PCF_RLSD 		支持RLSD(接收线信号检测)<br> 
+ PCF_RTSCTS 		支持RTS(请求发送)/CTS(清除发送)<br> 
+ PCF_SETXCHAR 		支持可设置的XON/XOFF<br> 
+ PCF_SPECIALCHARS 	支持特殊字符<br> 
+ PCF_TOTALTIMEOUTS 	支持总(占用时间)超时<br> 
+ PCF_XONXOFF 		支持XON/XOFF流控制<br> 
+ 标准RS-232和WINDOW支持除PCF_16BITMODE和PCF_SPECIALCHAR外的所有功能&nbsp;<br>
+      <br>
+ dwSettableParams&nbsp;<br>
+ SP_BAUD 		可配置波特率<br> 
+ SP_DATABITS 		可配置数据位个数<br> 
+ SP_HANDSHAKING 	可配置握手(流控制)<br> 
+ SP_PARITY 		可配置奇偶校验模式<br> 
+ SP_PARITY_CHECK 	可配置奇偶校验允许/禁止<br> 
+ SP_RLSD 		可配置RLSD(接收信号检测)<br> 
+ SP_STOPBITS 		可配置停止位个数<br> 
+ 标准RS-232和WINDOW支持以上所有功能&nbsp;<br>
+      <br>
+ wSettableData&nbsp;<br>
+ DATABITS_5 		5个数据位<br> 
+ DATABITS_6 		6个数据位<br> 
+ DATABITS_7 		7个数据位<br> 
+ DATABITS_8 		8个数据位<br> 
+ DATABITS_16 		16个数据位<br> 
+ DATABITS_16X 		通过串行硬件线路的特殊宽度路径<br> 
+ WINDOWS 95支持16的所有设置<br> 
+      <br> 
+      5.DCB结构：<br> 
+      typedef struct _DCB {// dcb<br> 
+    DWORD DCBlength;           // sizeof(DCB)&nbsp;<br>
+    DWORD BaudRate;            // current baud rate&nbsp;<br>
+				指定当前的波特率<br>
+    DWORD fBinary: 1;          // binary mode, no EOF check&nbsp;<br>
+				指定是否允许二进制模式，<br>
+				WINDOWS 95中必须为TRUE<br> 
+    DWORD fParity: 1;          // enable parity checking&nbsp;<br>
+				指定奇偶校验是否允许<br>
+    DWORD fOutxCtsFlow:1;      // CTS output flow control&nbsp;<br>
+				指定CTS是否用于检测发送控制。<br>
+				当为TRUE是CTS为OFF，发送将被挂起。<br>
+    DWORD fOutxDsrFlow:1;      // DSR output flow control&nbsp;<br>
+				指定CTS是否用于检测发送控制。&nbsp;<br>
+				当为TRUE是CTS为OFF，发送将被挂起。<br>
+    DWORD fDtrControl:2;       // DTR flow control type&nbsp;<br>
+				DTR_CONTROL_DISABLE值将DTR置为OFF,<br>
+				DTR_CONTROL_ENABLE值将DTR置为ON,<br>
+				DTR_CONTROL_HANDSHAKE允许DTR"握手"<br>
+    DWORD fDsrSensitivity:1;   // DSR sensitivity&nbsp;<br>
+				当该值为TRUE时DSR为OFF时接收的字节被忽略<br>
+    DWORD fTXContinueOnXoff:1; // XOFF continues Tx&nbsp;<br>
+				指定当接收缓冲区已满,并且驱动程序已经发<br>
+				送出XoffChar字符时发送是否停止。<br>
+				TRUE时，在接收缓冲区接收到缓冲区已满的字<br>
+				节XoffLim且驱动程序已经发送出XoffChar字符中<br>
+				止接收字节之后，发送继续进行。<br>
+				FALSE时，在接收缓冲区接收到代表缓冲区已空<br>
+				的字节XonChar且驱动程序已经发送出恢复发送<br>
+				的XonChar之后，发送继续进行。&nbsp;<br>
+    DWORD fOutX: 1;            // XON/XOFF out flow control&nbsp;<br>
+				TRUE时，接收到XoffChar之后便停止发送<br>
+					接收到XonChar之后将重新开始&nbsp;<br>
+    DWORD fInX: 1;             // XON/XOFF in flow control&nbsp;<br>
+				TRUE时，接收缓冲区接收到代表缓冲区满的<br>
+				XoffLim之后，XoffChar发送出去<br>
+					接收缓冲区接收到代表缓冲区空的<br>
+				XonLim之后，XonChar发送出<br>
+      去&nbsp;<br>
+    DWORD fErrorChar: 1;       // enable error replacement&nbsp;<br>
+				该值为TRUE且fParity为TRUE时，用ErrorChar<br>
+				成员指定的字符代替奇偶校验错误的接收字<br>
+      符&nbsp;<br>
+    DWORD fNull: 1;            // enable null stripping&nbsp;<br>
+				TRUE时，接收时去掉空（0值）字节<br>
+    DWORD fRtsControl:2;       // RTS flow control&nbsp;<br>
+				RTS_CONTROL_DISABLE时,RTS置为OFF<br>
+				RTS_CONTROL_ENABLE时, RTS置为ON<br> 
+				RTS_CONTROL_HANDSHAKE时,<br> 
+				当接收缓冲区小于半满时RTS为ON<br> 
+				当接收缓冲区超过四分之三满时RTS为OFF<br> 
+				RTS_CONTROL_TOGGLE时,<br> 
+				当接收缓冲区仍有剩余字节时RTS为ON<br> 
+				否则缺省为OFF<br> 
+    DWORD fAbortOnError:1;     // abort reads/writes on error&nbsp;<br>
+				TRUE时,有错误发生时中止读和写操作<br>
+    DWORD fDummy2:17;          // reserved&nbsp;<br>
+				未使用<br>
+    WORD wReserved;            // not currently used&nbsp;<br>
+				未使用,必须为0<br>
+    WORD XonLim;               // transmit XON threshold&nbsp;<br>
+				指定在XON字符发送这前接收缓冲区中可允许<br>
+				的最小字节数<br>
+    WORD XoffLim;              // transmit XOFF threshold&nbsp;<br>
+				指定在XOFF字符发送这前接收缓冲区中可允许<br>
+				的最小字节数<br>
+    BYTE ByteSize;             // number of bits/byte, 4-8&nbsp;<br>
+				指定端口当前使用的数据位<br>
+    BYTE Parity;               // 0-4=no,odd,even,mark,space&nbsp;<br>
+				指定端口当前使用的奇偶校验方法,可能为:<br>
+				EVENPARITY,MARKPARITY,NOPARITY,ODDPARITY<br>
+    BYTE StopBits;             // 0,1,2 = 1, 1.5, 2&nbsp;<br>
+				指定端口当前使用的停止位数,可能为:<br>
+				ONESTOPBIT,ONE5STOPBITS,TWOSTOPBITS<br>
+    char XonChar;              // Tx and Rx XON character&nbsp;<br>
+				指定用于发送和接收字符XON的值<br>
+    char XoffChar;             // Tx and Rx XOFF character&nbsp;<br>
+				指定用于发送和接收字符XOFF值<br>
+    char ErrorChar;            // error replacement character&nbsp;<br>
+				本字符用来代替接收到的奇偶校验发生错误时<br>
+				的值<br>
+    char EofChar;              // end of input character&nbsp;<br>
+				当没有使用二进制模式时,本字符可用来指示<br>
+				数据的结束<br>
+    char EvtChar;              // received event character&nbsp;<br>
+				当接收到此字符时,会产生一个事件<br>
+    WORD wReserved1;           // reserved; do not use<br> 
+				未使用<br> 
+ } DCB;&nbsp;<br>
+      <br>
+      6.改变端口设置<br>
+  使用如下的两个方法<br>
+  BOOL GetCommState(hComm,&amp;dcb);<br> 
+  BOOL SetCommState(hComm,&amp;dcb);<br> 
+      <br> 
+      7,改变普通设置<br> 
+  BuildCommDCB(szSettings,&amp;DCB);<br> 
+  szSettings的格式:baud parity data stop<br> 
+  例: "baud=96 parity=n data=8 stop=1"<br> 
+      简写:"96,N,8,1"<br> 
+  szSettings 的有效值<br> 
+  baud:<br> 
+  11 or 110  = 110  bps<br> 
+  15 or 150  = 150  bps<br> 
+  30 or 300  = 300  bps<br> 
+  60 or 600  = 600  bps<br> 
+  12 or 1200 = 1200 bps<br> 
+  24 or 2400 = 2400 bps<br> 
+  48 or 4800 = 4800 bps<br> 
+  96 or 9600 = 9600 bps<br> 
+  19 or 19200= 19200bps&nbsp;<br>
+  parity:<br>
+  n=none<br>
+  e=even<br>
+  o=odd<br>
+  m=mark<br>
+  s=space<br>
+  data:<br>
+  5,6,7,8<br>
+  StopBit<br>
+  1,1.5,2<br>
+      <br>
+      8.COMMCONFIG结构：<br>
+  typedef struct _COMM_CONFIG {<br> 
+    DWORD dwSize;<br> 
+    WORD  wVersion;<br> 
+    WORD  wReserved;<br> 
+    DCB   dcb;<br> 
+    DWORD dwProviderSubType;<br> 
+    DWORD dwProviderOffset;<br> 
+    DWORD dwProviderSize;<br> 
+    WCHAR wcProviderData[1];<br> 
+  } COMMCONFIG, *LPCOMMCONFIG;<br> 
+  可方便的使用BOOL CommConfigDialog(<br> 
+                   LPTSTR lpszName,&nbsp;<br>
+                   HWND hWnd,&nbsp;<br>
+                   LPCOMMCONFIG lpCC);&nbsp;<br>
+  来设置串行口。<br>
+      <br>
+      9.超时设置:<br>
+  可通过COMMTIMEOUTS结构设置超时,<br>
+  typedef struct _COMMTIMEOUTS {<br> 
+     DWORD ReadIntervalTimeout;&nbsp;<br>
+     DWORD ReadTotalTimeoutMultiplier;<br> 
+     DWORD ReadTotalTimeoutConstant;<br> 
+     DWORD WriteTotalTimeoutMultiplier;<br> 
+     DWORD WriteTotalTimeoutConstant;&nbsp;<br>
+  } COMMTIMEOUTS,*LPCOMMTIMEOUTS;&nbsp;<br>
+  区间超时:(仅对从端口中读取数据有用)它指定在读取两个字符之间要经历的时间<br>
+  总超时:  当读或写特定的字节数需要的总时间超过某一阈值时,超时触发.<br> 
+  超时公式:<br> 
+  ReadTotalTimeout = (ReadTotalTimeoutMultiplier * bytes_to_read)<br> 
+                     + ReadToTaltimeoutConstant<br> 
+  WriteTotalTimeout = (WriteTotalTimeoutMuliplier * bytes_to_write)<br> 
+                     + WritetoTotalTimeoutConstant<br> 
+  NOTE:在设置超时时参数0为无限等待，既无超时<br> 
+                   参数MAXDWORD为立即返回<br> 
+  超时设置：&nbsp;<br>
+  GetCommTimeouts(hComm,&amp;timeouts);<br>
+  SetCommTimeouts(hComm,&amp;timeouts);<br>
+      <br>
+      10.查询方式读写数据<br>
+  例程：<br>
+  COMMTIMEOUTS to;<br> 
+  DWORD ReadThread(LPDWORD lpdwParam)<br> 
+  {<br> 
+  BYTE inbuff[100];<br> 
+  DWORD nBytesRead;<br> 
+  if(!(cp.dwProvCapabilities&amp;PCF_INTTIMEOUTS))<br> 
+	return 1L;<br> 
+  memset(&amp;to,0,sizeof(to));<br> 
+  to.ReadIntervalTimeout = MAXDWORD;<br> 
+  SetCommTimeouts(hComm,&amp;to);<br> 
+  while(bReading)<br> 
+  {<br> 
+	if(!ReadFile(hComm,inbuff,100,&amp;nBytesRead,NULL))<br> 
+	   locProcessCommError(GetLastError());<br> 
+        else<br> 
+	   if(nBytesRead)<br> 
+               locProcessBytes(inbuff,nBytesRead);<br> 
+  }<br> 
+  PurgeComm(hComm,PURGE_RXCLEAR);<br> 
+  return 0L;<br> 
+  }<br> 
+      <br> 
+  NOTE:<br> 
+  PurgeComm()是一个清除函数，它可以中止任何未决的后台读或写，并且<br> 
+      可以冲掉I/O缓冲区.<br> 
+  BOOL PurgeComm(HANDLE hFile,DWORD dwFlags);<br> 
+  dwFlages的有效值：&nbsp;<br>
+  PURGE_TXABORT: 中止后台写操作<br> 
+  PRUGE_RXABORT: 中止后台读操作&nbsp;<br>
+  PRUGE_TXCLEAR: 清除发送缓冲区<br> 
+  PRUGE_RXCLEAR: 清除接收缓冲区<br> 
+  技巧:<br> 
+  可通过ClearCommError()来确定接收缓区中处于等待的字节数。<br> 
+  BOOL ClearCommError(&nbsp;<br>
+	HANDLE hFile, 		// handle to communications device&nbsp;<br>
+	LPDWORD lpErrors, 	// pointer to variable to receive error codes&nbsp;<br>
+	LPCOMSTAT lpStat 	// pointer to buffer for communications status&nbsp;<br>
+	);&nbsp;<br>
+  ClearCommError()将返回一个COMSTAT结构：<br>
+  typedef struct _COMSTAT { // cst&nbsp;<br>
+    DWORD fCtsHold : 1;   // Tx waiting for CTS signal&nbsp;<br>
+    DWORD fDsrHold : 1;   // Tx waiting for DSR signal&nbsp;<br>
+    DWORD fRlsdHold : 1;  // Tx waiting for RLSD signal&nbsp;<br>
+    DWORD fXoffHold : 1;  // Tx waiting, XOFF char rec`d&nbsp;<br>
+    DWORD fXoffSent : 1;  // Tx waiting, XOFF char sent&nbsp;<br>
+    DWORD fEof : 1;       // EOF character sent&nbsp;<br>
+    DWORD fTxim : 1;      // character waiting for Tx&nbsp;<br>
+    DWORD fReserved : 25; // reserved&nbsp;<br>
+    DWORD cbInQue;        // bytes in input buffer&nbsp;<br>
+    DWORD cbOutQue;       // bytes in output buffer&nbsp;<br>
+  } COMSTAT, *LPCOMSTAT;&nbsp;<br>
+  其中的cbInQue和cbOutQue中即为缓冲区字节。<br>
+      <br>
+      11.同步I/O读写数据<br>
+ COMMTIOMOUTS to;<br> 
+ DWORD ReadThread(LPDWORD lpdwParam)<br> 
+ {<br> 
+ BYTE inbuff[100];<br> 
+ DWORD nByteRead,dwErrorMask,nToRead;<br> 
+ COMSTAT comstat;<br> 
+ if(!cp.dwProvCapabilities&amp;PCF_TOTALTIMEOUTS)<br> 
+ 	return 1L;<br> 
+ memset(&amp;to,0,sizeof(to));<br> 
+ to.ReadTotalTimeoutMultiplier = 5;<br> 
+ to.ReadTotalTimeoutConstant = 50;<br> 
+ SetCommTimeouts(hComm,&amp;to);<br> 
+ while(bReading)<br> 
+ {<br> 
+	ClearCommError(hComm,&amp;dwErrorMask,&amp;comstat);<br> 
+	if(dwErrorMask)<br> 
+		locProcessCommError(dwErrorMask);<br> 
+	if(comstat.cbInQue >100)<br> 
+		nToRead = 100;<br> 
+    	else<br> 
+		nToRead = comstat.cbInQue;<br> 
+	if(nToRead == 0)<br> 
+		continue;<br> 
+	if(!ReadFile(hComm,inbuff,nToRead,&amp;nBytesRead,NULL))<br> 
+		locProcessCommError(GetLastError());<br> 
+	else<br> 
+	    if(nBytesRead)<br> 
+		locProcessBytes(inbuff,nBytesRead);<br> 
+ }<br> 
+ return 0L;<br> 
+ }<br> 
+      <br> 
+      12.异步I/O读写数据<br> 
+  当CreateFile()中的fdwAttrsAndFlags参数为FILE_FLAG_OVERLAPPEN时,<br> 
+  端口是为异步I/O打开的,此时可以在ReadFile的最后一个参数中指定一个<br> 
+  OVERLAPPED结构，使数据的读操作在后台进行。WINDOWS 95包括了异步<br> 
+  I/O的许多变种。<br> 
+  typedef struct _OVERLAPPED {&nbsp;<br>
+    DWORD  Internal;&nbsp;<br>
+    DWORD  InternalHigh;&nbsp;<br>
+    DWORD  Offset;&nbsp;<br>
+    DWORD  OffsetHigh;&nbsp;<br>
+    HANDLE hEvent;&nbsp;<br>
+  } OVERLAPPED;&nbsp;<br>
+  对于串行口仅hEvent成员有效，其于成员必须为0。<br>
+  例程：<br>
+  COMMTIMEOUTS to;<br> 
+  ...<br> 
+  DWORD ReadThread((LPDWORD lpdwParam)<br> 
+  {<br> 
+  BYTE inbuff[100];<br> 
+  DWORD nRytesRead,endtime,lrc;<br> 
+  static OVERLAPPED o;<br> 
+  if(!cp.dwProvCapabilities &amp; PCF_TOTALTIMEOUTS)<br> 
+	return 1L;<br> 
+  memset(&amp;to,0,sizeof(to));<br> 
+  to.ReadTotalTimeoutMultiplier = 5;<br> 
+  to.ReadTotalTimeoutConstant = 1000;<br> 
+  SetCommTimeouts(hComm,&amp;to);<br> 
+  o.hEvent = CreateEvent(NULL,TRUE,FALSE,NULL);<br> 
+  while(bReading)<br> 
+  {<br> 
+	if(!ReadFile(hComm,inbuff,10,&amp;nBytesRead,&amp;o))<br> 
+	{<br> 
+	  nBytesRead = 0;<br> 
+	  if(lrc=GetLastError() == ERROR_IO_PENDING)<br> 
+	  {<br> 
+	    endtime = GetTickCount() + 1000;<br> 
+	    while(!GetOverlappedResult(hComm,&amp;o,&amp;nBytesRead,FALSE))<br> 
+	      if(GetTickCount() > endtime) break;<br> 
+	  }<br> 
+	  if(nBytesRead) locProcessBytes(inbuff,nBytesRead);<br> 
+	}<br> 
+	else<br> 
+	{<br> 
+	  if(nBytesRead) locProcessBytes(inbuff,nBytesRead);<br> 
+	  ResetEvent(o.hEvent);<br> 
+	}<br> 
+  }<br> 
+  PurgeComm(hComm,PURGE_RXCLEAR);<br> 
+  return 0L;<br> 
+      }<br> 
+      <br> 
+  这一例程是对一开始读缓冲区就读到所需的字节时的处理：<br> 
+  while(bReading)<br> 
+  {<br> 
+ 	if(!ReadFile(hComm,inbuff,10,&amp;nBytesRead,&amp;o))<br> 
+	{&nbsp;<br>
+	  if((lrc=GetLastError()) ==ERROR_IO_PENDING)<br> 
+	  {<br> 
+	    if(GetOverlappedResult(hComm,&amp;o,&amp;nBytesRead,TRUE))<br> 
+	    {&nbsp;<br>
+	    	if(nBytesRead)<br>
+		  locProcessBytesa(inbuff,nBytesRead);<br>
+ 	    }<br>
+	    else<br>
+	      locProcessCommError(GetLastError());<br>
+          }<br>
+	  else<br>
+            locProcessCommError(GetLastError));<br>
+	}<br>
+	else<br>
+	  if(nBytesRead) locProcessBytes(inbuff,nBytesRead);<br> 
+	ResetEvent(o.hEvent);<br> 
+  }<br> 
+      <br> 
+      13.事件驱I/O读写：<br> 
+  GetCommMask(hComm,&amp;dwMask)<br> 
+  Windows 95报告给应用程序的事件由此方法返回。<br> 
+  SetCommMasl(hComm,&amp;dwMask)<br> 
+  添加或修改Windows 95所报告的事件列表。<br> 
+  事件掩码如下：<br> 
+  EV_BREAK	检测到输入为止<br> 
+  EV_CTS	CTS(清除发送)信号改变状态<br> 
+  EV_DSR 	DSR(数据设置就绪)信号改变状态<br> 
+  EV_ERR	发生了线路状态错误.<br> 
+		线路状态错误为:<br> 
+  		CE_FRAME(帧错误)<br> 
+ 		CE_OVERRUN(接收缓冲区超限)<br> 
+		CE_RXPARITY(奇偶校验错误)<br> 
+  EV_RING	检测到振铃<br> 
+  EV_RLSD	RLSD(接收线路信号检测)信号改变状态<br> 
+  EV_EXCHAR	接收到一个字符,并放入输入缓冲区<br> 
+  EV_RXFLAG 	接收到事件字符(DCB成员的EvtChar成员),度放入输入缓冲区<br> 
+  EV_TXEMPTY	输出缓冲区中最后一个字符发送出去<br> 
+  在用SetCommMask指定了有用的事件后,应用程序可调用WaitCommEvent()来等<br> 
+  待事件发生.<br> 
+  BOOL WaitCommEvent(<br> 
+ 	HANDLE hFile,   	    // handle of communications device&nbsp;<br>
+ 	LPDWORD lpEvtMask,  	    // address of variable for event that occurred&nbsp;<br>
+     	LPOVERLAPPED lpOverlapped,  // address of overlapped structure&nbsp;<br>
+        );&nbsp;<br>
+  此方法可以以同步或异步方式操作<br>
+  例程:<br>
+  COMMTIMEOUTS to;<br> 
+  ...<br> 
+  DWORD ReadTherad(LPDWORD lpdwParam)<br> 
+  {<br> 
+  BYTE binbuff[100];<br> 
+  DWORD nBytesRead,dwEvent,dwError;<br> 
+  COMSTAT cs;<br> 
+  SetCommMask(hComm,EV_RXHAR);<br> 
+  while(bReading)<br> 
+  {<br> 
+	if(WaitCommEvent(hComm,&amp;dwEvent,NULL))<br> 
+	{<br> 
+	  ClearCommError(hComm,&amp;dwError,&amp;cs);<br> 
+	  if((dwEvent&amp;EV_RXCHAR)&amp;&amp;cs.cbInQue)<br> 
+	  {<br> 
+	     if(!ReadFile(hComm,inbuff,cs.cbInQue,&amp;nBytesRead,NULL)<br> 
+		locProcessCommError(GetLastError());<br> 
+	  }<br> 
+ 	  else<br> 
+	  {<br> 
+	    if(nByteRead)<br> 
+		locProcessBytes(inbuff,nBytesRead);<br> 
+	  }<br> 
+	else<br> 
+	  locProcessCommError(GetLastError());<br> 
+  }<br> 
+  PurgeComm(hComm,PURGE_RXCLEAR);<br> 
+  return 0L;<br> 
+      }<br> 
+  NOTE: SetCommMask(hComm,0)可使WaitCommEvent()中止.<br> 
+      <br> 
+  可使用GetCommmodemStatus()方法,例程:<br> 
+  if(cp.dwProvCapabilities&amp;PCF_RTSCTS)<br> 
+  {<br> 
+     SetCommMask(hComm,EV_CTS);<br> 
+     WaitCommEvent(hComm,&amp;dwMask,NULL);<br> 
+     if(dwMask&amp;EV_CTS)<br> 
+     {<br> 
+ 	GetCommModemStatus(hComm,&amp;dwStatus)<br> 
+	if(dwStatus&amp;MS_CTS_ON)  /* CTS stransition OFF-ON */<br> 
+        else                    /* CTS stransition ON-OFF */<br> 
+     }<br> 
+   }<br> 
+   MS_CTS_ON	CTS为ON<br> 
+   MS_DSR_ON	DSR为ON<br> 
+   MS_RING_ON	RING为ON<br> 
+   MS_ELSD_ON	RLSD为ON<br> 
+      <br> 
+      14.错误<br> 
+  当发生错误时应用方法ClearCommError(hComm,&amp;dwErrorMask,&amp;constat)<br> 
+  得到错误掩码。<br> 
+  CE_BREAK	中止条件<br> 
+  CE_FRAME	帧错误<br> 
+  CW_IOE	一般I/O错误,常伴有更为详细的错误标志<br> 
+  CE_MODE	不支持请求的模式<br> 
+  CE_OVERRUN	缓冲区超限下一个字符将丢失<br> 
+  CE_RXOVER	接收缓冲区超限<br> 
+  CE_RXPARITY	奇偶校验错误<br> 
+  CE_TXFULL	发送缓冲区满&nbsp;<br>
+  CE_DNS	没有选择并行设备<br> 
+  CE_PTO	并行设备发生超时&nbsp;<br>
+  CE_OOP	并行设备缺纸<br> 
+      <br> 
+      15.控制命令<br> 
+  EscapeCommFunction()可将硬件信号置ON或OFF，模拟XON或XOFF<br> 
+  BOOL EscapeCommFunction(<br> 
+	HANDLE hFile,  // handle to communications device&nbsp;<br>
+ 	DWORD dwFunc   // extended function to perform&nbsp;<br>
+  	);&nbsp;<br>
+  dwFunc的有效值（可用‘|’同时使用多个值）<br>
+  CLRDTR	DTR置OFF<br> 
+  CLRRTS	RTS置OFF<br> 
+  SETDTR	STR置ON<br> 
+  SETRTS	TRS置ON<br> 
+  SETXOFF	模拟XOFF字符的接收<br> 
+  SETXON	模拟XON字符的接收<br> 
+  SETBREAK	在发送中产生一个中止<br> 
+  CLRBREAK	在发送中清除中止    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+ 
+</body> 
+ 
+</html> 

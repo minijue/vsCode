@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">VisualBasic窗体背景花纹的实现<br>
+      <br>
+                     山东省德州市德城区工商银行胥智强<br>
+                            德州市立医院曹秀英      
+      <p><br>
+      &nbsp;&nbsp;&nbsp; 我们在开发软件过程中，为提高软件的商品化程度，感觉到界面的美观程度是一个软件能否获得成功的一个重要因素，我们仔细研究了一些成功的商品化软件，从这些软件上可以看到,程序窗口背景能显示出非常美丽的、富有立体感的花纹。而采用VisualBasic3.0或4.0进行窗体设计，若只按照系统提供的功能，只能从有限的几种颜色中选择一种颜色或采用程序绘制一些简单的线条。而想实现立体感很强的纹理图案，一般只能采用窗体的PICTURE属性调用位图文件，使用这种方法实现有许多缺点,其一是窗体大小受位图大小的限制，调整起来麻烦，不具有通用性和灵活性；其二是浪费资源，因为花纹图案基本上是重复图案，采用与窗体同样大小的位图是一种浪费。<br>
+      <br>
+    下面介绍一种窗体背景花纹实现的方法。在窗体上建立一个网格控件，设定网格行不可见，去掉固定行和固定列，用程序实现网格控件与窗体同样大小，并随窗体大小的改变而改变。然后设计一个花纹图案，形成BMP位图文件(本文程序使用文件Pict1.bmp)，或者从其它图象中截取一段图案,也可以利用Windows系统提供的图案（如c:windowsTiles.bmp)，将其调入Picture控件。设定网格的每个单元与该图案大小相同，使单元的数量正好覆盖整个窗体背景，再将所有单元均显示该图案。通过子程序Backpict()实现以上过程，不论图案大小、窗体大小，<br>
+      程序都能自动调整网格控件大小和网格单元大小及单元数量。该程序在VisualBasic4.0上调试成功。<br>
+      <br>
+      1.新建窗体Form1,属性如下：<br>
+      Caption=“背景花纹的实现”<br>
+      Borderstyle=3(无最大、最小化按钮）<br>
+      <br>
+      2.建网格控件Grid1,它的位置和大小将在程序中设置（与Form1同样大）,属性为：<br>
+      Enabled=False（焦点不会落在网格控件Grid1上）<br>
+      Fillstyle=1（改变所有单元Text特性）<br>
+      Fixedcols=0（无固定行）<br>
+      Fixedrows=0（无固定列）<br>
+      Gridlines=False（网格行不可见），<br>
+      Visible=True<br>
+      <br>
+      3.建立图象控件Picture1,程序运行时将背景花纹基本图案放入其中，属性为<br>
+      Visible=False（不可见）<br>
+      Autosize=True（自动调整大小）<br>
+      <br>
+      4.控件中加入Sheridan3DControls,选取其中的三维命令按钮SSCommand,建立两个<br>
+      按钮<br>
+      SSCommand1.Caption=“退出”<br>
+      SSCommand2.Caption=“更换背景”（演示不同的背景图案）<br>
+      <br>
+      它们的属性Picture可调用与背景相同或不同的图案，如果使用普通的命令按钮控<br>
+      件Command也可，只是命令按钮无背景图案。<br>
+      <br>
+      5.建立背景图案形成子程序：<br>
+      <br>
+		Dim pictfile As String  `位图文件名<br> 
+		Dim FILEPATH As String  ` 文件路径<br> 
+      Sub Backpict(pictfile)&nbsp;<br>
+      picture1.ScaleMode = 3<br> 
+      Form1.ScaleMode = 3<br> 
+      picture1.Picture = LoadPicture(pictfile)<br> 
+      `网格控件覆盖整个窗体背景<br> 
+      grid1.Top = -1<br> 
+      grid1.Left = -1<br> 
+      grid1.Width = Width<br> 
+      grid1.Height = Height<br> 
+      grid1.Cols=Int(Form1.ScaleWidth/picture1.ScaleWidth) + 1<br> 
+      grid1.Rows=Int(Form1.ScaleHeight/picture1.ScaleHeight) + 1<br> 
+      `所有单元大小等于基本图案大小<br> 
+      For i = 0 To grid1.Cols - 1<br> 
+      For j = 0 To grid1.Rows - 1<br> 
+      grid1.ColWidth(i) = picture1.ScaleWidth * 15<br> 
+      grid1.RowHeight(j) = picture1.ScaleHeight * 15<br> 
+      Next j<br> 
+      Next I<br> 
+      `选定所有单元<br> 
+      grid1.SelStartCol = 0<br> 
+      grid1.SelStartRow = 0<br> 
+      grid1.SelEndCol = grid1.Cols - 1<br> 
+      grid1.SelEndRow = grid1.Rows - 1<br> 
+      grid1.Picture = Picture1.Picture<br> 
+      End Sub<br> 
+       6. 窗体主程序&nbsp;<br>
+      Private Sub Form_Load()<br> 
+      Private Sub Form_Load()<br> 
+ `得到运行程序路径名，路径名后带反斜杠<br> 
+		If Right(App.Path, 1) &lt;> "" Then<br> 
+        filePath = App.Path &amp; ""<br> 
+  	Else<br> 
+        filePath = App.Path<br> 
+ End If<br> 
+      `窗体初始显示由Tiles.bmp基本图案组成的背景<br> 
+      pictfile = "c:windowsTiles.bmp"<br> 
+      backpict (pictfile)<br> 
+      End Sub<br> 
+       7. 退出程序命令按钮&nbsp;<br>
+  Private Sub SSCommand1_Click()<br> 
+      End<br> 
+      End Sub<br> 
+       8. 演示不同的底纹图案&nbsp;<br>
+  Private Sub SSCommand2_Click()<br> 
+		`两种背景图案交替演示<br> 
+ If pictfile = filePath &amp; "Pict1.bmp" Then<br> 
+      pictfile = "c:windowsTiles.bmp"<br> 
+ Else<br> 
+      pictfile = filePath &amp; "Pict1.bmp"<br> 
+     End If<br> 
+ Backpict (pictfile)<br> 
+      End Sub      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

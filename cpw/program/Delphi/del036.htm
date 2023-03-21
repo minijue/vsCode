@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center"><br>
+			DELPHI程序注册码设计<br>
+      <br>
+ 						阿梁      
+      <p><br>
+      &nbsp;&nbsp;&nbsp; 当你辛辛苦苦用DELPHI做好了一个你认为十分不错的程序,你是否想把它发布出去成为共享软件呢? 做为一个共享软件,注册码肯定是少不了的,你可以通过判断程序是否注册来进行功能,时间或一些其它限制.现在就介绍一种简单的注册码制造方法.思路是这样的:程序运行时先检测注册表,如果找到注册项,则表明已经注册,如果没有找到注册项,则提示要求注册.<br> 
+      <br> 
+      &lt;注册例程><br> 
+      <br> 
+      在DELPHI下新建一工程,放置Edit1,Edit2,Label1,Label2,Button1组件.具体代码如下:<br> 
+      <br> 
+      unit Unit1;<br> 
+      <br> 
+      interface<br> 
+      <br> 
+      uses<br> 
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,<br> 
+  StdCtrls,Registry;//在此加上Registry以便调用注册表.<br> 
+      <br> 
+      type<br> 
+  TForm1 = class(TForm)<br> 
+    Button1: TButton;<br> 
+    Edit1: TEdit;<br> 
+    Edit2: TEdit;<br> 
+    Label1: TLabel;<br> 
+    Label2: TLabel;<br> 
+    procedure Button1Click(Sender: TObject);<br> 
+    procedure FormCreate(Sender: TObject);<br> 
+  private<br> 
+  Function Check():Boolean;<br> 
+  Procedure CheckReg();<br> 
+  Procedure CreateReg();<br> 
+    { Private declarations }<br> 
+  public<br> 
+    { Public declarations }<br> 
+  end;<br> 
+      <br> 
+      var<br> 
+  Form1: TForm1;<br> 
+  PName:string;  //全局变量,存放用户名和注册码.<br> 
+  PPass:integer;<br> 
+      <br> 
+      implementation<br> 
+      <br> 
+      {$R *.DFM}<br> 
+      <br> 
+      Procedure TForm1.CreateReg();//创建用户信息.<br> 
+      var Rego:TRegistry;<br> 
+      begin<br> 
+ Rego:=TRegistry.Create;<br> 
+ Rego.RootKey:=HKEY_USERS;<br> 
+ rego.OpenKey('.DEFAULT\Software\AngelSoft\Demo',True);//键名为AngelSoft\Demo,可自行修改.<br> 
+ Rego.WriteString('Name',PName);//写入用户名.<br> 
+ Rego.WriteInteger('Pass',PPass);//写入注册码.<br> 
+ Rego.Free;<br> 
+ ShowMessage('程序已经注册,谢谢!');<br> 
+ CheckReg; //刷新.<br> 
+      end;<br> 
+      <br> 
+      Procedure TForm1.CheckReg();//检查程序是否在注册表中注册.<br> 
+      var Rego:TRegistry;<br> 
+      begin<br> 
+ Rego:=TRegistry.Create;<br> 
+ Rego.RootKey:=HKEY_USERS;<br> 
+ IF Rego.OpenKey('.DEFAULT\Software\AngelSoft\Demo',False) then<br> 
+ begin<br> 
+  Form1.Caption:='软件已经注册';<br> 
+  Button1.Enabled:=false;<br> 
+  Label1.Caption:=rego.ReadString('Name');//读用户名.<br> 
+  Label2.Caption:=IntToStr(Rego.ReadInteger('Pass')); //读注册码.<br> 
+  rego.Free;<br> 
+ end<br> 
+ else Form1.Caption:='软件未注册,请注册';<br> 
+      end;<br> 
+      <br> 
+      Function TForm1.Check():Boolean;//检查注册码是否正确.<br> 
+      var<br> 
+      Temp:pchar;<br> 
+      Name:string;<br> 
+      c:char;<br> 
+      i,Long,Pass:integer;<br> 
+      begin<br> 
+ Pass:=0;<br> 
+ Name:=edit1.Text;<br> 
+ long:=length(Name);<br> 
+      <br> 
+ for i:=1 to Long do<br> 
+ begin<br> 
+  temp:=pchar(copy(Name,i,1));<br> 
+  c:=temp^;<br> 
+  Pass:=Pass+ord(c); //将用户名每个字符转换为ASCII码后相加.<br> 
+ end;<br> 
+ if StrToInt(Edit2.Text)=pass then<br> 
+  begin<br> 
+   Result:=True;<br> 
+   PName:=Name;<br> 
+   PPass:=Pass;<br> 
+  end<br> 
+  else Result:=False;<br> 
+      end;<br> 
+      <br> 
+      procedure TForm1.Button1Click(Sender: TObject);<br> 
+      begin<br> 
+ if Check then CreateReg<br> 
+ else ShowMessage('注册码不正确,无法注册');<br> 
+      end;<br> 
+      <br> 
+      procedure TForm1.FormCreate(Sender: TObject);<br> 
+      begin<br> 
+ CheckReg;<br> 
+      end;<br> 
+      <br> 
+      end.<br> 
+      <br> 
+      <br> 
+      &lt;注册器><br> 
+      <br> 
+      在DELPHI下新建一工程,放置Edit1,Edit2,Button1组件.具体代码如下:<br> 
+      <br> 
+      unit Unit1;<br> 
+      <br> 
+      interface<br> 
+      <br> 
+      uses<br> 
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,<br> 
+  StdCtrls;<br> 
+      <br> 
+      type<br> 
+  TForm1 = class(TForm)<br> 
+    Button1: TButton;<br> 
+    Edit1: TEdit;<br> 
+    Edit2: TEdit;<br> 
+    procedure Button1Click(Sender: TObject);<br> 
+  private<br> 
+    { Private declarations }<br> 
+  public<br> 
+    { Public declarations }<br> 
+  end;<br> 
+      <br> 
+      var<br> 
+  Form1: TForm1;<br> 
+      <br> 
+      implementation<br> 
+      <br> 
+      {$R *.DFM}<br> 
+      <br> 
+      procedure TForm1.Button1Click(Sender: TObject);<br> 
+      var<br> 
+      Temp:pchar;<br> 
+      Name:string;<br> 
+      c:char;<br> 
+      i,Long,Pass:integer;<br> 
+      begin<br> 
+ Pass:=0;<br> 
+ Name:=edit1.Text;<br> 
+ long:=length(Name);<br> 
+      <br> 
+ for i:=1 to Long do<br> 
+ begin<br> 
+  temp:=pchar(copy(Name,i,1));<br> 
+  c:=temp^;<br> 
+  Pass:=Pass+ord(c);<br> 
+ end;<br> 
+ edit2.text:=IntToStr(pass);<br> 
+      end;<br> 
+      <br> 
+      end.<br> 
+      <br> 
+      &nbsp;&nbsp;&nbsp; 从&lt;注册器>中取得注册码,便可在&lt;注册例程>中进行注册.原理是使用ORD函数取得用户名每单个字符的ASCII码值,并进行相加得到注册码.<br>
+      当然,这十分容易并破解,你可以用XOR进行异或操作,或者倒取反值...具体的要看你怎么实现了.总之,本文章只抛砖引玉罢了.     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p><br>
+</p>
+
+</body>
+
+</html>

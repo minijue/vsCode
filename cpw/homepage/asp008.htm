@@ -1,0 +1,291 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（八）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （八）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计 —— ASP 篇 （八）<font
+    size="-1"> </p>
+    <p align="right"></font><span style="font-family: 宋体; font-size: 9pt">作者 ： 天 
+    骄 创 作 室　书 生 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　在 上 一 篇 中 作 者 给 
+    大 家 详 细 介 绍 了 ASP 内 建 对 象 Response 的 使 用 方 法，在 这 一 
+    篇 中 作 者 将 继 续 给 大 家 介 绍 另 两 个 非 常 实 用 且 重 要 
+    的 ASP 的 内 建 对 象 Application 和 Session。&nbsp; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 ASP 的 内 建 对 象 
+    中 除 了 用 于 发 送、接 收 和 处 理 数 据 的 对 象 外，还 有 一 
+    些 非 常 实 用 的 代 表 Active Server 应 用 程 序 和 单 个 用 户 信 息 
+    的 对 象。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 让 我 们 先 来 看 看 
+    Application 对 象。在 同 一 虚 拟 目 录 及 其 子 目 录 下 的 所 有 .asp 
+    文 件 构 成 了 ASP 应 用 程 序。我 们 非 但 可 以 使 用 Application 对 
+    象，在 给 定 的 应 用 程 序 的 所 有 用 户 之 间 共 享 信 息，并 
+    在 服 务 器 运 行 期 间 持 久 的 保 存 数 据。而 且，Application 对 
+    象 还 有 控 制 访 问 应 用 层 数 据 的 方 法 和 可 用 于 在 应 用 
+    程 序 启 动 和 停 止 时 触 发 过 程 的 事 件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 就 让 我 们 一 
+    起 来 学 习 Application 对 象。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 一、属 性 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 虽 然 Application 对 象 
+    没 有 内 置 的 属 性，但 我 们 可 以 使 用 以 下 句 法 设 置 用 户 
+    定 义 的 属 性 也 可 称 为 集 合。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Application(&quot; 属 性 / 
+    集 合 名 称 &quot;)= 值 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 我 们 可 以 使 用 如 
+    下 脚 本 声 明 并 建 立 Application 对 象 的 属 性。 <br>
+    &lt; %<br>
+    Application(&quot;MyVar&quot;) = &quot;Hello&quot;<br>
+    Set Application(&quot;MyObj&quot;) = Server.CreateObject(&quot;MyComponent&quot;)<br>
+    %&gt;<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 一 旦 我 们 分 配 了 
+    Application 对 象 的 属 性，它 就 会 持 久 地 存 在，直 到 关 闭 WEB 
+    服 务 器 服 务 使 得 Application 停 止。由 于 存 储 在 Application 对 象 
+    中 的 数 值 可 以 被 应 用 程 序 的 所 有 用 户 读 取，所 以 
+    Application 对 象 的 属 性 特 别 适 合 在 应 用 程 序 的 用 户 之 间 
+    传 递 信 息。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 二、方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Application 对 象 有 两 
+    个 方 法，它 们 都 是 用 于 处 理 多 个 用 户 对 存 储 在 Application 
+    中 的 数 据 进 行 写 入 的 问 题 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、Lock 方 法 禁 止 其 
+    他 客 户 修 改 Application 对 象 的 属 性。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Lock 方 法 阻 止 其 他 
+    客 户 修 改 存 储 在 Application 对 象 中 的 变 量，以 确 保 在 同 一 
+    时 刻 仅 有 一 个 客 户 可 修 改 和 存 取 Application 变 量。如 果 用 
+    户 没 有 明 确 调 用 Unlock 方 法，则 服 务 器 将 在 .asp 文 件 结 束 
+    或 超 时 后 即 解 除 对 Application 对 象 的 锁 定。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 让 我 们 来 看 看 下 
+    面 这 段 用 Application 来 记 录 页 面 访 问 次 数 的 程 序 : <br>
+    &lt; %<br>
+    Dim NumVisitsNumVisits=0<br>
+    Application.LockApplication(&quot;NumVisits&quot;) = Application(&quot;NumVisits&quot;) + 
+    1<br>
+    Application.Unlock<br>
+    %&gt;<br>
+    欢 迎 光 临 本 网 页，你 是 本 页 的 第 &lt; %= 
+    Application(&quot;NumVisits&quot;) %&gt; 位 访 客 !<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 将 以 上 脚 本 保 存 
+    在 你 的 .asp 文 件 中，就 轻 而 易 举 地 给 你 的 页 面 添 加 了 一 
+    个 计 数 器。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、和 Lock 方 法 相 
+    反，Unlock 方 法 允 许 其 他 客 户 修 改 Application 对 象 的 属 性。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 上 面 的 例 子 
+    中，上 述 例 子 中，Unlock 方 法 解 除 对 象 的 锁 定，使 得 下 一 
+    个 客 户 端 能 够 增 加 NumVisits 的 值。 　　 三、事 件 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、Application_OnStart </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Application_OnStart 事 件 
+    在 首 次 创 建 新 的 会 话 ( 即 Session_OnStart 事 件 ) 之 前 发 生。当 
+    WEB 服 务 器 启 动 并 允 许 对 应 用 程 序 所 包 含 的 文 件 进 行 
+    请 求 时 就 触 发 Application_OnStart 事 件。Application_OnStart 事 件 的 处 
+    理 过 程 必 须 写 在 Global.asa 文 件 之 中。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Application_OnStart 事 件 
+    的 语 法 如 下 : <br>
+    &lt; SCRIPT LANGUAGE=ScriptLanguage RUNAT=Server&gt;<br>
+    Sub Application_OnStart. . .<br>
+    End Sub<br>
+    &lt; /SCRIPT&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、Application_OnEnd </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Application_OnEnd 事 件 在 
+    应 用 程 序 退 出 时 于 Session_OnEnd 事 件 之 后 发 生，Application_OnEnd 
+    事 件 的 处 理 过 程 也 必 须 写 在 Global.asa 文 件 之 中。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 让 我 们 来 看 
+    看 在 使 用 Application 对 象 时 必 须 注 意 的 一 些 事 项。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 不 能 在 Application 对 
+    象 中 存 储 ASP 内 建 对 象。例 如，下 面 的 每 一 行 都 返 回 一 
+    个 错 误。 <br>
+    &lt; %<br>
+    Set Application(&quot;var1&quot;)=Session<br>
+    Set Application(&quot;var2&quot;)=Request<br>
+    Set Application(&quot;var3&quot;)=Response<br>
+    Set Application(&quot;var4&quot;)=Server<br>
+    Set Application(&quot;var5&quot;)=Application<br>
+    Set Application(&quot;var6&quot;)=ObjectContext<br>
+    %&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 若 您 将 一 个 数 组 
+    存 储 在 Application 对 象 中，请 不 要 直 接 更 改 存 储 在 数 组 中 
+    的 元 素。例 如，下 列 的 脚 本 无 法 运 行。 <br>
+    &lt; % Application(&quot;StoredArray&quot;)(3) = &quot;new value&quot; %&gt;</span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 是 因 为 Application 
+    对 象 是 作 为 集 合 被 实 现 的。数 组 元 素 StoredArray(3) 未 获 得 
+    新 的 赋 值。而 此 值 将 包 含 在 Application 对 象 集 合 中，并 将 
+    覆 盖 此 位 置 以 前 存 储 的 任 何 信 息。建 议 您 在 将 数 组 存 
+    储 在 Application 对 象 中 时，在 检 索 或 改 变 数 组 中 的 对 象 前 
+    获 取 数 组 的 一 个 副 本。在 对 数 组 操 作 时，您 应 再 将 数 
+    组 全 部 存 储 在 Application 对 象 中，这 样 您 所 做 的 任 何 改 动 
+    将 被 存 储 下 来。下 列 的 脚 本 对 此 进 行 演 示。 <br>
+    ---asp8a.asp---<br>
+    &lt; %<br>
+    dim MyArray()<br>
+    Redim MyArray(5)<br>
+    MyArray(0)=&quot;hello&quot;<br>
+    MyArray(1)=&quot;some other string&quot;<br>
+    Application.Lock<br>
+    Application(&quot;StoredArray&quot;)=MyArray<br>
+    Application.Unlock<br>
+    Response.Redirect &quot;asp8b.asp&quot;<br>
+    %&gt;<br>
+    <br>
+    ---asp8b.asp---<br>
+    &lt; %<br>
+    LocalArray=Application(&quot;StoredArray&quot;)<br>
+    LocalArray(1)=&quot; there&quot;<br>
+    Response.Write LocalArray(0)&amp;LocalArray(1)<br>
+    Application.Lock<br>
+    Application(&quot;StoredArray&quot;)=LocalArray<br>
+    Application.Unlock<br>
+    %&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 与 Application 对 象 具 
+    有 相 近 作 用 的 另 一 个 非 常 实 用 的 ASP 内 建 对 象 就 是 
+    Session。我 们 可 以 使 用 Session 对 象 存 储 特 定 的 用 户 会 话 所 
+    需 的 信 息。当 用 户 在 应 用 程 序 的 页 之 间 跳 转 时，存 储 
+    在 Session 对 象 中 的 变 量 不 会 清 除，而 用 户 在 应 用 程 序 中 
+    访 问 页 面 时，这 些 变 量 始 终 存 在。当 用 户 请 求 来 自 应 
+    用 程 序 的 Web 页 时，如 果 该 用 户 还 没 有 会 话，则 Web 服 务 
+    器 将 自 动 创 建 一 个 Session 对 象。当 会 话 过 期 或 被 放 弃 
+    后，服 务 器 将 终 止 该 会 话。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 通 过 向 客 户 程 序 
+    发 送 唯 一 的 Cookie 可 以 管 理 服 务 器 上 的 Session 对 象。当 用 
+    户 第 一 次 请 求 ASP 应 用 程 序 中 的 某 个 页 面 时，ASP 要 检 查 
+    HTTP 头 信 息，查 看 是 否 有 在 报 文 中 有 名 为 ASPSESSIONID 的 Cookie 
+    发 送 过 来，如 果 有，则 服 务 器 会 启 动 新 的 会 话，并 为 该 
+    会 话 生 成 一 个 全 局 唯 一 的 值，在 把 这 个 值 作 为 新 
+    ASPSESSIONID Cookie 的 值 发 送 给 客 户 端，正 是 使 用 这 种 Cookie，可 
+    以 访 问 存 储 在 服 务 器 上 的 属 于 客 户 程 序 的 信 息。Session 
+    对 象 最 常 见 的 作 用 就 是 存 储 用 户 的 首 选 项。例 如，如 
+    果 用 户 指 明 不 喜 欢 查 看 图 形，就 可 以 将 该 信 息 存 储 在 
+    Session 对 象 中。另 外 其 还 经 常 被 用 在 鉴 别 客 户 身 份 的 程 
+    序 中。要 注 意 的 是，会 话 状 态 仅 在 支 持 cookie 的 浏 览 器 中 
+    保 留，如 果 客 户 关 闭 了 Cookie 选 项，Session 也 就 不 能 发 挥 作 
+    用 了。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 一、属 性 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、SessionID </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 SessionID 属 性 返 回 用 
+    户 的 会 话 标 识。在 创 建 会 话 时，服 务 器 会 为 每 一 个 会 
+    话 生 成 一 个 单 独 的 标 识。会 话 标 识 以 长 整 形 数 据 类 型 
+    返 回。在 很 多 情 况 下 SessionID 可 以 用 于 WEB 页 面 注 册 统 计。 
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、TimeOut </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Timeout 属 性 以 分 钟 
+    为 单 位 为 该 应 用 程 序 的 Session 对 象 指 定 超 时 时 限。如 果 
+    用 户 在 该 超 时 时 限 之 内 不 刷 新 或 请 求 网 页，则 该 会 话 
+    将 终 止。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 二、方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Session 对 象 仅 有 一 
+    个 方 法，就 是 Abandon，Abandon 方 法 删 除 所 有 存 储 在 Session 对 
+    象 中 的 对 象 并 释 放 这 些 对 象 的 源。如 果 您 未 明 确 地 调 
+    用 Abandon 方 法，一 旦 会 话 超 时，服 务 器 将 删 除 这 些 对 
+    象。当 服 务 器 处 理 完 当 前 页 时，下 面 示 例 将 释 放 会 话 
+    状 态。 <br>
+    　　&lt; % Session.Abandon %&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 三、事 件 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Session 对 象 有 两 个 
+    事 件 可 用 于 在 Session 对 象 启 动 和 释 放 是 运 行 过 程。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、Session_OnStart 事 件 
+    在 服 务 器 创 建 新 会 话 时 发 生。服 务 器 在 执 行 请 求 的 页 
+    之 前 先 处 理 该 脚 本。Session_OnStart 事 件 是 设 置 会 话 期 变 量 
+    的 最 佳 时 机，因 为 在 访 问 任 何 页 之 前 都 会 先 设 置 它 
+    们。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 尽 管 在 Session_OnStart 
+    事 件 包 含 Redirect 或 End 方 法 调 用 的 情 况 下 Session 对 象 仍 会 
+    保 持，然 而 服 务 器 将 停 止 处 理 Global.asa 文 件 并 触 发 
+    Session_OnStart 事 件 的 文 件 中 的 脚 本。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 为 了 确 保 用 户 在 
+    打 开 某 个 特 定 的 Web 页 时 始 终 启 动 一 个 会 话，就 可 以 在 
+    Session_OnStart 事 件 中 调 用 Redirect 方 法。当 用 户 进 入 应 用 程 序 
+    时，服 务 器 将 为 用 户 创 建 一 个 会 话 并 处 理 Session_OnStart 事 
+    件 脚 本。您 可 以 将 脚 本 包 含 在 该 事 件 中 以 便 检 查 用 户 
+    打 开 的 页 是 不 是 启 动 页，如 果 不 是，就 指 示 用 户 调 用 
+    Response.Redirect 方 法 启 动 网 页。程 序 如 下 : <br>
+    <br>
+    &lt; SCRIPT RUNAT=Server Language=VBScript&gt;<br>
+    Sub Session_OnStart<br>
+    startPage = &quot;/MyApp/StartHere.asp&quot;<br>
+    currentPage = Request.ServerVariables(&quot;SCRIPT_NAME&quot;)<br>
+    if strcomp(currentPage,startPage,1) then<br>
+    Response.Redirect(startPage)<br>
+    end if<br>
+    End Sub<br>
+    &lt; /SCRIPT&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 上 述 程 序 只 能 在 
+    支 持 cookie 的 浏 览 器 中 运 行。因 为 不 支 持 cookie 的 浏 览 器 
+    不 能 返 回 SessionID cookie，所 以，每 当 用 户 请 求 Web 页 时，服 务 
+    器 都 会 创 建 一 个 新 会 话。这 样，对 于 每 个 请 求 服 务 器 
+    都 将 处 理 Session_OnStart 脚 本 并 将 用 户 重 定 向 到 启 动 页 中。 
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、Session_OnEnd 事 件 在 
+    会 话 被 放 弃 或 超 时 发 生。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 关 于 使 用 Session 对 
+    象 需 要 注 意 的 事 项 Application 对 象 相 近，请 参 照 前 文。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 会 话 可 以 通 过 以 
+    下 三 种 方 式 启 动 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、一 个 新 用 户 请 
+    求 访 问 一 个 URL，该 URL 标 识 了 某 个 应 用 程 序 中 的 .asp 文 
+    件，并 且 该 应 用 程 序 的 Global.asa 文 件 包 含 Session_OnStart 过 
+    程。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、用 户 在 Session 对 
+    象 中 存 储 了 一 个 值。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 3、用 户 请 求 了 一 
+    个 应 用 程 序 的 .asp 文 件，并 且 该 应 用 程 序 的Global.asa 文 件 
+    使 用 &lt; OBJECT&gt; 标 签 创 建 带 有 会 话 作 用 域 的 对 象 的 实 
+    例。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 如 果 用 户 在 指 定 
+    时 间 内 没 有 请 求 或 刷 新 应 用 程 序 中 的 任 何 页，会 话 将 
+    自 动 结 束。这 段 时 间 的 默 认 值 是 20 分 钟。可 以 通 过 在 
+    Internet 服 务 管 理 器 中 设 置“应 用 程 序 选 项”属 性 页 中 
+    的“会 话 超 时”属 性 改 变 应 用 程 序 的 默 认 超 时 限 制 设 
+    置。应 依 据 您 的 Web 应 用 程 序 的 要 求 和 服 务 器 的 内 存 空 
+    间 来 设 置 此 值。例 如，如 果 您 希 望 浏 览 您 的 Web 应 用 程 
+    序 的 用 户 在 每 一 页 仅 停 留 几 分 钟，就 应 该 缩 短 会 话 的 
+    默 认 超 时 值。过 长 的 会 话 超 时 值 将 导 致 打 开 的 会 话 过 
+    多 而 耗 尽 您 的 服 务 器 的 内 存 资 源。对 于 一 个 特 定 的 会 
+    话，如 果 您 想 设 置 一 个 小 于 默 认 超 时 值 的 超 时 值，可 
+    以 设 置 Session 对 象 的 Timeout 属 性。例 如，下 面 这 段 脚 本 将 
+    超 时 值 设 置 为 5 分 钟。 <br>
+    　　&lt; % Session.Timeout = 5 %&gt;</span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 当 然 你 也 可 以 设 
+    置 一 个 大 于 默 认 设 置 的 超 时 值，Session.Timeout 属 性 决 定 超 
+    时 值。你 还 可 以 通 过 Session 对 象 的 Abandon 方 法 显 式 结 束 一 
+    个 会 话。例 如，在 表 格 中 提 供 一 个“退 出”按 钮，将 按 钮 
+    的 ACTION 参 数 设 置 为 包 含 下 列 命 令 的 .asp 文 件 的 URL。 <br>
+    　　&lt; % Session.Abandon %&gt;<br>
+    <br>
+    　　 今 天，我 们 学 习 了 两 个 在 WEB 页 面 特 别 是 基 于 WEB 的 
+    BBS 或 Chat 上 经 常 使 用 ASP 内 建 对 象，由 于 这 两 个 对 象 在 实 
+    际 运 用 中 很 实 用，因 此 在 下 一 篇 中 作 者 将 运 用 至 此 我 
+    们 所 学 过 的 4 个 ASP 内 建 对 象，给 大 家 演 示 一 个 完 整 的 
+    ASP 应 用 程 序，相 信 通 过 这 个 练 习，能 大 大 加 深 你 对 ASP 
+    应 用 程 序 的 理 解 和 掌 握。敬 请 关 注“动 态 网 站 设 计 --ASP 
+    篇 (9)”。</span><font size="-1"> </font></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

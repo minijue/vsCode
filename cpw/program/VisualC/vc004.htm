@@ -1,0 +1,160 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Windows 95多线程间同步事件的控制方法</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<p align="center"><strong><span style="font-size: 9pt"><font face="Arial" size="4">Windows 
+95</font><font size="4">多线程间同步事件的控制方法</font></span></strong></p>
+
+<p align="center"><span style="font-size: 9pt">录入/江湖小子</span></p>
+
+<p><span style="font-size: 9pt">摘要：在Windows 95中所有的应用程序实际上都以是线程的方式运行的。在设计多线程应用程序中有时必须在线程之间保持一定的同步关系，才能使用户能够对独立运行的线程进行有效的控制。为此本文在简要介绍Windows 
+95中线程的概念及其创建方法后，提出了一种在多线程之间利用 event对象实现事件同步的控制方法。最后还介绍了在不同应用程序之间进行同步事件控制的方法，这种方法使得不同应用程序进行相互间的同步事件控制变得很简单。<br>
+关键词：Windows95 线程 <br>
+同步事件 event<br>
+对象 Win32<br>
+<br>
+一, 引言<br>
+<br>
+Windows 95是一个多任务、多线程的操作系统，其中的每一个应用程序都是一个进程（process）。进程可以创建多个并发的线程（thread），同时进程也以主线程（primarythread)的形式被系统调度。所谓的线程是系统调度的一个基本单位， 
+在程序中线程是以函数的形式出现的，它的代码是进程代码的一部分，并与进程及其派生的其它线程共享进程的全局变量和文件打开表等公用信息。主线程类似于UNIX系统中的父进程，线程则类似于子进程。主线程也是一个线程，称作主线程仅仅是为了和它创建的线程区别开来。每个线程都相对于主线程而独立运行，为了使得线程能对用户的控制作出响应，必须控制线程的运行，比如用户可暂停、终止一个线程的运行或改变线程运行的条件等。而且在用户控制与线程运行之间有时应该有一定的同步控制关系，以保证用户对线程的有效控制。线程可以根据不同的条件对用户的控制作出不同的响应。为了实现上述目的必须使用系统提供的同步对象（Synchronization 
+Object），如event对象。 编写多线程应用程序必须使用Win32 API。<br>
+<br>
+二, 线程的创建方法<br>
+<br>
+调用Win32 API中的CreateThread函数创建线程。hThread=CreateThread(NULL,0,&amp;TEventWindow::ThreadFunc,this,0,&amp;hThreadId);第一个参数设定线程的安全属性，因其仅用于Windows 
+NT，故不设定。第二个参数为0指定线程使用缺省的堆栈大小。第三个参数指定线程函数，线程即从该函数的入口处开始运行，函数返回时就意味着线程终止运行。第四个参数为线程函数的参数，可以是指向任意数据类型的指针。第五个参数设定线程的生成标志。hThreadId存放线程的标识号。线程函数如下定义，上述的 
+this参数是指向线程所属窗口的句柄指针，通过thrdWin参数传送过来，利用这个指针再调用相应的LoopFunc函数，线程的具体事务都在这个函数中执行。<br>
+<br>
+DWORD _stdcall TEventWindow::ThreadFunc(void *thrdWin){<br>
+return STATIC_CAST(TEventWindow*,thrdWin)-&gt;LoopFunc( );<br>
+}<br>
+<br>
+三, 线程的同步事件控制方法<br>
+<br>
+Windows 95提供两种基本类型的系统对象，一种是彼此互斥的对象，用来协调访问数据，如 
+mutex对象；一种是事件同步对象，用来发送命令或触发事件，安排事件执行的先后次序，如 
+event对象。系统对象在系统范围内有效，它们都具有自己的安全属性、访问权限和以下两种状态中的一种：Signaled和nonSignaled。对于event对象调用SetEvent函数可将其状态设为Signaled，调用ResetEvent函数则可将其状态设为nonSignaled。演示程序中的线程在一个大循环中不断地将运行结果显示出来，当用户要关闭窗口时线程才终止运行。不过必须在窗口关闭之前先终止线程的运行，否则线程运行的结果将会显示在屏幕的其他地方，所以有必要在线程结束与关闭窗口这两个事件之间建立起同步关系。为此在TEventWindow类的构造函数中创建两个event对象，用来实现事件同步。hCloseEvent=CreateEvent(0,FALSE,FALSE,0); 
+hNoCloseEvent=CreateEvent(0,FALSE,FALSE,0);第二个参数为FALSE 
+表示创建的是一个自动event对象，第三个参数为FALSE表示对象的初始状态为nonSignaled，第四个参数为0表示该对象没有名字。在TEventWindow类的构造函数中还同样创建hWatchEvent和hNtyEvent对象，初始状态都为nonSignaled。用户要关闭窗口时，程序首先调用CanClose 
+函数，在该函数中设置hCloseEvent对象的状态为Signaled，利用这个方法来通知线程，要求线程终止运行。然后主线程调用函数WaitForMultipleObjects（该函数以下简称wait函数 
+），wait函数先判断对象hThread和hNoCloseEvent中任意一个的状态是否为Signaled， 
+如果都不是就堵塞主线程的运行，直到上述条件满足；如果有一个对象的状态为Signaled，wait函数就返回，不再堵塞主线程。如果对象是自动event对象，wait函数在返回之前还会将对象的状态设为nonSignaled。wait函数中的参数FALSE表示不要求两个对象的状态同时为Signaled，参数-１表示要无限期地等待下去直到条件满足，参数２表示SignalsC数组中有两个对象。在Windows 
+95中线程也被看作是一种系统对象，同样具有两种状态。线程运行时其状态为nonSignaled，如果线程终止运行，则其状态被系统自动设为Signaled（ 
+可以通过线程的句柄hThread得到线程状态），此时wait函数返回０，表示第一个对象满足条件，于是CanClose返回TRUE表示窗口可以关闭；如果线程不能满足终止运行的条件，就设置hNoCloseEvent 
+对象的状态为Signaled，此时wait函数返回1，表示第二个对象满足条件，于是CanClose返回FALSE表示窗口暂时还不能关闭。<br>
+<br>
+BOOL TEventWindow::CanClose(){<br>
+<br>
+HANDLE SignalsC[2]={hThread,hNoCloseEvent};<br>
+<br>
+SetEvent(hCloseEvent);<br>
+<br>
+if(WaitForMultipleObjects(2,SignalsC,FALSE,-1)==0) return TRUE;<br>
+<br>
+else return FALSE;<br>
+<br>
+}<br>
+<br>
+另一个用户控制的例子是，用户使主线程暂停运行直到线程满足某种条件为止。比如用户选择“Watch”菜单后，主线程调用如下函数开始对线程的运算数据进行监测。 
+首先设置hWatchEvent对象的状态为Signaled，以此来通知线程， 
+主线程此时已进入等待状态并开始对数据进行监测，然后主线程调用wait函数等待线程的回应。线程在满足某个条件后就设置hNtyEvent对象的状态为Signaled，使主线程结束等待状态，继续运行。<br>
+<br>
+void TEventWindow::CmWatch(){<br>
+<br>
+SetEvent(hWatchEvent);<br>
+<br>
+WaitForSingleObject(hNtyEvent,-1);<br>
+<br>
+::MessageBox(GetFocus(),&quot;线程已符合条件,主线程继续运行!&quot;,&quot;&quot;,MB_OK);<br>
+<br>
+}<br>
+<br>
+线程函数所调用的LoopFunc是一个大循环，它不断地判断同步对象的状态，并根据这些对象的状态执行相应的操作，这些对象在数组SignalsL中列出。在这个数组中各元素的排列顺序是很重要的，前两个对象分别对应两种不同的用户控制事件，通过判断对象的状态可以知道发生的是哪一种用户控制。只有当前面两个对象的状态都不是Signaled时才会判断第三个对象的状态，这样一方面保证线程能检测到所有的用户控制事件，另一方面又保证了在不发生用户控制事件时线程也能继续运行。为此特地在TEventWindow类的构造函数中创建的对象hNoBlockEvent的状态始终为Signaled。<br>
+<br>
+hNoBlockEvent=CreateEvent(0,TRUE,TRUE,&quot;MyEvent&quot;);<br>
+<br>
+第二个参数为TRUE表示创建的是一个手工event对象， 其状态是不会被wait函数所改变的，除非显式地调用ResetEvent函数。第三个参数为TRUE表示对象初始状态为Signaled，第四个参数定义了该对象的名字为“MyEvent”。LoopFunc函数调用wait函数，如果检测到hCloseEvent的状态为Signaled， 
+此时wait函数返回0，线程知道用户要关闭窗口了，就判断线程是否可以终止，条件是iCount&gt;100，如果满足终止条件LoopFunc函数就返回，实际上就终止了线程的运行；如果不满足条件线程就设置 
+hNoCloseEvent对象的状态为Signaled，让主线程知道线程暂时还不能终止。由于hCloseEvent是自动event对象，所以wait函数返回0时还会将对象hCloseEvent的状态设置为nonSignaled，这样在第二次循环时，wait函数就不会判断出hCloseEvent对象的状态为Signaled，避免了线程错误地再次去判断是否会满足终止条件。如果wait函数检测到对象hWatchEvent的状态为Signaled，此时wait函数返回1，线程知道主线程已进入等待状态并在对数据进行监测，就设置变量bWatch的值为TRUE。如果前面的两个事件都未发生，则前面两个对象的状态都为nonSignaled，于是wait函数就检测第三个对象的状态， 
+由于第三个对象hNoBlockEvent 的状态始终为Signaled，所以线程就无阻碍地继续运行下去，将变量iCount不断加一，当变量大于200时，如果bWatch为TRUE，就设置hNtyEvent的状态为<br>
+<br>
+Signaled，从而使主线程停止等待，继续运行。<br>
+<br>
+DWORD TEventWindow::LoopFunc(){<br>
+<br>
+HANDLE SignalsL[3]={hCloseEvent,hWatchEvent,hNoBlockEvent};<br>
+<br>
+static BOOL bWatch=false;int dwEvent;<br>
+<br>
+while(1){<br>
+<br>
+dwEvent=WaitForMultipleObjects(3,SignalsL,FALSE,-1);<br>
+<br>
+switch(dwEvent){<br>
+<br>
+case 0: if(iCount&gt;100) return 0;<br>
+<br>
+else SetEvent(hNoCloseEvent);<br>
+<br>
+break;<br>
+<br>
+case 1: bWatch=TRUE;break;<br>
+<br>
+case 2: ++iCount;<br>
+<br>
+if(bWatch &amp;&amp; iCount&gt;200) SetEvent(hNtyEvent);<br>
+<br>
+break;<br>
+<br>
+}<br>
+<br>
+}<br>
+<br>
+}<br>
+<br>
+四, 进程间的多线程同步事件控制方法<br>
+<br>
+由于event对象是系统范围内有效的，所以另一个进程（即一个应用程序,本身也是一个线程）可调用OpenEvent函数，通过对象的名字获得对象的句柄， 
+但对象必须是已经创建的，然后可将这个句柄用于ResetEvent、SetEvent和WaitForMultipleObjects等函数中。这样可以实现一个进程的线程控制另一进程生成的线程的运行。如下面的语句就是通过对象名字“MyEvent”获得了上面进程生成的hNoBlockEvent对象的句柄，再使用这个句柄将对象状态设为nonSignaled。在上述的 
+LoopFunc函数中由于该对象的状态已经改变，使得上面的线程暂停运行。<br>
+<br>
+HANDLE hEvent=OpenEvent(EVENT_ALL_ACCESS,true,&quot;MyEvent&quot;);<br>
+<br>
+ResetEvent(hEvent);<br>
+<br>
+OpenEvent函数的第一个参数表示函数的调用线程对event对象的访问权限，比如让线程拥有对象所有的访问权限，就选参数EVENT_ALL_ACCESS，这样线程就能用ResetEvent函数改变对象的状态；参数true表示由这个进程派生的子进程可以继承该句柄；最后一个参数指出了event对象的名字。用下面的语句设置对象hNoBlockEvent的状态为Signaled，就可以使线程继续运行，如SetEvent(hEvent)。<br>
+<br>
+进程不再使用该句柄时尽可以用CloseHandle函数关闭对象句柄，但对于同一个event对象而言，因为它可能还在别的线程中被使用，所以只有在它的所有被引用的句柄都关闭后对象才会被系统释放，文中提到的所有 
+event对象在主线程和线程之间以及在不同的进程之间所起的控制作用如图１所示：<br>
+① ┌───────┐ ①:关闭窗口<br>
+┌──→─┤ hCloseEvent ├───┐ ②:对上面事件的反应<br>
+│ └───────┘ │ ｜<br>
+│ ┌───────┐ ↓ ｜ 暂停/恢复线程的运行<br>
+│ │ hThread 或 │②┌─┴─┐&nbsp;&nbsp; ┌───────┐ 
+┌───┐<br>
+┌─┴─┐ ┌┤hNoCloseEvent ├←┤ 线程 ├←┤hNoBlockEvent 
+├←┤进程 2│<br>
+│主线程├←┘└───────┘ └┬─┬┘ &nbsp;&nbsp; 
+└───────┘ └───┘<br>
+│/进程1├→┐┌───────┐ ↑ │ ｜不同进程之间<br>
+└─┬─┘⑴└┤ hWatchEvent ├──┘ │ ｜的地址界限<br>
+↑ └───────┘ │ <br>
+│ ┌───────┐ │ ⑴:监测数据<br>
+└────┤ hNtyEvent ├←───┘ ⑵:线程满足监测条件<br>
+└───────┘⑵<br>
+<br>
+图1 event对象在多线程间同步事件控制中的作用<br>
+<br>
+五, 结束语<br>
+<br>
+多线程编程技术在多媒体、网络通讯、数学计算和实时控制方面有着很广阔的应用前景。当然在实际编程中情况往往是很复杂的，这时应注意的是如何将任务准确地划分成可并发的线程以及象文中提到的SignalsL数组中元素的排列顺序等问题。本文所讲内容对于在Windows 
+NT或在某些支持多线程的UNIX系统中设计多线程应用程序也是有所帮助的。<br>
+</span></p>
+</body>
+</html>

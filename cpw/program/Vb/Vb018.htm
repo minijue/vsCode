@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>一个图像滤光处理程序</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> 
+    一个图像滤光处理程序</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8" style="font-size: 9pt">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">一个图像滤光处理程序</span></strong></td>
+  </tr>
+  <tr>
+    <td>滤光处理是图像处理的一个重要组成部分，通俗地讲，图像的滤光处理就是透过某种颜色的玻璃去观看图像时的效果。本人用VB5编程实现了图像的滤光处理，既可以用单独的红色、绿色、蓝色进行滤光，也可以用这三种颜色的任意组合颜色实现滤光，而且任何一种颜色都可以随便调整强度，效果颇佳。下面具体介绍实现方法。<br>
+    &nbsp;&nbsp; 首先新建一个窗体Form1，并创建一个PictureBox控件，把Picture1的Picture属性设置为一副图像。接着<br>
+    引入WINDOWS的两个API函数，并在代码窗体的起始位置声明：<br>
+    Private Declare Function GetPixel Lib &quot;gdi32&quot; (ByVal hDC As Long,ByVal x As 
+    Long,ByVal Y As Long)As Long<br>
+    Private Declare Function SetPixelV Lib &quot;gdi32&quot; (ByVal hDC As Long,ByVal x As 
+    Long,ByVal Y As Long,ByVal crColor As Long) As Long<br>
+    &nbsp;&nbsp; 然后在Picture1的下方按水平方向连续创建三个TextBox控件，名称都设为Txt,Index属性分别为1、2、<br>
+    3,Text属性为空。和三个TextBox相对应，在其下方创建三个HScrollBar控件，名称都设为HS1，Index属性<br>
+    分别为1、2、3，Min和Value都设为0，SmallChange都设为2，LargeChange都设为10，Max都设为100。和三<br>
+    个HScrollBar相对应，在其下方创建三个Label控件，Caption属性分别设为“红色滤光”、“绿色滤光”、“蓝色滤光”。以上相对应的三组控件都要上下紧挨、大小适中。双击任何一个HScrollBar控件，在HS1_Change()事件中添入下列代码：<br>
+    Private Sub HS1_Change(Index As Integer)<br>
+    &nbsp;&nbsp;&nbsp; Txt(Index).Text = CStr(HS1(Index).Value)+&quot;%&quot;<br>
+    End Sub<br>
+    &nbsp;&nbsp; 最后在Form1窗体的正下方创建一个CommandButton控件，名称设为ComLg，Caption属性设为“滤光处理”。双击该按钮，在ComLg_Click()事件中添入下列代码：<br>
+    Private Sub ComLg_Click()<br>
+    &nbsp;&nbsp;&nbsp; Dim hDCp, Wdh, Hgh, RedC, GreenC, BlueC, Rgbp As Long<br>
+    &nbsp;&nbsp;&nbsp; Wdh = Picture1.ScaleWidth<br>
+    &nbsp;&nbsp;&nbsp; Hgh = Picture1.ScaleHeight<br>
+    &nbsp;&nbsp;&nbsp; hDCp = Picture1.hDC<br>
+    &nbsp;&nbsp;&nbsp; For i&amp; = 1 To Wdh<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For j&amp; = 1 To Hgh<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rgbp = 
+    GetPixel(hDCp,i&amp;,j&amp;) '获取图像上某点的像素值<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RedC = Rghp And &amp; 
+    HFF<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GreenC = ((Rgbp And 
+    &amp; HFF00)/256&amp;) Mod 256&amp;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BlueC = (Rgbp And &amp; 
+    HFF0000)/65536<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RedC = Ys(RedC + 
+    HS1(1).Value / 2 * 5)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GreenC = Ys(GreenC + 
+    HS1(2).Value / 2 * 5)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BlueC = Ys(BlueC + 
+    HS1(3).Value / 2 * 5)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rgbp = RGB(RedC, 
+    GreenC, BlueC)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetpixelV hDCp, i&amp;, 
+    j&amp;, Rgbp<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Next j&amp;<br>
+    &nbsp;&nbsp;&nbsp; Next i&amp;<br>
+    &nbsp;&nbsp;&nbsp; MsgBox &quot;图像复位后可再次进行滤光&quot;,0,&quot;图像复位&quot;<br>
+    &nbsp;&nbsp;&nbsp; For i&amp; = 1 To 3<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HS1(i&amp;).Value = 0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Txt(i&amp;).Text = &quot;0%&quot;<br>
+    &nbsp;&nbsp;&nbsp; Next i&amp;<br>
+    &nbsp;&nbsp;&nbsp; Set Picture1.Picture=Picture1.Image<br>
+    End Sub<br>
+    另外，还需加入一个校验颜色值的子函数：<br>
+    Private Function Ys(ByVal mColor As Long) As Long<br>
+    &nbsp;&nbsp;&nbsp; If mColor &gt; 255&amp; Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ys = 255<br>
+    &nbsp;&nbsp;&nbsp; ElseIf mColor &lt; 0 Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ys = 0<br>
+    &nbsp;&nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ys= mColor<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    End Function<br>
+    Form_load()事件中添入下列代码：<br>
+    Private Sub Form_Load()<br>
+    &nbsp;&nbsp;&nbsp; Form1.ScaleMode = 3<br>
+    &nbsp;&nbsp;&nbsp; Picture1.ScaleMode= 3<br>
+    &nbsp;&nbsp;&nbsp; Picture1.AutoRedraw = True<br>
+    &nbsp;&nbsp;&nbsp; For i% = 1 To 3<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Txt(i%).Text = &quot;0%&quot;<br>
+    &nbsp;&nbsp;&nbsp; Next i%<br>
+    &nbsp;&nbsp;&nbsp; Picture1.AutoRedraw = False<br>
+    End Sub<br>
+    &nbsp;&nbsp; 按F5运行后，随便选择一种颜色或几种颜色的组合，并自由调整滤光颜色的强度，然后按下“滤光处理”<br>
+    按钮，即可进行滤光。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

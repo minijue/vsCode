@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Vbidx099.htm">Visual Basic</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">用VB实现“ICQ”式的启动欢迎画面&nbsp;<br>
+      <br>
+                            广西 高罡    
+      <p><br> 
+      <br> 
+      　　第一次运行，或通过运行程序的方式来启动ICQ时，随着一声火车的长鸣，我们都能看到一朵背景为透空的大花，这就是ICQ独特的欢迎画面！通常，我们都是用一整个带图形及文字的窗体来做为欢迎画面的。我们要如何去做才能实现类ICQ的欢迎画面呢？这看起来像是件十分复杂的工作，其实，利用了强大的API函数，事情就会变得非常的简单。出于简单化的考虑，我使用VB6.0简体中文企业版来完成这一例程。<br>
+      　　首先要准备好做为欢迎画面所需要的图片，然后对图片进行简单的处理，把需要透空的地方填上纯白色（255，255，255），然后保存为＊.bmp文件，这用PhotoShop可以很容易地实现。需要注意的是，图片必须为“索引色”模式，如果不是就需用PhotoShop来修改，否则不能实现透空效果。　　先建立一个标准EXE工程，在窗体上文稿放置一个Picture控件，控件名为Picture1，和一个Timer控件，控件名为Timer1，Interval属性设置为2000。<br>
+      　　原程序如下：<br>
+      　　Option Explicit<br> 
+      　　`定义获取桌面HDC的api函数<br>
+      　　Private Declare Function GetDC Lib “user32” (ByVal hwnd As Long) As Long<br> 
+      　　`定义TransparentBlt函数<br>
+      　　`实现图片的透空效果需要用上API函数：TransparentBlt，这个函数功能十分强大，而且使用方便，但不幸的<br>
+      　　`是VB自带的API浏览器居然把它的漏掉了，所以我们只有采用人工输入的方法了<br>
+      　　Private Declare Function TransparentBlt Lib “msimg32.dll”_<br> 
+      　　 (ByVal hdcDest As Long, _<br> 
+      　　 ByVal nXOriginDest As Long, _<br> 
+      　　 ByVal nYOriginDest As Long, _<br> 
+      　　 ByVal nWidthDest As Long, _<br> 
+      　　 ByVal nHeightDest As Long, _<br> 
+      　　 ByVal hdcSrc As Long, _<br> 
+      　　 ByVal nXOriginSrc As Long, _<br> 
+      　　 ByVal nYOriginSrc As Long, _<br> 
+      　　 ByVal nWidthSrc As Long, _<br> 
+      　　 ByVal nHeightSrc As Long, _<br> 
+      　　 ByVal crTransparent As Long) As Long<br> 
+      　　`其中，hdcDest为目标地的HDC，nXOriginDEst和nYoriginDest分别为目标图像的起始点坐标，nWidthDesk和nHeightDest分别为目标图像的宽度和高度。与之相应的hdcSrc、nXOriginSrc、nyOriginSrc、nWidthSrc、nHeightSrc分别为原图的HDC、原图的起始X、Y坐标、原图和宽度和长度，crTransparent为需要设置成透空的颜色的RGB值。<br>
+      　　`定义用于恢复桌面的函数<br>
+      　　Private Declare Function InvalidateRectAsAny Lib “user32” Alias&nbsp;<br>
+      “InvalidateRect”_ (ByVal hwnd As Long, lpRect As Any, ByVal bErase As Long) As Long<br> 
+      　　<br>
+      　　Private Sub Form_Load()<br> 
+      　　 Me.Hide<br> 
+      　　 Dim Pic As Long<br> 
+      　　 Dim w As Long<br> 
+      　　 Dim h As Long<br> 
+      　　 Dim x As Long<br> 
+      　　 Dim sx, sy<br> 
+      　　Picture1.AutoRedraw = True<br> 
+      　　`获取桌面的HDC<br>
+      　　x = GetDC(0)&nbsp;<br>
+      　　`计算桌面的宽度和高度<br>
+      　　 sx = Screen.Width \ Screen.TwipsPerPixelX&nbsp;<br>
+      　　 sy = Screen.Height \ Screen.TwipsPerPixelY<br> 
+      　　 `计算图像的宽度和高度<br> 
+      　　 w = Picture1.ScaleX(Picture1.Picture.Width, 8, vbPixels)&nbsp;<br>
+      　　h = Picture1.ScaleY(Picture1.Picture.Height, 8, vbPixels)<br> 
+      　　<br>
+      　　picture1.picture=loadpicture(“图像文件的完整文件名称”)<br>
+      　　<br>
+      　　 `使透空的图像显示在桌面的中央<br> 
+      　　 Pic = TransparentBlt(x, _<br> 
+      　　 sx / 2 － w / 2, _<br> 
+      　　 sy / 2 － h / 2, _<br> 
+      　　 w, _<br> 
+      　　 h, _<br> 
+      　　 Picture1.hDC, _<br> 
+      　　 0, _<br> 
+      　　 0, _<br> 
+      　　 w, _<br> 
+      　　 h, _<br> 
+      　　 RGB(255, 255, 255))<br> 
+      　　End Sub<br> 
+      　　Private Sub Timer1_Timer()<br> 
+      　　`两秒钟后恢复桌面<br>
+      　　InvalidateRectAsAny 0, ByVal 0＆, True<br> 
+      　　Load 自制程序的主窗体名<br> 
+      　　Timer1.Enabled = False<br> 
+      　　End Sub<br> 
+      　　需要注意的是程序完成后如果直接在VB环境下运行有可能会出现透空图像一闪而过的现象，这并不是你的错，只要把程序编译成＊.exe的文件后运行一切都会正常的。<br>
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+
+</body>
+
+</html>

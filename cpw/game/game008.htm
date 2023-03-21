@@ -1,0 +1,78 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>远望资讯.微型计算机</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+.f{font-size: 12px;line-height: 15px;}
+A:link {text-decoration: none; color: blue}
+A:visited {text-decoration: none; color: "#54646D"}
+A:active {text-decoration: none}
+A:hover {text-decoration: underline; color: 000080} 
+-->
+</style>
+</head>
+
+<body>
+<div align="center"><center>
+
+<table border="0" width="720" cellspacing="0" cellpadding="4" bgcolor="#E8FFFF">
+  <tr>
+    <td width="718" height="29"><table border="1" width="32%" bordercolor="#800000"
+    cellspacing="0" cellpadding="2" height="30">
+      <tr>
+        <td width="100%" bgcolor="#4264B5" bordercolor="#FFFFFF" style="font-size: 9pt"><p
+        align="center"><font color="#FFFFFF">资料整理<span class="f">&middot;</span><a
+        href="http://fasoft.yeah.net" target="_blank" style="color: rgb(255,255,255)">飞意软件工作室-程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" bgcolor="#E8FFFF"><br>
+    <span class="f"><strong>指令集的进步——MMX和SSE</strong><br>
+    <br>
+    　　如果一次只能做一件事情……<br>
+    　　自最简单的计算机开始，指令序列便能取得运算对象，并对它们执行计算。对大多数计算机而言，这些指令同时只能执行一次计算。如需完成一些并行操作（如立体声左、右声道，或显示器的红、绿、蓝混合），就要连续执行多次计算。此类计算机采用的是“单指令单数据”（SISD）处理器。<br>
+    　　然而，现实世界的大多数计算都会同SISD模型冲突。比如对麦克风传来的左、右立体声道进行简单过滤处理时，需将之前的几个采样值累加起来，再同当前值加到一起，再除以采样次数。必须重复计算左、右声道。下述C代码便是为这一目的设计的（假定采样值保存在left和right数组里，变量指向最新的声音采样值，而且要求出之前三个值的平均值）：<br>
+    int LeftSum,RightSum;<br>
+    LeftSum=(left[now-2]+left[now-1]+left[now])/3;<br>
+    RightSum=(Right[now-2]+Right[now-1]+Right[now])/3;<br>
+    　　看来似乎颇为简单，但在实际应用中，每次采样都必须作同样的计算。如决定使用CD音质，那么每秒种都要对左、右声道执行44100次采样，总共便要计算88200次。为获得LeftSum和RightSum的结果，分别要执行6条指令。所以为确保获得连贯的CD音质，每秒钟要执行的指令总数为:44100次采样×2个声道×6条指令＝529000条！<br>
+    　　计算机显示的道理与此相似，但情况会糟得多——想想在1024×768的分辨率和24位真彩色下，假定每秒显示30帧（虽然好但非特别出色的3D加速性能），仅仅为了访问每个像素，而不做任何实际工作，每秒便要执行70778880条指令，这显然是个沉重的负担。<br>
+    <br>
+    同时做几件事情会快得多……<br>
+    　　再来研究一下上述两行C代码，你会发现除数据来源不同外（同样的指令应用于两个不同的数据流），两者几乎是完全一致的。设想一下，假如有这样的一种处理器，虽然它只能执行单个指令序列，但能将那些指令同时应用于几个独立的数据流，速度显然就会快上许多。我们称之为“单指令多数据”（SIMD）处理器。<br>
+    　　MMX和SSE(Streaming SIMD Extensions)便是为此设计的——Intel为传统x86指令集增加了一系列新指令——在奔腾和奔腾Ⅱ里叫MMX，在Pentium 
+    Ⅲ里则叫做SSE，它们都能以SIMD方式处理数据。SSE其实就是我们早期的文章中曾提到过的KNI(Katmai 
+    New Instruction)指令，随着PⅢ的面市，KNI便正式定名为SSE了。<br>
+    　　MMX指令可对整数执行SIMD运算，比如-40、0、1、469或32766等等；SSE指令则增加了对浮点数的SIMD运算能力，比如-40.2337，1.4355或877343226.012等等。利用MMX和SSE，一条指令可对2个以上的数据流执行计算。就前面的例子来说，再也不必每秒执行529000条指令了，只需执行264600条即可。因为同样的指令可同时对左、右声道发生作用。显示时，每秒也不需要70778880条指令，只需23592960条，因为红、绿、蓝通道均可用相同的指令控制。<br>
+    　　MMX和SSE的作用还不止于此。假定颜色深浅在0到255之间变化（24位色深）。为显示出阴暗或照明效果，在调节光线强度时，这个值完全可能低于0或超过255。如果用8位保存，这两种情况就分别叫做“下溢”和“上溢”。显然，必须将值限制到0到255间，否则会产生混乱的显示。在没有MMX或SSE的情况下，必须在软件里对这种情况进行判断与纠正。但由于在指令中使用了跳转指令（jump），所以会明显减慢某些处理器的速度。而在MMX或SSE问世以后，只需用范围限制算法执行指令即可。值会被“强制”位于正确的范围之间，程序会流畅执行下去，用户感觉不出任何变化。<br>
+    <br>
+    MMX不仅对游戏有用……<br>
+    　　稍微探讨一下3D游戏，就会知道MMX为何没有带来游戏性能的显著提升，而SSE在这方面却有卓越表现。比如玩Quake时，3D物件均由多边形构成，而这些多边形以一系列点的形式保存。每个点(上接29页)都有对应的3轴坐标。如限制成只用整数，便不能精确地表示这些位置（如每个坐标轴使用16位，那么只能得到65536个坐标点），造成图形显示非常糟糕。自奔腾开始，Intel各型处理器的浮点运算能力便非常强大，游戏开发者几乎都情愿选用浮点运算。由于MMX不能对浮点进行操作(更糟的是，从MMX切换到浮点模式时，还会造成性能的瞬间剧降），所以MMX并不能将游戏提速至比设备驱动程序更高的一个水准，这正是MMX令许多人失望的原因。假如你用3D加速卡做图形渲染，游戏中完成的运算（模拟、3D变形、照明等）会耗去约90%的处理器时间。也就是说，MMX只为处理器留出了10%的时间来做其他工作，这还是在你使用了3D卡的前提下。<br>
+    　　SSE有效解决了这个问题，除保持原有的MMX指令外，又新增了70条指令，在加快浮点运算的同时，也改善了内存的使用效率，使内存速度显得更快一些。对游戏性能的改善十分显著，可以说令人震惊！想想你现在需要一个400MHz以上的处理器，才能使Voodoo2、Riva 
+    TNT或Rage 128等显卡发挥至最高帧频，便可清楚理解这一点。按Intel的说法，SSE对下述几个领域的影响特别明显：3D几何运算及动画处理；图形处理（如Photoshop）；视频编辑／压缩／解压（如MPEG和DVD）；语音识别（ViaVoice仍然只是玩具，因为一般你每说20个字，它就会听错一个）；以及声音压缩和合成。<br>
+    <br>
+    将SSE引入你的系统<br>
+    　　Pentium Ⅲ（代号Katmai）已于2月底正式上市，初期只提供450和500MHz两个版本，均采用Slot 
+    1封装及100MHz外频。所以假如你用的是BX主板，只需升级一下BIOS，便可让PⅢ在你的系统上运行如飞。当然，前提是你的腰包足够鼓——它们现在仍是天价。<br>
+    软件和驱动方面则不必担心。自1999年开始，会有越来越多的SSE优化软件上市，包括一些最热门的游戏，比如“天旋地转3”和“Quake 
+    3:竞技场”等等。<br>
+    　　下个系列的Pentium Ⅲ将于今年2季度晚些时候大量上市，将支持更快的133MHz外频（某些老主板未提供这一频率），从533MHz起跳。到99年末，600MHz以上的系统更会“遍地开花”。 
+    <br>
+    </span></td>
+  </tr>
+  <tr>
+    <td width="100%" height="6"><hr size="1" color="#808080">
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#E8FFFF" height="14"><span class="f">飞意软件工作室-程序员网站版权所有</span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

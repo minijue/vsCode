@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VisualBasic</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">用VB实现拖放功能<br>
+      <br>
+                                (广东　陈立)    
+      <p><br>
+      　　拖放是用鼠标拖动一个文件到其它对象的活动。在图形操作过程中，拖放是最常用的功能之一，下面我们来看看怎样用VB实现拖放功能。<br>
+      　　首先介绍与拖放有关的控件：<br>
+      　　1.属性:DragMode决定拖动操作的初始化是人工方式还是自动方式　　　　　 DragIcon确定在拖动过程中显示的指针的图标形状<br> 
+      　　2.方法:Drag开始，结束或取消拖动控件<br>
+      　　3.事件:MouseDown事件发生于用户按下鼠标按钮时。DragOver事件发生于拖动操作完成时。DragDrop事件发生于拖动操作正在进行时。<br>
+      　　然后编写一个小程序，这个程序能实现在窗口中或窗口间拖动图标的功能。建立窗口Form1和Form2，在窗口中都加入Image1，其中Form1下的Image1.picture为你想显示的图标。<br>
+      　　Form1下程序代码为：<br>
+      　　Option Explicit<br> 
+      　　Dim dragx As Single<br> 
+      　　Dim dragy As Single<br> 
+      　　Const BEGIN_DRAG=1<br> 
+      　　Private Sub Form_DragDrop(Source As Control， X As Single， Y As Single)<br> 
+      　　　　Image1.Picture=Source　　　；Sourse为被拖动的控件<br>
+      　　Form2.Image1.Picture=LoadPicture(″″)<br>
+      　　Image1.Move(X－dragx)，(Y－dragy)； X，Y为鼠标所在目标窗体或控件的当前坐标<br> 
+      　　End Sub<br> 
+      　　Private Sub Form_Load()<br> 
+      　　 Load Form2<br> 
+      　　 Form2.Show 0<br> 
+      　　End Sub<br> 
+      　　Private Sub Image1_MouseDown(Button As Integer，Shift As Integer，<br> 
+      X As Single，Y As Single)<br> 
+      　　 dragx=X<br> 
+      　　 dragy=Y<br> 
+      　　 Image1.Drag BEGIN_DRAG　　　；开始拖动操作<br>
+      　　 Image1.DragIcon = LoadPicture(″按下鼠标时想显示的光标″)<br> 
+      　　End Sub<br> 
+      　　 Form2下程序代码为：<br> 
+      　　Option Explicit<br> 
+      　　Dim dragx As Single<br> 
+      　　Dim dragy As Single<br> 
+      　　Const BEGIN_DRAG=1<br> 
+      　　Private Sub Form_DragDrop(Source As Control，X As Single，Y As Single)<br> 
+      　　 Image1.Picture=Source<br> 
+      　　 Form1.Image1.Picture=LoadPicture(″″)<br> 
+      　　 Image1.Move(X－dragx)，(Y－dragy)<br> 
+      　　End Sub<br> 
+      　　Private Sub Image1_MouseDown(Button As Integer， Shift As Integer，<br> 
+      X As Single，Y As Single)<br> 
+      　　 dragx=X<br> 
+      　　 dragy=Y<br> 
+      　　 Image1.Drag BEGIN_DRAG<br> 
+      　　 Image1.DragIcon=LoadPicture(″按下鼠标时想显示的光标″)<br> 
+      　　End Sub<br> 
+      　　本程序在VB5.0，Window95环境下通过。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+<p>　</p>
+
+</body>
+
+</html>

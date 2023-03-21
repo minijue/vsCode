@@ -1,0 +1,295 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<meta name="keywords"
+content="SLUG, slug, Shanghai, Linux, User, Group, LUG, LDP, Unix, Mailing List, Support, Sponsor, GuestBook">
+<link rel="stylesheet" type="text/css" href="../../css/link.css" title="style1">
+<title>SLUG - 网友文集 - 6</title>
+</head>
+
+<body background="../../images/back31.gif">
+
+<p>　</p>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt"
+height="28">
+  <tr bgcolor="#CCFFCC">
+    <td height="10"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="linuxidx.htm">Unix/Linux</a> &gt;</b> Linux中IP隧道的分析与建议</span></td>
+  </tr>
+  <tr>
+    <td height="14"></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>Linux中IP隧道的分析与建议</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center">作者信箱: xiaoman04@hotmail.com</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<p>O、由于网络的日益普及，网络的安全成为目前的热门话题。本文对隧道技术的分析，就侧重安全领域，对利用隧道技术实现虚拟专网提出建议。<br>
+    <br>
+    为什么需要IP隧道？没有接触过这个概念的人自然提出这样的疑问。实际上概念最初的提出很简单，为了在TCP/IP网络中传输其他协议的数据包。设想IPX协议或X.25封装的数据包如何通过Internet网进行传输，在已经使用多年的桥接技术中是通过在源协议数据包上再套上一个IP协议头来实现，形成的IP数据包通过Internet后卸去IP头，还原成源协议数据包，传送给目的站点。对源协议数据来说，就如被IP带着过了一条隧道。这种技术在业余无线网络（Amateur 
+    Packet Radio network，应该怎么翻，请告诉我）得到了最广泛的应用。<br>
+    利用IP隧道来传送的协议包也包括IP数据包，本文主要分析的IPIP封包就是如此，从字面来理解IPIP就对了，就是把一个IP数据包又套在一个IP包里。为什么要这么做呢？多此一举嘛。其实不然，见过一些应用就会明白，移动IP（Mobile-IP）和IP多点广播（IP-Multicast）是两个通常的例子。目前，IP隧道技术在构筑虚拟专网（ 
+    Virtual Private Network）中也显示出极大的魅力。本文也将对利用IP隧道技术构筑VPN做简单设想。<br>
+    <br>
+    <br>
+    <br>
+    背景：隧道的多种理解和实现<br>
+    <br>
+    Internet的研究者多年前就感到需要在网络中建立隧道，最初的理解是在网络中建立一条固定的路径，以绕过一些可能失效的网关。可以说，隧道就是一条特定的路径。<br>
+    这样的隧道是通过IP报头中的源路由选项来实现的，在目前看来，这个方法的缺陷十分明显。要设置源路由选项就必须知道数据包要经过的确切路径，而且目前多数路由实现中都不支持源路由。<br>
+    <br>
+    另一个实现隧道的机制是开发一种新的IP选项，用来表明源数据包的信息，原IP头可能成为此选项的一部分。这种隧道的意义与我们所说的隧道已十分接近。但它的不足在于要对目前IP选项的实现和处理做较大的修改，也缺乏灵活性。<br>
+    <br>
+    最后常用的一种实现方法是开发一种新的IP封包协议，仍然套用当前的IP头格式。通过IP封包，不须指明网络路径，封包就能透明地到达目的地。也可以通过封包空间把未直接连接的机器绑在一起，从而创建虚拟网络。这种方法易行、可靠、可扩展性强，Linux采用了这一方法，这也是目前我们所理解的隧道思想。<br>
+    <br>
+    <br>
+    <br>
+    一、封包协议的结构和实现<br>
+    <br>
+    封包协议的实现原理十分简单。先看看通过隧道传送的数据报在网络中如何流动，如图一。<br>
+    为了叙述简便，我把在隧道中传送的IP数据包称为封包。<br>
+    <br>
+    </p>
+    <pre>
+     --------------                    -----------
+    /    子网A     \                  /   子网C   \
+   /                \                /             \
+  |                  |              |               |
+  |     &amp;            |              |               |
+  |     +   +++++    |              |      *****    |
+  |     +++++   +    |              |      *   *    |
+  |             +    |              |  *****   *    |
+   \            +   /  -----------  \ *       *    /  ----------
+    \           ++&gt; # *         **&gt;(#) *       ***&gt; # ++++      \
+     --------------  / *        *  \  ------------  /   +        \
+                    |  *        *   |              |    +         |
+                    |  *        *   |              |    +         |
+                    |  *****    *   |              |    +++++++   |
+                    |      *****    |              |          V   |
+                    |               |              |          &amp;   |
+                     \             /                \             /
+                      \   子网B   /                  \  子网D    /
+                       -----------                    ----------
+
+                     ++++++       原数据报
+                     ******       封装后的数据包（封包）
+                     #            封装/解封
+                     &amp;            用户主机
+
+                         图一.  封包协议实现模型
+</pre>
+    <p><br>
+    <br>
+    看图中的设备 #，分别处于隧道的两端，分别起打包（封装）和解包（解封）的作用，在整个数据包的传送路径中，除了隧道两端的 
+    # 设备，其他网关把数据包看成一个普通的IP包进行转发。<br>
+    设备 # 就是一个封包基于的两个实现部件--封装部件和解封部件。封装和解封部件（设备）都应当同时属于两个子网。封装部件对接收到的数据报加上封包头，然后以解封部件地址作为目的地址转发出去；而解封部件则在收到封包后，还原原数据报，转发到目的子网。<br>
+    <br>
+    隧道的源端（封装部件）对进入隧道的数据包进行封装，形成封包。一个完整的封包如图二所示。<br>
+    <br>
+    </p>
+    <pre>
+                    /  +-----------------+
+                    |  |    封包IP头     | 
+           封包头   |  +-----------------+
+                    |  |   封包协议头    |
+                    \  +-----------------+
+                    /  |    原协议头     |   
+                    |  +-----------------+
+                    |  |                 |
+          原数据报  |  |   原协议数据    | 
+                    |  .                 .
+                    |  .                 .
+                    |  |                 |
+                    \  +-----------------+
+
+                  图二.      封包结构
+</pre>
+    <p><br>
+    <br>
+    <br>
+    二、Linux中的实现<br>
+    <br>
+    本人分析的版本是Linux2.0.34（RedHat5.2采用）。<br>
+    <br>
+    在Linux中，隧道的实现主要基于两个文件new_tunnel.c和ipip.c<br>
+    <br>
+    同时Linux定义了一种新的协议类型--IPIP（IPPROTO_IPIP），与上面所说封包类型类似。<br>
+    <br>
+    基本思路<br>
+    在Linux中IP Tunnel的实现也分为两个部件：封装部件和解封部件，分别司职发送和接收。但这两个部分是在不同的层次以不同的方式实现的。<br>
+    封装部件是在数据链路层以虚设备的方式实现。所有源代码见<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/src/linux/drivers/net/new_tunnel.c<br>
+    为实现封装，Linux实现一个称为tunl的网络设备（类似loopback设备），此设备具有其他网络设备共有的特征，对于使用此设备的上层应用来说，对这些网络设备不加区分，调用及处理方法当然也完全一样。<br>
+    tunnel_init()和tunnel_xmit()是new_tunnel.c中的两个主要过程。<br>
+    tunnel_init()初始化与设备tunl相关的device结构。而tunnel_xmit()在从tunl设备发送数据时被调用，tunl设备作为实现IP隧道技术的封装部分，在此过程中完成对相应的数据报进行封装所需的全部操作，形成IPIP类型的IP包，并重新转发此数据包（ip_forward()）。解封部件在IP的上层实现，系统把它作为一个虚的传输层（实际上与传输层毫无关系），具体处理见文件<br>
+    /usr/src/linux/net/ipv4/ipip.c。<br>
+    我们知道，每一个IP数据包均交由ip_rcv函数处理，在进行一些必要的判断后，ip_rcv对于发送给本机的数据包将交给上层处理程序。对于IPIP包来说，其处理函数是ipip_rcv（就如TCP包的处理函数是tcp_rcv一样，IP层不加区分）。也就是说，当一个目的地址为本机的封包到达后，ip_rcv函数进行一些基本检查并除去IP头，然后交由ipip_rcv解封。<br>
+    ipip_rcv所做的工作就是去掉封包头，还原数据包，然后把还原后的数据包放入相应的接收队列（netif_rx()）。<br>
+    <br>
+    从以上IP Tunnel实现的思想来看，思路十分清晰，但由于IP Tunnel的特殊性，其实现的层次并不单纯。实际上，它的封装和解封部件不能简单地象上面所说的那样分层。tunl设备虽应算进链路层，但其发送程序中做了更多的工作，如制作IPIP头及新的IP头（这些一般认为是传输层或网络层的工作），调用ip_forward转发新包也不是一个网络设备应当做的事。可以说，tunl借网络设备之名，一把抓干了不少工作，真是‘高效’。而解封部件宏观上看在网络层之上，解出IPIP头，恢复原数据包是它分内的事，但在它解出数据包（即原完整的协议数据包）后，它把这个包放入相应的协议接收队列。这种事可不是一个上层协议干的，这是网络设备中断接收程序的义务。看到了，在这点上，它好象到了数据链路层。<br>
+    是不是有点乱，隧道机制就是这样，你有没有更好的办法？<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    三、为实现VPN的扩展<br>
+    <br>
+    实际上Linux只为实现隧道机制提供了一个框架，图二中的封包协议头在Linux中被忽略了，也就是说，封包头只含封包IP头，其后紧跟原IP数据包。这样的结构用于传输公开数据没有关系，但对于一个VPN来说，安全保密是不可缺少的重要功能。我们希望通过隧道的数据可靠且不可窃取和冒充的，那么，加密和认证就必不可少。<br>
+    为实现这一构想，设计以下封包协议头：<br>
+    <br>
+    </p>
+    <pre>
+         0    4     8          16           24          31 
+        +-----+-----+-----------+------------------------+
+        | ver |type |   hlen    |      OldPacketLen      |
+        +-----------------------+------------------------+
+        |        DeviceID       |       EncapID          |
+        +-----------------------+------------------------+
+        |         Flags         |       CheckSum         |
+        +------------------------------------------------+
+        |         IPIP Options( If any )                 |
+        +------------------------------------------------+
+        .                                      | padding |
+        .                                                .
+        +------------------------------------------------+
+        
+                 图三、 IPIP头设想图
+</pre>
+    <p><br>
+    ver: 版本号，利于扩展<br>
+    type:&nbsp;&nbsp;&nbsp; 用于建立不同目的的隧道（可能处理上有差别）<br>
+    OldPacketLen: 进入隧道的原数据包长度<br>
+    DeviceID:&nbsp;&nbsp;&nbsp; 对数据包进行封装的设备标识<br>
+    EncapID:&nbsp;&nbsp;&nbsp; 此封包的ID号<br>
+    Flags: 标志位，共16位，初步定义如下：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    保留<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    有否加密<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    有否做摘要<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    有否签名<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    保留<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    有否传送消息密钥<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    消息密钥有否加密<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    消息密钥是否需保留<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8-15&nbsp;&nbsp;&nbsp; 保留<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    CheckSum:&nbsp;&nbsp;&nbsp; 头校验<br>
+    IPIP Options: 用来传送一些必要的数据，比如消息密钥、签名等<br>
+    格式： +-------------------------------------+<br>
+    | 类型 | 长度 | 数据 ... |<br>
+    +-------------------------------------+<br>
+    &nbsp;&nbsp;&nbsp; <br>
+    好了，有了这个东西，我们就可以扩展Linux IP Tunnel为我们的VPN服务了。<br>
+    首先，改写new_tunnel.c和ipip.c两个文件，加入对IPIP头的处理。<br>
+    <br>
+    接着，我们要实现一种密钥的管理和传送机制。<br>
+    &nbsp;&nbsp;&nbsp; 当然，对称密钥是必需的，而对IP数据包加密要使用序列密码。从全体考虑，<br>
+    &nbsp;&nbsp;&nbsp; 我们可以提出建立VPN的逻辑步骤；<br>
+    &nbsp;&nbsp;&nbsp; 1、准备工作：建网安装系统完成配置等等<br>
+    &nbsp;&nbsp;&nbsp; 2、隧道的两端分别向对方发送自己的公开密码和设备号<br>
+    &nbsp;&nbsp;&nbsp; 3、如有必要，产生序列密码，后加密签名传给对方<br>
+    &nbsp;&nbsp;&nbsp; 4、正常通信，----放心，你的数据已经很保险了。<br>
+    <br>
+    在一个VPN的隧道中，一个封包的格式应如图四所示。<br>
+    </p>
+    <pre>
+                    /  +-----------------+
+                    |  |    封包IP头     | 
+           封包头   |  +-----------------+
+                    |  |   封包协议头    |
+                    \  +-----------------+
+                    /  |                 |   
+                    |  |    原协议头     |
+                    |  |       及        |
+          封包数据  |  |   原协议数据    | 
+                    |  .    （密文）     .
+                    |  .                 .
+                    |  |                 |
+                    \  +-----------------+
+            		
+	
+                    图四.      VPN封包结构	
+</pre>
+    <p><br>
+    <br>
+    你的几种使用方法。<br>
+    事情往往不能两全其美，你在安全强度和通信速度上必须作出选择，（不然你就需要在安全强度和Money的耗费中做选择。） 
+    &nbsp;&nbsp;&nbsp; <br>
+    使用这样的协议，根据你的需求不同，你可有不同的使用方法，下面列举一些：<br>
+    0、跨Internet的公司多个内部网之间进行通信，保密性并不重要<br>
+    直接使用原框架机制，无任何加密措施<br>
+    这样速度快、效率高，公司也不用申请多个IP地址，方便可行<br>
+    1、一般性的商业应用，具有保密要求<br>
+    利用事先产生的序列密码，每次对原数据包加密<br>
+    安全度提高了，是一种十分实用的方法。只要强度足够，一般很难破译<br>
+    速度快<br>
+    2、密码不变的方式你认为不够安全<br>
+    你可以自己实现一种密码传送方法，每隔一段时间更换一次密码。<br>
+    其中一些握手关系需要完善，有兴趣的欢迎探讨。<br>
+    如果发展成熟，此法相信很有前途。<br>
+    4、高度机密领域<br>
+    敬请使用一次一密，并进行每次签名。<br>
+    每次产生新密钥和签名十分费时，在目前我国Internet网络的速度下<br>
+    几乎不可行。<br>
+    但相信有此需要的部门也能够设法提高其网络带宽，让网络状况适合<br>
+    这种应用。<br>
+    &nbsp;&nbsp;&nbsp; <br>
+    另外，当然还可以就加密强度自身作出选择，比如选择128位，还是512位、1024位<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    四、待完善<br>
+    <br>
+    主要牵涉到隧道的管理，在封包的传送过程中如果出现错误是十分正常的，当一台路由器检测到错误时，它会发送一个ICMP包给隧道的发送端，但遗憾的是ICMP返回的数据除了IP头外，只含8个字节的上层协议信息。只凭这个难以对ICMP信息作出反应，因此，在隧道端保留一些状态信息是必须的。这些信息主要包括：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 隧道的另一端的可达性<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 隧道的拥塞状况<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 隧道的MTU<br>
+    同时所发送的封包信息也是需要保留的，举例说，当一个路由不可达信息到来时，封包的发送者要能够找出所封装的数据来自何方，并发送相应的ICMP包。<br>
+    <br>
+    强调一点，MTU的更新对隧道来将很重要，因为一个灵活的隧道的下一级设备是不定的，同时一些数据包本身也要求更改MTU。<br>
+    <br>
+    <br>
+    <br>
+    所有这些，在Linux中的处理都不够或根本没有处理。大家努力呀！</td>
+  </tr>
+</table>
+</body>
+</html>

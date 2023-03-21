@@ -1,0 +1,81 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="vfp016.htm">VFP</a></b></span></td>     
+  </tr>     
+</table>     
+</center></div><div align="center"><center>     
+     
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"     
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">     
+  <tr>     
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"     
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"     
+    bordercolordark="#FFFFFF">     
+      <tr>     
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font     
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"     
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>     
+      </tr>     
+    </table>     
+      <p align="center">在VFP中如何自动生成统计图&nbsp;<br>
+      <br>
+                              (四川　周鸣扬)    
+      <p><br>
+      <br>
+      　　一张漂亮的统计图能更加直观地反映数据的内在联系，利用VFP的图形向导，我们能够轻易地制作出统计图。但是，在应用程序中我们是不可能让用户自己设计统计图的。如何让VFP自动生成统计图呢？<br>
+      　　一、VFP对统计图的管理<br>
+      　　使用过图形向导的用户都知道，在最后的一步，VFP会提示你将图形保存到TABLE中，这是为什么？原来，VFP将作图的各种数据都放入一TABLE中，在这TABLE中，只有一个通用型字段OLEGRAPH。通过OLEGRAPH字段，利用OLE技术，系统自动调用MS－GRAPH进行作图。<br>
+      　　二、相关的函数<br>
+      　　在VFP中，使用DO(_GenGraph)with parameter1, parameter2, .....parameter9函数完成相关的绘图操作。其中，九个参数中大致含义如下（为节约篇幅起见，这里只介绍其主要的参数）：<br> 
+      　　parameter1：指明绘图操作是否为自动执行，如是，该参数的取值为“AutoGraph”。<br>
+      　　Parameter2: 指明统计图形的类型：圆饼图、直方图等，分别用数值表示。<br> 
+      　　Parameter4：设定统计图的标题。<br>
+      　　Parameter8: 设定存放统计图数据的TABLE(表)。<br> 
+      　　Parameter9: 指明统计图的摆设方式：T表示将统计图放在FORM中。<br> 
+      　　三、设计实例：<br>
+      　　假设有一数据库CZ.DBF，今欲根据上述资料作一统计图。其内容如下：<br>
+      　　季度　　　产值<br>
+      　　一季度　　1200<br>
+      　　二季度　　3500<br>
+      　　三季度　　2300<br>
+      　　四季度　　4600<br>
+      　　1.建立一TABLE(表)GRAPH1.dbf，里面只能有一字段OLEGRAPH，类型为通用字段。<br>
+      　　2.新建一表单FORM1，将CZ.DBF和GRAPH1.DBF引入该表单的数据环境,并将GRAPH1.DBF的EXCLUSIVE设为真值T。<br>
+      　　3.在FORM1中添加一OLEBOUNDCONTROL对象，设定其CONTROLSOURCE为GRAPH1.OLEGRAPH。同时加入一按钮，设定其标题为“绘图”。<br>
+      　　4.为了保持图形的动态更新(不受GRAPH1中的“老”数据影响)，在FORM的ACTIVE事件中加入如下代码：<br>
+      　　set safe off<br> 
+      　　sele graph1<br> 
+      　　zap<br>
+      　　set safe on<br> 
+      　　5.在“绘图”对象的CLICK事件中，加入下述代码：<br>
+      　　wait ‘正在绘图，请稍候’window nowait<br> 
+      　　sele cz<br> 
+      　　sele 季度,产值 from cz into cursor tmp<br> 
+      　　do (_gengraph ) with ‘autograph`,;<br> 
+      　　11,1,‘订单统计图’,1,1,1,‘graph1`,.t.<br>
+      　　use in tmp<br> 
+      　　thisform.oleboundcontrol1.refresh<br>
+      　　wait ‘绘图完毕!’window nowait　　    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+
+</body>
+
+</html>

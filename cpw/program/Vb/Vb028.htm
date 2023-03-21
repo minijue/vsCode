@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VB设计动画时钟</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vbidx099.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html"><strong>Visual Basic</strong></a><b>&gt;</b> 
+    VB设计动画时钟</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>VB设计动画时钟</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>程序名：Sec-Time.vbp<br>
+    程序类别：完整的VB程序<br>
+    功能：显示一个动画时钟，该时针随着每一秒而动态变化。<br>
+    <br>
+    <br>
+    <strong>程序说明</strong><br>
+    1．如何画时钟表盘上的所有直线元素？<br>
+    &nbsp;&nbsp; 用Load命令建立原始Line控制的14个拷贝（因为表盘有12个点和时、分、秒共15个Line），该控制数组每一个实例的端点坐标属性设置为每条线在时钟表盘上的适当位置，这些拷贝中大多数只放置一次，而3个Line控制每秒钟更新一次，产生时钟指针移动的感觉。<br>
+    &nbsp;&nbsp; 
+    注意：在应用程序代码中并没有直接擦除任何一条线。当我们改变每一个Line控制的端点时，每一根针<br>
+    在移动时擦除和重画的所有技术工作都由VB来处理。<br>
+    2．如何修改时针的形状？<br>
+    &nbsp;&nbsp; 
+    通过调整代码中的属性设置，可以改变时钟的形状。例如：通过改变每一个Line控制的Borderwidth属性设置，可以建立更细或更粗的线。<br>
+    3. 计时器的Interval（间距）属性设置<br>
+    计时器的Interval属性设置为100，即为1/10秒。<br>
+    <strong>程序的编写与执行</strong><br>
+    （1）新建工程<br>
+    &nbsp;&nbsp; 先新建一个工程（工程类型为标准EXE），然后用“工具箱”中的工具加入一个Timer1（计时器）和line1（直线），其index（指针）分别设置为空和0。然后双击Form1窗体，输入源代码。<br>
+    （2）程序源代码<br>
+    Option Explicit<br>
+    DefDbl A-Z<br>
+    Private Sub Form_Load()<br>
+    &nbsp;&nbsp;&nbsp; timer1.Interval=100<br>
+    &nbsp;&nbsp;&nbsp; Width=4000<br>
+    &nbsp;&nbsp;&nbsp; Height=4000<br>
+    &nbsp;&nbsp;&nbsp; Left=Screen.Width\2-2000<br>
+    &nbsp;&nbsp;&nbsp; Top=(Screen.Height-Height)\2<br>
+    End Sub<br>
+    Private Sub Form_Resize()<br>
+    &nbsp;&nbsp;&nbsp; Dim i, Angle<br>
+    &nbsp;&nbsp;&nbsp; Static flag As Boolean<br>
+    &nbsp;&nbsp;&nbsp; If flag=False Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; flag=True<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For i=O to 14<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '画出表盘12个点和时、分、秒共15个LINE<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If i&gt;0 Then Load 
+    Line1(i)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).Visible=True<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).BorderWidth = 
+    5<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).BorderColor = 
+    RGB(0, 128,0) '设置LINE的精细和颜色<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Next i<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp; For i = 0 To 14<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Scale (-1, 1)-(1, -1)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Angle = i * 2 * Atn(1) / 3<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).X1 = 0.9 * Cos(Angle)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).Y1 = 0.9 * Sin(Angle)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).X2 = Cos(Angle)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line1(i).Y2 = Sin(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Next i<br>
+    End Sub<br>
+    Private Sub timer1_Timer()<br>
+    &nbsp;&nbsp;&nbsp; Const HH = 0<br>
+    &nbsp;&nbsp;&nbsp; Const MH = 13<br>
+    &nbsp;&nbsp;&nbsp; Const SH = 14<br>
+    &nbsp;&nbsp;&nbsp; Dim Angle<br>
+    &nbsp;&nbsp;&nbsp; Static LS<br>
+    &nbsp;&nbsp;&nbsp; If Second(Now) = LS Then Exit Sub<br>
+    &nbsp;&nbsp;&nbsp; LS = Second(Now)<br>
+    &nbsp;&nbsp;&nbsp; Angle = 0.5236 * (15 - (Hour(Now) + Minute(Now) /60)) '设置时针<br>
+    &nbsp;&nbsp;&nbsp; Line1(HH).X1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(HH).Y1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(HH).X2 = 0.3 * Cos(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Line1(HH).Y2 = 0.3 * Sin(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Angle = 0.1047 * (75 - (Minute(Now) + Second(Now) / 60)) '设置分针<br>
+    &nbsp;&nbsp;&nbsp; Line1(MH).X1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(MH).Y1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(MH).X2 = 0.7 * Cos(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Line1(MH).Y2 = 0.7 * Sin(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Angle = 0.5236 * (75 Second(Now)) '设置秒针<br>
+    &nbsp;&nbsp;&nbsp; Line1(SH).X1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(SH).Y1 = 0<br>
+    &nbsp;&nbsp;&nbsp; Line1(SH).X2 = 0.8 * Cos(Angle)<br>
+    &nbsp;&nbsp;&nbsp; Line1(SH).Y2 = 0.8 * Sin(Angle)<br>
+    &nbsp;&nbsp;&nbsp; form1.Caption = Str(Now()) '窗口显示精确的日期和数字化的时间<br>
+    End Sub<br>
+    （3）程序的编译和执行<br>
+    &nbsp;&nbsp;&nbsp; 点击VB“运行”菜单中的“启动”或“全面编译”命令，即可对程序编译并运行！<br>
+    &nbsp;&nbsp;&nbsp; 注：上述程序在中文Windows98和VB5.0中文企业版下调试通过。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

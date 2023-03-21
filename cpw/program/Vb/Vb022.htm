@@ -1,0 +1,244 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>非常VB测声卡 </title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+<style type="text/css" media="screen">
+BODY {   font-size: 9pt ; line-height:13pt; }
+.font {   font-size: 9pt ; line-height:13pt; }
+.bfont {   font-size: 9pt ; line-height:13pt; }
+A:link          {font-size: 9pt ; color:#0000ff; font-style: normal; text-decoration: none; cursor: hand}
+A:visited       {font-size: 9pt ; color:#0000a0; font-style: normal; text-decoration: none}
+A:active        {font-size: 9pt ; color:  rgb(255,0,0); font-style: normal; text-decoration: none}
+A:hover         {font-size: 9pt ; color:#408080; font-style:bold; text-decoration: underline}     
+.p12 {  color: #ff0000; font-size: 12pt}
+.p16 {  color: #ff0000; font-size: 15pt}
+.p14 {  color: #ff0000; font-size: 14pt; font-weight: none}
+.p13 {  color: #ff8080; font-size: 12pt; font-weight: none}
+</style>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> <font
+    color="#000000">非常VB测声卡</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" style="font-size: 9pt"><p align="center"><span style="font-size: 9pt"><strong><font
+    color="#000000">非常VB测声卡</font></strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">在一个多媒体应用程序中，如果涉及对声音的播 
+    放与操作，那么我们就有必要先对用户系统中的声卡 
+    及真功能进行一下测试。幸好有VB，所以我们要实现 
+    这些功能并不用费多大力气（也就是吃顿饭的力气）， 
+    在下面的程序中我们将利用VB调用两个windows Api函数--Waveoutgetnumdevs()和Waveoutgetdev- 
+    capS()来访问设备驱动程序，获取有关信息，实现上述 目的。OK，Let's 
+    Go! 一、我们先要捡测一下声卡是否存在 <br>
+    1．新建一工程并添加模块Module1.bas，在其声 明部分加入如下代码：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Declare Function Waveoutgetnumdevs Lib&quot;Winmm.Dll&quot;() as 
+    Long<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Public Const Mb_ok= &amp; H40<br>
+    2.在窗体上添加一个命令按钮cmdtest，设置Caption的属性为“测试声卡”<br>
+    3.在窗体的通用声明部分加入一函数testcard,代码如下：<br>
+    Public Function Testcard() As Boolean <br>
+    Dim Y As long <br>
+    Dim Find As String Find = “Fied Sound Blaster Card&quot; <br>
+    Y = Waveoutgetnumdevs() <br>
+    If Y &gt; 0 Then <br>
+    &nbsp;&nbsp; Testcard = True <br>
+    &nbsp;&nbsp; Msgbox &quot;啥啥，我找到你了--声卡!&quot;, Mb_ok,Find <br>
+    Else <br>
+    &nbsp;&nbsp; Testcard = Falsc <br>
+    &nbsp;&nbsp; Msgbox &quot;未发现设备&quot;,Mb_ok,Find <br>
+    End if <br>
+    End Function <br>
+    4.在命令按钮的单击事件中加入代码: <br>
+    Private sub Cmdtest_Click() <br>
+    Dim Existent As Boolean <br>
+    Existent =Testcard <br>
+    End sub <br>
+    现在你可以运行这个程序试试看了，它会检测你 
+    的系统中是否有声卡的存在。 二、测试声卡的功能 <br>
+    既然已经发现了声卡的存在，接下来就要测试一 
+    下它的功能。为什么？举个例子来说，老式声卡支持的 
+    采样率和位分辨率是远不及现在声卡的，如果你试图 用只有8位分辨率和22.05KHz采样率的声卡来播放 
+    44.1KHz、16位立体声的声音文件，嘿嘿……有你好 
+    看（其实也没啥大不了的）。好，你大胆的往下看。 <br>
+    1．在窗体上加入picturebox控件picture1。 <br>
+    2．在Module1.bass的声名节中加入代码： <br>
+    Declare Function Waveoutgetdevcaps Lib &quot;Winmm.dll&quot; 
+    Alias&quot;Waveoutgetdevcapsa&quot;（ByvaI Udcviceid As Long，Lpcaps As WaveOutcaps， 
+    ByvaI Usize As Long） As LOng <br>
+    '参数1指定被测设备。由于一台PC上装有几个音频设 
+    备是完全可能的，所以Windows自动给每个设备编号，第一 
+    个可用设备号为0。 <br>
+    '参数2是一个Waveoutcaps结构的指针。 <br>
+    '多数3是第二个参数的大小。 <br>
+    Public Const Maxpnamelen = 32 <br>
+    Public Const Wave_Format_1m08 = &amp; H1 <br>
+    Public Const Wavp_Format_1ml6 = &amp; H4 <br>
+    Public Const Wave_Format_1s08 = &amp; H2 <br>
+    Public Const Wave_Format_1sl6 = &amp; H8 <br>
+    Public Const Wavc_Format_2m0B = &amp; H1O <br>
+    Public Const Wave_Format_2m16 = &amp; H40 <br>
+    Public Const Wave_Format_2s08 = &amp; H20 <br>
+    Public Const Wave_Format_2s16 = &amp; H80 <br>
+    Public Const Wave_Format_4m08 = &amp; H100 <br>
+    Public Const Wave_Format_4ml6 = &amp; H400 <br>
+    Public Const Wave_Format_4s08 = &amp; H200 <br>
+    Public Const Wave_Format_4s16 = &amp; H800 <br>
+    Public Const Wavecaps_Lrvolume = &amp; H8 <br>
+    Public Const Wavecaps_Pitch = &amp; H1 <br>
+    Public Const Wavecaps_Playbackrate = &amp; H2 <br>
+    Public Const Wavecaps_Sync = &amp; H10 <br>
+    Public Const Wavecaps_Volume = &amp; H4 <br>
+    <br>
+    Type WaveoutCaps <br>
+    Wmid As Integer '设备驱动程序厂商标识 <br>
+    Wpid As Integer '声卡厂商标识 <br>
+    Vdriverversion As Long '驱动程序版本号，高字节为主版 
+    本号，低字节为次版本号 <br>
+    Szpname As String ＊ Maxpnamelen '产品名称 <br>
+    Dwformats As Long '支持的wave格式，每一位代表一 种格式 <br>
+    Wchannels As Integer '返回整型值1（单声道）或2（立体 声） <br>
+    Dwsupport As Long '设备支持的扩展输出功能 <br>
+    End Type <br>
+    3. 在窗体的声明节内增加两个函数： <br>
+    '函数 listwaveformat 检测波形音频支持的格式 <br>
+    Public Function Listwaveformat(Aboutwave As long) As String <br>
+    Dim Waveformat As String <br>
+    Select Case Aboutwave <br>
+    Case Wave_Format_1m08 <br>
+    Waveformat = &quot;11.025khz, Mono, 8bit, 11kb/Ps&quot; <br>
+    Case Wave_Format_1m16 <br>
+    Waveformat = &quot;11.025khz, Mono, 16bit, 22kb/Ps&quot; <br>
+    Case Wave_Format_1s08 <br>
+    Waveformat = &quot;11.025khz, Stereo, 8bit, 22kb/Ps&quot; <br>
+    Case Wave_Format_1s16 <br>
+    Waveformat = &quot;11.025khz, Stereo, 16bit, 43kb/Ps&quot; <br>
+    Case wave_Format_2m08 <br>
+    Waveformat = &quot;22.05khz, Mono, 8bit, 22kb/Ps&quot; <br>
+    Case Wavc_Format_2m16 <br>
+    Waveformat = &quot;22.05khz. Mono,16bit, 43kb/Ps&quot; <br>
+    Case Wave_Format_2s16 <br>
+    Waveformat = &quot;22.05khz, Stereo, 8bit, 43kb/Ps&quot; <br>
+    Case Wave_Format_2s16 <br>
+    Waveformat = &quot;22.05khz, Stereo, 16bit, 86kb/Ps&quot; <br>
+    Case Wave_Format_4m08 <br>
+    Waveformat = &quot;44.1khz, Mono, 8bit, 43kb/Ps&quot; <br>
+    Case Wave_Format_4m16 <br>
+    Wavcformat = &quot;44.lkhz, Mono, 16bit, 86KB/Ps&quot; <br>
+    Case Wave_Format_4s08 <br>
+    Waveformat = &quot;44.lkhz, Stereo, 8bit, 86kb/Ps&quot; <br>
+    Case Wavc_Format_4s16 <br>
+    Waveformat = &quot;44.lkhz. Stereo, 16bit, 172kb/Ps&quot; <br>
+    End Select <br>
+    Listwaveformat = Waveformat <br>
+    End Function <br>
+    '函数 Listwavesupport 检测设备支持的扩展输出功能 <br>
+    Public Function Listwavesupport(Aboutwave As long) As String <br>
+    Dim Wavefun As String <br>
+    Sclect Case Aboutwave <br>
+    Case Wavecaps_Pitch <br>
+    Wavefun = &quot;Support Pitch&quot; <br>
+    Casc Wavecaps_Playbackrate <br>
+    Wavefun = &quot;Support Playback&quot; <br>
+    Case Wavecaps_Volume <br>
+    Wavefun = &quot;Support Volume Control&quot; <br>
+    Csae Wavecaps_Lrvolume <br>
+    Wavefun = &quot;Support Left - Right Channals&quot; <br>
+    Csae Wavecaps_sync <br>
+    Wavcfun = &quot;Support Synchronization&quot; <br>
+    End Select <br>
+    Listwavesupport = Wavefun <br>
+    End Function <br>
+    4. 修改 cmdtest_Click 事件的代码为: <br>
+    Private Sub Cmdtest_Click() <br>
+    Dim Existent As Boolean <br>
+    Dim Consequence As long <br>
+    Dim Returncaps As Waveoutcaps <br>
+    Dim Rainver As Long <br>
+    Dim Lesservcr As long <br>
+    Dim Pname As String * 32 <br>
+    Dim Aboutwave As long <br>
+    Dim Channel As String * 2 <br>
+    Dim I As lnteger <br>
+    Existent = Testcard <br>
+    If Existent Then <br>
+    &nbsp;&nbsp; Consequence = Waveoutgetdevcaps(0, Returncaps, Len (Returncaps)) If 
+    Consequence = 0 Then <br>
+    &nbsp;&nbsp; Mainver = Returncaps.Vdriverversion \ 256 <br>
+    &nbsp;&nbsp; Lesserver = Returncaps.Vdriverversion Mod 256 <br>
+    '因为API在返回Returncaps.szpname 时在返回值与空格之 
+    间会插入一个空的终止符，用Rtrim$会返回一个0终止字符 
+    串，所以我们采用Instr+Left$的方法. <br>
+    Pname = Left$ (Returncaps.Szpname,Instr(Returncaps .Szpname, Chrr$(0))-1) <br>
+    Channe1 = Str$ (Returncaps.Wchannels) <br>
+    Picture1.Print &quot;产品名称:&quot;; Pname <br>
+    Picture1.Print &quot;产品 Id:&quot;; Returncaps.Wpid <br>
+    Picture1.Print &quot;驱动程序 Id:&quot;; Returncaps.Wrmid <br>
+    Picture1.Print &quot;驱动程序版本:&quot;; Mainver; &quot;.&quot;; Lesserver 
+    Picture1.Print &quot;输出声道:&quot;; Channel <br>
+    Picture1.Print &quot;支持格式列表:&quot; <br>
+    For I = 0 TO 11 <br>
+    &nbsp; If Returncaps.Dwformats And (2^I) Then <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Picture1.Print Listwaveformat (2^I) <br>
+    &nbsp; End if <br>
+    Next I <br>
+    Picture1.Print &quot;扩展输出功能列表:&quot; <br>
+    For l = 0 To 4 <br>
+    &nbsp; If Returncaps.Dwsupport And (2^I) Then <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Picture1.Print Listwavesupport(2^I) <br>
+    &nbsp; End if <br>
+    Next I <br>
+    End if <br>
+    Else <br>
+    End <br>
+    End if <br>
+    End Sub <br>
+    5. 为 Form_load 事件加入 代码: <br>
+    Private Sub Form_Load() Picture1.Cls End Sub 本程序在Win95(osr2)、 VB5企业版下调试通过，在 
+    win3.2 下仅仅两个API函数 略有改变，照猫画虎即可。 <br>
+    好了，工作已经全部做完了。现在你要做的只是按下 F5,我也要随风而去了，各位看官后会有期，隐也。</span></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

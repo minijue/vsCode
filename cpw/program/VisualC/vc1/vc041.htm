@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">VC++程序中用对话框的形式显示HTML文件<br>
+      <br>
+                        zhou daibing       
+      <p>----在安装了IE4后，可以在程序中用对话框的形式显示HTML文件，如弹出用HTML写的帮助文件等等，如同直接用浏览器，但又与浏览器风格不同。<br> 
+      <br> 
+      ----其实现如下：&nbsp;<br>
+      //在头文件或.cpp文件的开头包含文件urlmon.h，定义函数<br>
+      /////<br>
+      #include "urlmon.h"<br> 
+      typedef HRESULT STDAPICALLTYPE SHOWHTMLDIALOGFN<br> 
+      (HWND hwndParent, IMoniker<br> 
+      *pmk, VARIANT *pvarArgIn, TCHAR* pchOptions,<br> 
+      VARIANT *pvArgOut);<br> 
+      //////<br> 
+      <br> 
+      //函数显示对话框，成功返回TRUE,失败返回FALSE<br> 
+      BOOL ShowHtml()<br> 
+      {<br> 
+      HINSTANCE hinstMSHTML = LoadLibrary<br> 
+      (TEXT("MSHTML.DLL")); //装载动态连接库<br> 
+      WCHAR url[]=L"HTTP://www.ccw.com.cn";<br> 
+      //此地址名称可直接用html文件名代替<br> 
+      <br> 
+      if(hinstMSHTML)//装载动态连接库成功<br> 
+      {<br> 
+      SHOWHTMLDIALOGFN *pfnShowHTMLDialog;<br> 
+      <br> 
+      pfnShowHTMLDialog = (SHOWHTMLDIALOGFN*)<br> 
+      GetProcAddress(hinstMSHTML,<br> 
+      TEXT ("ShowHTMLDialog"));<br> 
+      <br> 
+      if(pfnShowHTMLDialog)<br> 
+      {<br> 
+      IMoniker *moniker=NULL;<br> 
+      <br> 
+      //<br> 
+      if( FAILED(CreateURLMoniker(NULL,<br> 
+      (LPWSTR)url,&amp;moniker ) ))<br> 
+      {<br> 
+      FreeLibrary(hinstMSHTML);<br> 
+      return FALSE;<br> 
+      }<br> 
+      <br> 
+      //调用ShowHTMLDialog函数显示URL上的HTML文件<br> 
+      pfnShowHTMLDialog(m_hWnd,moniker,NULL,NULL,NULL);<br> 
+      <br> 
+      if(moniker!=NULL)<br> 
+      moniker->Release();<br> 
+      <br> 
+      //显示成功，返回TRUE<br> 
+      return TRUE;<br> 
+      <br> 
+      }<br> 
+      else //GetProcessAddress失败<br> 
+      return FALSE;<br> 
+      <br> 
+      FreeLibrary(hinstMSHTML);<br> 
+      }<br> 
+      else //装载动态连接库失败<br> 
+      return FALSE;<br> 
+      }      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

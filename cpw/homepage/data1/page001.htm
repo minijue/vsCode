@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../home_idx1.htm">主页制作</a>&nbsp;</b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">怎样把Java Applet嵌入HTML文件<br>
+      <br>
+      文：张苏华   
+      <p><br>
+      <br>
+      一、 前言 首先你已经知道，使用Java 
+      语言可以编写两种类型的程序：应用程序 （Application）和小应用程序（Applet）。应用程序是可以独立运行的程 
+      序，HotJava浏览器即是典型的一例，人们还记得当HotJava刚推出时，那 
+      跳动的小人给当时呆板的浏览器带来的勃勃生机以及其强大的交互性操作 
+      是多么振奋人心。Java 语言还能编写一种小应用程序Applet，它不能独立 
+      运行，而是要嵌入HTML文件,遵循一套约定，在支持Java的浏览器（如： 
+      Netscape Navigator 2.02版本以上，HotJava,Microsoft Internet Explorer 
+      3.0版本以上）运行，Java目前应用最广泛的领域，或许也是Java 
+      使你感兴趣的地方，就是在WWW网页（Home Page / Pages）设计中加入动画、 
+      影像、音乐等，而要达到这些效果使用最多的是Java Applet和Java 
+      Script (这是一种Java的命令稿语言)，本文主要说明怎样把Java 
+      Applet嵌入到HTML 文件中。<br>
+      <br>
+      二、 在HTML文件中加入Java Applet 1.编写Java Applet小应用程序 
+      首先你要找一个文字处理工具来编写你的小应用程序，比方在Windows下 
+      的小作家、记事本就可以。为了简单，我们以一个能在屏幕上显示“Hello 
+      World!”字样的小应用程序为例，你也可以用一个你喜欢的其它小应用程序 
+      来作，但不管是什么小应用程序，编写好存储时必须用纯文本格式。 
+      // 程序名是HelloApplet . java import java . awt . Graphics； import 
+      java . applet. Applet； public class HelloApplet extends Applet { public 
+      void paint (Graphics g ) { g.drawString (&quot;Hello World!&quot;, 50, 25)； 
+      } } 2.编译Java小应用程序 
+      编写并存储好你的小应用程序后，接着就可以编译它了。说到编译，自 
+      然是使用Sun公司的 Java开发工具JDK最好了，若你已连入WWW， 
+      JDK 可以从 Sun公司的网页取到或从以下地址下载：http://java.sun.com/JDK－1.0/ 
+      installation. html。用户在使用JDK时，要在路径中增加 
+      c:\java\bin, 并 要更新环境变量GLASSPATH, 
+      关于这方面的内容请查看有关资料。有了JDK， 编译HelloApplet.java很简单，对于Windows 
+      95/NT (在DOS Shell下)用户， 你只要在命令行键入： javac 
+      HelloApplet .java 编译成功将产生一个HelloApplet.class 
+      的文件。 3.把小应用程序嵌入HTML文件 如前所述，Applet小应用程序是在网络浏览器中执行的程序，它不能独立 
+      运行，为了观察小应用程序的结果，先编写一个HTML文件，编写HTML文件最好 
+      使用普通的文本编辑器。 为了在HTML文件中嵌入小应用程序，Sun公司在HTML语言规范中加入了 
+      &quot;applet&quot;标签，在这个标签中，可以在“CODE=”后指定小应用程序的字节码 
+      文件的名字，在“WIDTH=”和“HEIGHT=”后分别指定小应用程序运行时所占 
+      位置的宽度和高度（以象素为单位）。值得注意的是，在&quot;APPLET&quot;标签中指定 
+      的宽度和高度一定要比小应用程序的绘图或打印的位置大，否则你在屏幕上就 
+      不会看到它了。在&quot;APPLET&quot;标签中还可以利用CODEBASE、ALIGN、HSPACE及 
+      VSPACE 等其它属性。 4.观察小应用程序的执行结果 
+      现在有了HTML文件，启动浏览器。你可以先不必理会网络问题，即使浏览 
+      器或网络连接软件提示缺少网络连接，你也可以不必管它。运行浏览器后，找 
+      到标有Open Local, Open File或Open的菜单或按钮，它能使你浏览本地的磁 
+      盘文件，Open File命令告诉浏览器从本地磁盘读HTML文件，进行语法分析并 
+      显示，就如同它是Web 页一样。通过运用浏览器的Open Local命令，你可以在 
+      自己的计算机上编写测试你的HTML文件，从而看到小应用程序运行结果。<br>
+      <br>
+      三、 把Java小应用程序连接到自己的网页中 
+      如果你的小应用程序运行结果同自己预期的一样，你就可以把它链接到自 
+      己的网页中了，方法是在网页中安排一个超链接指向HelloApplet 
+      .html<br>
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+
+</body>
+
+</html>

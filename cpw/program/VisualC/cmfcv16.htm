@@ -1,0 +1,164 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第十六期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>MFC邮递表的中文翻译-第十六期</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font COLOR="#FF0000">第十六期目录</font> <font SIZE="-1">杨晓东 
+    1998.12.1</font></h3>
+    <ol>
+      <li><a HREF="#vol16q1">怎样实现3D效果？</a> </li>
+      <li><a HREF="#vol16q2">怎样建立客户CSocket?</a> </li>
+      <li><a HREF="#vol16q3">Disable一个非模态对话框的客户区？</a> </li>
+      <li><a HREF="#vol16q4">关于使用SetClassLong和SetCapture问题</a> </li>
+    </ol>
+    <p><a NAME="vol16q1"></a></p>
+    <p><br>
+    </p>
+    <h3><font COLOR="#FF0000">问：怎样实现3D效果？</font></h3>
+    <p><br>
+    问:在对话框中怎样实现Edit和Listboxes控件的3D效果?(环境95/NT VC5.0)<br>
+    答:1). 使用带WS_EX_CLIENTEDGE标志的::CreateWindowEx来替换::CreateWindow 
+    或者用CWnd::CreateEx替换CWnd::Create.<br>
+    2).在建立控件之后,调用ModifyStyleEx(0, WS_EX_CLIENTEDGE).<br>
+    </p>
+    <p><a NAME="vol16q2"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:怎样建立客户CSocket?</font></h3>
+    <p><br>
+    问: 我有一个客户socket想在socket中建立一个局域联接.我使用下列顺序:<br>
+    </p>
+    <pre>
+CSocket* m_pSocket;
+m_pSocket = new CSMSSocket(this);
+m_pSocket-&gt;Create();
+m_pSocket-&gt;Bind(m_intHostPort, m_strHostIPAddress);
+m_pSocket-&gt;Connect(lpszAddress, nPort);
+</pre>
+    <p>但每次Windows Socket都定向到别的端口,怎样才能定向到同一个端口(环境:95/NT 
+    VC5.0). </p>
+    <p>答: 1).如果你想用Client Socket,你就不能在connect()之前调用bind(),因为 
+    局域端口地址由TCP/IP设置,我们不可能知道下一次将使用那一个端口,我想我们 
+    不必这做.<br>
+    2).看一下Create()的帮助,里面告诉我们必须给Create()指定一个端口值, 
+    缺省的情况为0,也就是由Window为我们选择一个端口,通过Create()将会自动捆绑. 
+    3).我不认为你应该完成所有的工作,但想总是用一个相同的端口来连接远程 
+    机器是一个不正确的想法.<br>
+    问题出在端口数/地址结合必须唯一,如果你想在Create()中指一个固定 
+    的端口数,你只能与远程机器建一个单个连接.在你所写的代码中是允许局域端口 
+    数可变化,可以打开多个连接来取得相同的地址.在侦听(listening)Socket中有许 
+    多理由使用一个固定端口,但在连接(connecting Socket中我想没有太多的必要. 
+    </p>
+    <p><a NAME="vol16q3"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:Disable一个非模态对话框的客户区？</font></h3>
+    <p><br>
+    问:我在OCX(对象连接和嵌入客户控制程序)有一个非模态对话框.它有一个菜单以及工具 
+    条.现在我想Disable客户区(只是客户区,例如:设置特殊变量时显示一个等待光标,区域里 
+    的所有控制都不可以处理)但在客户区的所有控制要看上去没有变化(也就是不可以Disable)<br>
+    </p>
+    <p>答:可以这样试一下,建立一个子窗口,覆盖对话框的全部的用户区域,用WS_EX_TRANSPAPENT 
+    透明类型,然后调用函数EnableWindow(FALSE),使用SetClassLong或者别的方法,在子窗口调 
+    用&quot;忙&quot;光标,这时光标就正确了,但对话框中的菜单还能正常使用.(说白了就是建立一个透明 
+    的子窗口盖住所有的用户区域,然后Disable该透明窗口,在这个窗口中设置光标为&quot;忙&quot;) 
+    这个方法我没有试过,但在一些老的Windows的书介绍过这种方法.<br>
+    </p>
+    <p><a NAME="vol16q4"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:关于使用SetClassLong和SetCapture问题</font></h3>
+    <p><br>
+    问:我用SetClassLong设置对话框光标时遇到了一些问题,当我使用SetCapture捕获鼠标时,<br>
+    答:光标形状并没有变化时,以下为原代码:<br>
+    </p>
+    <pre>
+void CMouseMoveSimDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+  myDragging = TRUE;
+
+  myhPrevCursor = (HCURSOR)SetClassLong( m_hWnd, GCL_HCURSOR,
+   (long)LoadCursor(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDC_SELECTCURSOR )));
+
+  SetCapture(m_hWnd);
+ CDialog::OnLButtonDown(nFlags, point);
+}
+</pre>
+    <p>如果移去SetCapture这一行,光标就会正确的设置,但它就不能正确的捕获<br>
+    鼠标消息.那儿出问题了(环境NT4.0 VC6.0)?<br>
+    </p>
+    <p>答:1).如果我没有记错的话,SetClassLong只影响调用它以后的建立的窗口.可以使用 
+    SetWindowLong来改变已存在的窗口的属性.(为什么要用SetClassLong来改变光标形状, 
+    为什么不在消息WM_SETCURSOR中替换.)<br>
+    2).我也不清楚问题出在那儿,但下面的方法可以克服SetCapture带来的问题,它是从 
+    我的程序里面提出来的:<br>
+    </p>
+    <pre>
+void CScribbleView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+    ........
+    SetCapture(); // Capture the mouse until button up
+
+    myhPrevCursor = (HCURSOR)SetClassLong( m_hWnd, GCL_HCURSOR,
+
+(long)LoadCursor(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDC_CURSOR1)));
+
+SetCursor(LoadCursor(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDC_CURSOR1)));
+    ........
+}
+
+void CScribbleView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+    if( GetCapture() != this )
+        return;
+    ........
+    ReleaseCapture();
+    SetClassLong( m_hWnd, GCL_HCURSOR, (long)myhPrevCursor);
+    return;
+}
+</pre>
+    <hr>
+    <a href="cmfcv17.htm"><p align="center">前一期</a>|<a href="cmfcv15.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+</body>
+</html>

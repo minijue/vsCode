@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>Visual C++ 编程技巧</title>
+<link rel="stylesheet" href="../images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td width="733"><span style="font-size: 9pt">您现在的位置是：<a
+    href="Vcidx098.htm">Visual C++/C++</a> <b>&gt;</b> Visual C++ 编程技巧</span></td>
+  </tr>
+  <tr>
+    <td width="733"></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><font color="#000000"><strong>Visual 
+    C++ 编程技巧</strong></font></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td style="font-size: 9pt">VC++给人的第一感觉便是过于专业化，高深和晦涩。其实也并非如此，在基本掌握了它之后你就会发现，VC++使用起来是很方便的。至于说难，那是有点。但这并非是VC++的过错，而是Windows，这个庞大无比对用户亲切之至却对程序员不那么友好的家伙。再说，VC++系出自名门，微软的哪样东西不是先把你服侍得舒舒服服，然后再把你口袋中的钱掏个精光呢？好，下面就向大家介绍几个在使用中的小技巧。<br>
+    <strong>1．使用中文</strong><br>
+    &nbsp;&nbsp; VC++从1.5版到现在的6.0版，好像还没有出现过像VB一样的中文版。大概是Microsoft认为能够用VC++编程的人英文水平都很高吧，但这对用户可不行啊。VC++在中文平台下可以使用中文，但编译后那些按钮上的、对话框上的中文都成ASCII码了。何故？因为VC++在安装时是默认按单字节字符安装的，而中文字符是双字节编码，自然就不能正确显示了。要解决这个问题其实也很容易，将VC++光盘上DEVSTUDIO\SHAREDIDE\BIN\IDE路径下的中文资源语言模块Appwzchs.dll拷贝至硬盘DevStudio\SharedIDE\BIN\IDE路径下即可。<br>
+    <strong>2．位图按钮的使用</strong><br>
+    &nbsp;&nbsp; 我们知道Windows是一个图形界面的操作系统，如果在我们的应用程序中加入一些图形的话，会起到锦上添花的效果。在VC++中使用位图，并不像在VB中信手拈来那么简单。不过也并不复杂，其中以位图按钮用途较广。<br>
+    &nbsp;&nbsp; 选定要使用位图的按钮（以OK按钮为例，假设其标识符为IDC_BtonOK），选其属性中的Owner 
+    draw选项，此时，在对话框编辑器中就可看到原先显示在按钮上的字符都消失了。将按钮的Caption改为OK（必须为大写）。打开Insert菜单，单击其中的Resource选项，随后选择Bitmap。再按下Import（导入）按钮，将所需位图导入项目（Project）。可以在Resource 
+    View窗口中通过右键单击刚才导入的位图，将其ID（标识符）改为“OKU”，注意：字符必须为大写，双引号及字母U必不可少。字母U代表的按钮为按下状态时所显示的位图。此外还可使用后缀D、F、X，分别表示按下、拥有输入焦点时、按钮处于无效状态时所显示的位图。通过对同一个按钮的不同状态使用不同的位图，很容易做出具有动态效果的按钮。<br>
+    &nbsp;&nbsp; 
+    当将按钮所需使用的位图导入到项目中后，就应该在使用位图按钮的那个对话框的类声明文件中加入位图按钮变量的定义CBitmapButton 
+    m_BtonOK。同时，在适当的位置（一般是在对话框的OnInitDialog()函数中）加入如下语句：m_BtonOK.AutoLoad（IDC_BtonOK），使程序在运行时将位图装入内存并显示。至此，创建位图按钮的整个步骤即告结束。<br>
+    &nbsp;&nbsp; 
+    上述方法不仅限于创建位图按钮，还可用于在对话框上显示简单的位图。嘘，告诉你一个小秘密，位图按钮所使用的颜色最多可达256种，而非位图编辑器中的16种。但对于256色位图，当在导入VC++的位图编辑器后就不能使用该编辑器作任何修改。否则在编译连接后，原先256色位图就变成16色位图了。<br>
+    <strong>3．通用对话框的使用</strong><br>
+    &nbsp;&nbsp; 
+    在编程中，自己要设计存储或打开文件时的对话框是件很头疼的事。不过Windows既然已经为我们提供好了现成的通用对话框，只管拿来用就是了。先在使用文件对话框的类的类定义文件中加入对象定义CFileDialog 
+    m_OpenDialog(TRUE,&quot;txt&quot;,&quot;*.txt&quot;)。随后，在需要使用该对话框的地方加入以下语句：m_OpenDialog.Domodal();<br>
+    <br>
+    其调用规则为：<br>
+    CFileDialog(BOOL bOpenFileDialog,LPCTSTR lpszDefExt=NULL,LPCTSTR lpszFileName=NULL,DWORD 
+    dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPR OMPT,LPCTSTR lpszFilter=NULL,CWnd * 
+    pParentWnd<br>
+    =NULL);<br>
+    第一个参数 bOpenFileDialog为TRUE或FALSE。TRUE为打开文件；FALSE为保存文件。<br>
+    第二个参数lpszDefExt为缺省的扩展名。<br>
+    第三个参数lpszFileName为显示在文件名组合框的编辑框的文件名，一般可选NULL<br>
+    第四个参数dwFlags为对话框风格，一般为OFN_HIDEREADONLY | 
+    OFN_OVERWRITEPROMPT,即隐藏只读选项和覆盖已有文件前提示。<br>
+    第五个参数LpszFilter为下拉列表枢中显示文件类型。<br>
+    第六个参数pParentWnd一般可选NULL。<br>
+    例如：在文件类型列表框的编辑框要显示“可执行文件(*.exe)”，而在它的下拉列表框中列出“小型可执行文件(*.com)、批处理文件(*.bat)、All 
+    Files(*.*)”内容，则变量定义如下：CFileDialogc m_OpenDialog(TRUE 
+    m_OpenDialog(TRUE,&quot;exe&quot;,NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,&quot;可执行文件(*.exe) 
+    | *.exe|小型可执行文件(*.com)|*.com |批处理文件(*.bat) | *.bat | All Files 
+    (*.*) | *.* ||&quot;,NULL);<br>
+    说明：第五个参数lpszFilter为一个指向字符串的指针，在列表框中要显示的字符后跟一个用“|”括起来<br>
+    的字符串，为要显示文件的文件类型。<br>
+    <strong>4．最高窗口的实现</strong><br>
+    &nbsp;&nbsp; 
+    最高窗口就是总浮动在其他窗口上的，不会被一般窗口遮住的窗口，最高窗口技术在编程中有着很广泛的应用。VC++中对基于SDI、MDI的运用程序，要实现最高窗口，只要在框架窗口类CMainFrame中的PreCreateWindow()函数中加入“cs.dwExStyle 
+    =WS_EX_TOPMOST;”即可。关于函数PreCreateWindow()及结构CREATESTRUCT的详细信息可参见VC++的联机文档。<br>
+    &nbsp;&nbsp; 
+    而对基于对话框的运用程序，如何实现最高窗口却很少论及，以下便是一种实现方法。<br>
+    &nbsp;&nbsp; 重载要实观最高窗口的对话框的OnInitDialog()函数，方法是进入ClassWizard，在Object 
+    ID列表框中选择该对话框的ID，在Message列表框中选择WM_INITDIALOGG，单击Add 
+    Function按钮后，即对onlnitDialog函数进行了重载。再按下Edit code按钮，加入以下语句：<br>
+    const CWnd * pWndInsertAfter;<br>
+    pWndInsertAfter = &amp;wndTopMost;<br>
+    SetWindowPos(pWndInsertAfter,0,0,0,0,SWP_NOSIZE | SWP_NOMOVE);<br>
+    函数SetWindowPos原型为BOOL SetWindowPos(const CWnd * pWndInsertAfter,int x,int y,int 
+    cx,int cy,UINT nFlags);<br>
+    pWndInsertAfter为指向标识窗口类型的CWnd对象的指针。<br>
+    x，y为窗口左上角的坐标。<br>
+    cx，cy为窗口的宽与高。<br>
+    nFlags确定窗口的大小及位置。当为SWP_NOSIZE时，忽略cx，cy。当为SWP_NOMOVE时，忽略x，y。<br>
+    <strong>5．窗口最大化、最小化的实现</strong><br>
+    &nbsp;&nbsp; 当利用AppWizard生成运用程序框架时，VC++已经为我们在标题条上做好了最大化，最小化及恢复按钮。但有时我们也想在其它地方使用这些功能。这就可采用下面的办法。在指定的消息处理函效中加入下列语句，则程序在收到该条消息后即执行窗口最小化。<br>
+    WINDOWPLACEMENT lwndpl;<br>
+    WINDOWPLACEMENT * lpwndpl;<br>
+    lpwndpl=&amp;lwndpl;<br>
+    GetWindowPlacement(lpwndpl);<br>
+    lpwndpl-&gt;showCmd=SW_SHOWMINIMIZED;<br>
+    SetWindowPlacement(lpwndpl);<br>
+    函数BOOL GetWindowPlacement(WINDOWPLACEMENT * lpwndpl) const的作用为获取表示当前窗口的布局的结构WINDOWPLACEMENT的结构变量指针。结构WINDOWPLACEMENT定义为：<br>
+    typedef struct tagWINDOWPLACEMENT {/* wndpl * / UINT length;<br>
+    UINT flags;<br>
+    UINT showCmd;<br>
+    POINT ptMinPosition;<br>
+    POINT ptMaxPosition;<br>
+    RECT rcNormalPosition;<br>
+    } WINDOWPLACEMENT;<br>
+    &nbsp;&nbsp; 其中的成员变量showCmd确定当前窗口的状态。其取值一般为：<br>
+    SW_HIDE隐藏窗口。SW_MINIMIZE最小化指定的窗口。SW_RESTORE将最大化或最小化的窗口恢复原来大小。SW_SHOW以原来的大小激话并显示窗口。SW_SHOWMAXIMIZED激活并最大化窗口。函数BOOL 
+    SetWindowPlacement(const WINDOWPLACEMENT * lpwndpl)作用为按结构MENT的设置显示窗口。<br>
+    <strong>6．OCX控件的使用</strong><br>
+    &nbsp;&nbsp; VC++的初学者可能会很羡慕VB或是C++Builder中那多得令人眼花缭乱且使用方便的控件。其实，VC++中可使用的控件更多，只不过在通常的主界面上看不到而已。如果打开Project菜单，选择Add 
+    To Project选项，在随后出现的子菜单中，选择Components And Controls，随后就可在Components 
+    andControls Gallery对话框中的列表框中看到Developer Studio Components和Registered 
+    ActiveX Controls两个文件夹。随便打开一个文件夹，你会看到什么？这么多控件，够用了吧。选定一个，要加入，单击Insert按钮；要帮助，单击More 
+    Info按钮。也可以直接在对话框编辑器中，右键单击对话框空白处，选择Insert 
+    ActiveXControls选项，然后就自己挑选去吧。下面向大家介绍两个常用的控件作为例子。<br>
+    （1）在前面介绍的位图按钮中，可以用该方式在对话框中加入颜色最多仅256色的位图，现在，利用Microsoft 
+    Forms 2.0 Image控件，你就可自由自在的使用真彩色位图了。方法如下：右键单击要加入位图的对话框空白处，选择Insert 
+    ActiveX Controls选项，随后选择Microsoft Forms 2.0 Image控件，加入后，右键单击该控件，调整该控件的属性。在All标签列出的属性中，Picture属性决定显示那一幅位图。属性调整完毕后，再编译连接，就一切OK了。<br>
+    （2）在你的程序中要具有Tips of the Day功能，那定能增色不少。像通用对话框一样，你无需自己去费时<br>
+    费力，Microsoft已经为你做好了，方法如下：打开Project菜单，选择Add 
+    To Project选项，在随后出现的子菜单中，选择Components And Controls，打开Developer 
+    Studio Components选择Tip of the Day，将其加入到Project中去。再编译连接运行，Tips 
+    of the Day出来了。不过此时Tips of the Day还没有任何内容。此时，需要打开project莱单，选择Add 
+    To Project选项，在打开的子菜单选择New，随后创建一个名为tips.txt的TXT文件，并加入到Project中去。用回车符来区分每一条Tip，注意，每条Tip不能以Tab跳格开头，且长度不能超过1000个字符。这样，加入Tip 
+    of the Day就大功告成了。<br>
+    &nbsp; 也许大家还记得，在用AppWizard创建运用程序框架时，有一步询问程序是否需要ActiveX控件支持。因此，如果在创建运用程序框架时没有包含这一特性，后来的Project就不能加入ActiveX控件了。但这也不是绝对的，利用函数AfxEnableControlContainer()就可补上这一特性，在运用程序的InitInstance()_函数中加入该函数，并在预编译文件StdAfx.h中加入#include&lt;Afxdisp.h&gt;即可。</td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" style="font-size: 9pt">中国程序员网站版权所有</td>
+  </tr>
+</table>
+</body>
+</html>

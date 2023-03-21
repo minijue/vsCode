@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb008.htm -->
+<!-- Copyright 1999 网页制作人：姚征   http://yaozheng.yeah.net  --><HTML><HEAD><TITLE>BC++ Builder 3.0中各种资源的利用</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>P {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+PRE {
+	FONT-FAMILY: Times New Roman; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width=&#4130;100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <FONT color=#0000c0>
+      <P align=center></FONT><STRONG>BC++ Builder  
+      3.0中各种资源的利用<BR><BR>烟台南大街建行科技部&nbsp; 李进 </STRONG></P>
+      <P><FONT color=#ffffff>----</FONT> 在 编 写 程 序 的 过 程 中， 经 常 要 用 到 各 种 资 源。 比  
+      如 说， 想 给 自 己 的 程 序 换 个 自 己 的 图 标， 使 用 一 些 活 泼 的 光 标 来 增 加 趣 味 性， 播 放 一 些 声  
+      音 和 动 画 文 件， 或 者 使 用 别 人 写 好 的 程 序 来 实 现 某 个 功 能。 我 们 往 往 希 望 将 这 些 资 源 直  
+      接 放 到EXE 文 件 中 以 形 成 一 个 单 独 的 可 执 行 文 件， 这 就 存 在 一 个 如 何 在 运 行 时 访 问 和 使  
+      用 这 些 资 源 的 问 题。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 编 译 期 间， 这 就 要 用 到 一 种 文 件， 以 .rc 结 尾  
+      的 资 源 定 义 文 件。 </P> 
+      <P><FONT color=#ffffff>----</FONT> <B>一： RC 文 件</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> rc 文 件 是 个 文 本 文 件， 它 的 格 式 很 简 单， 按 如  
+      下 格 式 定 义： </P> 
+      <P><FONT color=#ffffff>----</FONT> 资 源 标 识 符 资 源 类 型 资 源 的 路 径 </P> 
+      <P><FONT color=#ffffff>----</FONT> 以 下 的 rc 文 件 定 义 了 一 个 声 音 资 源， 两 个 光 标  
+      资 源， 三 个 图 标 资 源 和 一 个exe 文 件 资 源。 </P><PRE>src1.rc:
+  S1        WAV     wav1.Wav
+  C1      CURSOR  cursor1.cur
+  C2      CURSOR  cursor2.cur
+  I1        ICON    icone1.ico
+  I2        ICON    icone2.ico
+  I3        ICON    icone3.ico
+  unzip    EXEFILE  pkunzip.exe</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 你 可 以 将 写 好 的 rc 文 件 加 到 你 的 project( 项  
+      目） 中。 你 也 可 以 手 工 将 其 编 译 为 供 程 序 直 接 使 用 的 二 进 制 资 源 文 件（.res 文 件）。  
+      在BCB3.0 中， 可 以 使 用 命 令 行： brcc32 src1.rc src1.res 。 </P> 
+      <P><FONT color=#ffffff>----</FONT> <B>二： 资 源 的 使 用</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> 下 面， 按 照 使 用 的 简 繁 程 度， 依 次 说 明 各 类 资 源  
+      的 使 用 方 法。 需 要 说 明 的 是， 下 面 讲 述 的 使 用 方 法， 在 别 的 编 译 环 境 下（BC, VC 等） 也 是 一  
+      样 的。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 1： 建 立 一 个 新 的 项 目 </P> 
+      <P><FONT color=#ffffff>----</FONT> 启 动 BCB3.0, 选 FILE- &gt;new-  
+      &gt;Application 建 立 一 个 新 的 项 目。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 project- &gt;Add to Project 中， 加 入 写  
+      好 的 src1.rc 文 件。 当 然， 那 些 声 音、 光 标、 图 标 文 件 都 应 该 存 在。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 这 时， 我 们 有 了 一 个 空 的 窗 体(Form)。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 2： 能 够 利 用 windows API 函 数 直 接 访 问 的 资  
+      源 有： </P><PRE>  图 标    LoadIcon（）
+  光 标    LoadCursor（）
+  加 速 表  LoadAccelerators（）
+  位 图    LoadBitmap（）
+  菜 单    LoadMenu（）
+  字 符 串  LoadString（）</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 前 五 个 API 函 数 使 用 方 法 都 一 样， 带 两 个 参 数。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 第 一 个 参 数 指 明 资 源 的 存 放 地 ， 第 二 个 参 数 为  
+      rc 文 件 中 资 源 的 标 识。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 字 符 串 LoadString 除 这 两 个 参 数 外， 还 有 两 个  
+      参 数， 指 明 字 符 串 缓 冲 区 的 地 址 和 大 小。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 下 面 的 一 小 段 程 序 示 范 了 图 标 和 光 标 的 使 用。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 Form 上 放 置 一 个 按 纽， 在 其 OnClick 事 件 中  
+      加 入 以 下 代 码： </P><PRE> void __fastcall TForm1::Button1Click(TObject *Sender) {
+ // 将光标形状改为自己定义的：
+ Screen- &gt;Cursors[crDefault] = LoadCursor( HInstance, &quot;C1&quot;);
+ // 将图标改为自己定义的：
+ Icon = new TIcon() ;
+ Icon- &gt;Handle = LoadIcon(HInstance,&quot;I1&quot;);
+ Application- &gt;Icon = Icon ;
+  }</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 其 中 的 HInstance 指 示 资 源 所 在 地 为 执 行 文  
+      件。 编 译 执 行 后， 点 击 该 按 纽， 光 标 和 图 标 都 会 换 成 新 的。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 3： 能 够 通 过 windows API 使 用 的 资 源 </P> 
+      <P><FONT color=#ffffff>----</FONT> 对 于 声 音、 动 画 等 文 件， 可 以 使 用 windows API  
+      函 数 播 放。 但 是 不 象 上 面 几 种 资 源， 需 要 遵 循 一 定 的 步 骤。 如 下 所 示， 依 次 调 用  
+      FindResource, LoadResource, LockResource 函 数， 来 播 放 一 个Wav 声 音 文 件。 </P> 
+      <P><FONT color=#ffffff>----</FONT> （ 当 然， 独 立 的 声 音 文 件 可 以 在 运 行 时 直 接 播  
+      放。 我 们 这 里 讨 论 的 是 将 wav 文 件 编 译 进 EXE 文 件 的 情 况） </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 Form 上 放 置 第 二 个 按 纽， 在 其 OnClick 事 件  
+      中 加 入 以 下 代 码： </P><PRE>void __fastcall TForm1::Button2Click(TObject *Sender)
+	//定义资源块
+	char *wav_handle ;
+	//装入 Wav文件
+	HRSRC h = FindResource(HInstance,&quot;S1&quot;,&quot;WAV&quot;);
+  	HGLOBAL h1 = LoadResource(HInstance, h);
+  	wav_handle = (char *)LockResource(h1);
+	//播放 Wav文件。由于Wav文件装载在内存中，
+   sndPlaySound函数要用 SND_MEMORY参数
+	sndPlaySound(wav_handle, SND_MEMORY | SND_SYNC);
+  }</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 编 译 执 行 后， 点 击 该 按 纽， 会 播 放 一 次 声 音。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 对 于 动 画 等 文 件， 使 用 方 式 类 似Wav 文 件。（ BCB  
+      提 供 了 一 个TAnimate 控 件， 可 以 播 放 无 声 的Avi 文 件） </P> 
+      <P><FONT color=#ffffff>----</FONT> 4： 不 能 直 接 通 过 windows API 使 用 的 资 源  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 此 种 资 源 不 能 够 由 windows API 直 接 访 问 和 执  
+      行。 但 是， 我 们 可 以 用 一 种 变 通 的 方 法 来 使 用 它。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 下 面 示 范 如 何 使 用 pkunzip.exe， 思 路 如 下： 程  
+      序 运 行 时， 将pkunzip.exe 从EXE 文 件 中 分 离 出 来， 放 在 临 时 目 录 下， 用 ShellExecute()  
+      执 行 它。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在FORM 上 放 置 第 三 个 按 纽， 在 放 置 两 个 Edit ,  
+      用 来 输 入 pkunzip.exe 的 参 数。 </P><PRE>void __fastcall TForm1::Button3Click(TObject *Sender)
+  {
+	char exefile[100], tmppath[100] ;
+   	unsigned long ret ;
+   	//检查 pkunzip.exe是否已经存在
+	GetTempPath( 100, tmppath ) ;
+   	strcpy( exefile ,(AnsiString(tmppath)+
+    AnsiString(&quot;\\pkunzip.exe&quot;) ).c_str() ) ;
+	ret = GetFileAttributes( exefile ) ;
+   	if( ret == 0xffffffff ) { //不存在，则分离出 pkunzip.exe
+      	  TResourceStream &amp;rs = *new TResourceStream( 
+          (int)HInstance, AnsiString(&quot;unzip&quot;),&quot;EXEFILE&quot; ) ;
+	  rs.SaveToFile( AnsiString(exefile) ) ;
+          delete &amp;rs ;
+ 	}
+ 	//执行 pkunzip.exe
+	// Edit1- &gt;Text和 Edit2- &gt;Text分别为运行时
+    输入的zip文件名和目标文件目录。
+	ShellExecute(HInstance,	&quot;open&quot;, exefile, \
+   	  (AnsiString(&quot;-d &quot;) + Edit1- &gt;Text + 
+      &quot; &quot; + Edit2- &gt;Text).c_str(), \
+          tmppath, SW_HIDE ) ;
+        Application- &gt;MessageBox(&quot;解压缩完成&quot;, &quot;OK&quot;, IDOK ) ;
+  }</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 此 种 方 法 实 际 上 是 用 时 间 和 空 间 来 换 取 便 利  
+      性， 有 一 定 的 参 考 价 值。 例 如，DynaDoc 的 免 费 分 发 版 本， 就 是 将 真 正 的 执 行 程 序 压 缩 后 放  
+      在 一 个 有 解 压 缩 功 能 的“ 壳” 中。 运 行 时， 首 先 是“ 壳” 运 行 起 来， 将 真 正 的 执 行 程 序 解 压 缩  
+      到 临 时 目 录， 然 后 去 运 行 它。 如 果 你 的 程 序 含 有 大 量 的BMP,WAV 文 件， 不 妨 一 试， 能 让 你 的  
+      程 序 减 肥 不 少。 </P>   
+      <p>　   
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+<p>　</p> 
+</BODY></HTML> 

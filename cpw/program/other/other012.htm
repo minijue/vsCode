@@ -1,0 +1,114 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="oth_idx.htm">其它</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">CIH硬盘数据恢复方法与实例<br>
+      江海客<br>
+      <p><br>
+      <br>
+      一、基础知识&nbsp;<br>
+      1、DOS（DOS兼容系统硬盘数据）的构成<br>
+      主分区和扩展分区结构基本相似，以下以主分区为例。<br>
+      主引导记录（MBR）：MBR占一个扇区，在CYL 0、SIDE 0 、SEC 1，由代码区和分区表构成。其中代码区可以由FDISK/MBR重建。<br> 
+      系统扇区：CYL 0、SIDE 0 、SEC 1-CYL 0、SIDE 0 、SEC 63，共62个扇区<br> 
+      引导区（BOOT）：CYL 0、SIDE 1 、SEC 1 这是我们过去称的DOS引导区。也占一个扇区。<br> 
+      隐藏扇区：CYL 0、SIDE 0 、SEC 1，如果是FAT16那么占一个扇区，如果是FAT32则由此占32个扇区。<br> 
+      文件分配表：一般有两个FAT表，FAT12、FAT16的第一FAT表一般均在0-1-2，FAT32的第一FAT表在0-1-33。FAT表是  记录文件占用扇区连接的地方，如果两个FAT表都坏了，后果不堪设想。由于FAT表的长度与当前分区的大小有关所以FAT2的地址是需要计算的。<br> 
+      根目录区：（ROOT）这里记录了根目录里的目录文件项等，ROOT区跟在FAT2后面。<br> 
+      数据区：跟在ROOT区后面，这才是数据内容。<br> 
+      <br> 
+      2、主引导记录简单说明：<br> 
+      主引导记录是硬盘引导的起点，关于代码区不多说了，其分区表，比较重要的是2个标志，在偏移1BE，处的80的标记表示系统可引导，且整个分区表只能有一个80标记。另一个就是结尾的55 AA标记。用来表示主引导记录是一个有效的记录。<br> 
+      <br> 
+      <br> 
+      其实，无论MBR还是隐含扇区还是BOOT区，都不重要，这些重建都比较容易。对数据恢复来说，能否成功的找回数据文件是重要的。另外，由于FAT表记录了文件在硬盘上占用扇区的链表，如果2个FAT表都完全损坏了。那么恢复文件，特别是占用多个不连续扇区文件就相当困难了。<br> 
+      <br> 
+      基本思路是，<br> 
+      1、FAT2没有损坏的情况，用FAT2覆盖FAT1。<br> 
+      2、FAT2也已经损坏的情况，我一般是只期待找回其中某些关键的文件了。我们最期待的是这些文件是连续的。如果不连续的话，也并非没有可能，但这往往还要知道文件的一些细节，包括对一些文件本身的连接结构有了解。如果FAT2没有完全破坏，是有一定用处的，另外，一般来说，FAT16的硬盘因为FAT表靠前破坏的比较严重，一般两个FAT表都坏了，小硬盘也很难恢复了。<br> 
+      <br> 
+      <br> 
+      二、一个基本恢复被CIH破坏硬盘数据的例子<br> 
+      <br> 
+      一直有朋友问手工恢复的技巧，<br> 
+      近来恢复了多块被CIH破坏的硬盘，之所以选取这一次，是因为尽管恢复成功，但其中犯了一些错误，值得注意。<br> 
+      <br> 
+      委托恢复用户：某银行系统<br> 
+      硬盘情况：CIH发作有该单位电脑人员曾用KV300 F10进行修复，但没有成功，又恢复了保存的MBR。<br> 
+      <br> 
+      准备好软盘3张：<br> 
+      DISK1 ：WIN98启动盘（带DEBUG）<br> 
+      DISK2：DISKEDIT等工具（此盘不要写保护）<br> 
+      DISK3：DOS下杀CIH的工具<br> 
+      <br> 
+      把我的硬盘摘下，挂上待恢复的的硬盘，开机，进入SETUP，检测硬盘，把参数记下。<br> 
+      CLY 620 HEAD 128 PRECOMP 0 LANDZ 4959 SECTOR 63 MODE LBA。<br> 
+      用准备好的软盘启动：<br> 
+      A：>C：<br> 
+      显示Invalid drive specification<br> 
+      FDISK/MBR重建主引导记录。（这是个习惯），重新软盘引导：（可能没有必要）。此时已经看的见C：硬盘。启动DISKEDIT，启动过程中显示Invalid 
+      media type reading DRIVER C,哎呀，算了，还是先用DEBUG 清空分区表,，并置80和55aa标志。重新启动，再运行DISKEDIT，显示设定为READ ONLY，没关系，把CONFIGURATION中的只读选项去掉，存盘，好了，可以编辑了。由于当时接的硬盘有多块，我把这块当成了是一块只有C分区，所以没看别的东西，我们期待FAT2没有损坏，以用FAT2覆盖FAT1，在这个时候DISKEDIT要比DEBUG容易的多，在FIND OBJECT中选择 FAT，查一下起始扇区，好的，在CYL 0 SIDE68 SEC 14，0000H，F8 FF FF 0F（FAT32的），好的，FAT2没坏。其实如果不用DISKEDIT的可以用DEBUG查，偏移0000的F8 FF FF。<br> 
+      <br> 
+      由于以为只有C分区，所以，上来就在FIND中查找IOSYS（IO和SYS中要有空格）以查找ROOT区。找到后观察，是否有C：\下常见文件。好的，ROOT区没被破坏。记下了该扇区的CYL 0、SIDE 68 、SEC 14，备用。<br> 
+      <br> 
+      FAT1一般前面已经被破坏了，但后面应该还在，这可以作为检查。因为是32位的，FAT1 一般在CYL 0 SIDE1 SEC 33。因为有了ROOT 区然后应该计算FAT表的长度了，因为FAT2到ROOT前一扇区为止，所以非常简单。然后可以用FAT2覆盖FAT1，这里用DEBUG还是DISKEDIT都可以，如果用DEBUG一般是用INT 25读绝对扇区，再用INT 26写入，不过一般要分几次。记得保留断点呀：-）用DISKEDIT可以MARK FAT2的内容COPY下来，在WRITE到FAT1。<br> 
+      <br> 
+      然后可以恢复主引导记录、隐含扇区和BOOT区，可以先用NDD修复分区表，然后可以考虑用标准覆盖法，如果你希望下一步由NORTONUtilities ，来接手这些都可以不做。我从另一台FAT32上取来了，相应的部分，写了进去。我这是发现好象有一个D盘。先看一下在说吧。好了，关机串上我的硬盘，用NORTON 
+      Utilities 4扫描C盘，文件基本恢复，对C盘杀毒，WHY，没有发现病毒，换了2种杀毒软件还是没有病毒，更糟糕的是，显示C盘是948M，有一个D盘，但是95下无法浏览，DOS下乱码。于是打电话核实当时的情况，原来是26日那天，放进一张光盘，光驱灯亮了一会，就硬盘狂响，蓝屏死机了。应该证实我的推断一样，是光盘的AUTORUN程序有CIH病毒。所以说没有实时防御能力的软件是没有意义的。另外，他们的硬盘确实分两个区，而且重要文件在D区。（气死我了！）<br> 
+      <br> 
+      <br> 
+      然后在修复D盘吧，再回到DOS，用DEBUG查找结束标志为55AA的扇区，由结构判定是否为扩展分区。此时可算出大小来返回修订主分区表。当然，许多工具也可以很好的完成这一工作。如果你没有把握，就用他们完成好了。<br> 
+      <br> 
+      经验总结：1、你不要听信或者凭记忆想一块硬盘该是怎么样的，一定要自己去看，我就是凡了这个错误。2、KV300 F10确实如一些网友所讲，有一定隐患，如果银行的电脑人员在用KV300 F10处理之前没有备份，可能要给我找些麻烦。3、恢复数据要本着几项原则，1。先备份，这也是而后我写HD-MIRROR的原因，2。优先抢救最关键的数据 3。在稳妥的情况下先把最稳定的鸡蛋捞出来，（理应先修复扩展分区，再修复C），最好修复一部分备份一部分。4。要先作好准备，不要忙中出错，由于我的机器没有装过NORTON 
+      ，先解压，惯的敲了一个D：\TEMP,这才想起来文件险些解在没有完全修好的C盘上。<br>
+      <br>
+      其实看来，如果FAT2没有损坏的情况下，恢复C盘数据是非常容易的。如果FAT2损坏了，最容易恢复的当然是只占用一个扇区的文件和连续的文件，如果不连续的，比较容易恢复的文本文件，<br>
+      <br>
+      关于这个例子，我又不禁想起了KILL98的新广告，<br>
+      “您购买杀毒软件了么？” -YES<br> 
+      “您经常杀毒么？”       -YES<br> 
+      “您的数据被CIH破坏了么”-YES<br> 
+      ？？？？？？<br> 
+      您需要具有实时防御能力的杀毒软件。<br> 
+      <br> 
+      我不是想说KILL98如何如何好，我只是想再次点明杀毒软件95/98环境的实时能力的意义，总之，当中国的一些杀毒软件在以修复CIH的硬盘为标榜展开新一轮广告攻势的时候，我不仅感到莫名其妙，如果你们的用户硬盘被破坏了，你们所做的应该是对你们的软件为何没有防止这一事件的解释，而不是以能部分修复硬盘作为给用户的恩典。打一个比方，一个人买防弹衣你决不会告诉用户，我这个防弹衣虽然防不住子弹，但是，附带的急救包特灵，挨几枪后，上点药就好了。那还不如去卖药呢！我也用D版光盘，我的D版光盘也有CIH，我从不对任何驱动器主动检查，但我的机器从未感染过任何病毒（除非测试某一病毒），因为我也跑着杀毒软件，是D版的AVP。我无所谓，但是不要忘了，你们的用户是付了钱的。<br> 
+      <br> 
+      <br> 
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+ 
+</body> 
+ 
+</html> 

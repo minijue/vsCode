@@ -1,0 +1,64 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">VB4.0为应用程序创建快捷方式      
+      <p><br>
+      　　一般来说，软件在安装时都会创建一个快捷方式来方便用户使用，我们也可为自己的应用程序在桌面上创建一个快捷方式。安装Microsoft Visual Basic 4.0后，将会有一个Setup Kit工具，其所带的STKIT432.DLL文件中提供了一个API函数fCreateShellLink可供用户来为应用程序创建快捷方式。下来举例说明其使用方法。<br> 
+      　　在这里我们为NOTEPAD创建一个快捷方式。<br>
+      　　1、在VB4.0中打开一个新工程文件，在FORM1上添加一个命令按钮Command1。<br>
+      　　2、双击窗体，在General Declarations中输入下面代码：<br> 
+      Private Declare Function fCreateShellLink Lib ″STKIT432.DLL"″(ByVal_lpstrFolderName As<br> 
+      String,ByVal lpstrLinkName As String,ByVal_lpstrLinkPath As String,ByVal lpstrLinkArgs As<br> 
+ String) As Long<br> 
+      　　3、双击Command1命令按钮，写如下代码：<br>
+      Sub Command1_Click()<br> 
+      Dim lReturn As Long<br> 
+      lReturn=fCreateShellLink(″..。.Desktop″,_″快捷方式Notepad″,″c:win95<br> 
+      otepad.exe″,″″)<br> 
+      lReturn=fCreateShellLink(″″,″快捷方式Notepad″,_″c:\win95<br> 
+      otepad.exe″,″″)<br> 
+      lReturn=fCreateShellLink(″startup″,″快捷方式Notepad″,_″c:win95<br> 
+      otepad.exe″,″″)<br> 
+      End Sub<br> 
+      　　4、按F5运行，单击命令按钮command1，如果没有输入错误的话，桌面上就会出现NOTEPAD的快捷方式。<br>
+      运行环境：VB4.0(32)，中文WINDOWS95。     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

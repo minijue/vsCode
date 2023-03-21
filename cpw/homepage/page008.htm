@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="home_idx1.htm">主页制作</a>--&gt;</b> 
+    </span>将数据库的内容放到下拉列表中</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>将数据库的内容放到下拉列表中</strong></p>
+    <p><br>
+    <br>
+    ASP Source Code: <br>
+    <br>
+    <br>
+    --------------------------------------------------------------------------------<br>
+    <br>
+    &lt;%<br>
+    Dim objDC, objRS<br>
+    <br>
+    ' Create and establish data connection<br>
+    Set objDC = Server.CreateObject(&quot;ADODB.Connection&quot;)<br>
+    objDC.ConnectionTimeout = 15<br>
+    objDC.CommandTimeout = 30<br>
+    <br>
+    'Use this line to use Access<br>
+    'objDC.Open &quot;DBQ=&quot; &amp; Server.MapPath(&quot;database.mdb&quot;) &amp; 
+    &quot;;Driver={Microsoft Access Driver 
+    (*.mdb)};DriverId=25;MaxBufferSize=8192;Threads=20;&quot;, &quot;username&quot;, 
+    &quot;password&quot;<br>
+    <br>
+    'Our SQL Server code - use above line to use sample on your server<br>
+    objDC.Open Application(&quot;SQLConnString&quot;), Application(&quot;SQLUsername&quot;), 
+    Application(&quot;SQLPassword&quot;)<br>
+    <br>
+    <br>
+    ' Create recordset and retrieve values using the open connection<br>
+    Set objRS = Server.CreateObject(&quot;ADODB.Recordset&quot;)<br>
+    ' Opening record set with a forward-only cursor (the 0) and in read-only mode (the 1)<br>
+    <br>
+    ' If a request for a specific id comes in, then do it o/w just show pulldown<br>
+    If Len(Request.QueryString(&quot;id&quot;)) &lt;&gt; 0 Then<br>
+    &nbsp;&nbsp;&nbsp; ' request record for requested id<br>
+    &nbsp;&nbsp;&nbsp; objRS.Open &quot;SELECT * FROM sample WHERE id=&quot; &amp; 
+    Request.QueryString(&quot;id&quot;), objDC, 0, 1<br>
+    &nbsp;&nbsp;&nbsp; ' Show selected record<br>
+    &nbsp;&nbsp;&nbsp; If Not objRS.EOF Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; objRS.MoveFirst<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TABLE BORDER=2&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TR&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;&lt;B&gt;ID 
+    Number&lt;/B&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;&lt;B&gt;First 
+    Name&lt;/B&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;&lt;B&gt;Last 
+    Name&lt;/B&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;&lt;B&gt;Month's 
+    Sales&lt;/B&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/TR&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TR&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD 
+    ALIGN=&quot;center&quot;&gt;&lt;%= objRS.Fields(&quot;id&quot;) %&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD 
+    ALIGN=&quot;left&quot;&gt;&lt;%= objRS.Fields(&quot;first_name&quot;) %&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD 
+    ALIGN=&quot;left&quot;&gt;&lt;%= objRS.Fields(&quot;last_name&quot;) %&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD 
+    ALIGN=&quot;right&quot;&gt;&lt;%= objRS.Fields(&quot;sales&quot;) %&gt;&lt;/TD&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/TR&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/TABLE&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp; objRS.Close<br>
+    End If<br>
+    <br>
+    objRS.Open &quot;sample&quot;, objDC, 0, 1<br>
+    ' Loop through recordset and display results<br>
+    If Not objRS.EOF Then<br>
+    &nbsp;&nbsp;&nbsp; objRS.MoveFirst<br>
+    &nbsp;&nbsp;&nbsp; ' the form below calls this file only this time with an id in the 
+    QueryString<br>
+    &nbsp;&nbsp;&nbsp; %&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;FORM ACTION=&quot;./db_pulldown.asp&quot; 
+    METHOD=&quot;get&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;SELECT NAME=&quot;id&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;OPTION&gt;&lt;/OPTION&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;%<br>
+    &nbsp;&nbsp;&nbsp; ' Continue until we get to the end of the recordset.<br>
+    &nbsp;&nbsp;&nbsp; Do While Not objRS.EOF<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' For each record we create a option tag and 
+    set it's value to the employee id<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' The text we set to the employees first name 
+    combined with a space and then their last name<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;OPTION VALUE=&quot;&lt;%= 
+    objRS.Fields(&quot;id&quot;) %&gt;&quot;&gt;&lt;%= objRS.Fields(&quot;first_name&quot;) 
+    &amp; &quot; &quot; &amp; objRS.Fields(&quot;last_name&quot;) %&gt;&lt;/OPTION&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%<br>
+    &nbsp;&nbsp;&nbsp; ' Get next record<br>
+    &nbsp;&nbsp;&nbsp; objRS.MoveNext<br>
+    &nbsp;&nbsp;&nbsp; Loop<br>
+    &nbsp;&nbsp;&nbsp; %&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;/SELECT&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;INPUT type=&quot;submit&quot; value=&quot;Submit&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;/FORM&gt;<br>
+    &nbsp;&nbsp;&nbsp; &lt;%<br>
+    End If<br>
+    <br>
+    ' Close Data Access Objects and free DB variables<br>
+    objRS.Close<br>
+    Set objRS = Nothing<br>
+    objDC.Close<br>
+    Set objDC = Nothing<br>
+    %&gt;<br>
+    </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

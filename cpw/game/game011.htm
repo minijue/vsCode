@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="Author" CONTENT="Flyhorse">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>what is allegro？</title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="gameprg.htm">游戏制作</a>&gt;</b> 
+    </span>多页动画技术</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>多页动画技术</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%"> 
+    &nbsp;&nbsp;&nbsp; 动画设计中消除图像闪烁的一种方法是使用多页动画。多页动画是通过使用页切换技术实现的。页切换改变显示页以绘制出给定动画序列的相邻帧。由于图像通常绘制在不同的页上(不是当前可见页),用户不会看到图像被绘制或擦除。所以,这种技术能产生高质量的动画而没有图像闪烁。进行页切换的详细步骤如下。<br>
+    1.选择一种至少有两个可用显示页的视频模式(示例中为EGA640×200,16色4页)。<br>
+    2.使用-setvideomode()函数获取选择的视频模式。在当前显示页(0页)上绘制出序列中的第一帧。<br>
+    3.在需要绘制出序列中下一帧时,使用-setactivepage()函数设置激活页为备用显示项,仅仅改变激活页(不是可见页)。<br>
+    4.绘制出下一帧。此帧将被绘制在备用显示页(页1)上,而当前页(页0)继续被显示。在以后重复这一步时在绘制新的一帧前擦除掉已有的帧。 
+    5.绘制出新的一帧以后,使用-setvisualpage()函数将可见页设 
+    置为备用页。此时,备用页成为当前页。 6.重复步骤3到5直到完成了动画序列为止。 
+    以下程序(采用Visual C++)演示了实际的多页动画,例子中的动 
+    画序列读者自行设计。 #include <conio.h> #include <graph.h} #include <time.h} #define LAST-FRAME 4/* Total frames in the sequence. */ #define DRAW 1 /* Code for the draw operation. */ #define DELTA-X 10 /* Pixels moved per frame change. */ #define HALF-SECOND 500 /* 500 msec delay between frames . */ #define MAX-X 600 /* Max X position before termination. */ #define SETUP-DISPLAY \par \par setvideomode(-HRES16COLOR); \par #define EXIT-TO-DOS \par \par setvideomode (-DEFAULTMODE); \par /****页切换和绘制动画序列****/ #define PAGE-FLIP(v) \par \par if(v="=0)" v="1;" \par else v="0;" \par setactivepage(v); \par clearscreen(-GCLEARSCREEN); \par settextposition(1,16); \par outtext( \par "Example: Multiple Page Animation"); \par<BR> draw-frame(current-frame,px,py); \par<br>
+    -setvisualpage(page); \par create-delay(HALF-SECOND); \par<br>
+    int px,py; /* Current character position. */<br>
+    int page; /* Current page displayed. */<br>
+    int current-frame; /* Current frame displayed. */<br>
+    main()<br>
+    SETUP-DISPLAY<br>
+    cycle-frames();<br>
+    EXIT-TO-DOS<br>
+    cycle-frames()<br>
+    current-frame=0;<br>
+    px=0;<br>
+    py=85;<br>
+    page=0;<br>
+    while(px<=MAX-X)<BR> current-frame++;<br>
+    if (current-frame&gt;LAST-FRAME)<br>
+    current-frame=2;<br>
+    PAGE-FLIP(page)<br>
+    px=px+DELTA-X;<br>
+    current-frame=1;<br>
+    PAGE-FLIP(page)<br>
+    draw-frame(frame,x,y)<br>
+    int frame,x,y;<br>
+    switch(frame)<br>
+    case 1:<br>
+    frame-1(DRAW,x,y);<br>
+    break;<br>
+    case 2:<br>
+    frame-2(DRAW,x,y);<br>
+    break;<br>
+    case 3:<br>
+    frame-3(DRAW,x,y);<br>
+    break;<br>
+    case 4:<br>
+    frame-4(DRAW,x,y);<br>
+    break;<br>
+    create-delay(td)<br>
+    /**同Borland C++中的delay(td)函数**/<br>
+    int td;<br>
+    time-t ts1,ts2;<br>
+    ts2=ts1=clock();<br>
+    while(ts1+td&gt;ts2)<br>
+    ts2=clock();<br>
+    </td>
+  </tr>
+</table>
+
+<p>　</p>
+</body>
+</html>

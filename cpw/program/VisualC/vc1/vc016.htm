@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">VC++中使程序自动运行    
+      <p><br>
+      <br>
+ 我用VC++，希望该程序能在其Main Frame Window出现在屏幕后自动运行，而无需等待任何消息。所以想知道哪些函数在窗口出现后会被自动调用？首先，在Windows中没有任何一个消息用来通知窗口初始化完毕，所以在VC中也没有相应的函数，但您的问题可用下面的办法解决。<br> 
+      <br> 
+      用VC++5.0编写应用程序，MFC AppWizard会自动生成程序的框架，其中CTestView类的函数OnDraw()在窗口出现后自动调用。当然，此函数在窗口的大小发生改变(如最大、最小化)以及窗口由被遮住（一部分）到重新显现时也会被调用。所以为了使某些代码能够自动运行并且只运行一次，除了要将其代码写在OnDraw()函数中外，还要在CTestView类中添加一个用于标记的BOOL型变量x（用户可以自己定义变量名），在该类的构造函数中赋值为true。在OnDraw()函数里加上判断语句：当x为true时执行要求首先运行的代码，然后将x置为false；当x为false时什么也不做。这样就可以保证特定的代码在窗口出现时自动运行而且只执行一次。<br> 
+      <br> 
+      具体的程序片段如下：<br> 
+      <br> 
+      (CTestView.h 文 件 中)<br> 
+      <br> 
+      class CTestView : public CView<br> 
+      <br> 
+      {<br> 
+      <br> 
+    public:<br> 
+      <br> 
+    BOOL x;<br> 
+      <br> 
+    ......   // 其 他 的 语 句<br> 
+      <br> 
+      }<br> 
+      <br> 
+      (CTestView.cpp 文 件 中)<br> 
+      <br> 
+      CTestView::CTestView()<br> 
+      <br> 
+      {<br> 
+      <br> 
+      // add construction code here<br> 
+      <br> 
+    x=TRUE;<br> 
+      <br> 
+      }<br> 
+      <br> 
+      <br> 
+      <br> 
+      void CTestView::OnDraw(CDC* pDC)<br> 
+      <br> 
+      {<br> 
+      <br> 
+      CTestDoc*pDoc=GetDocument();<br> 
+      <br> 
+    ASSERT_VALID(pDoc);<br> 
+      <br> 
+    if(x==TRUE ){<br> 
+      <br> 
+      x=FALSE;<br> 
+      <br> 
+      ......// 要 求 首 先 运 行 的 代 码<br> 
+      <br> 
+    }<br> 
+      <br> 
+      }     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+ 
+</body> 
+ 
+</html> 

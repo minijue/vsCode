@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.swm.com.cn/yingyong/rj-98-yy6/98-y6-yy3.htm -->
+<html>
+
+<head>
+<title>大型WAV文件的播放</title>
+<meta content="text/html; charset=gb2312" http-equiv="Content-Type">
+<meta content="Microsoft FrontPage 3.0" name="GENERATOR">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt"
+height="28">
+  <tr bgcolor="#CCFFCC">
+    <td height="10"><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">大型WAV文件的播放</font></td>
+  </tr>
+  <tr>
+    <td height="14"></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>大型WAV文件的播放</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">在多媒体软件的设计中经常要处理声音文件，用Windows提供的API函数sndPlaySound可以实现小型WAV文件的播放。但是当WAV文件大于可用内存时，sndPlaySound函数就不能进行播放，那么如何利用MCI播放大型音频文件呢？本文将介绍一种方法。<br>
+    <br>
+    Windows支持两种RIFF(resource interchange file format,“资源交互文件格式”)音频文件：MIDI的RMID文件和波形音频文件格式WAV文件，本文将介绍如何用MCI命令播放大型WAV文件。<br>
+    <br>
+    用sndPlaySound播放音频文件只需要一行代码。比如实现异步播放的方法为<br>
+    sndPlaySound(&quot;c:\windows\ding.wav&quot;,SND_ASYNC);<br>
+    <br>
+    由此可以看到，sndPlaySound的使用是很简单的。但是用sndPlaySound播放音频文件有一个限制，即整个音频文件必须全部调入可用的物理内存。因此应用sndPlaySound播放的音频文件相对较小，最大约100K。要播放大一些的音频文件(在多媒体设计中是经常要遇到的情况)需要使用MCI的功能。<br>
+    <br>
+    本文创建了一个Cwave类，可以处理播放音频的MCI命令，因为该类能够执行很多的MCI命令和建立了数据结构，所以只需要简单的成员函数(如OpenDevice, 
+    CloseDevice, Play和Stop)。在CWave类中抽象了特定的MCI命令和数据结构，只含几个简单的成员函数OpenDevice, 
+    CloseDevice, Play和Stop。波形音频设备是一个复合设备，如果打开波形设备，然后打开并关闭每个波形元素，最后关闭波形设备，这样可以使得播放性能更好。调用Cwave::OpenDevice就可以打开波形设备，OpenDevice将MCI_OPEN命令传递给mciSendCommand函数，如果调用成功，就用数据结构MCI_OPEN_PARMS的wDeviceID成员返回波形设备的标识符，该标识符保存在一个供以后使用的私有数据成员中。<br>
+    <br>
+    一旦打开了Cwace对象，通过Cwace::Play播放WAV文件就就绪了，WAV文件名和一个窗口指针被传递给Play方法以便将MCI通知消息发送到制定的窗口。<br>
+    &nbsp;&nbsp;&nbsp; <br>
+    WAV文件的播放分为两步。首先要通过分配一个MCI_OPEN_PARMS结构并给所要播放的WAV文件设置lpstrElementName成员打开WAV文件。将该结构和MCI_OPEN传递给mciSendCommand，打开WAV文件并用MCI_OPEN_PARMS结构的wDeviceID成员返回元素标识符。<br>
+    &nbsp;&nbsp;&nbsp; <br>
+    第二步是命令波形音频设备播放WAV文件。分配了MCI_PLAY_PARMS结构并将dwCallback成员设置为窗口句柄。如果要同步播放音频波形文件，就增加MCI_WAIT标志并跳过窗口句柄。这样做会使应用程序在mciSendCommand函数返回之前等待WAV文件播放完毕。最可能的情况是异步播放大型WAV文件，可以象下面那样指定MCI_NOTIFY标志并设置dwCallback成员做到这一点。<br>
+    &nbsp;&nbsp;&nbsp; MCI_PLAY_PARMS mciPlayParms;<br>
+    &nbsp;&nbsp;&nbsp; MciPlayParms.dwCallback=(DWORD)pWnd-&gt;m_hWnd;<br>
+    &nbsp;&nbsp;&nbsp; DwResult=mciSendCommand(m_nDevice,MCI_PLAY,MCI_NOTIFY,<br>
+    (DWORD)(LPVOID)&amp;mciPlayParms);<br>
+    <br>
+    这样就开始了WAV文件的播放，并且在播放完毕后，MM_MCINOTIFY消息会发送到指定的窗口，图1给出了一个WAV文件播放所发生的事件序列：(1)命令播放WAV文件并立即返回；(2)播放WAV文件；(3)完成后发送通知消息。<br>
+    <br>
+    图1 播放WAV文件<br>
+    &nbsp;&nbsp;&nbsp; 完成播放后关闭WAV文件元素是程序员的责任，简单的调用Cwave类的Stop成员函数就可以了。Stop成员函数将WAV文件标识符和MCI_CLOSE命令传递给mciSendCommand函数，不必为该命令分配一个MCI结构，下述代码关闭了WAV文件<br>
+    mciSendCommand(m)nElement,MCI_CLOSE,NULL,NULL);<br>
+    &nbsp;&nbsp;&nbsp; 播放完所有的WAV文件后必须关闭波形音频设备，Cwave类的析构函数调用Cwave::CloseDevice自动完成。<br>
+    &nbsp;&nbsp;&nbsp; 将本文中介绍的CWave类加入到自己的程序中，就可以方便的应用它播放音频文件了。<br>
+    //建立Cwave类，放在Wave.h文件中<br>
+    class CWave:public CObject<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; //Construction<br>
+    &nbsp;&nbsp;&nbsp; public:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CWave();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; virtual ~CWave();<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //Operations<br>
+    public:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DWORD OpenDevice();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DWORD CloseDevice();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DWORD Play(CWnd *pParentWnd,LPCSTR pFileName);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DWORD Stop();<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //Implementation<br>
+    &nbsp;&nbsp;&nbsp; protected:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void DisplayErrorMsg(DWORD dwError);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //Members<br>
+    &nbsp;&nbsp;&nbsp; protected:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MCIDEVICEID m_nDeviceID;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MCIDEVICEID m_nElementID;<br>
+    };<br>
+    <br>
+    //Cwave类的实现代码，Cwave.cpp<br>
+    #include &lt;stdafx.h&gt;<br>
+    #include &quot;cwave.h&quot;<br>
+    <br>
+    CWave::CWave()<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; m_nDeviceID=0;<br>
+    &nbsp;&nbsp;&nbsp; m_nElementID=0;<br>
+    }<br>
+    <br>
+    CWave::~CWave()<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; if(m_nElementID)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stop();<br>
+    &nbsp;&nbsp;&nbsp; if(m_nDeviceID)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CloseDevice();<br>
+    }<br>
+    <br>
+    DWORD CWave::OpenDevice()<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; DWORD dwResult=0;<br>
+    &nbsp;&nbsp;&nbsp; if (m_nDeviceID)<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MCI_OPEN_PARMS mciOpenParms;<br>
+    &nbsp;&nbsp;&nbsp; mciOpenParms.lpstrDeviceType=(LPSTR)MCI_DEVTYPE_WAVEFORM_AUDIO;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //open the wave device<br>
+    dwResult=mciSendCommand(NULL,MCI_OPEN,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    MCI_OPEN_TYPE|MCI_OPEN_TYPE_ID|MCI_WAIT,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    (DWORD)(LPVOID)&amp;mciOpenParms);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //save device identifier,will use eith other 
+    MCI commands<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_nDeviceID=mciOpenParms.wDeviceID;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //display error message if failed <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(dwResult)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    DisplayErrorMsg(dwResult);<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //return result of MCI 
+    operation<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return dwResult;<br>
+    }<br>
+    <br>
+    DWORD CWave::CloseDevice()<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; DWORD dwResult=0;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //close if currently open<br>
+    &nbsp;&nbsp;&nbsp; if(m_nDeviceID)<br>
+    &nbsp;&nbsp;&nbsp; {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //close the MCI device<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    dwResult=mciSendCommand(m_nDeviceID,MCI_CLOSE,NULL,NULL);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //display error message if failed<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(dwResult)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    DisplayErrorMsg(dwResult);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //set identifier to close state<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_nDeviceID=0;<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //return result of MCI operation<br>
+    &nbsp;&nbsp;&nbsp; return dwResult;<br>
+    }<br>
+    <br>
+    DWORD CWave::Play(CWnd* pWnd,LPCSTR pFileName)<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; MCI_OPEN_PARMS mciOpenParms;<br>
+    &nbsp;&nbsp;&nbsp; //initialize structure<br>
+    &nbsp;&nbsp;&nbsp; memset(&amp;mciOpenParms,0,sizeof(MCI_OPEN_PARMS));<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //set the WAV file name to be played<br>
+    &nbsp;&nbsp;&nbsp; mciOpenParms.lpstrElementName=pFileName;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //first open the device<br>
+    &nbsp;&nbsp;&nbsp; DWORD dwResult=mciSendCommand(m_nDeviceID,MCI_OPEN,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    MCI_OPEN_ELEMENT,(DWORD)(LPVOID)&amp;mciOpenParms);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //display error message if failed<br>
+    &nbsp;&nbsp;&nbsp; if(dwResult)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DisplayErrorMsg(dwResult);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //if successful,instruct the device to play the WAV file<br>
+    &nbsp;&nbsp;&nbsp; else<br>
+    &nbsp;&nbsp;&nbsp; {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //save element indentifier<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_nElementID=mciOpenParms.wDeviceID;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MCI_PLAY_PARMS mciPlayParms;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //set the window that will receive notification 
+    message<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mciPlayParms.dwCallback=(DWORD)pWnd-&gt;m_hWnd;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //instruct device to play file<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dwResult=mciSendCommand(m_nElementID,MCI_PLAY,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    MCI_NOTIFY,(DWORD)(LPVOID)&amp;mciPlayParms);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //display error and close element if failed<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(dwResult)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    DisplayErrorMsg(dwResult);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stop();<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //return result of MCI operation<br>
+    &nbsp;&nbsp;&nbsp; return dwResult;<br>
+    }<br>
+    <br>
+    DWORD CWave::Stop()<br>
+    {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; DWORD dwResult=0;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //close if element is currently open<br>
+    &nbsp;&nbsp;&nbsp; if(m_nElementID)<br>
+    &nbsp;&nbsp;&nbsp; {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    dwResult=mciSendCommand(m_nElementID,MCI_CLOSE,NULL,NULL);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; //display error message if failed<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(dwResult)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    DisplayErrorMsg(dwResult);<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //set identifier to closed state<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m_nElementID=0;<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    &nbsp;&nbsp;&nbsp; return dwResult;<br>
+    }<br>
+    <br>
+    void CWave::DisplayErrorMsg(DWORD dwError)<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; //check if there was an error<br>
+    &nbsp;&nbsp;&nbsp; if(dwError)<br>
+    &nbsp;&nbsp;&nbsp; {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //character string that contains error message<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char szErrorMsg[MAXERRORLENGTH];<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //retrieve string associated error message<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    if(!mciGetErrorString(dwError,szErrorMsg,sizeof(szErrorMsg)))<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    strcpy(szErrorMsg,&quot;Unknown Error&quot;);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //display error string in message box<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AfxMessageBox(szErrorMsg);<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    }</td>
+  </tr>
+</table>
+</body>
+</html>

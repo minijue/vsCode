@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<meta name="FORMATTER" content="Microsoft FrontPage 2.0">
+<title></title>
+</head>
+
+<body bgcolor="#8080C0" text="#000000">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> 
+    --&gt; <a href="pow_idx.htm">PowerBuilder</a>&nbsp; --&gt;</b> <font color="#000000">PowerBuilder应用开发系列讲座(2) 
+    </font></span></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><font color="#0000ff">　<h2 align="center"></font><font color="#000000"><span
+    style="font-size: 9pt">PowerBuilder 应 用 开 发 系 列 讲 座(2) </span></font></h2>
+    <h3 align="center"><font color="#000000"><span style="font-size: 9pt">调 用Windows 的 
+    动 态 链 接 库 </span></font></h3>
+    <h3 align="center"><span style="font-size: 9pt">华 天 新 技 术 开 发 公 司&nbsp;&nbsp;&nbsp;&nbsp;张 
+    健 姿 <br>
+    北 京 友 谊 宾 馆 30538 室&nbsp;&nbsp;&nbsp;&nbsp;100873 <br>
+    Email: sjhzyz@public.bta.net.cn </span></h3>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 许 多 熟 练 使 用C 
+    的 程 序 员 在 使 用PowerBuilder 时 都 希 望 自 己 以 前 在C 上 做 的 
+    工 作 可 以 被P owerBuilder 引 用, 这 是 完 全 可 以 的。 在PowerBuilder 
+    中 你 可 以 通 过 外 部 引 用 函 数 的 形 式 来 调 用 动 态 连 接 
+    库 中 的 函 数。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font></span></p>
+    <h5><span style="font-size: 9pt">PowerBuilder 调 用DLL 程 序 使 用 规 则 </span></h5>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>PowerBuilder 可 以 支 
+    持 任 何 一 种 非PowerScript 编 写, 并 存 储 在 动 态 链 接 库 中 的 
+    外 部 函 数 或 过 程 的 调 用。 但 外 部 函 数 的 参 数 必 须 是 符 
+    合Pascal 规 则 的( 即 参 数 压 栈 顺 序 从 前 至 后)。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在 函 数 调 用 前, 
+    因 先 作 函 数 声 明,PowerBuilder 支 持 以 下 两 种 外 部 函 数 类 型: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> &middot; 全 局 函 数: 
+    可 以 在 应 用 的 任 意 位 置 调 用; </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> &middot; 局 部 外 部 
+    函 数: 在window,menu,user object 或 用 户 自 定 义 函 数 等 对 象 中 定 
+    义。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 外 部 函 数 声 明 
+    的 语 法 是: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>{Access}FUNCTION 
+    ReturnDataType Function-Name({REF}{DataTypel Arg1,...,Data TypeN ArgN})LIBRARY LibName </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 外 部 过 程 声 明 
+    的 语 法 是: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>{Access}SUBROUTION 
+    Subroutine({REF}{DataType1 Arg1,...,DataTypeN ArgN}) </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 如 果 您 使 用 的 
+    是 局 部 外 部 函 数 的 声 明, 您 还 可 以 指 定 对 象 的 访 问 权 
+    限:Public,Private, Protected。 对 局 部 函 数 权 限 访 问 的 限 制 同 对 
+    对 象 的 实 例 变 量 的 限 制 相 同。 您 可 以 指 定 对 象 名 加 函 
+    数 名 的 方 式 调 用 外 部 函 数: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>object.function(arguments) 
+    </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 如 在window 的w_emp 
+    上 调 用 局 部 外 部 函 数Recog(), 就 可 这 样 使 用: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>w_emp.Recog() </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font></span></p>
+    <h5><span style="font-size: 9pt">如 何 在PowerBuilder 与DLL 之 间 传 递 参 数 </span></h5>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在PowerBuilder 的script 
+    中 调 用DLL 中 的 函 数, 缺 省 情 况 下 是 通 过 传 值 法 来 传 递 
+    参 数(pa ssed by value), 也 就 是 说PowerBuilder 将 对 要 传 递 的 参 数 做 
+    一 份 拷 贝, 然 后 通 过 堆 栈 将 这 份 拷 贝 传 递 给 函 数。 如 
+    果 你 希 望DLL 中 的 函 数 可 以 改 变 调 用 参 数 的 原 值, 就 可 
+    以 通 过 参 考 传 值 法 (passed by reference) 来 传 递 参 数, 即 在 参 数 
+    类 型 前 面 加REF 关 键 字 来 声 明 该 参 数 将 要 用 参 考 传 值 
+    法。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在 使 用DLL 时 有 
+    一 些 基 本 规 则 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在MS Windows 中, 一 
+    个DLL 在 被 装 入 内 存 后, 只 会 有 一 个 实 例, 不 会 因 为 多 个 
+    程 序 使 用 同 一 个DLL 而 在 内 存 中 产 生 多 个DLL 拷 贝。 每 个DLL 
+    只 有 一 个 最 大 为64K 的 数 据 段。 缺 省 情 况 下,Po werBuilder 都 
+    是 使 用 传 值 法 来 传 递 参 数。 当 你 在 函 数 应 用 说 明 时 使 
+    用 了REF 关 键 字,PowerBu ilder 将 传 递 一 个32 位 的 地 址 指 针( 段 
+    地 址+ 偏 移 量) 给 被 调 用 的 函 数, 而 不 是 只 传 递 偏 移 量, 
+    这 才 能 保 证DLL 中 的 函 数 能 得 到PowerBuilder 中 数 据 的 正 确 地 
+    址。 在PowerBuilder 中 使 用 的 数 据 类 型 与C 语 言 支 持 的 数 据 
+    类 型 不 尽 相 同,C 中 不 支 持 的 数 据 类 型 应 在 调 用 前 先 进 
+    行 转 换。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 对 于 结 构, 要 在C 
+    和PowerBuilder 中 做 相 等 的 说 明。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>PowerBuilder 不 支 持 
+    函 数 指 针 的 传 递, 因 此 在PowerBuilder 中 不 能 使 用 回 调 函 数(callb 
+    ack funcion)。 如 果DLL 的 参 数 需 要 空 指 针(NULL), 你 可 以 向 函 数 
+    传 递 一 个 值 为0 的 长 整 型。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>Windows 中 使 用 的 
+    有 些 数 据 类 型C 中 并 不 支 持, 但 一 般 在C 的 预 编 译 器 中 用TYPEDEF 
+    作 预 定 义, 同 时PowerBuilder 接 口 也 应 当 作 适 当 转 换。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font></span></p>
+    <h5><span style="font-size: 9pt">使 用DLL 的 常 见 错 误 和 需 要 注 意 的 
+    地 方 </span></h5>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>1. 导 致 保 护 性 
+    错(general protection fault) </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在Windows 中, 如 果 
+    你 企 图 访 问 不 是 属 于 你 的 应 用 程 序 的 内 存 将 导 致 保 
+    护 性 错。 导 致 保 护 性 错 的 原 因 可 能 有 以 下 几 点: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>a. 向DLL 中 的 函 数 
+    传 递 了 不 正 确 的 参 数。 这 种 错 误 是 比 较 难 调 试 的, 因 
+    为PowerBuilder 的 调 试 器 不 能 跟 踪 到C 程 序 中。 你 可 以 通 过 
+    在C 中 使 用MessageBox 函 数 显 示 调 用 参 数 的 方 法 来 检 查 参 数 
+    传 递 的 正 确 性。 更 全 面 的 方 法 是 使 用Windows 的 调 试 版 本( 
+    带 有 调 试 信 息 的Windows 环 境) 和 功 能 更 强 的 调 试 器(Soft-ice 
+    for windows 或CodeView 等); </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>b.C 中 对 数 组 的 
+    访 问 超 出 了PowerBuilder 中 申 请 的 边 界。 在C 中 是 不 作 数 组 
+    边 界 检 查 的, 这 可 能 是 导 致 保 护 性 错 的 最 常 见 的 原 因; </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>c. 使 用 了 已 经 
+    释 放 的 内 存 指 针。 你 最 好 把 已 经 释 放 的 内 存 指 针 置 为NULL, 
+    以 便 在 使 用 前 进 行 判 断。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>2. 使 用 远 指 针 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在C 中, 所 有 的 
+    静 态 变 量 和 全 局 变 量 都 是 在 程 序 的 数 据 堆 中 分 配 的, 
+    其 他 变 量 都 是 在 栈 中 分 配 的。DLL 可 以 有 自 己 的 数 据 段, 
+    但 是 它 没 有 堆 栈 段, 使 用 的 是 调 用 程 序 的 堆 栈。 这 就 
+    意 味 着 寄 存 器DS 指 向 的 是DLL 数 据 段,SS 指 向PowerBuilder 应 用 
+    程 序 的 堆 栈。 而 一 般 的Windows 应 用 程 序 中,DS 和SS 是 相 同 的, 
+    你 可 以 使 用 近 指 针, 但 在 调 用DLL 中 引 用 远 堆 的 变 量 必 
+    须 使 用32 位 的 远 指 针。 如 果 使 用 任 何 与 内 存 寻 址 有 关 
+    的C 函 数, 都 要 使 用C 中 的far 版 本。 例 如 字 符 串 拷 贝 函 数, 
+    应 该 用_fstrcpy 而 不 要 用strcpy。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>3. 注 意 静 态 变 
+    量 的 使 用 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 无 论 有 多 少 实 
+    例 调 用 同 一 个DLL, 在 内 存 中 只 有 一 份DLL 代 码。 由 于Windows 
+    是 多 任 务 的 环 境, 因 此DLL 中 的 静 态 变 量 可 能 由 于 其 他 
+    实 例 对 此DLL 的 调 用 而 改 变。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>4. 不 要 试 图 共 
+    享 文 件 句 柄 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在Windows 环 境 下, 
+    不 可 能 在 应 用 程 序 和DLL 间 共 享 文 件 句 柄。 每 个 应 用 有 
+    各 自 的 文 件 句 柄 表, 如 果 两 个 应 用 通 过 一 个DLL 来 访 问 
+    同 一 个 文 件, 它 们 必 须 分 别 打 开 这 个 文 件。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>5. 及 时 释 放 使 
+    用 过 的 资 源 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 如 果 你 的DLL 中 
+    使 用 了GDI 对 象, 一 定 要 及 时 释 放 它 们, 否 则 会 使Windows 因 
+    申 请GDI 资 源 失 败 而 死 机; 例 如 你 建 立 了 一 个 逻 辑 字 体 
+    或 逻 辑 笔, 在 使 用 完 后, 要 用DeleteObject 来 删 除 它。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>6. 为 使PowerBuilder 
+    应 用 在Windows 环 境 下 正 常 运 行,DLL 应 放 在 下 列 目 录 之 中: </span><ul
+    type="square">
+      <li><span style="font-size: 9pt">当 前 目 录 <br>
+        </span></li>
+      <li><span style="font-size: 9pt">目 录 <br>
+        </span></li>
+      <li><span style="font-size: 9pt">Windows System 目 录 <br>
+        </span></li>
+      <li><span style="font-size: 9pt">在DOS 的 路 径 中 包 括 的 目 录 </span></li>
+    </ul>
+    </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

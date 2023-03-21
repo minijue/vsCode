@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="Author" CONTENT="Tang Jun">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>RedHat 初步印象</title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="linuxidx.htm">Unix/Linux</a> 
+    &gt;</b> </span>RedHat 初步印象</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><b>RedHat 初步印象</b></td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center">作者: con</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%"><b><font SIZE="+2"><p align="left"></font></b>&nbsp; &nbsp; &nbsp; &nbsp; 
+    昨天在D碟市场上竟看到一套心仪已久的RedHat 5.1, 而且是双CD的, 
+    一阵兴奋后马上买了下来. 回来后就开始准备安装, 
+    由于我的机器不能从光驱启动, 只好先制作启动软盘. 
+    检查了一下光碟目录, 发现有一个目录叫images, 
+    进去后有五个文件分别是Trans.tbl, boot.cat, boot.img, supp.img, rescue.img, 
+    没有像Slackware那样提供写盘的工具. 由于扩展名是img, 试着用hd-copy打开后顺利的将boot.img写到了软盘上. 
+    可不知为什么hd-copy不能打开supp.img和rescue.img. 
+    接下来就用这张软盘启动机器, 一会儿就进入了RedHat的安装界面, 
+    首先让我选择安装时用的语言, 没有中文可选, 于是选了English. 
+    接下来选择键盘类型. 之后选择Install Method, 当然选local CDROM, RedHat顺利的找到了我的光碟. 
+    然后问我do you have a SCSI adapters, 选择No. 接着选择安装的分区, 
+    可选择用Disk Druid和fdisk, 我选择了推荐的Disk Druid. 
+    选好分区后竟提示我没有一个交换分区, 安装无法进行. 
+    只好退了出来. </p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 查看了一下随盘的文档,&nbsp; &nbsp; 
+    &nbsp; 发现安装RedHat需要一个至少16Mb的交换分区.&nbsp; &nbsp; 没办法,&nbsp; 
+    &nbsp; 只好退到dos下运行pqmagic弄了一个40Mb的分区出来 (花了我一个多小时时间 
+    :(&nbsp; ).&nbsp; 重新进入安装程序把那个分区设为交换分区后一切ok. 
+    我选择了安装除两个与打印有关的package外的所有, 用了369Mb空间. 
+    接下来才真正开始安装. RedHat同时用进度条和数字显示安装进度, 
+    很一目了然. 和Slackware一样, 文件安装完后就是一些设置工作, 
+    包括鼠标, 时区, LILO, 网络等. 不同的是RedHat在安装时就设置XFree 86了. 
+    全部设置完毕后重新启动机器, 发现sendmail daemon的启动速度奇慢, 
+    登录后发现sendmail确实有问题--不能发送邮件到其他地方. 
+    不过网络的其他部分倒还正常.&nbsp; 还发现我在安装时甚至要mount的dos分区一个也没起来, 
+    检查了一下/etc/fstab发现更本没加进去. 手工修改了一下重新启动, 
+    一切正常.&nbsp; 接着启动X, 发现出错, 只得重新设置. 键入XF86Setup发现RedHat里没这个命令, 
+    只好用字符界面的Xconfigurator, 感觉比起Slackware的设置程序粗糙很多, 
+    许多选项都没有. 设好后再键入startx, 顺利的进入了X-Window.&nbsp; 
+    在安装时发现已经装了CXterm, wzce等中文软件, 于是试着键入cxtermgb 
+    &amp;, CXterm马上顺利的运行起来了, 而且字形比起我在Slackware里自己安装的好看多了. 
+    另外还有一个类似Win95里控制面板的东东, 可以方便的设置网络, modem, 
+    甚至修改密码, 增加用户等.&nbsp; 还有一个小小的遗憾--ls 
+    列出的文件都是黑白的, 不像Slackware那样是彩色的. 后来终于在BBS上找到了答案.</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 总的来说, RedHat不论安装和使用都比Slackware要简单一些, 
+    不过Slackware也有它的长处. 现在已是深夜, 该睡觉了........... </td>
+  </tr>
+</table>
+</body>
+</html>

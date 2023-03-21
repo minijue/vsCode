@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb006.htm -->
+<!-- Copyright 1999 网页制作人：姚征   http://yaozheng.yeah.net  --><HTML><HEAD><TITLE>利用C++ Builder开发动画DLL</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>P {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+PRE {
+	FONT-FAMILY: Times New Roman; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <P align=center><STRONG>利用C++ Builder开发动画DLL <BR><BR>厦门前沿科技开发有限公司  
+      刘学平</STRONG></P> 
+      <P>----  
+      我们在Windows98环境下执行拷贝文件、查找文件或计算机等耗时比较长的操作时，Windows会显示一个小小的动画，指示正在进行的操作，与死板的静止图像相比增色不少。那么我们自己开发软件时，能否也显示一个这样的动画提示呢？我在开发一个外贸应用软件系统时，遇到的数据量很大，当通过复合条件查找时，因为不是数据库表的每个项目都有索引，所以很费时，系统也会表现出长时间停顿，用户感觉极为不爽。我经过一段时间的探索，开发了一个能够在采用的开发环境PowerBuilder下调用的动画DLL，由于采用多线程编程，PB调用的DLL函数能够及时将控制权交还为PB，不影响应用系统的运转。用户能够看到一个东西在动，也就不会想到系统是不是停止响应了，感觉时间也似乎没那么久了。  
+      </P> 
+      <P>---- 代码与编译选项 </P> 
+      <P>---- (1) 在C++Builder的File菜单下选择New，在New  
+      Item对话框的New属性页中选择DLL，C++Builder就会创建一个空白的DLL项目。 </P> 
+      <P>---- (2) 在File菜单下选择New Form，C++Builder创建一个空白的Form，修改它的属性为 </P><PRE>BorderStyle=bsDialog
+BorderIcons的子属性均为False
+FormStyle=fsStayOnTop
+Position= poScreenCenter
+Name=StatusForm</PRE> 
+      <P>---- (3) 在Form上添加一个Win32下的Animate控件Animate1，修改它的属性为 </P><PRE>Align=alTop</PRE> 
+      <P>---- (4)  
+      在Form上添加一个Standard下的Button控件Button_Cancel，再添加System下的Timer控件Timer1，设置定时Interval时间位250，以较快的响应用户的取消请求。  
+      </P> 
+      <P>----  
+      因为PB应用系统与动画窗体代码分别属于两个线程，不能采用PB线程直接关闭动画窗体线程的窗口，否则会引起系统运行不正常，因此采用PB线程设置关闭标志，而动画线程采用Timer控件定时检查标志，一旦检测到关闭标志，就关闭窗口，清除线程标志，结束动画线程。  
+      </P> 
+      <P>---- 下面给出编码及编码原理： </P> 
+      <P>---- 1．DLL DLL主体代码： </P><PRE>/**********************************
+ * DLL主体代码
+* 定义DLL公用变量
+*  g_CommonAVI
+对Animate控件动画类型索引
+*  gi_Canceled
+Button_Cancel按钮是否被选择过
+*  gi_AVIType 
+要显示的动画类型，由DLL输出函数做为参数输入
+*  gi_RequestClose 
+请求动画线程关闭标志
+*  gi_WindowActive 
+动画窗口所处的状态
+*  lpsWinTitle  
+动画窗体的标题，由DLL输出函数做为参数输入
+
+*/
+
+TCommonAVI g_CommonAVI[]={
+     aviNone, aviFindFolder,
+     aviFindFile, aviFindComputer,
+     aviCopyFiles, aviCopyFile,
+     aviRecycleFile, aviEmptyRecycle,
+     aviDeleteFile
+};
+int gi_Canceled=0,gi_AVIType=0;
+int gi_RequestClose=0,gi_WindowActive=0;
+char lpsWinTitle[256];
+HWND hWndParent=NULL;
+
+/* 定义DLL 输出函数 */
+extern &quot;C&quot; __declspec(dllexport) 
+int pascal DllEntryPoint(HINSTANCE hinst,
+ unsigned long reason, void*);
+extern &quot;C&quot; __declspec(dllexport) int 
+pascal ShowStatusWindow(int AVIType,
+LPSTR WinTitle,long hWnd);
+extern &quot;C&quot; __declspec(dllexport) int 
+pascal GetStatus(int ai_CloseWin);
+extern &quot;C&quot; __declspec(dllexport) int 
+pascal CloseStatusWindow();
+
+/*定义线程TformThread:*/
+class TFormThread : public TThread{
+public:// User declarations
+    __fastcall TFormThread(bool CreateSuspended);
+    void __fastcall Execute(void);
+};
+__fastcall TFormThread::
+TFormThread(bool CreateSuspended):
+TThread(CreateSuspended){
+}
+/* 动画线程执行代码，
+动画窗体的定时器控件会关闭它，
+清除窗体存在标志后结束线程的运行
+ */
+void __fastcall TFormThread::Execute(void){
+     gi_WindowActive=1;
+     StatusForm=new TStatusForm(NULL);
+
+     StatusForm- &gt;Caption=lpsWinTitle;
+     StatusForm- &gt;ShowModal();
+     gi_WindowActive=0;
+     delete StatusForm;
+     gi_RequestClose=0;
+}
+/* 定义一个线程实例指针 */
+TFormThread *FormThread;
+/**********************************************
+ * 输出函数代码实现部分
+ *  DllEntryPoint 32位DLL入口
+ *  ShowStatusWindow  显示动画窗口，
+它通过创建一个线程来创建窗口，避免由于窗口
+的MODAL属性而使控制权不能及时的返还给调用者
+ *  GetStatus
+取得“取消”状态，即用户有没有选择“取消”按钮
+ *  CloseStatusWindow   关闭动画窗口，
+ */
+__declspec(dllexport) int WINAPI DllEntryPoint
+(HINSTANCE hinst, unsigned long reason, void*)
+{
+    return 1;
+}
+
+__declspec(dllexport) int pascal 
+ShowStatusWindow(int AVIType,LPSTR
+ WinTitle,long hWnd){
+    hWndParent=(HWND)hWnd;
+    memset(lpsWinTitle,0,sizeof(lpsWinTitle));
+    strncpy(lpsWinTitle,WinTitle,sizeof(lpsWinTitle)-1);
+    if (AVIType &gt;0 &amp;&amp; AVIType&lt; =8)
+        gi_AVIType=AVIType;
+
+    FormThread=new TFormThread(true);
+
+    FormThread- &gt;Priority = tpNormal;
+    FormThread- &gt;Resume();
+}
+
+__declspec(dllexport) int pascal
+ GetStatus(int ai_CloseWin){
+    if (gi_Canceled)
+       if (gi_WindowActive){
+          gi_RequestClose=1;
+          while(gi_RequestClose);
+       }
+
+    return gi_Canceled;
+}
+
+__declspec(dllexport) int pascal 
+CloseStatusWindow(){
+    if (gi_WindowActive){
+       gi_RequestClose=1;
+       while(gi_RequestClose);
+    }
+
+    return gi_Canceled;
+}
+
+2.窗体StatusForm的代码：
+TStatusForm *StatusForm;
+//-----------------------------------
+extern int gi_Canceled;
+extern int gi_AVIType;
+extern TCommonAVI g_CommonAVI[];
+__fastcall TStatusForm::
+TStatusForm(HWND ParentWindow)
+    : TForm(ParentWindow)
+{
+  gi_Canceled=0;
+}
+//-----------------------------------
+//取消按钮并不直接关闭窗体，
+而指示设置取消标志，供调用者查看
+void __fastcall TStatusForm::
+Button_CancelClick(TObject *Sender)
+{
+    gi_Canceled=1;
+//    ModalResult=mrCancel;
+}
+//-----------------------------------
+// 激活动画，在FORMCREATE事件中
+void __fastcall TStatusForm::
+FormCreate(TObject *Sender)
+{
+      Animate1- &gt;CommonAVI=g_CommonAVI[gi_AVIType];
+      Animate1- &gt;Active = true;
+}
+//-----------------------------------
+
+extern int gi_RequestClose;
+// 定时器事件检测到结束标志关闭窗体
+void __fastcall TStatusForm::
+Timer1Timer(TObject *Sender)
+{
+   if (gi_RequestClose){
+      ModalResult=mrOk;
+   }
+}
+//-----------------------------------</PRE> 
+      <P>---- (5) 设置编译选项：Project-&gt;Options打开Project  
+      Options对话框，清除Linker属性页中的Use Dynamic RTL标志，清除Packages属性页中的Build with  
+      runtime packages。这样只要单个DLL就可以运行了，而不必安装一些动态连接运行时间库。使用动画DLL </P> 
+      <P>---- 上面编译出DLL可以由其它任何开发语言调用，下面给出在PB中的使用方法。 </P> 
+      <P>---- (1) 定义： </P><PRE>//Declare - &gt; Global External Functions
+FUNCTION Long ShowStatusWindow(Long
+ AVIType,String WinTitle,long hWnd) &amp;
+    LIBRARY &quot;STATWIN.DLL&quot; ALIAS FOR &quot;ShowStatusWindow&quot;
+
+FUNCTION Long GetCancelStatus(Long  CloseWindow) &amp;
+    LIBRARY &quot;STATWIN.DLL&quot; ALIAS FOR &quot;GetStatus&quot;
+
+FUNCTION Long CloseStatusWindow() &amp;
+    LIBRARY &quot;STATWIN.DLL&quot; ALIAS FOR &quot;CloseStatusWindow&quot;</PRE> 
+      <P>---- (2) 调用： </P><PRE>long ll_EndTime
+//显示查找文件夹动画
+ShowStatusWindow(2)
+setpointer(HourGlass!)
+
+ll_EndTime = Cpu() + 10 * 1000
+DO
+  if GetCancelStatus(0)=1 then
+     exit
+  end if
+  // 做想做的事情
+LOOP UNTIL cpu() &gt; ll_EndTime
+
+CloseStatusWindow()</PRE>    
+      <p>　    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+<p>　</p> 
+</BODY></HTML> 

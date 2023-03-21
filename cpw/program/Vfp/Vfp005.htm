@@ -1,0 +1,160 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>VFP 中 几 个 常 用 类 的 设 计 技 巧</title>
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>VFP中几个常用类的设计技巧</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">文/崔建中 录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.07</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>Visual Foxpro for Windows 3.0（VFP 3.0）， 以 其 面 向 对 象 的 编 程 方 
+式 受 到 开 发 人 员 的 欢 迎， 特 别 是 面 向 对 象 中 的 类 以 其 
+继 承 性、 封 装 性 和 多 态 性 倍 受 程 序 员 青 睐。 下 面 向 您 
+介 绍 在 开 发 过 程 中 经 常 用 到 的 中 文 文 本 框、 进 度 条、 
+三 维 立 体 框 等 类 的 设 计 技 巧。 <br>
+<br>
+中 文 文 本 框 的 设 计 方 法<br>
+在 程 序 开 发 过 程 中， 我 们 经 常 要 设 计 一 些 文 本 框， 而 
+且 这 些 文 本 框 要 求 只 能 输 入 中 文。 在 这 种 情 况 下， 通 
+常 需 手 工 启 动 某 一 种 中 文 输 入 法。 如 果 软 件 能 够 自 动 
+启 动 缺 省 的 中 文 输 入 法， 那 么 将 会 给 编 程 人 员 带 来 很 
+大 的 方 便。 下 面 的 类 便 能 实 现 这 一 功 能， 具 体 的 设 计 
+步 骤 如 下： <br>
+1. 创 建 一 个 新 类， 其 基 类 是“TextBox”， 类 名 为“ 中 文TextBox”， 
+存 储 于“myclass” 类 库 中。 <br>
+<br>
+2. 进 入 类 设 计 器 后， 设 置“ 中 文TextBox” 的 各 项 属 性， 如 
+字 体、 颜 色 等。 <br>
+<br>
+3. 设 计GotFocus 事 件， 代 码 为： <br>
+=IMESTATUS(1) <br>
+<br>
+表 示 当 光 标 移 到 此 框 后， 自 动 启 动 中 文 输 入 法。 <br>
+<br>
+4. 设 计LostFocus 事 件， 代 码 为： <br>
+=IMESTATUS(0) <br>
+<br>
+表 示 当 光 标 移 开 此 框 后， 自 动 关 闭 中 文 输 入 法。 设 计 
+好 后， 保 存 到 文 件 即 可。 <br>
+<br>
+立 体 框 类 的 设 计 方 法<br>
+在VFP 的 标 准 类 里 提 供 了 一 个 形 状 控 制 类（Shape）， 可 以 
+简 单 地 将Shape 的“SpecialEffect” 属 性 设 置 为“0-3D”， 将“BackStyle” 
+属 性 设 为“0- 透 明”， 来 设 计 三 维 立 体 框。 然 而 这 样 的 
+三 维 立 体 框 太 单 调， 缺 少 变 化。 通 过 以 下 的 设 计 方 
+法， 我 们 可 以 作 出 类 似 于VB 中 的Three_D Panel 那 样 的 效 果。 
+具 体 设 计 步 骤 如 下： <br>
+1. 新 建 一 个 类， 基 类 是“Container”， 类 名 为“Three_Panel”， 
+存 储 于“myclass” 类 库 中。 <br>
+<br>
+2. 进 入 类 设 计 器 后， 设 置“Three_ panel” 的 各 项 属 性， 如 表1 
+所 示。 属 性 设 计 完 毕 后， 存 入 文 件， 就 可 以 得 到 凸 起 
+效 果 的 边 框 类。 <br>
+<br>
+表1 <br>
+<br>
+属 性 取 值 <br>
+BackStyle 0- 透 明 <br>
+BoardWidth 3 <br>
+SpecialEffect 0- 凸 起 <br>
+<br>
+<br>
+3. 通 过 调 整“SpecialEffect” 的 值 为“1- 凹 下”， 可 以 设 计 凹 
+下 效 果 的 边 框 类（three_panel_ao）。 <br>
+<br>
+调 整 其 余 参 数 可 以 得 到 不 同 效 果 的 边 框。 <br>
+<br>
+进 度 条 类 的 设 计 方 法<br>
+进 度 条 是 我 们 在 程 序 设 计 中 经 常 用 来 表 示 某 一 过 程 
+进 行 程 度 的 图 标。 具 体 设 计 步 骤 如 下： <br>
+1. 创 建 一 个 新 类， 其 基 类 是“Form”， 类 名 为“JD”， 存 储 
+于“myclass” 类 库 中。 <br>
+<br>
+2. 进 入 类 设 计 器 后， 设 计“JD” 的 属 性 如 表2 所 示。 <br>
+<br>
+表2 属 性 取 值 <br>
+AlwayOnTop .T. <br>
+AutoCenter .T. <br>
+BackColor 192,192,192 <br>
+Closeable .F. <br>
+CntrolBox .F. <br>
+MaxButton .F. <br>
+MinButton .F. <br>
+Moveable .F. <br>
+Start_b 0 <br>
+<br>
+<br>
+其 中Start_b 是 个 新 增 加 的 属 性， 此 属 性 用 来 表 示 初 始 进 
+度。 并 且 需 增 加 一 个 新 的 方 法“xsjd”, 其 代 码 如 下： <br>
+<br>
+lparameters start_b,cap<br>
+thisform.start_b=thisform.start_b+start_b<br>
+thisform.label1.caption=cap<br>
+thisform.label2.width=thisform.thr_ee<br>
+_pan_aol.width*(thisform.start_b/ <br>
+100)<br>
+thisform.label4.caption=str(thisform.start_b)+“%”<br>
+3. 在“Form” 上 增 加 一 个“Label” 对 象， 命 名 为“label1”， 用 
+来 显 示 过 程 的 题 目， 其 属 性 如 表3 所 示。 <br>
+4. 在“Form” 上 增 加 一 个“Label” 对 象， 命 名 为“Label4”， 用 
+来 显 示 进 行 过 程 中 所 占 的 百 分 数， 其 属 性 如 表3 所 示。 
+<br>
+<br>
+表3 属 性 取 值 <br>
+AutoSize .T. <br>
+BackStyle 0- 透 明 <br>
+Caption NULL <br>
+<br>
+<br>
+5. 在“Form” 上 增 加 一 个 三 维 矩 形 凹 框“Three_pan_ao” 对 象（ 
+见 立 体 框 类 设 计）， 命 名 为“three_pan_aol”。 <br>
+<br>
+6. 在“Form” 上 增 加 一 个“Label” 对 象， 命 名 为“label2”， 其 
+起 始 位 置 和 高 度 与“Three_pan_aol” 起 始 位 置 和 高 度 相 同， 
+属 性 如 表4 所 示。 <br>
+<br>
+表4 属 性 取 值 <br>
+Alignment 2- 中 间 <br>
+BackColor 0,0,255 <br>
+Width 0 <br>
+Caption NULL <br>
+<br>
+<br>
+应 用 示 例<br>
+设 表example 里 有 两 个 字 段： 姓 名、 数 量。 下 面 的 例 子 将 
+每 个 纪 录 的 数 量 加1。 <br>
+clea<br>
+clos all<br>
+set classlib to myclass<br>
+use example in 0<br>
+jdt=createobject(“jd”)<br>
+jdt.show()<br>
+jj=recc()<br>
+go top<br>
+do whil not eof()<br>
+repl 数 量with 数 量+1<br>
+jdt.xsjd（84/(jj+1),“ 正 在 统 计”）<br>
+skip<br>
+endd<br>
+clos all<br>
+retu<br>
+以 上 程 序 在Windows 95 和 中 文VFP 3.0 下 调 试 成 功。 <br>
+</p>
+</body>
+</html>

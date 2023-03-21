@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+<title>用Delphi“玩”编程（3）</title>
+</head>
+
+<body leftmargin="3"
+style="color: rgb(0,128,128); font-family: 宋体; font-size: 9pt; line-height: 17px">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt"><font color="#000000">现在的位置是： </font><b><font
+    color="#0000FF"><a href="Del_idx.htm">Delphi</a></font><font color="#000000">&nbsp; &gt;</font></b> 
+    <font color="#000000">用Delphi“玩”编程（3）</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><strong><font color="#000000"><span
+    style="font-size: 9pt"><big>用Delphi“玩”编程</big>（3）</span></font></strong></p>
+    <p align="center"><font color="#000000">定义“对象” </font></p>
+    <p align="center"><font color="#000000">江伟芸</font></p>
+    <p><font color="#000000">&nbsp;&nbsp;&nbsp; 上一期中我们用Delphi建立了一个程序。文中多次提及“对象&quot;。 
+    什么是对象呢？按最简单的理解，我们程序中的按钮、文字框、窗体等都可以叫做对象。一个对象是一个数据类型。对象就像记录一样，是一种数据结构。Delphi是基于面向对象编程的先进开发环境。Delphi之所以能够方便地建造应用程序，应归功于各种各样的“建筑材料&quot;―“对象&quot;。<br>
+    &nbsp;&nbsp;&nbsp; 每一个对象都有它的属性（Properties）和事件（Events）这些由组件“特性编辑器&quot;（Object 
+    Inspector）控制。特性编辑器分成Properties 页、Events页和对象列表三部分。Properties 
+    页用于修改对象的特性。每个对象都有的特性有Name（名称）Color（颜色）Font（字体）等等。Delphi为每个属性预定义了一个值，都可以按你的意愿修改。但对于Name特性，建议各位保持它自定义名称。因为当同类对象超过一个的时候Delphi 
+    把同类的对象定为类似“Button1&quot;“ Button2&quot;这样的名称，123总是比各有不同的名称容易记。Events页用于建立响应事件的句柄，列表中列出窗体内的所有对象的名称和类别。<br>
+    &nbsp;&nbsp;&nbsp; 在Delphi中使用的一部分对象都是在设计和运行期间可以看见的部件，例如编辑框、按钮等。一些部件，在设计时看不见，而在运行时可以看见。下面为我们的程序添加一个仅在运行期可见的对话框：<br>
+    双击Form1的OnCloseQuery事件右边的空格，添加斜体部分代码。<br>
+    procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);<br>
+    var userchoiceWord:word;<br>
+    begin<br>
+    userChoiceword:= messagedlg('真的要退出吗？', mtconfirmation, [mbyes, mbno],0);<br>
+    canclose:=(userChoiceword=mryes);<br>
+    end;<br>
+    &nbsp;&nbsp;&nbsp; 
+    添加代码后运行，关闭程序。退出程序前会弹出一个对话框以确认你是否确实要退出。<br>
+    &nbsp;&nbsp;&nbsp; 
+    以上两种对象称为可视化对象。另外有些部件，在程序的运行期间没有任何可视化的显示，但您却可以在您的应用程序中使用它们，称为非可视化对象，定时器（TTimer）就是其中一种。下面为程序添加一个计时器，使窗体每隔一段时间变色。<br>
+    &nbsp; 在对象栏System项中选定 并放置；<br>
+    &nbsp; 双击它，添加<br>
+    &nbsp;&nbsp;&nbsp; i:=i＋100;<br>
+    &nbsp;&nbsp;&nbsp; form1.color:=＄00C080FF＋i; <br>
+    &nbsp;&nbsp;&nbsp; 这里为Timer的 OnTimer事件添加了代码，设定“运行期&quot;的Color（颜色）特性。“运行期特性&quot;即只在程序运行的时候才表现的特性。但现在还不能马上运行，因为电脑不认识代码中的“i&quot;，我们必须先为它领“身份证&quot;。<br>
+    &nbsp; 上移代码编辑器的滚动条找到下文所示部分，添加代码<br>
+    &nbsp;&nbsp;&nbsp; var<br>
+    &nbsp;&nbsp;&nbsp; Form1: TForm1;<br>
+    &nbsp;&nbsp;&nbsp; i:integer;<br>
+    &nbsp;&nbsp;&nbsp; implementation<br>
+    &nbsp;&nbsp;&nbsp; 现在运行，我们的程序在不停地变脸呢。<br>
+    &nbsp;&nbsp;&nbsp; 这期我们简单了解了几种“对象&quot;这个Delphi的精灵，程序就是各种对象巧妙堆砌的结果。“对象&quot;的含义非常广，进一步学习还需要更多的专业知识。在下一期我们将介绍Object 
+    Pascal语言，是它使得用Delphi编写的程序拥有丰富的内涵。<br>
+    </font>&nbsp;&nbsp;&nbsp; </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

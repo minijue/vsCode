@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="home_idx1.htm">主页制作</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <p align="center"><font class="a"><b>四、在安全页面中检查是否已经验证用户身份</b>
+      <p align="right">作 者 : <a href="mailto:microsoftwindows@126.com">仙人掌工作室</a>
+      <p>　　 
+      每一个受保护的页面都应该检查用户身份是否已经验证。这是因为用户有可能为这些页面做了书签，如果不在这些页面中验证用户已经登录，就不能保证浏览页面的是经过授权的合法用户。
+      <p>　　 为检查是否已经验证用户身份，可以测试在signUserOn中创建的Session(&quot;User&quot;)是否是一个对象、类型是否正确等。如果上述测试失败，则重定向浏览器到登录页面signOn.asp。对于不支持Cookies的浏览器，检查用户是否经过身份验证的方法略为复杂，它需要通过在Application(&quot;Users&quot;)中搜索ID获得当前用户记录。如下面的代码在signedOn页面中完成上述检验：<br>
+      &lt; %@ Language=VBScript %&gt;<br>
+      &lt; % option explicit %&gt;<br>
+      &lt; % Response.Buffer = true %&gt;<br>
+      &lt; % Response.Expires = 0 %&gt;<br>
+      <br>
+      &lt; !-- #INCLUDE FILE=&quot;ASPSecurity.inc&quot; --&gt;<br>
+      &lt; HTML&gt;<br>
+      &lt; BODY&gt;<br>
+      &lt; %<br>
+      dim ID<br>
+      dim aUser<br>
+      dim AppUsers<br>
+      dim authenticated<br>
+      dim i<br>
+      if Session(&quot;SupportsCookies&quot;) then<br>
+      if not isUser(Session(&quot;User&quot;)) then<br>
+      Response.Redirect &quot;signon.asp&quot;<br>
+      else<br>
+      set aUser = Session(&quot;User&quot;)<br>
+      end if<br>
+      else<br>
+      authenticated = false<br>
+      ID = Request(&quot;ID&quot;)<br>
+      if len(ID) &gt; 0 then<br>
+      AppUsers = Application(&quot;Users&quot;)<br>
+      for each aUser in AppUsers<br>
+      if aUser(&quot;SessionID&quot;) = ID then<br>
+      authenticated=true<br>
+      aUser(&quot;LastActivity&quot;) = now()<br>
+      Application.Lock<br>
+      Application(&quot;Users&quot;) = AppUsers<br>
+      Application.UnLock<br>
+      exit for<br>
+      end if<br>
+      next<br>
+      end if<br>
+      if not authenticated then<br>
+      Response.Redirect &quot;signon.asp&quot;<br>
+      end if<br>
+      end if<br>
+      %&gt;</font>
+      <p align="right">
+      <p><font class="a">　 <a href="asp019.htm">第1页</a>　 <a href="asp020.htm">第2页</a>　 
+      <a href="asp021.htm">第3页</a>　 第4页　 <a href="asp023.htm">第5页</a>　 
+      </font>  
+      <p>　  
+    </td>  
+  </tr>  
+</table>  
+</center></div>  
+
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>用VB5.0编写自已的MP3播放器</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> 用VB5.0编写自已的MP3播放器</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" bgcolor="#4264B5"
+    height="30" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%"><p align="center"><font color="#FFFFFF">资料整理<span class="f">&middot;</span><a
+        href="http://fasoft.yeah.net" target="_blank" style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">用VB5.0编写自已的MP3播放器</span></strong></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">MP3播放器大家用得应该不少，不过，您是否厌 
+    倦了播放器的老面孔，是否尝试编写一个自己的MP3 
+    播放器呢？什么，太复杂！你会VB吗？会就得了！ <br>
+    首先，得了解一下我从朋友处得来的一个Ac tiveX控件--Mp3Play.ocx。所谓ActiveX控件就是 
+    高手早已编好的专门化功能软件部件。以前在16位 VB中是以vbx作为扩展名，Win95中扩展名改为 
+    ocx。大家只要知道Mp3Play.ocx是一个专门播放MP3 音乐文件的VB控件就行。我们编写自己的播放器，使 
+    用该控件，并适当设置其属性，就可以获得专业级的 MP3音乐效果。要想使用该控件，最好将它放到Windows\system目录，并且在注册表中注册。利用该控 
+    件，还可以将一个MP3文件解码为一个WAV文件。 <br>
+    Mp3Play.ocx的主要属性有： <br>
+    BitRate:MP3流比特率；FrameCount：MP3流帧记 数； TotalTime：总计已播放的时间；FrameNotifyCount( 
+    RW):发送一次通告的帧数，缺省为32；IsCopyright ed、IsOriginal、HasChecksums：从MP3流获得的发行信 
+    息；SampleFrequency：采样率；Layer：取值可以为1、2。 3，分别代表Layer1、Layer2、Layer3的标准，缺省为3， 
+    这意味着MPx的文件都可以播放；MPEGVersion：取 值代表MPEG-1或MPEG-2。 <br>
+    常用的方法有： <br>
+    AoutBox():显示About框。 <br>
+    Authorize(Name，Password)：验证许可证(注册 码)，Name即注册名，Password为注册码，由控件的提 
+    供商在用户注册后提供，返回值为0则通过，否则为 5。 <br>
+    Open(Inputfile，Outputfile)：打开MPEG音频文 
+    件并解码播放，若在声卡上播放则Outputfile应为空 串，返回非0值表示解码有误。如果Outputfile为文件 
+    名则解码至WAV文件。也就是说，可以利用此方法编 写MP3-WAV转换器。 <br>
+    Close：关闭当前MPEG流解码。 <br>
+    GetVolumeLeft，GetVolumeRight：获取左右声道的 音量，返回Long型值。 <br>
+    SetVolume(left channel，right channel)：设置系 统左右声道音量。 <br>
+    Pausc()：暂停，奇次声音暂停，偶次开启。 <br>
+    Play()：开始解码，并播放当前MPEG文件，返回0表 示解码无误。 <br>
+    Stop()：停止当前解码工作，返回非0表示有误。 <br>
+    下面，我们一步一步地完成： <br>
+    1．添加Mp3play.ocx控件 <br>
+    启动VB5，选择standard EXE。此时，左边的控件 面板中只是一些Win95标准控件。我们选Project(工 
+    程)菜单下的Components...(组件)项，在弹出的对话 框中选中Dialog-Medien 
+    Mp3play ActiveX Control Module项。这“宝贝”即我们所需的MP3控件。确定后 
+    在控件面板中会增添一个蓝色的喇叭图标，表示该控 
+    件已经添加到控件面板中。 <br>
+    2．设置属性 <br>
+    点中蓝色喇叭，在窗体中拖动一个矩形框，松开后 在窗体中出现MP3控件图标。为了在播放时隐去喇 
+    叭，在MP3Play1的属性表中将Visible设为False。一 
+    般就这么多，剩下的就是使用它的方法(Methods)了。 <br>
+    3．添加按钮 <br>
+    点中“Command”按钮，在窗体中建立三个名字分 别为Command1、Command2、Command3的命令按钮， 
+    将它们的Caption分别设为“选择MP3文件”、“播放”、 “暂停”。 <br>
+    4．添加CommonDialog控件 <br>
+    为能方便地选择MP3文件，还需文件打开对话 
+    框。如果控件面板中没有此控件，如1中所述选中 Components菜单项，在Microsoft 
+    Common Dialog Control 5.0前的复选框中打勾，确认后即可在控件面 
+    板中看到此控件图标。在窗体中建立一个名为Com monDialog1的对象，为使能快速找到MP3的文件，需 
+    要设置它的Filter属性为“*.MP3|*.MP3”。 <br>
+    5．在按钮中编写相应的代码 <br>
+    双击Command1、在Private Sub Command1_Click ()中输入以下代码： <br>
+    CommonDialog1.ShowOpen <br>
+    双击Command2，在Private Sub Command2_Click ()中输入： <br>
+    Err =Mp3Play1.open(CommonDialog1.filename，&quot;&quot;) <br>
+    MP3play1.Play <br>
+    双击Command3，在Private Sub Command3_Click ()中输入： <br>
+    Mp3play.Pause <br>
+    6.调整窗口大小，运行播放器 <br>
+    适当调整窗体的外观，如大小、颜色等，怎么舒服 
+    您就怎么设置。好了，开始按F5运行，选择MP3文件 --播放！感受一下您自个儿的MP3播放器吧！ 
+    <br>
+    此外．您还可以用Photoshop等软件制作一些漂 
+    亮的界面，贴在窗体上，增强其艺术性。还可以仿照 winamp的“plug_ins”，利用Timer控件完成一些特殊 
+    的动画效果。当然，一切都靠您自个的天才去设计了。 
+    顺便在此请教诸位大侠，哪儿有未加时间限制的 Mp3Play.ocx，或者您有注册号，请告诉在下。我因没 
+    有注册码，每首歌曲只能播放30秒。 </span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用VB实现文件查找功能      
+      <p>　　在VB中要实现查找文件功能，我们可以利用VB的DIR函数进行递归来实现。每次使用DIR函数后，比较是否有要查找的文件，再检查是否有子目录，若有，利用递归继续查找，这样可对整个盘进行查找。<br>
+      　　下面是一个例子，查找DOS目录下的所有EXE文件，统计EXE文件的数目并列出文件名。本程序会查找当前路径下的所有文件和子目录，与WIN95的“包含子文件夹”的查找功能类似。<br>
+      程序与注释如下：<br>
+      1.在窗体中加一命令按钮Command1,Caption=查找示例，双击此按钮，写如下代码：<br>
+      Private Sub Command1－Click()<br> 
+      Dim ff() As String′定义一个字符串数组用来保存找到的文件名称<br> 
+      Dim fn As Long′保存找到的文件数目<br> 
+      fn=TreeSearch(″C:％％dos″，″＊.exe″，ff())<br> 
+      Print″找到文件数目为″；fn<br> 
+      For i=1 To fn<br> 
+      Print ff(i)<br> 
+      Next<br> 
+      End Sub<br> 
+      2.插入一模块Modulel.bas，写如下代码：<br> 
+      Option Explicit<br> 
+      Public Function TreeSearch(ByVal sPath As String,ByVal sFileSpec As String,sFiles() As String)<br> 
+      As Long<br> 
+      Static 1Files As Long′文件数目<br> 
+      Dim sDir 　 As String<br> 
+      Dim sSubDirs() As String′存放子目录名称<br> 
+      Dim 1Index As Long<br> 
+      If Right(sPath,1)&lt;>″％％″Then sPath=sPath＆″％％″<br> 
+      sDir=Dir(sPath ＆ sFileSpec)<br> 
+      ′获得当前目录下文件名和数目<br> 
+      Do While Len(sDir)<br> 
+      1Files=1Files＋1<br> 
+      ReDim Preserve sFiles(1 To 1Files)<br> 
+      sFiles(1Files)=sPath＆sDir<br> 
+      sDir=Dir<br> 
+      Loop<br> 
+      ′获得当前目录下的子目录名称<br> 
+      1Index=0<br> 
+      sDir=Dir(sPath＆″＊.＊″,16)<br> 
+      Do While Len(sDir)<br> 
+      If Left(sDir,1)&lt;>″.″Then ′skip.and..<br> 
+      ′找出子目录名<br> 
+      If GetAttr(sPath ＆ sDir)And vbDirectory Then<br> 
+      1Index=lIndex ＋1<br> 
+      ′保存子目录名<br> 
+      Redim Preserve sSubDirs(1 To 1Index)<br> 
+      sSubDirs(1Index)=sPath ＆ sDir ＆″％％″<br> 
+      End If<br> 
+      End If<br> 
+      sDir=dir<br> 
+      Loop<br> 
+      For 1Index=1 To 1Index<br> 
+      ′查找每一个子目录下文件，这里利用了递归<br> 
+      Call TreeSearch(sSubDirs(1Index),sFileSpec,sFiles())<br> 
+      Next 1Index<br> 
+      TreeSearch=1Files<br> 
+      End Function<br> 
+      3.保存文件，按F5运行，单击命令按钮即可。<br> 
+      程序运行环境：VB 4.0 (32位)，中文WIN95。<br> 
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

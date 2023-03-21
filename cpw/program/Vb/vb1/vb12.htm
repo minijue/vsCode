@@ -1,0 +1,187 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用VB实现动态显示操作进度程序&nbsp;<br>
+      <br>
+              江苏镇江港务局微机室(212001)蔡可训&nbsp;      
+      <p><br>
+      凡是用过Windows的用户都非常熟悉Windows安装程序所提供的界面,即随着安装盘文件拷贝到硬盘,有一蓝色的水平尺随着百分数的增加而不<br>
+      断增加,当百分数达到50%时,原为白底黑字显示百分比,变成蓝底白字显示,水平尺动态显示工作进度的动感非常强。&nbsp;<br>
+      <br>
+      如何在自己的应用程序加入显示动态操作进度的功能,笔者在VB编程工作中总结出两种方法。&nbsp;<br>
+      <br>
+      1.方法一:&nbsp;<br>
+      <br>
+      建立两个图片框,这两个图片框的大小和位置都相同。将一个设置为可见,白色背景和黑色前景。另一个设置为不可见,蓝色背景和白色前景,<br>
+      AUTODRAW为TURE。将不可见图片框中的蓝色位图通过Windows API中的BITBLT函数拷贝到可见的图片框中。两个图片框中输出百分数的位置<br> 
+      相同。&nbsp;<br>
+      <br>
+      ①在目标文件列表(OBJECT)中选择GENERAL,在过程列表(PROC)中选择DECLARATIONS(声明),进入窗体级代码定义窗口输入:&nbsp;<br>
+      <br>
+      DECLARE FUNCTION BITBLT% LIB "GDI"(BYVAL DESTDC%,BYVAL X%,BYVAL Y%,<br> 
+      BYVAL W %BYVAL H%,BYVAL SRCDC%,BYVAL XSRC%,BYVAL YSRC%,BYVAL RASTEROP&amp;)&nbsp;<br>
+      <br>
+      CONST SRCCOPY = &amp;HCC0020&nbsp;<br>
+      <br>
+      ②建立一个计时器,设置每隔五毫秒使水平尺增加1%。&nbsp;<br>
+      <br>
+      输入计时器的程序代码:&nbsp;<br>
+      <br>
+      SUB TIMER1_TIMER ()&nbsp;<br>
+      <br>
+      STATIC COUNT AS INTEGER&nbsp;<br>
+      <br>
+      COUNTS!=COUNT/100&nbsp;<br>
+      <br>
+      PERCENT$ = FORMAT(COUNTS!,"0%")&nbsp;<br>
+      <br>
+      P1.PRINT PERCENT$ `显示百分数.P1是可见框的控制名称.&nbsp;<br>
+      <br>
+      P2.PRINT PERCENT$ `显示百分数.P2是不可见框的控制名称.&nbsp;<br>
+      <br>
+      R% = BITBLT(P1.HDC,0,0,P2.WIDTH*COUNTS!,P2.HEIGHT,P2.HDC,0,0,SRCCOPY)&nbsp;<br>
+      <br>
+      COUNT = COUNT +&nbsp;<br>
+      <br>
+      IF COUNT = 100 THEN&nbsp;<br>
+      <br>
+      COUNT = 0&nbsp;<br>
+      <br>
+      `计数清零&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      这种方法实现起来太繁琐且运行效果表现为水平尺的动感强,但缺乏立体美感,所以笔者只提供了程序代码的主要部分,下面将着重介绍方法二。&nbsp;<br>
+      <br>
+      2.方法二:&nbsp;<br>
+      <br>
+      充分利用三维控件的属性,制作一个三维立体界面。&nbsp;<br>
+      <br>
+      ①先介绍3D控件中的特殊属性(本文用到的)含义:&nbsp;<br>
+      <br>
+      SHADOWCOLOR 用于控制阴影的颜色,它有1-黑色,0-浅灰色两种选项,本文选0。&nbsp;<br>
+      <br>
+      BEVELOUTER&nbsp;<br>
+      <br>
+      用于控制控件倾斜框外边形状。它有0-没有,1-凹入,2-凸出三项。&nbsp;<br>
+      <br>
+      BEVELINNER&nbsp;<br>
+      <br>
+      用于控制控件倾斜框内边形状。选项同BEVELOUTER。&nbsp;<br>
+      <br>
+      BEVELWIDTH&nbsp;<br>
+      <br>
+      用于控制控件倾斜框的宽度。&nbsp;<br>
+      <br>
+      BORDERWIDTH 用于控制控件边框的宽度。&nbsp;<br>
+      <br>
+      FLOODTYPE&nbsp;<br>
+      <br>
+      用于控制在面板内填充的方式,0-没有,1-从左到右,2-从右到左,&nbsp;<br>
+      <br>
+      3-从上到下,4-从下到上,本文选1。&nbsp;<br>
+      <br>
+      FLOODCOLOR&nbsp;<br>
+      <br>
+      指定填充时的填充颜色。&nbsp;<br>
+      <br>
+      FLOODSHOWPCT 控制是否在填充时显示完成的百分比。有TRUE/FALSE两种选项,本文设置为TRUE。&nbsp;<br>
+      <br>
+      ②建立含有如下控件的窗体:&nbsp;<br>
+      <br>
+      控件 NAME CAPTION BEVELINNER BEVELOUTER BEVELWIDTH BORDERWIDTH&nbsp;<br>
+      <br>
+      FLOODCOLOR&nbsp;<br>
+      <br>
+      窗体 FORM1 动态显示操作演示 `程序窗口&nbsp;<br>
+      <br>
+      命令按钮 COMMAND1 退出 `程序结束&nbsp;<br>
+      <br>
+      计时器 TIMER1 (INTERVAL为5)&nbsp;<br>
+      <br>
+      面板 PANEL3D1 空 1 1 1 4 蓝色&nbsp;<br>
+      <br>
+      由于显示超宽,部分属性的设置见2①属性说明&nbsp;<br>
+      <br>
+      ③利用计时器,每隔5毫秒就使水平尺增加1%。当达到50%时,百分数显示由原来的白底黑字变成蓝底白字;当达到100%时,将百分数清零再从头显<br>
+      示水平尺。&nbsp;<br>
+      <br>
+      (1)输入计时器的代码:&nbsp;<br>
+      <br>
+      SUB TIME1_TIMER()&nbsp;<br>
+      <br>
+      STATIC COUNT AS INTEGER&nbsp;<br>
+      <br>
+      PANEL3D1.FORECOLOR = &amp;H0&nbsp;<br>
+      <br>
+      `设置百分数为黑字.&nbsp;<br>
+      <br>
+      PANEL3D1.FLOODPERCENT = COUNT `显示百分数.&nbsp;<br>
+      <br>
+      COUNT = COUT +&nbsp;<br>
+      <br>
+      IF COUNT ＞=50 THEN&nbsp;<br>
+      <br>
+      PANEL3D1.FORECOLOR = &amp;HFFFFFF `设置百分数为白字.&nbsp;<br>
+      <br>
+      IF COUNT = 100 THEN&nbsp;<br>
+      <br>
+      COUNT = 0 `计数清零.&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      (2)输入退出按钮的代码:&nbsp;<br>
+      <br>
+      SUB COMMAND1_CLICK()&nbsp;<br>
+      <br>
+      END&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      以上程序在AST PIII+4/66D上,VISUAL BASIC 3.0 FOR WINDOWS环境中运行通过,用户可将本程序适当修改加入到自己的应用程序中,增加程序<br> 
+      界面的立体美感。      
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

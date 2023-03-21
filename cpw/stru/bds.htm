@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>表达式求解</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>表达式求解</strong></p>
+
+<p>//表达式求解<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;math.h&gt;<br>
+//char a[10]={'5','(','(','x','+','x',')','*','x',')'};//4x<br>
+//char a[10]={'5','(','(','x','*','x',')','+','x',')'};//2x+1<br>
+//char a[10]={'5','(','x','*','x',')'};//2x<br>
+char a[14]={'5','(','x','*','(','(','x','*','x',')','+','x',')',')'};<br>
+<br>
+main()<br>
+{<br>
+int b[10]={{0}},c[10]={{0}};<br>
+char d[10]={{'-'}};//B为系数 C为指数栈 D为符号栈<br>
+int ks=1,kf=1,kh=1,i=0;//ks系数指针 kf符号指针 kh括号计数<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp; do<br>
+{<br>
+i++;<br>
+switch(a[i])<br>
+{<br>
+&nbsp;&nbsp;&nbsp; case '(':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kh++;<br>
+break;<br>
+&nbsp;&nbsp;&nbsp; case 'x':<br>
+&nbsp;&nbsp;&nbsp; b[ks]=1;c[ks]=1;ks++;<br>
+break;<br>
+&nbsp;&nbsp;&nbsp; case '+':<br>
+&nbsp;&nbsp;&nbsp; d[kf]='+';kf++;<br>
+break;<br>
+&nbsp;&nbsp;&nbsp; case '*':<br>
+&nbsp;&nbsp;&nbsp; d[kf]='*';kf++;<br>
+break;<br>
+&nbsp;&nbsp;&nbsp; case ')':<br>
+&nbsp;&nbsp;&nbsp; if(kh!=1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kh--;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kf--;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(d[kf]=='+')<br>
+{<br>
+if(c[ks-2]==c[ks-1])<br>
+{<br>
+&nbsp;&nbsp;&nbsp; b[ks-2]=b[ks-2]+b[ks-1];<br>
+ks=ks-1;b[ks]=0;c[ks]=0;<br>
+}<br>
+}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(d[kf]=='*')<br>
+{<br>
+&nbsp;&nbsp;&nbsp; b[ks-2]=b[ks-2]*b[ks-1];<br>
+c[ks-2]=c[ks-2]+c[ks-1];<br>
+ks=ks-1;b[ks]=0;c[ks]=0;<br>
+}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+}<br>
+}while(kh!=1);<br>
+<br>
+int lj=0;<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;ks;i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; lj=lj+b[i]*c[i]*pow(a[0]-0x30,c[i]-1);<br>
+}<br>
+cout&lt;&lt;lj;<br>
+cin&gt;&gt;i;<br>
+}</p>
+</body>
+</html>

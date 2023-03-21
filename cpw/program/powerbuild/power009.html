@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="pow_idx.htm">      
+    PowerBuilder</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF" height="67">    
+  <tr>    
+    <td width="85%" align="left" valign="top" height="61"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">PowerBuild 的高级菜单设计技术<br> 
+      <br> 
+                      武警学院计算机中心 程连孚     
+      <p><br> 
+      <br> 
+      　　做为事件驱动的系统，菜单所起的作用是明显的。一个好的菜单，能给程序起到锦上添花的作用。PowerBuild 5.0(以下简称PB5)在这方面给用户提供了很大的灵活性，使用户能根据自已的爱好和需求设计出各种不同风格的菜单。下面就谈谈如何在PB5中实现两种别致的菜单：动态菜单和声音菜单。<br> 
+      一、动态菜单<br> 
+      如果一个程序的选项复杂，那么菜单项也会相应地增多。在主界面上设置过多的菜单项会影响界面的简洁，有时也会使用户无所适从。如果将菜单设置成动态菜变化的菜单，在一个功能下只显示相应的菜单，那么用户使用起来会效果更好。菜单在PB5中是窗口的一个属性，我们可在通过改变这种属性来改变窗口菜单的显示。我们假设在已存在一个库test.pbl，该库中有一个标准的File菜单(m_file)，<br> 
+      <br> 
+      窗口上有一个按钮"Change to Another Applicatiuon"，按下后，程序将启动另一个应用模块，该模块将用自己的菜单来替代现有的菜单。我们可以通过下面的方法来实现这一功能。&nbsp;<br>
+    1、在菜单模板下，创建一个菜单，设为 m_test，它与前面的file菜单有完全不同的设置<br> 
+    2、利用"Change to Another Application"按钮的脚本来改变菜单的显示。单现"Script"按钮，在其中添加如下的语句：<br> 
+        Parent.ChangeMenu(m_test)<br> 
+    3、运行程序，即可得到结果。<br> 
+      需要说明地是，改变菜单项必须通过ChangeMenu( )函数，而不能通过标准的"."来无成，因为在PB5中，菜单对窗口来说是保护（protected）属性，该属性只能通过界面函数来访问。另外，如果在菜单项中添加脚本来动态改变菜单，则脚本中应该使用语名：<br> 
+        ParentWindow.ChangeMenu(m_test)<br> 
+      二、为菜单添加声音<br> 
+      &nbsp;&nbsp;&nbsp; 在多媒体演示产品中，我们经常会遇到这样的情形，当鼠标单击某一菜单或按钮时，音箱会发出某种音效（如果有这种设备的话），这使得软件更加生动。在 PB中我们也可以很容易地实现这一点。<br> 
+      &nbsp;&nbsp;&nbsp; PB中没有直接调用多媒体功能的函数，要想为一个程序加入多媒体功能，必须通过调用Windows API函数"SndPlaySound()"或"PlaySound()"来完成。假设我们己有有了一个库"test.pbl"，其菜单也如前所示，具体实现步骤<br> 
+      如下 :<br> 
+      <br> 
+      1、在"Declare"菜单中选择"Local External Functions…"，弹出的对话框中填入如下的声明语句：<br> 
+      Function Boolean sndPlaySound(String s_file,&amp;<br> 
+      UINT u_flags) Library "WINMM.dll"<br> 
+    Function UINT LoadLibrary(String as_library) "kernel32.dll"&nbsp;<br>
+    Subroutine FreeLibrary(UINT Hinstance)Library "kernel32.dll"<br> 
+      实际上PB中的菜单也是动态的，"Declare"必须在编辑菜单时才出现&nbsp;<br>
+      2、为每个菜单项选择相应的声音文件" .WAV"<br> 
+    3、为菜单项添加脚本，驱动声音文件，以"new"菜单为例：<br> 
+        sndPlaySound ("new.wav",0)<br> 
+    sndPlaySound函数有两个参数，前面的一个为声音文件名，后面的一个为播放方式，主要用到有如下几个：<br> 
+        0－－同步播放<br> 
+        1－－异步播放<br> 
+        2－－找不到声音文件即返回<br> 
+        4－－播放声音文件在内存中的映象<br> 
+    声音文件最好是放在当前目录下，否则系统将按如下的顺序进行查找：当前目录，Windows目录，Windows系统目录，PATH中列出的目录，<br> 
+      网络映射目录。    完成上述步骤后，运行程序即可听到菜单的声音了。 
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+<p><br>
+</p>
+
+</body>
+
+</html>

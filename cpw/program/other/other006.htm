@@ -1,0 +1,143 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>为PowerBuilder应用软件制作安装盘</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="oth_idx.htm">PowerBuilder</a>&gt;</b> 
+    为PowerBuilder应用软件制作安装盘</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>为PowerBuilder应用软件制作安装盘</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td><strong>一、Install Builder的原理 <br>
+    </strong>&nbsp;&nbsp; 针对每一应用，用户通过Install Builder的交互界 
+    面定义一个配置文件。Install Builder根据配置文件，将 
+    用户开发的应用和选用的可重用部件（Reusable Components）生成磁盘影像（Diskette 
+    Images）。同时， Install Builder根据配置文件生成描述安装过程和界面 
+    的INF文件。最后，Powersoft安装程序（Setup Pro gram）根据INF文件中的设置进行安装。 
+    <br>
+    <strong>二、Install Builder使用要点 <br>
+    </strong>&nbsp;&nbsp; 通过Install Builder发行应用程序可按下述步骤进行： 
+    创建配置文件--&gt;创建可重建组件--&gt;产生磁盘影像--&gt; 
+    产生安装盘。除此以外，还可以定义Install Builder的 INI文件。 <br>
+    <strong>1</strong>．创建配置文件 <br>
+    在创建配置文件这一步骤中，用户主要完成以下 
+    任务：定义组件和子组件的内容；设定安装路径；设定 应用和ODBC的INI文件；设定应用和ODBC及OLE 
+    的注册信息。 <br>
+    <br>
+    （1）Install Builder主窗口 <br>
+    &nbsp;&nbsp;&nbsp; 创建配置文件的全部工作都是通过Install Builder 
+    的主窗口实现的，它由以下部分组成：菜单、工具条、 组件项（fields）、标签（tabs）。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 组件项用来定义应用组件/子组件的概要信息。 
+    它由三个单行编辑框（名称、描述和缺省安装路径）和 两个checkbox（加入路径和对用户隐藏）组成。增加和 
+    删除组件/子组件的操作可通过Addcomp、AddSub、 DeleteComp个工具条按钮实现。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 标签用来定义当前组件的详细信息。它包括：文 件、INI设定、注册实体、扩展、补充选项和图标 
+    （BillBoards）。对它们的操作可以通过在其上直接输入 
+    或点击工具条上的相应按钮实现。 <br>
+    <br>
+    （2）应用组件 <br>
+    &nbsp;&nbsp;&nbsp; 通过Install Builder主窗口可以定义一个基本组 件（base）和若干个组件/子组件。定义它们的目的是为 
+    最终用户安装您的应用提供一个自由选择的余地。 <br>
+    <br>
+    （3）路径设置（系统路径和应用路径） <br>
+    &nbsp;&nbsp;&nbsp; win3.1对路径的处理与Win 95和Win NT不 同。在Windows 3.1中，用户将一个目录加入系统路径 
+    （autoexec.bat的PATH），操作系统将在搜索文件的过 
+    程中用到这一目录。 <br>
+    在Win 95和Win NT中，每个应用有自己的应用 路径（application path）。应用路径包含了一系列目录， 
+    当操作系统搜索文件时将在这些目录中查找。16位安 
+    装的路径设置：选取Add to Path checkbox。 <br>
+    32位安装的路径按以下步骤进行：①为所有组件 选取文件；②选取Add 
+    to Path checkbox；③点击位于 Add to Path checkbox右侧的按钮，弹出App Path对话 
+    框，该对话框列出了当前组件中的所有可执行文件；④ 在App path对话框中选取需要加入路径的文件，然后 
+    点击OK按钮。 <table border="1" width="100%" cellspacing="0" cellpadding="0"
+    bordercolor="#000000" style="font-size: 9pt">
+      <tr>
+        <td width="50%" align="center">可变路径变量</td>
+        <td width="50%" align="center">替换为</td>
+      </tr>
+      <tr>
+        <td width="50%" align="center">@（base）</td>
+        <td width="50%" align="center">基本组件的路径</td>
+      </tr>
+      <tr>
+        <td width="50%" align="center">@（windows）</td>
+        <td width="50%" align="center">windows的路径</td>
+      </tr>
+      <tr>
+        <td width="50%" align="center">@（system）</td>
+        <td width="50%" align="center">windows\system的路径</td>
+      </tr>
+      <tr>
+        <td width="50%" align="center">@（componentname）</td>
+        <td width="50%" align="center">某一组件（名称为componentname）的路径</td>
+      </tr>
+    </table>
+    <p>（4）使用可变路径变量 <br>
+    &nbsp;&nbsp; 不同用户机器的目录结构是各不相同的，使用In stall Builder的可变路径变量（也称符号变量，Symbolic 
+    Variables），可以应用程序安装在不同目录结构的机器 上。Install 
+    Builder使用以下几个可变路径： <br>
+    <br>
+    2.创建可重用组件 <br>
+    &nbsp;&nbsp; 可重用组件指的是Power Builder的运行模块和 具体DBMS客户端的运行模块，它们可被用于不同应 
+    用的安装。创建可重用组件的工作可以通过可重用组 
+    件窗口完成。用户可以通过点及菜单项Actions|Define Reusable components…进入可重用组件窗口。可重用 
+    组件窗口与Install Builder主窗口类似，对它的操作在 
+    许多方面也与定义应用组件相似。Install Builder将重 
+    用组件的定义存在INSTBLDR.INI中。 <br>
+    <br>
+    3．修改Install Builder的INl文件设置 <br>
+    &nbsp;&nbsp; Install Builder用INSTBLDR.INI来维护以下内 容： <br>
+    Install Builder文件的位置；Power Builder和SQL Anywhere可重用组件的位置；压缩后的可重用组件的 
+    位置：可重用组件的定义。 <br>
+    对INSTBLDR.INI得修改可以通过点击Options| INI后弹出的INI File Settings for 
+    Install Builder对话 框实现。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

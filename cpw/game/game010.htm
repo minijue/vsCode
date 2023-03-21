@@ -1,0 +1,1011 @@
+<html>
+
+<head>
+<meta http-equiv="author" content="martin liu">
+<meta http-equiv="description"
+content="cdx&micro;&Auml;&Ouml;&ETH;&Ograve;&euml;&iexcl;&Agrave;&frac34;">
+<meta http-equiv="keywords" content="cdx, directx">
+<meta http-equiv="distribution" content="Global">
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title> cdx参考资料(chinese gb) </title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#FF00FF" alink="#FF0000"
+topmargin="60" leftmargin="40" background="../res/back.JPG">
+
+<h1 align="center">CDX 参考资料 1.4</h1>
+
+<p align="center"><font size="2" face="Arial"><i>Created by Danny Farley and updated by 
+Chris Barnes</i></font></p>
+
+<p align="center"><font size="2" face="Arial"><i>Contact <a href="mailto:danny@jags.co.uk">danny@jags.co.uk</a> 
+with bugs or comments</i></font></p>
+
+<p align="center"><font size="2" face="Arial"><i>Translated and HTML File by <a
+href="mailto:martinl@nease.net">Martin Liu</a></i></font></p>
+
+<p align="center"><font size="2" face="宋体"><i>（由于时间仓促，翻译得不太完善，尽情原谅）</i></font><a
+name="index"></a></p>
+
+<p><b><font size="3" face="宋体">　　</font><font color="#6633FF" size="5"
+face="宋体">CDX类库</font></b><font size="3" face="宋体">是DirectX的封装，不过它只是基于DirectX部件的一个松散结构。CDX是将目前制作卷轴游戏所必须需的部件，如屏幕、图素、地图、角色等组织起来而成的。基本的目标是使DirectX的应用对程序员透明。下面将介绍CDX的用法、数据成员和成员函数。 
+</font></p>
+
+<p><b><font size="3" face="Arial"><a href="#CDXScreen">CDXScreen</a><br>
+<a href="#CDXSurface">CDXSurface</a><br>
+<a href="#CDXLayer">CDXLayer</a><br>
+<a href="#CDXTile">CDXTile</a><br>
+<a href="#CDXMap">CDXMap</a><br>
+<a href="#CDXSprite">CDXSprite</a><br>
+<a href="#CDXSpriteList">CDXSpriteList</a><br>
+<a href="#CDXInput">CDXInput</a><br>
+<a href="#CDXMusic">CDXMusic</a><br>
+<a href="#CDXSound">CDXSound</a><br>
+<a href="#CDXSoundBuffer">CDXSoundBuffer</a><br>
+</font><font size="4" face="宋体"><a href="#Global Functions">全局函数</a><br>
+<a href="#Important Notes &amp; known bugs">重要信息和已知的错误</a></font></b><font
+size="3" face="宋体"><br>
+<br>
+</font></p>
+
+<hr size="1">
+
+<p><a name="CDXScreen"></a></p>
+
+<p><font size="3" face="宋体"><br>
+<br>
+</font></p>
+
+<p><font size="5" face="Arial"><b><i>CDXScreen</i></b></font></p>
+
+<p><font size="3" face="宋体">　　CDXScreen是这个类库的主要对象，并且所有使用CDX的程序都必须包含CDXScreen对象。如同这个名字所暗示的一样，CDXScreen包含了图像操作所必需的全部函数，它同样包括了控制调色板的函数。</font></p>
+
+<p><font size="3" face="宋体"><br>
+<br>
+</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_lpDD</font><p><font size="3" face="Arial">m_lpDDSFront</font></p>
+    <p><font size="3" face="Arial">m_lpDDSBack</font></p>
+    <p><font size="3" face="Arial">m_lpDDPalette</font></p>
+    <p><font size="3" face="Arial">m_dwPixelWidth</font></p>
+    <p><font size="3" face="Arial">m_dwPixelHeight</font></p>
+    <p><font size="3" face="Arial">m_BPP</font></p>
+    <p><font size="3" face="Arial">m_bActive</font></p>
+    <p><font size="3" face="Arial">m_bFullScreen</font></p>
+    <p><font size="3" face="Arial">m_lpClipper</font></td>
+    <td><font size="3" face="宋体">DirectDraw对象</font><p><font size="3" face="宋体">前缓冲区的CDXSurface对象</font></p>
+    <p><font size="3" face="宋体">后缓冲区的CDXSurface对象</font></p>
+    <p><font size="3" face="宋体">DirectDrawPalette 对象</font></p>
+    <p><font size="3" face="宋体">屏幕的象素宽度</font></p>
+    <p><font size="3" face="宋体">屏幕的象素高度</font></p>
+    <p><font size="3" face="宋体">每象素的比特位（颜色深度）</font></p>
+    <p><font size="3" face="宋体">程序是活动的吗？通常不使用</font></p>
+    <p><font size="3" face="宋体">程序在全屏幕方式下运行吗？</font></p>
+    <p><font size="3" face="宋体">剪贴板，仅适用于窗口模式</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造与析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXScreen</b>(void)</font></p>
+
+<p><font size="3" face="Arial"><b>CDXScreen</b>(void *hWnd, DWORD Width, DWORD Height, 
+DWORD BPP)<br>
+</font><font size="3" face="宋体">创建DirectDraw对象，设置屏幕分辨率，创建并配置前后缓冲区。（此构造函数与函数<b>CreateFullScreen</b>没有区别）</font></p>
+
+<p><font size="3" face="Arial"><b>CDXScreen</b>( void *hWnd, int Width, int Height)</font><font
+size="3" face="宋体"><br>
+创建DirectDraw对象，为窗口模式的应用程序初始化DirectDraw（此构造函数与函数<b>CreateWindowed</b>没有区别）</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXScreen</b>()</font><font size="3" face="宋体"><br>
+销毁DirectDraw对象并将控制权交还给Windows。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">void <b>CreateFullScreen</b>(void *hWnd, DWORD Width, DWORD 
+Height, DWORD BPP);<br>
+</font><font size="3" face="宋体">创建DirectDraw对象，设置屏幕分辨率，创建并配置前后缓冲区。</font></p>
+
+<p><font size="3" face="Arial">void <b>CreateWindowed</b>(void *hWnd, int Width, int 
+Height);</font><font size="3" face="宋体"><br>
+创建DirectDraw对象，为窗口模式的应用程序初始化DirectDraw。Width和Height指后缓冲区的大小，而不是窗体的大小。</font></p>
+
+<p><font size="3" face="Arial">void <b>LoadBitmap</b>(LPCSTR szFilename)</font><font
+size="3" face="宋体"><br>
+直接向后缓冲区载入一个.BMP文件．</font></p>
+
+<p><font size="3" face="Arial">void <b>LoadPalette</b>(LPCSTR szFilename)</font><font
+size="3" face="宋体"><br>
+从一个.BMP文件载入调色板信息。应在其它的位图操作前调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>Fill</b>(DWORD FillColor)</font><font size="3"
+face="宋体"><br>
+用指定的颜色填充后缓冲区。</font></p>
+
+<p><font size="3" face="Arial">HRESULT <b>Flip</b>(void)</font><font size="3"
+face="宋体"><br>
+在屏幕上显示后缓冲区的内容。如果在窗口模式下，Flip会调整大小以适应窗口。</font></p>
+
+<p><font size="3" face="Arial">void <b>Restore</b>(void)</font><font size="3"
+face="宋体"><br>
+在DirectDraw对象丢失时恢复DirectDraw对象。当Flip操作失败时调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetColor</b>(int col, int r, int g, int b)</font><font
+size="3" face="宋体"><br>
+在当前调色板中设置一个颜色项的红、绿、蓝值。</font></p>
+
+<p><font size="3" face="Arial">void <b>GetColor</b>(int col, int *r, int *g, int *b)</font><font
+size="3" face="宋体"><br>
+在当前调色板中返回一个颜色项的红、绿、蓝的值。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetPalette</b>(int Start, int Count, LPPALETTEENTRY 
+lpPE)</font><font size="3" face="宋体"><br>
+用lpPE指向的内容设置调色板。Start指出要设置的第一个颜色项，Count指出要设置的项数。</font></p>
+
+<p><font size="3" face="Arial">void <b>GetPalette</b>(int Start, int Count, LPPALETTEENTRY 
+lpPE)</font><font size="3" face="宋体"><br>
+从当前调色板中取信息填入lpPE指向的地址。Start指出要取出的第一个颜色项，Count指出要取出的项数。</font></p>
+
+<p><font size="3" face="Arial">void <b>FillPalette</b>(int r, int g, int b)</font><font
+size="3" face="宋体"><br>
+用单一颜色值填充整个调色板。</font></p>
+
+<p><font size="3" face="Arial">void <b>GreyScale</b>(void)</font><font size="3"
+face="宋体"><br>
+将当前调色板转换成单色模式。</font></p>
+
+<p><font size="3" face="Arial">void <b>FadeIn</b>(int delay, LPPALETTEENTRY lpPE)</font><font
+size="3" face="宋体"><br>
+平滑地将当前调色板以渐变方式转换成lpPE指出的调色板。该操作需要三个步骤：首先要用GetPalette取得当前调色板信息，然后将当前调色板设置成你希望的开始状态，最后调用FadeIn将调色板渐变成你在第一步保存的状态。例如：</font></p>
+
+<p><font size="3" face="宋体">　　CDXScreen Screen;<br>
+　　PALETTEENTRY pe[256];<br>
+<br>
+　　Screen-&gt;GetPalette(0, 256, pe);<br>
+　　Screen-&gt;FillPalette(255, 0, 0);<br>
+　　Screen-&gt;FadeIn(6, pe);</font></p>
+
+<p><font size="3" face="宋体">这段代码将使屏幕闪成红色然后渐渐恢复到开始时的状态，就像火箭击中目标一样。</font></p>
+
+<p><font size="3" face="Arial">void <b>FadeOut</b>(int delay)</font><font size="3"
+face="宋体"><br>
+将当前调色板渐变成黑色。取值从0到10（0－最快，10－最慢）。</font></p>
+
+<p><font size="3" face="Arial">void <b>FadeTo</b>(int r, int g, int b, int delay)</font><font
+size="3" face="宋体"><br>
+将当前调色板渐变成指定的颜色。</font></p>
+
+<p><font size="3" face="Arial">LPDIRECTDRAW <b>GetDD</b>(void) { return m_lpDD; }<br>
+CDXSurface* <b>GetFront</b>(void) { return m_lpDDSFront.m_lpDDS; }<br>
+CDXSurface* <b>GetBack</b>(void) { return m_lpDDSBack.m_lpDDS; }<br>
+</font></p>
+
+<p><font size="3" face="Arial">LPDIRECTDRAWPALETTE <b>GetPalette</b>(void) { return 
+m_lpDDPalette; }</font></p>
+
+<p><font size="3" face="宋体">这些in-line函数返回各对象的指针。GetFront和GetBack函数返回CDXSurface对象的指针。</font></p>
+
+<p><font size="3" face="宋体"><br>
+<br>
+</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXSurface"></a></p>
+
+<p><font size="5" face="Arial"><b><i>CDXSurface</i></b></font></p>
+
+<p><font size="3" face="宋体">这基本上是一个IDirectDrawSurface对象的直接封装，它保存了将要拷贝到屏幕上的位图信息。就象你看到的，CDXSurface是CDX中大多数类的基类。记住你不能用DirectX创建大小超过屏幕的表面(Surface)对象。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_PixelWidth</font><p><font size="3" face="Arial">m_PixelHeight</font></p>
+    <p><font size="3" face="Arial">m_pFilename</font></p>
+    <p><font size="3" face="Arial">SrcRect</font></p>
+    <p><font size="3" face="Arial">DestRect</font></p>
+    <p><font size="3" face="Arial">m_lpDDS</font></p>
+    <p><font size="3" face="Arial">Screen</font></p>
+    <p><font size="3" face="Arial">m_DC</font></p>
+    <p><font size="3" face="Arial">m_DDSD</font></p>
+    <p><font size="3" face="Arial">m_Font</font></p>
+    <p><font size="3" face="Arial">m_ColorKey</font></td>
+    <td><font size="3" face="宋体">表面(Surface)的象素宽度</font><p><font size="3"
+    face="宋体">表面(Surface)的象素高度</font></p>
+    <p><font size="3" face="宋体">载入的位图文件名</font></p>
+    <p><font size="3" face="宋体">保存源表面(Surface)的RECT结构</font></p>
+    <p><font size="3" face="宋体">保存目标表面(Surface)的RECT结构</font></p>
+    <p><font size="3" face="宋体">LPDIRECTDRAWSURFACE 对象</font></p>
+    <p><font size="3" face="宋体">指向一个CDXScreen 对象的指针</font></p>
+    <p><font size="3" face="宋体">用于向表面(Surface)输出文本的HDC对象</font></p>
+    <p><font size="3" face="宋体">储存表面(Surface)信息的DDSURFACEDESC 对象</font></p>
+    <p><font size="3" face="宋体">描述当前字体的HFONT对象</font></p>
+    <p><font size="3" face="宋体">指定的该表面(Surface)的关键色</font></td>
+  </tr>
+</table>
+
+<p>　</p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXSurface</b>()</font></p>
+
+<p><font size="3" face="Arial"><b>CDXSurface</b>(CDXScreen *pScreen, char *szFilename)</font><font
+size="3" face="宋体"><br>
+创建一个表面(Surface)对象，szFilename为位图文件名。</font></p>
+
+<p><font size="3" face="Arial"><b>CDXSurface</b>(CDXScreen *pScreen, int Width, int 
+Height)</font><font size="3" face="宋体"><br>
+创建一个空的表面(Surface)对象，大小由Width和Height给出。</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXSurface</b>()</font><font size="3" face="宋体"><br>
+销毁表面(Surface)对象并释放内存。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">void <b>Create</b>(CDXScreen *pScreen, char *szFilename)</font><font
+size="3" face="宋体"><br>
+创建一个表面(Surface)对象，szFilename为位图文件名。</font></p>
+
+<p><font size="3" face="Arial">void <b>Create</b>(CDXScreen *pScreen, int Width, int 
+Height)</font><font size="3" face="宋体"><br>
+创建一个空的表面(Surface)对象，大小由Width和Height给出。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetDest</b>(int t, int l, int b, int r)</font><font
+size="3" face="宋体"><br>
+设置Draw操作的目标。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetSrc</b>(int t, int l, int b, int r)</font><font
+size="3" face="宋体"><br>
+设置Draw操作的源。</font></p>
+
+<p><font size="3" face="Arial">void <b>ColorKey</b>(int col)</font><font size="3"
+face="宋体"><br>
+设置源关键色。该颜色在输出到屏幕时会表现为透明。</font></p>
+
+<p><font size="3" face="Arial">void <b>Restore</b>(void)</font><font size="3"
+face="宋体"><br>
+</font></p>
+
+<p><font size="3" face="宋体">在丢失DirectDrawSurface对象和位图时恢复它们。　Draw操作失败时会在内部调用它。</font></p>
+
+<p><font size="3" face="Arial">virtual HRESULT <b>Draw</b>(CDXSurface* lpDDS)</font><font
+size="3" face="宋体"><br>
+向表面(Surface)拷贝lpDDS指出的源表面(Surface)的位图。用SrcRect和DestRect定位位图。你可用该方法来收缩和拉伸表面(Surface)。</font></p>
+
+<p><font size="3" face="Arial">virtual HRESULT <b>DrawFast</b>(int X, int Y, CDXSurface* 
+lpDDS)</font><font size="3" face="宋体"><br>
+向表面(Surface)拷贝lpDDS指出的源表面(Surface)的位图。用X和Y来定位位图。</font></p>
+
+<p><font size="3" face="Arial">virtual HRESULT <b>DrawTrans</b>(int X, int Y, CDXSurface* 
+lpDDS)</font><font size="3" face="宋体"><br>
+向表面(Surface)拷贝lpDDS指出的源表面(Surface)的位图。用X和Y来定位位图并用当前的源关键色进行透明操作。</font></p>
+
+<p><font size="3" face="Arial">virtual HRESULT <b>DrawClipped</b>(int X, int Y, 
+CDXSurface* lpDDS)</font><font size="3" face="宋体"><br>
+向表面(Surface)拷贝lpDDS指出的源表面(Surface)的位图。用X和Y来定位位图并用当前的源关键色进行透明操作。该函数用来粘贴位图（如果位图超出了屏幕边界，多余的部分将会被截掉，否则DirectDraw无法完成此项操作）。如果你要将此对象拷贝到屏幕的多个部分，则必须调用Clip函数。</font></p>
+
+<p><font size="3" face="Arial">virtual HRESULT <b>DrawWindowed</b>(CDXSurface* lpDDS)<br>
+virtual HRESULT <b>DrawScaled</b>(int X, int Y, float Factor, CDXSurface* lpDDS)<br>
+virtual void <b>DrawRotated</b>(int X, int Y, double Angle, CDXSurface* lpDDS)<br>
+virtual void <b>DrawHFlip</b>(int X, int Y, CDXSurface* lpDDS)<br>
+virtual void <b>DrawVFlip</b>(int X, int Y, CDXSurface* lpDDS)</font></p>
+
+<p><font size="3" face="Arial">void <b>Lock</b>(void)</font><font size="3" face="宋体"><br>
+锁定表面(Surface)并提供直接读写显存的通道。必须在调用例如PutPixel、Rect和Line之类的函数前调用。记得在读写显存的操作后调用Unlock函数。</font></p>
+
+<p><font size="3" face="Arial">void <b>UnLock</b>(void)</font><font size="3" face="宋体"><br>
+解除表面(Surface)锁定并封锁直接读写显存的通道。应该在Lock函数之后调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>GetDC</b>(void)</font><font size="3" face="宋体"><br>
+获得一个设备上下文(DC)句柄并将该句柄保存在数据成员m_DC中。设备上下文在GDI函数中用来进行屏幕输出。也可以使用TextXY函数。</font></p>
+
+<p><font size="3" face="Arial">void <b>ReleaseDC</b>(void)</font><font size="3"
+face="宋体"><br>
+释放设备上下文。应在GetDC函数之后调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>ChangeFont</b>(char* FontName, int Width, int 
+Height, int Attributes = FW_NORMAL)</font><font size="3" face="宋体"><br>
+选择TextXY函数所使用的字体。FontName必须是Windows默认的字体名。(提示：在你的字库目录下可以找到字体列表，例如“宋体”)。Width和Height指定字符的象素宽和象素高。成员Attributes指定了字体的磅重，取值从0到1000。 
+例如：400是正常而700是黑体。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetFont</b>(void)</font><font size="3"
+face="宋体"><br>
+将字体设置为ChangeFont中选择的字体。记得在设置前调用GetDC函数。</font></p>
+
+<p><font size="3" face="Arial">void <b>TextXY</b>(int X, int Y, COLORREF Col, LPCTSTR 
+pString)</font><font size="3" face="宋体"><br>
+在坐标X、Y用颜色Col显示指定的字符串pString。字符的背景是透明的。记得在显示字符前调用函数GetDC。</font></p>
+
+<p><font size="3" face="Arial">void <b>PutPixel</b>(int X, int Y, int Col)</font><font
+size="3" face="宋体"><br>
+在坐标X、Y用颜色Col向表面(Surface)输出一个点。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">int <b>GetPixel</b>(int X, int Y)</font><font size="3"
+face="宋体"><br>
+返回表面(Surface)上位于坐标X、Y的象素颜色值。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>Rect</b>(int X1,int Y1,int X2,int Y2,int Col)</font><font
+size="3" face="宋体"><br>
+向表面(Surface)输出一个颜色为Col矩形，X1、Y1是左上角坐标，X2、Y2是右下角坐标。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>FillRect</b>(int X1, int Y1, int X2, int Y2, int 
+Col)</font><font size="3" face="宋体"><br>
+向表面(Surface)输出一个颜色为Col填充矩形，X1、Y1是左上角坐标，X2、Y2是右下角坐标。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>Line</b>(int X1, int Y1, int X2, int Y2, int Col)</font><font
+size="3" face="宋体"><br>
+向表面(Surface)输出一条颜色为Col直线，X1、Y1是左上角坐标，X2、Y2是右下角坐标。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>VLine</b>(int Y1, int Y2, int X, int Col)</font><font
+size="3" face="宋体"><br>
+用颜色Col在坐标X向表面(Surface)输出一条从Y1到Y2的垂直线。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>HLine</b>(int X1, int X2, int Y, int Col)</font><font
+size="3" face="宋体"><br>
+用颜色Col在坐标Y向表面(Surface)输出一条从X1到X2的水平线。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><font size="3" face="Arial">void <b>Circle</b>(int X, int Y, int Radius, int Col)</font><font
+size="3" face="宋体"><br>
+用颜色Col在坐标X、Y向表面(Surface)输出半径为Radius的圆。现在只支持8-bit模式。记得在使用该函数前调用函数Lock。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXLayer"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXLayer</i></b></font></p>
+
+<p><font size="3" face="宋体">CDXLayer起源于CDXSurface，它在很多方面与CDXSurface非常相似。不过，CDXLayer还添加了将表面(Surface)相各方向平滑滚动的特性。这一特性能使背景是滚动位图而前景是滚动图素的游戏得到更好的效果。当DirectX不限制显存内位图的高度时CDXLayer同样能使一个弹珠类游戏表现得非常完美。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0">
+  <tr>
+    <td><font size="3" face="Arial">m_XOffset</font><p><font size="3" face="Arial">m_YOffset</font></td>
+    <td><font size="3" face="宋体">当前X轴象素坐标</font><p><font size="3"
+    face="宋体">当前Y轴象素坐标</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXLayer</b>(CDXScreen *pScreen, char *szFilename)</font><font
+size="3" face="宋体"><br>
+创建一个表面(Surface)对象，szFilename为位图文件名。</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXLayer</b>()</font><font size="3" face="宋体"><br>
+销毁表面(Surface)对象并释放内存。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">void <b>ScrollUp</b>(int Offset)<br>
+void <b>ScrollDown</b>(int Offset)<br>
+void <b>ScrollLeft</b>(int Offset)<br>
+void <b>ScrollRight</b>(int Offset)</font><font size="3" face="宋体"><br>
+这些函数能将位图向各自的方向上滚动Offset个象素点。</font></p>
+
+<p><font size="3" face="Arial">void <b>MoveTo</b>(int XOffset, int YOffset)</font><font
+size="3" face="宋体"><br>
+设置位图的位置。</font></p>
+
+<p><font size="3" face="Arial">virtual void <b>Draw</b>(LPDIRECTDRAWSURFACE lpDDS)</font><font
+size="3" face="宋体"><br>
+向表面(Surface)拷贝lpDDS指出的源表面(Surface)的位图。用DestRect定位位图。位图会自动地在屏幕上回绕。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXTile"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXTile</i></b></font></p>
+
+<p><font size="3" face="宋体">CDXTile这个名字让人感到迷惑，它并不只保存一个图素的信息，而是保存了所有的图素和角色的位图信息。CDXTile源于CDXSurface。</font></p>
+
+<p><font size="3" face="宋体">重要信息：包含图素的位图必须要将第一个图素置空，因为CDX会把它作为透明图素来处理。在位图中各图素必须以从左到右、由上而下的顺序排列，并且要保证图素能大小合适地嵌到位图中去，如果有不明白的地方可以看我的例子。记住将表面(Surface)的关键色设置成你定义成透明的颜色。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_BlockWidth</font><p><font size="3" face="Arial">m_BlockHeight</font></p>
+    <p><font size="3" face="Arial">m_BlockNum</font></td>
+    <td><font size="3" face="宋体">每个图素的象素宽。</font><p><font size="3"
+    face="宋体">每个图素的象素高。</font></p>
+    <p><font size="3" face="宋体">图素在位图文件中的序号。</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="宋体"><b>CDXTile</b>()</font></p>
+
+<p><font size="3" face="Arial"><b>CDXTile</b>(CDXScreen *pScreen, char* szFilename, int w, 
+int h, int num)</font><font size="3" face="宋体"><br>
+创建DirectDrawSurface并从.BMP文件中载入图素。你必须指定图素的宽和高以及在位图中的序号。</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXTile</b>()</font><font size="3" face="宋体"><br>
+销毁表面(Surface)并释放内存。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">BOOL<b> Create</b>(CDXScreen *pScreen, char* szFilename, 
+int w, int h, int num)</font><font size="3" face="宋体"><br>
+创建DirectDrawSurface并从.BMP文件中载入图素。你必须指定图素的宽和高以及在位图中的序号。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXMap"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXMap</i></b></font></p>
+
+<p><font size="3" face="宋体">这是CDX中控制滚动图素的主要对象。屏幕、图素和地图信息都被组织在这个类中以进行滚动输出。Map的信息以尽可能简单的格式存在二进制文件中，就象：</font></p>
+
+<p><font size="3" face="宋体">Map width (4 bytes)<br>
+Map height (4 bytes)<br>
+Map data (Map width * Map height * 4 bytes)</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_PosX</font><p><font size="3" face="Arial">m_PosY</font></p>
+    <p><font size="3" face="Arial">m_Width</font></p>
+    <p><font size="3" face="Arial">m_Height</font></p>
+    <p><font size="3" face="Arial">m_PixelWidth</font></p>
+    <p><font size="3" face="Arial">m_PixelHeight</font></p>
+    <p><font size="3" face="Arial">m_TileWidth</font></p>
+    <p><font size="3" face="Arial">m_TileHeight</font></p>
+    <p><font size="3" face="Arial">SCREEN_TW</font></p>
+    <p><font size="3" face="Arial">SCREEN_TH</font></p>
+    <p><font size="3" face="Arial">SCREEN_W</font></p>
+    <p><font size="3" face="Arial">SCREEN_H</font></p>
+    <p><font size="3" face="Arial">SIZE</font></p>
+    <p><font size="3" face="Arial">DATA</font></p>
+    <p><font size="3" face="Arial">Screen</font></p>
+    <p><font size="3" face="Arial">Tiles</font></td>
+    <td><font size="3" face="宋体">当前图片X轴的象素坐标</font><p><font size="3"
+    face="宋体">当前图片Y轴的象素坐标</font></p>
+    <p><font size="3" face="宋体">当前图片的宽度</font></p>
+    <p><font size="3" face="宋体">当前图片的高度</font></p>
+    <p><font size="3" face="宋体">当前图片的象素宽度</font></p>
+    <p><font size="3" face="宋体">当前图片的象素高度</font></p>
+    <p><font size="3" face="宋体">CDXTile指针指向的图素的象素宽度</font></p>
+    <p><font size="3" face="宋体">CDXTile指针指向的图素的象素高度</font></p>
+    <p><font size="3" face="宋体">屏幕在横向上能容纳的图素个数</font></p>
+    <p><font size="3" face="宋体">屏幕在横向上能容纳的图素个数</font></p>
+    <p><font size="3" face="宋体">CDXScreen指针指向的屏幕的象素宽度</font></p>
+    <p><font size="3" face="宋体">CDXScreen指针指向的屏幕的象素高度</font></p>
+    <p><font size="3" face="宋体">Map的大小，宽乘以高</font></p>
+    <p><font size="3" face="宋体">图片数据数组</font></p>
+    <p><font size="3" face="宋体">指向CDXScreen对象的指针</font></p>
+    <p><font size="3" face="宋体">指向CDXTile对象的指针</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXMap</b>(CDXTile *pTiles, CDXScreen *pScreen)</font><font
+size="3" face="宋体"><br>
+构造一个图片对象。你必须传递你要用到的图素的指针和一个CDXScreen对象的指针给图片对象。</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXMap</b>()</font><font size="3" face="宋体"><br>
+销毁图片并释放内存。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">void <b>Create</b>(int Width, int Height, int Fill)</font><font
+size="3" face="宋体"><br>
+创建一个新的图片。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Load</b>(const char *szFilename)</font><font
+size="3" face="宋体"><br>
+从文件中载入一幅图片。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Save</b>(const char *szFilename)</font><font
+size="3" face="宋体"><br>
+将图片保存到文件中。</font></p>
+
+<p><font size="3" face="Arial">void <b>Clear</b>(void)</font><font size="3" face="宋体"><br>
+清除图片。</font></p>
+
+<p><font size="3" face="Arial">void <b>Fill</b>(int TileNum)</font><font size="3"
+face="宋体"><br>
+用TileNum指定的图素填充图片。</font></p>
+
+<p><font size="3" face="Arial">void <b>Draw</b>(CDXSurface* lpDDS)</font><font size="3"
+face="宋体"><br>
+将图片输出到lpDDS指向的表面(Surface)上。</font></p>
+
+<p><font size="3" face="Arial">void <b>DrawTrans</b>(CDXSurface* lpDDS)</font><font
+size="3" face="宋体"><br>
+将图素透明的图片输出到lpDDS指向的表面(Surface)上。如果你没有为图素设置关键色那么屏幕上不会显示任何东西。</font></p>
+
+<p><font size="3" face="Arial">void <b>DrawClipped</b>(CDXSurface* lpDDS, LPRECT 
+ClipDestRect)</font><font size="3" face="宋体"><br>
+将图片输出到lpDDS指向的表面(Surface)上。图片会粘贴到矩形ClipDestRect上。</font></p>
+
+<p><font size="3" face="Arial">void <b>MoveTo</b>(int PosX, int PosY)<br>
+void <b>ScrollUp</b>(int Offset)<br>
+void <b>ScrollDown</b>(int Offset)<br>
+void <b>ScrollLeft</b>(int Offset)<br>
+void <b>ScrollRight</b>(int Offset)</font><font size="3" face="宋体"><br>
+</font></p>
+
+<p><font size="3" face="宋体">这一组函数用来设置图片的位置。所有的值以象素为单位。</font></p>
+
+<p><font size="3" face="Arial">void <b>WrapScrollUp</b>(int Offset)<br>
+void <b>WrapScrollDown</b>(int Offset)<br>
+void <b>WrapScrollLeft</b>(int Offset)<br>
+void <b>WrapScrollRight</b>(int Offset)</font><font size="3" face="宋体"><br>
+</font></p>
+
+<p><font size="3" face="宋体">这一组函数用来滚动图片。你如果你将图片移动到区域之外，那么图片将会回滚。举例来说，如果你将图片移动到顶部以外，它将会在底部显示出来。</font></p>
+
+<p><font size="3" face="Arial">void <b>ScreenTileSize</b>(int Width, int Height)</font><font
+size="3" face="宋体"><br>
+设置屏幕以图素为单位的宽度和高度。它是水平和垂直方向上屏幕能容纳的图素的个数。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetTile</b>(int MapX, int MapY, int Tile)</font><font
+size="3" face="宋体"><br>
+将位于MapX、MapY的图素设置为Tile指定的值。用于图素动。</font></p>
+
+<p><font size="3" face="Arial">int <b>GetTile</b>(int MapX, int MapY)</font><font size="3"
+face="宋体"><br>
+返回位于MapX、MapY的图素值。用于检测图素碰撞。</font></p>
+
+<p><font size="3" face="Arial">void <b>LoadTiles</b>(CDXTile *pTiles)</font><font size="3"
+face="宋体"><br>
+将另一套图素载入到图片中去。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXSprite"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXSprite</i></b></font></p>
+
+<p><font size="3" face="宋体">该类包含了显示动画角色的数据成员和函数。每个CDXSprite对象都是由一个指向保存了角色位图数据的CDXTile对象的指针创建的。角色所有的帧必须具有同样的宽度和高度并且要保存在同一个图像文件中。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_PosX</font><p><font size="3" face="Arial">m_PosY</font></p>
+    <p><font size="3" face="Arial">m_VelX</font></p>
+    <p><font size="3" face="Arial">m_VelY</font></p>
+    <p><font size="3" face="Arial">m_Frame</font></p>
+    <p><font size="3" face="Arial">m_Delay</font></p>
+    <p><font size="3" face="Arial">m_State</font></p>
+    <p><font size="3" face="Arial">m_Type</font></p>
+    <p><font size="3" face="Arial">m_Angle</font></p>
+    <p><font size="3" face="Arial">m_Flipped</font></p>
+    <p><font size="3" face="Arial">m_Tile</font></p>
+    <p><font size="3" face="Arial">m_Next</font></p>
+    <p><font size="3" face="Arial">m_Prev</font></td>
+    <td><font size="3" face="宋体">角色的X轴坐标</font><p><font size="3" face="宋体">角色的Y轴坐标</font></p>
+    <p><font size="3" face="宋体">角色在X轴方向上的速度。</font></p>
+    <p><font size="3" face="宋体">角色在Y轴方向上的速度。</font></p>
+    <p><font size="3" face="宋体">当前的帧</font></p>
+    <p><font size="3" face="宋体">帧与帧之间的延迟时间</font></p>
+    <p><font size="3" face="宋体">用户自定义的状态。行走、跳跃，等等</font></p>
+    <p><font size="3" face="宋体">用户自定义的类型。体力、武器，等等</font></p>
+    <p><font size="3" face="宋体">角色旋转的角度</font></p>
+    <p><font size="3" face="宋体">角色弹出了吗？</font></p>
+    <p><font size="3" face="宋体">指向角色位图数据的CDXTile指针</font></p>
+    <p><font size="3" face="宋体">在CDXSpriteList中下一个角色的CDXSprite指针</font></p>
+    <p><font size="3" face="宋体">在CDXSpriteList中上一个角色的CDXSprite指针</font></td>
+  </tr>
+</table>
+
+<p>　</p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXSprite</b>(CDXTile* pTile)</font><font size="3"
+face="宋体"><br>
+从一个指向保存了角色位图数据的CDXTile对象的指针创建角色对象。</font></p>
+
+<p><font size="3" face="Arial"><b>CDXSprite</b>(CDXScreen *pScreen, char* szFilename, int 
+w, int h, int num)</font><font size="3" face="宋体"><br>
+创建角色对象。需要你的游戏的CDXScreen对象和保存了角色对象位图文件。参数w和h给出每帧的宽度和高度，参数num给出位图文件中帧的总数。</font></p>
+
+<p><font size="3" face="Arial">~<b>CDXSprite</b>()</font><font size="3" face="宋体"><br>
+销毁表面(Surface)并释放内存。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">void <b>Create</b>(CDXTile* pTile)</font><font size="3"
+face="宋体"><br>
+从一个指向保存了角色位图数据的CDXTile对象的指针创建角色对象。</font></p>
+
+<p><font size="3" face="Arial"><b>Create</b>(CDXScreen *pScreen, char* szFilename, int w, 
+int h, int num)</font><font size="3" face="宋体"><br>
+创建角色对象。需要你的游戏的CDXScreen对象和保存了角色对象位图文件。参数w和h给出每帧的宽度和高度，参数num给出位图文件中帧的总数。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>SpriteHit</b>(CDXSprite* pSprite)</font><font
+size="3" face="宋体"><br>
+检测角色之间的碰撞。如果本角色与pSprite指出的角色交迭则返回TRUE。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>TileHit</b>(CDXMap* pMap, int Tile)</font><font
+size="3" face="宋体"><br>
+检测本角色和图片中图素的碰撞。如果本角色与pMap指定的图片中值为Tile的图素交迭则返回TRUE。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetPos</b>(int pX, int pY) { m_PosX = pX; m_PosY = 
+pY; }<br>
+void <b>SetVel</b>(int vX, int vY) { m_VelX = vX; m_VelY = vY; }<br>
+void <b>SetFrame</b>(int Frame) { m_Frame = Frame; }<br>
+void <b>SetDelay</b>(int Delay) { m_Delay = Delay; }<br>
+void <b>SetState</b>(int State) { m_State = State; }<br>
+void <b>SetType</b>(int Type) { m_Type = Type; }</font><font size="3" face="宋体"><br>
+</font></p>
+
+<p><font size="3" face="宋体">这一组in-line函数用于设置角色的数据成员。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetVelocity</b>(int xV, int yV)</font><font
+size="3" face="宋体"><br>
+设置角色的速度。</font></p>
+
+<p><font size="3" face="Arial">void <b>MoveTo</b>(int x, int y)</font><font size="3"
+face="宋体"><br>
+设置角色的位置。</font></p>
+
+<p><font size="3" face="Arial">HRESULT <b>Draw</b>(CDXSurface* lpDDS)<br>
+HRESULT <b>DrawFast</b>(CDXSurface* lpDDS)<br>
+HRESULT <b>DrawTrans</b>(CDXSurface* lpDDS)<br>
+HRESULT <b>DrawClipped</b>(CDXSurface* lpDDS)<br>
+HRESULT <b>DrawWindowed</b>(CDXSurface* lpDDS)<br>
+HRESULT <b>DrawScaled</b>(float Factor, CDXSurface* lpDDS)<br>
+void <b>DrawRotated</b>(float Angle, CDXSurface* lpDDS)<br>
+void <b>DrawHFlip</b>(CDXSurface* lpDDS)<br>
+void <b>DrawVFlip</b>(CDXSurface* lpDDS)</font><font size="3" face="宋体"><br>
+从源表面(Surface)向指出的lpDDS表面(Surface)拷贝位图。使用当前帧并用成员m_PosX、m_PosY定位位图。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXSpriteList"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXSpriteList</i></b></font></p>
+
+<p><font size="3" face="宋体">角色链表将角色以动态的方式保存。CDXSpriteList是CDXSprite对象构成的链表，它允许在运行时加入和删除CDXSprite对象。</font></p>
+
+<p><font size="3" face="宋体">周游链表：在使用角色链表时你经常会需要遍历链表并对每个角色进行操作，例如更新它们的坐标。下面的代码说明如何遍历CDXSpriteList。</font></p>
+
+<p><font size="3" face="Arial">CDXSpriteList SpriteList;<br>
+CDXSprite* Node;<br>
+CDXSprite* Save;</font></p>
+
+<p><font size="3" face="Arial">for(Node = SpriteList.Next(); Node != SpriteList.List(); 
+Node = Save)<br>
+{<br>
+Save = Node-&gt;m_Next;<br>
+<br>
+//<br>
+//</font><font size="3" face="宋体">在此加入更新角色的代码<br>
+</font><font size="3" face="Arial">//<br>
+}</font></p>
+
+<p><font size="3" face="宋体">注意：如果当你更新角色时想把某个角色从链表中删除，你必须在链表中保存下一个角色的指针以避免断链。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_List</font><p><font size="3" face="Arial">m_nSprites</font></td>
+    <td><font size="3" face="宋体">链表的头节点</font><p><font size="3" face="宋体">链表中角色的数量</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial"><b>CDXSpriteList</b>(void)<br>
+~<b>CDXSpriteList</b>(void)</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="宋体">void <b>AddSprite</b>(CDXTile* pTile, int Type=0,<br>
+　　　　　　　　int PosX=0, int PosY=0,<br>
+　　　　　　　　int VelX=0, int VelY=0,<br>
+　　　　　　　　int State=0, int Frame=0,<br>
+　　　　　　　　int Delay=0)</font></p>
+
+<p><font size="3" face="宋体">将一个角色添加到角色链表。只有指向CDXTile对象的指针是必须的，不过你也可以按需要设置其它参数。</font></p>
+
+<p><font size="3" face="Arial">void <b>DelSprite</b>(CDXSprite* pNode)</font><font
+size="3" face="宋体"><br>
+从链表中删除角色。</font></p>
+
+<p><font size="3" face="Arial">CDXSprite* <b>Next</b>(void) { return m_List.m_Next; }</font><font
+size="3" face="宋体"><br>
+返回链表中第一个角色的指针的in-line函数。</font></p>
+
+<p><font size="3" face="Arial">CDXSprite* <b>Prev</b>(void) { return m_List.m_Prev; }</font><font
+size="3" face="宋体"><br>
+返回链表中最后一个角色的指针的in-line函数。</font></p>
+
+<p><font size="3" face="Arial">CDXSprite* <b>List</b>(void) { return &amp;m_List; }</font><font
+size="3" face="宋体"><br>
+返回链表头节点的指针的in-line函数。</font></p>
+
+<p><font size="3" face="Arial">void <b>Draw</b>(CDXSurface* lpDDS)<br>
+void <b>DrawFast</b>(CDXSurface* lpDDS)<br>
+void <b>DrawTrans</b>(CDXSurface* lpDDS)<br>
+void <b>DrawClipped</b>(CDXSurface* lpDDS)<br>
+void <b>DrawWindowed</b>(CDXSurface* lpDDS)<br>
+void <b>DrawScaled</b>(float Factor, CDXSurface* lpDDS)<br>
+void <b>DrawRotated</b>(float Angle, CDXSurface* lpDDS)<br>
+void <b>DrawHFlip</b>(CDXSurface* lpDDS)<br>
+void <b>DrawVFlip</b>(CDXSurface* lpDDS)</font><font size="3" face="宋体"><br>
+向lpDDS指出的表面(Surface)输出链表中所有的角色。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXInput"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXInput</i></b></font></p>
+
+<p><font size="3" face="宋体">CDXInput一个封装了DirectInput的类，它包含了丛鼠标、键盘和游戏杆接受数据的函数。现在接收的鼠标坐标是相对位置，如果你需要绝对位置则必须改用m_lpDIDMouse对象。因为我自己的游戏杆坏了，所以我没有测试游戏杆函数，也许有人会帮我测试一下？</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">m_lpDI</font><p><font size="3" face="Arial">m_lpDIDKeyboard</font></p>
+    <p><font size="3" face="Arial">m_lpDIDMouse</font></p>
+    <p><font size="3" face="Arial">Mouse</font></p>
+    <p><font size="3" face="Arial">Joystick</font></p>
+    <p><font size="3" face="Arial">MouseLB</font></p>
+    <p><font size="3" face="Arial">MouseMB</font></p>
+    <p><font size="3" face="Arial">MouseRB</font></p>
+    <p><font size="3" face="Arial">JoystickB1</font></p>
+    <p><font size="3" face="Arial">JoystickB2</font></p>
+    <p><font size="3" face="Arial">Keys</font></p>
+    <p><font size="3" face="Arial">JoyInfo</font></td>
+    <td><font size="3" face="宋体">DirectInput对象</font><p><font size="3" face="宋体">键盘DirectInputDevice</font></p>
+    <p><font size="3" face="宋体">鼠标DirectInputDevice</font></p>
+    <p><font size="3" face="宋体">保存鼠标相对位置的POINT结构</font></p>
+    <p><font size="3" face="宋体">保存游戏杆位置的POINT结构</font></p>
+    <p><font size="3" face="宋体">左键是否按下？</font></p>
+    <p><font size="3" face="宋体">中键是否按下？</font></p>
+    <p><font size="3" face="宋体">右键是否按下？</font></p>
+    <p><font size="3" face="宋体">游戏杆的1键是否按下？</font></p>
+    <p><font size="3" face="宋体">游戏杆的2键是否按下？</font></p>
+    <p><font size="3" face="宋体">长度为256的字符数组，存储键盘上当前按下的键</font></p>
+    <p><font size="3" face="宋体">存储游戏杆信息的JOYINFOEX结构</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="宋体"><b>CDXInput</b>()<br>
+~<b>CDXInput</b>()</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Create</b>(void *hInst, void *hWnd)</font><font
+size="3" face="宋体"><br>
+创建DirectInput对象和键盘、鼠标及游戏杆设备。</font></p>
+
+<p><font size="3" face="Arial">void <b>Restore</b>(void)</font><font size="3"
+face="宋体"><br>
+当键盘和鼠标设备丢失时请求它们。Update失败时会在内部调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>Release</b>(void)</font><font size="3"
+face="宋体"><br>
+释放键盘和鼠标设备。</font></p>
+
+<p><font size="3" face="Arial">void <b>Update</b>(void)</font><font size="3" face="宋体"><br>
+更新键盘、鼠标及游戏杆的数据。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXMusic"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXMusic</i></b></font></p>
+
+<p><font size="3" face="宋体">CDXMusic允许你载入并播放MIDI文件以产生游戏音乐。目前CDXMusic使用Windows 
+MCI函数，所以性能不算很好。我真希望微软能尽快发行DirectMusic……</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">HWND m_hWnd</font></td>
+    <td><font size="3" face="宋体">窗口句柄</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial">CDXMusic(void *hWnd)</font><font size="3" face="宋体"><br>
+创建CDXMusic对象。将m_hWnd的值置为hWnd。</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Play</b>(char *Filename)</font><font size="3"
+face="宋体"><br>
+播放指定的MIDI文件。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Stop</b>(void)</font><font size="3" face="宋体"><br>
+停止当前播放的MIDI文件。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Pause</b>(void)</font><font size="3" face="宋体"><br>
+暂停当前播放的所有MIDI文件。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Resume</b>(void)</font><font size="3" face="宋体"><br>
+继续当前暂停的MIDI文件。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Restart</b>(void)</font><font size="3"
+face="宋体"><br>
+从头播放MIDI文件。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXSound"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXSound</i></b></font></p>
+
+<p><font size="3" face="宋体">CDXSound是DirectSound对象的一个简单封装。在你用CDXSoundBuffer对象（见下节）载入并播放声音的时候必须要创建CDXSound对象。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">LPDIRECTSOUND m_lpDS</font><p><font size="3" face="Arial">DSCAPS 
+    m_DSCaps</font></td>
+    <td><font size="3" face="宋体">DirectSound对象</font><p><font size="3" face="宋体">直接声音输出许可</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial">CDXSound()<br>
+<b>~CDXSound</b>()</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">HRESULT <b>Create</b>(void *hWnd)</font><font size="3"
+face="宋体"><br>
+初始化DirectSound对象。成功则返回DS_OK，失败则返回SetCooperativeLevel的返回值。</font></p>
+
+<p><font size="3" face="Arial">HRESULT <b>GetCaps</b>(void)</font><font size="3"
+face="宋体"><br>
+获得当前的声音输出许可。成功则返回DS_OK，失败则返回GetCaps的返回值。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="CDXSoundBuffer"></a></p>
+
+<p><font size="5" face="宋体"><b><i>CDXSoundBuffer</i></b></font></p>
+
+<p><font size="3" face="宋体">DirectSoundBuffer对象的一个简单封装。它用于载入并播放WAVE文件以在你的游戏中产生音效。</font></p>
+
+<p><font size="3" face="宋体"><b>数据成员</b></font></p>
+
+<table border="0" width="100%">
+  <tr>
+    <td><font size="3" face="Arial">int m_nBuffers</font><p><font size="3" face="Arial">int 
+    m_Current</font></p>
+    <p><font size="3" face="Arial">const char* m_Filename</font></p>
+    <p><font size="3" face="Arial">CDXSound* m_pDS</font></p>
+    <p><font size="3" face="Arial">LPDIRECTSOUNDBUFFER m_lpDSB[1]</font></td>
+    <td><font size="3" face="宋体">创建的缓冲区数量</font><p><font size="3"
+    face="宋体">当前选定的缓冲区</font></p>
+    <p><font size="3" face="宋体">WAVE文件名</font></p>
+    <p><font size="3" face="宋体">指向CDXSound对象的指针</font></p>
+    <p><font size="3" face="宋体">IDirectSoundBuffer对象</font></td>
+  </tr>
+</table>
+
+<p><font size="3" face="宋体">　　</font></p>
+
+<p><font size="3" face="宋体"><b>构造／析构</b></font></p>
+
+<p><font size="3" face="Arial">CDXSoundBuffer(void)</font></p>
+
+<p><font size="3" face="Arial"><b>~CDXSoundBuffer</b>(void)</font></p>
+
+<p><font size="3" face="宋体"><b>成员函数</b></font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Load</b>(CDXSound* pDS, char *Filename, int Num = 
+1)</font><font size="3" face="宋体"><br>
+载入文件名为FileName的WAVE文件。Num是该声音可能同时播放的次数，如果必要的话将会创建多个缓冲区，所以应尽量使它小一些。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Play</b>(int Pan = 0, DWORD dwFlags = 0)</font><font
+size="3" face="宋体"><br>
+播放载入的WAV文件。在立体声声卡你可以调整Pan参数使声音在左右声道间定位，取值从10,000到-10,000。如果将参数值设为DSBPLAY_LOOPING声音将会循环播放直到调用Stop函数。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>Stop</b>()</font><font size="3" face="宋体"><br>
+停止当前播放的WAV文件。</font></p>
+
+<p><font size="3" face="Arial">void <b>SetVolume</b>(LONG Volume)</font><font size="3"
+face="宋体"><br>
+改变声音的音量。取值从0到-10,000（声音不能被放大）。</font></p>
+
+<p><font size="3" face="Arial">BOOL <b>CreateSoundBuffer</b>(DWORD dwBufSize, DWORD 
+dwFreq, DWORD dwBitsPerSample, DWORD dwBlkAlign, BOOL bStereo)<br>
+BOOL <b>ReadData</b>(FILE* fp, DWORD dwSize, DWORD dwPos)</font><font size="3"
+face="宋体"><br>
+</font></p>
+
+<p><font size="3" face="宋体">这两个函数都是被LoadFromFile函数在内部调用的。不用直接调用它们。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="Global Functions"></a></p>
+
+<p><font size="5" face="宋体"><b><i>全局函数</i></b></font></p>
+
+<p><font size="3" face="宋体">这些是不适合任何类但有独特作用的函数。</font></p>
+
+<p><font size="3" face="Arial">void <b>DDError</b>(HRESULT hErr, void * hWnd)<br>
+void <b>DSError</b>(HRESULT hErr, void * hWnd)</font></p>
+
+<p><font size="3" face="宋体">弹出包含错误信息的消息框并终止应用程序。在发生致命错误时被调用。</font></p>
+
+<p><font size="3" face="Arial">void <b>Clip</b>(int *DestX, int *DestY, RECT *SrcRect, 
+RECT DestRect)</font><font size="3" face="宋体"><br>
+剪贴矩形到指定的区域。当被粘贴的区域的边缘没有与屏幕边缘重合时特别有用（例如：只在屏幕左数500个象素的区域内操作以留下控制面板的空间时）。这个函数被DrawClipped调用。</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr size="1">
+
+<p><a name="Important Notes &amp; known bugs"></a></p>
+
+<p><font size="5" face="宋体"><b><i>重要信息和已知的错误</i></b></font> 
+
+<ul>
+  <li><font size="3" face="宋体">象CDXSprite::DrawTrans和CDXMap::DrawTrans这样的透明写屏操作必须在调用前设置关键色。</font></li>
+  <li><font size="3" face="宋体">m_lpClipper(CDXScreen)不允许在全屏的应用程序中使用</font></li>
+  <li><font size="3" face="宋体">显存不足会导致画面滚动缓慢,因此必须注意创建了多少个表面(Surface)。</font></li>
+  <li><font size="3" face="宋体">320x200和320x240模式不适于平滑的滚动，这是由这些模式的本质造成的。</font></li>
+  <li><font size="3" face="宋体">DrawWindowed函数用于直接向窗口前缓冲区输出。</font></li>
+  <li><font size="3" face="宋体">DestRect成员(CDXSurface)仅仅用于Draw操作。</font></li>
+  <li><font size="3" face="宋体">窗口模式下的滚动效果不太好,我不清楚这是怎么造成的，可能是由于显存不足,颜色的转换等等。非常感谢对此提出改进的建议。</font></li>
+</ul>
+
+<p><font size="3" face="宋体">谢谢使用CDX！</font></p>
+
+<p><a href="#index"><span style="font-family: 宋体; font-size: 9pt">回到索引</span></a></p>
+
+<hr>
+
+<p><a href="gameprg.htm"><big><strong>返回</strong></big></a></p>
+</body>
+</html>

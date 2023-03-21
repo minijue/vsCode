@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+
+<head>
+<title>Cgi简明教程二</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../../res/back.JPG">
+
+<table style="font-size: 9pt">
+  <tr VALIGN="TOP">
+    <td VALIGN="TOP"><h2 ALIGN="CENTER">第二章 Html的表单基础知识</h2>
+    <p>组成Cgi程序的是两部分，一部分是html页面，就是用户看到的东西。另一部分则是运行在<br>
+    服务器上的程序。一般来说，我们先些html页面，再些程序。所以我们的学习页是这样，先看看表单的写法，再去学习CGI程序。<br>
+    对于html的表单，有比较复杂和详细的规定。但由于它们是属于html标准里的东西，所以我不打算详细讲解。最好是你自己找本书看看。</p>
+    <p><b>Html表单</b></p>
+    <p><b>&lt;Form&gt;&lt;/Form&gt;</b>标记把输入域组合起来,并且说明了表单提交的方式 
+    和地点.Form标签有许多属性,比如NAME等等.具体的属性,将在使用的时候说明. 
+    </p>
+    <p>在FORM里还有许多不同的标签,正是它们组成了表单的各种成分. <br>
+    </p>
+    <p><b>&lt;INPUT [TYPE=TEXT] NAME=&quot;TEXT-ID&quot; [SIZE=NN] [MAXLENGTH=NN] 
+    [VALUE='DEFAULT TEXT']&gt;<br>
+    </b>该语句在HTML里产生一个文本标签,[]里表示该属性是可选的. </p>
+    <p><b>&lt;INPUT TYPE=SUBMIT [NAME='BUTTON-ID'][VALUE=&quot;BUTTON LABLE TEXT&quot;]&gt;<br>
+    </b>该语句产生一个提交按键,用于表单的提交.它提供一个发送表单的按纽,信息发向&lt;FORM&gt;标记里 
+    ACTION属性里给出的URL.根据表单方法(METHOD)指定的HTTP请求类型 
+    提交信息.在以后我将详细讲解. </p>
+    <p><b>&lt;INPUT TYPE=RESET[VALUE='BUTTON LABEL TEXT']&gt;<br>
+    </b>具有TYPE=RESET属性的INPUT将产生一个按钮,它能重置表单各个域 
+    的内容到初始状态. </p>
+    <p><b>&lt;INPUT TYPE=RADIO NAME=&quot;RADIO-SET -ID&quot; vALUE=&quot;CHOICE-ID&quot; 
+    [CHECKED]&gt;<br>
+    </b>表单可以用此标记提示用户从几个选择项里作出选择.么个选择项目都是一个单选按钮它们具有相同的NAME值.在任何时候只要有一个被选中.此标记有一个VALUE属性,如果它被 
+    选中,则发送表单时将以&quot;RADIO-SET-ID=CHOICE-ID&quot;的形式发送. <br>
+    </p>
+    <p><b>&lt;INPUT TYPE=CHECKBOX NAME='BOX-SET-ID' VALUE='CHOICE-ID' [CHECKED]&gt;</b> <br>
+    此标签将产生一个'OFF'或'ON'的开关.它同RADIO相似,但是可以多选.当提交表单的时候 
+    如果一个复选框是选中的饿，那么它的VALUE属性作为BOX-SET-ID表单数据的值被提交.几个 
+    拥有同样NAME属性的复选框为一组.它们用','分开的列表. </td>
+  </tr>
+</table>
+
+<p><a HREF="default.html" tppabs="http://202.96.217.5/~xiaoyi/default.html">返回CGI教程目录</a></p>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>用VB制作TopMost类型窗口</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> <font
+    color="#000000">用VB制作TopMost类型窗口</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt"><font
+    color="#000000">用VB制作TopMost类型窗口</font></span></strong></td>
+  </tr>
+  <tr>
+    <td>TopMost这个词也许你很陌生，但具有TopMost窗口的软件你应该早就接触过，如Office97、网络吸血鬼、IE等。所谓TopMost窗口是指哪些始终出现在桌面的最前方且不会被其它窗口覆盖的窗口，如网络吸血鬼中的下载图标。<br>
+    &nbsp;&nbsp; 一般憎况下，在运行VB程序时，窗口总有可能会被其它程序的窗口所覆盖。如何在自己的应用程序中实现TopMost类型的窗口呢？我们可以通过调用Windows 
+    API函数SetWindowPos来实现。<br>
+    <strong>一、SetWindowPos函数介绍</strong><br>
+    &nbsp;&nbsp; SetWindowPos函数功能是将一个窗口在三维空间中移动，利用它，你可以改变一个窗口的位置，甚至可以在Z轴上改变（Z轴决定了一个窗口和其它窗口的前后关系），你还可以改变窗口的尺寸。为了实现TopMost类型的窗口，我们只需调用该函数，将窗口放在所有窗口的前面并永远保持在最前面即可。要想在VB中使用SetWindowPos函数，必须在程序的代码模块中进行如下的函数声明：<br>
+    Declare Function SetwindowPos Lib &quot;user32.dll&quot; (ByVal hwnd As Long,ByVal 
+    hWndInsertAfter As Long,ByVal x As Long,ByVal y As Long,ByVal cx As Long,ByVal cy As 
+    Long,ByVal wFlags as Long)As Long<br>
+    SetWindowPos函数各个参数的含义见表1。<p align="center">表1 SetWindowPos函数的参数解释</p>
+    <div align="center"><center><table border="1" width="520" bordercolor="#000000"
+    cellspacing="0" cellpadding="0" style="font-size: 9pt">
+      <tr>
+        <td width="182" align="center">参数名</td>
+        <td width="334" align="center">参数含义</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">hwnd</td>
+        <td width="334" align="center">要移动的窗口的句柄（可以用窗体的hwnd属性）</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">hWndInsertAfter</td>
+        <td width="334" align="center">关于如何在Z轴上放置窗口的标记（具体见表2）</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">x</td>
+        <td width="334" align="center">相当于窗口的Left属性</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">y</td>
+        <td width="334" align="center">相当于窗口的Top属性</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">cx</td>
+        <td width="334" align="center">相当于窗口的Right属性</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">cy</td>
+        <td width="334" align="center">相当于窗口的Bottom属性</td>
+      </tr>
+      <tr>
+        <td width="182" align="center">wFlags</td>
+        <td width="334" align="center">关于如何移动窗口的标记（具体见表3）</td>
+      </tr>
+    </table>
+    </center></div><p align="center">表2 HWndInsertAfter参数的可能取值及含义</p>
+    <div align="center"><center><table border="1" width="520" bordercolor="#000000"
+    cellspacing="0" cellpadding="0" style="font-size: 9pt">
+      <tr>
+        <td width="214" align="center">hWndInsertAfter的可能取值</td>
+        <td width="302" align="center">功能</td>
+      </tr>
+      <tr>
+        <td width="214" align="center">某一窗口的句柄</td>
+        <td width="302" align="center">将窗口放在该句柄指定的窗口后面</td>
+      </tr>
+      <tr>
+        <td width="214" align="center">HWND_BOTTOM(1)</td>
+        <td width="302" align="center">把窗口放在Z轴的最后，即所有窗口的后面</td>
+      </tr>
+      <tr>
+        <td width="214" align="center">HWND_TOP(0)</td>
+        <td width="302" align="center">将窗口放在Z轴的前面，即所有窗口的前面</td>
+      </tr>
+      <tr>
+        <td width="214" align="center">HWND_TOPMOST(-1)</td>
+        <td width="302" align="center">使窗口成为“TopMost”类型的窗口，这种类型<br>
+        的窗口总是在其它窗口的前面，真到它被关闭</td>
+      </tr>
+      <tr>
+        <td width="214" align="center">HWND_NOTOPMOST(-2)</td>
+        <td width="302" align="center">将窗口放在所有“TopMost”类型<br>
+        窗口的后面、其它类型窗口的前面</td>
+      </tr>
+    </table>
+    </center></div><p align="center">表3 wFlags参数的可能值及含义</p>
+    <div align="center"><center><table border="1" width="520" bordercolor="#000000"
+    cellspacing="0" cellpadding="0" style="font-size: 9pt">
+      <tr>
+        <td width="218" align="center">wFlags参数的可能值</td>
+        <td width="298" align="center">功能</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_DRAWFRAME(&amp;H20)</td>
+        <td width="298" align="center">移动窗口后重画窗口及其上的所有内容</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_HIDEWINDOW(&amp;H80)</td>
+        <td width="298" align="center">隐藏窗口，窗口隐藏后既不出现在屏幕上也不出现在任<br>
+        务栏上，但它仍然处于激活状态</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOACTIVATE(&amp;H10)</td>
+        <td width="298" align="center">窗口移动后不激活窗口，当然，如果窗口在移动前就是<br>
+        激活的则例外</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOCOPYBITS(&amp;H100)</td>
+        <td width="298" align="center">当窗口移动后，不重画它上面的任何内容</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOMOVE(&amp;H2)</td>
+        <td width="298" align="center">不移动窗口（即忽略X和Y参数）</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOSIZE(&amp;H1)</td>
+        <td width="298" align="center">不改变窗口尺寸（即忽略Cx和Cy参数）</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOREDRAW(&amp;H8)</td>
+        <td width="298" align="center">Do not remove the image of the window in its former 
+        position<br>
+        from the screen. In other words,leave behind a ghost image<br>
+        of the window in its old position</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_NOZORDER(&amp;H4)</td>
+        <td width="298" align="center">不改变窗口听Z轴位置（即忽略hWndInsertAfter参数）</td>
+      </tr>
+      <tr>
+        <td width="218" align="center">SWP_SHOWWINDOW(&amp;H40)</td>
+        <td width="298" align="center">显示窗口（之前必须使用过SWP_HIDEWINDOW<br>
+        隐藏窗口）</td>
+      </tr>
+    </table>
+    </center></div><p>&nbsp;&nbsp; 前面已提到，利用SetWindowPos函数可以决定窗口在Z轴中的位置，具体如何放置，需根据表2给hWndInsertAfter参数赋予合适的值。<br>
+    &nbsp;&nbsp; 另外，wFlags参数为SetWindowPos函数移动窗口提供了附加的特性，我们可以通过or运算将表3中若干个wFlags结合在一起使用，如SWP_NOMOVE 
+    Or SWP_NOSIZE既不移动窗口又不改变窗口的尺寸。但是要注意不要将功能冲突的值结合使用，如SWP_HIDEWINDOW 
+    Or SWP_SHOWWINDOW。<br>
+    <strong>二、程序举例</strong><br>
+    &nbsp;&nbsp; 下面，我们以一个简单的例子说明SetWindowPos函数的用法及如何实现TopMost类型窗口。新建工程，在普通窗体Form1上放置两个命令按钮cmdNormal和cmdTopMost，命令按钮的Caption属性分别为“变成普通窗口”和“变成TopMost窗口”。cmdNormal的Enabled属性为False。为工程添加代码模块Moudall，在其中放置如下声明代码：<br>
+    Declare Function SetWindowPos Lib &quot;user32&quot; (ByVal hwnd As Long,ByVal 
+    hWndInsertAfter As Long,ByVal x As Long,ByVal y As Long, ByVal cx As Long, ByVal cy As 
+    Long,ByVal wFlags As Long) As Long<br>
+    Public Const SWP_NOMOVE= &amp;H2 '不移动窗体<br>
+    Public Const SWP_NOSIZE=&amp;H1 '不改变窗体尺寸<br>
+    Public Const Flag=SWP_NOMOVE Or SWP_NOSIZE<br>
+    Public Const HWND_TOPMOST=-1 '窗体总在最前面<br>
+    Public Const HWND_NOTOPMOST=-2 '窗体不在最前面<br>
+    为窗体添加代码如下：<br>
+    Private Sub cmdNormal_Click()<br>
+    &nbsp;&nbsp; cmdTopMost.Enabled=True<br>
+    &nbsp;&nbsp; cmdNormal. Enabled= False<br>
+    &nbsp;&nbsp; Form1.Captio = &quot;现在是普通窗口&quot;<br>
+    &nbsp;&nbsp; SetWindowPos Form1.hwnd,HWND_NOTOPMOST,0,0,0,0,Flag<br>
+    End Sub<br>
+    Private Sub cmdTopMost_Click()<br>
+    &nbsp;&nbsp; cmdTopMost.Enabled = False<br>
+    &nbsp;&nbsp; cmdNormal.Enabled = True<br>
+    &nbsp;&nbsp; Form1.Caption = &quot;现在是TopMost窗口&quot;<br>
+    &nbsp;&nbsp; SetWindowPos Form1.hwnd,HWND_TOPMOST,0,0,0,0,Flag<br>
+    End Sub<br>
+    &nbsp;&nbsp; 按下F5，运行程序，单击“变成TopMost窗体”命令按钮，此时窗口即成为TopMost类型。随意打开桌面上的其它窗口，Form1总是处在其它窗口的前面；如果单击“变成普通窗体”按钮。则一切又恢复正常，一旦打开了其它窗口，则其它窗口会将Form1窗口覆盖。<br>
+    &nbsp;&nbsp; 本程序用Visual Basic 5.0编写，在Pwin95、Pwin97环境下运行正常。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

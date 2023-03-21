@@ -1,0 +1,401 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>再谈Shell语句的用法</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> <font
+    color="#000000">再谈Shell语句的用法</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><span style="font-size: 9pt"><strong>再谈Shell语句的用法</strong></span></font></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">笔者曾经在98年《新潮电子》第10期上写过一篇《shell语句用法心得》，看过此文的朋友一定会觉 
+    得其中的主角其实是Rundll32.exe，而非shell语句，因为只要知道Rundll32.exe的用法，在任何编程 
+    语言中均可调用。事实上用这种方法来调用系统功能既方便又安全，着实让人体会到微软和windows体 
+    贴、温柔的一面。 
+    上回疏漏了许多有用有趣的用法，此番又长了不少经验值，不敢不与大家共享，也算是对上文的补 
+    充吧。 <br>
+    <strong>一、关于Rundll32.exe <br>
+    </strong>过去，你曾经为了自己编的文件管理器能Format 
+    磁盘、浏览器能自动拨号连接而求助于那位高傲的 API。现在，Rundll32.exe向你提供了更为平易近人的 
+    方法来实现这些功能。 <br>
+    附表中列举了本人总结出的一些精华，耐 
+    心的你是否会发现，有时只要一条语句便可解开心中 的难题呢？（shell语句的执行格式为shell加上表中 
+    列举的相应命令。例如，要调用关机程序则为：shell “rundll32.exe 
+    user.exe，exitwindOws”。）</span><table border="1" bordercolor="#000000"
+    cellspacing="0" cellpadding="0" width="100%" style="font-size: 9pt">
+      <tr>
+        <td width="101" align="center"><span style="font-size: 9pt">调用模块</span></td>
+        <td width="442" align="center"><span style="font-size: 9pt">命&nbsp; 令</span></td>
+        <td width="185" align="center"><span style="font-size: 9pt">结&nbsp; 果</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32.dll,Control_RunDLL</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开控制面板</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">SHELL32.DLL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,SHHelpShortcuts_Rundll PrintersFolder</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开打印机文件夹</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,SHHelpShortcuts_Rundll FontsFolder</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开字体文件夹</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,SHHelpShortcuts_Rundll AddPrinter</td>
+        <td width="185" align="center"><span style="font-size: 9pt">添加新打印机向导</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,SHformatDrive</td>
+        <td width="185" align="center"><span style="font-size: 9pt">格式化软盘</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">SYSDM.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL sysdm.cpl</td>
+        <td width="185" align="center"><span style="font-size: 9pt">系统属性，常规</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL sysdm.cpl,,l</td>
+        <td width="185" align="center"><span style="font-size: 9pt">系统属性，设备管理器</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL sysdm.cpl,,3</td>
+        <td width="185" align="center"><span style="font-size: 9pt">系统属性，性能</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL sysdm.cpl @1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">添加新硬件向导</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">APPWIZ.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL appwiz.cpl,,1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">添加/删除程序</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL appwiz.cpl,,2</td>
+        <td width="185" align="center"><span style="font-size: 9pt">安装Windows部件</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL appwiz.cpl,,3</td>
+        <td width="185" align="center"><span style="font-size: 9pt">制作启动盘</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">DISKCOPY.DLL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe diskcopy.dll,DiskcopyRundll</td>
+        <td width="185" align="center"><span style="font-size: 9pt">复制磁盘</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">RNAUI.DLL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe rnaui.dll,RnaDial x (x为连接名称)</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开拨号边接对话框，若已连接，则显示连接状态对话框</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe rnaui.dll,RnaWizard</td>
+        <td width="185" align="center"><span style="font-size: 9pt">新建拨号连接向导</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">DESK.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL desk.cpl,,0</td>
+        <td width="185" align="center"><span style="font-size: 9pt">选择桌面背景</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL desk.cpl,,1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">选择屏幕保护</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL desk.cpl,,2</td>
+        <td width="185" align="center"><span style="font-size: 9pt">选择外观</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL desk.cpl,,3</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置显示属性</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">MAIN.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @0</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置鼠标属性</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置键盘属性，速度</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @1,,1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置键盘属性，语言</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @2</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开打印机文件夹</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @3</td>
+        <td width="185" align="center"><span style="font-size: 9pt">打开字体属性</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL main.cpl @4</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置输入法</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">MODEM.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL modem.cpl,,add</td>
+        <td width="185" align="center"><span style="font-size: 9pt">添加调制解调器向导</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">MMSYS.CPL</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe shell32,Control_RunDLL mmsys.cpl @1</td>
+        <td width="185" align="center"><span style="font-size: 9pt">设置声音属性（也可以加入,,0到,,4的参数以选择不同的标签）</span></td>
+      </tr>
+      <tr>
+        <td width="101" align="center">UESR.EXE</td>
+        <td width="442" align="center">　</td>
+        <td width="185" align="center">　</td>
+      </tr>
+      <tr>
+        <td width="101" align="center">　</td>
+        <td width="442" align="center">rundll32.exe user.exe,exitwindows</td>
+        <td width="185" align="center"><span style="font-size: 9pt">关闭计算机</span></td>
+      </tr>
+    </table>
+    <p><span style="font-size: 9pt"><strong>二、如何确定Shell语句调用的程序已经关闭 
+    <br>
+    </strong>这个标题确实太长，但它确实概括了本节的内容。 
+    当你需要等待由Shell启动的应用程序运行完毕时， 便会发现Shell语句只管调用，之后就撒手不管了，于 
+    是我们不得不动用一下API函数了。当然我们可以用 API来完成全部的工作，但是如果那样的话，我们将要 
+    面临CreateProcess这个非常复杂的函数，光写下它 
+    和相关结构类型的宣告就超出一页纸了。别误会，我 
+    说这些的目的只是为了让大家体会到下面我们将要做 
+    的是多么简单的事。 <br>
+    只需按以下步骤step by step，便OK了。 <br>
+    1．新建一个项目，在窗体上放一个command1，再 添加一个Module。 <br>
+    2. 在Module中写入如下代码： <br>
+    Option Explicit <br>
+    以下声明了OpenProcess，GetExitCodeProcess 和Closeandle 三个API函数 <br>
+    Public Declare Function OpenProcess Lib&quot;ker nel32&quot;（ByVal dwDesiredAccess As 
+    Long， ByVal bInheritHandle As Long， ByVal dwProcessId As Long）As Long <br>
+    Public Declare Function GetExitcodeProcess Lib “kernel32”（ByVal hProcess As Long， 
+    1pExitcode As Long） As Long <br>
+    Public Declare Function Closellandle Lib &quot;Ker nel32”（ByVal hobject As Long) As 
+    Long <br>
+    Publi Const PROCESS_QUERY_INFORMATION= ＆H400 <br>
+    Public Const STATUS_PENDING ＝ ＆H103＆ <br>
+    3．打开窗体的代码窗口，写入如下代码： <br>
+    Option Explicit <br>
+    Private Sub RunShell（cmdline As String） 这个自定义过程完成了所有工作 <br>
+    Dim hProcess As Long <br>
+    Dim ProcessId As Long <br>
+    Dim exitCode As Long <br>
+    ProcessId ＝ Shell（cmdline，1）'此处利用了 Shell当函数使用时返回的任务标识 
+    <br>
+    hProcess＝OpenProcess（PROCESS_QUERY_INFOR MATION，False，ProcessId） <br>
+    Do <br>
+    Ca11 GetExitCodeProcess（hProcess，exitcode) <br>
+    DoEvents <br>
+    Loop While exitCode ＝ STATUS_PENDING <br>
+    Call CloseHandle（hProcess) <br>
+    MsgBox cmdline ＆ &quot;已经关闭。&quot; <br>
+    End Sub <br>
+    Private Sub Command1_Click（） <br>
+    RunShell ”notepad.exe” <br>
+    End Sub <br>
+    4&middot;按F5运行，单击Command1运行计事本，关闭 
+    计事本将弹出对话框“notepad.exe 已经关闭。” <br>
+    注意：由于本程序是用一个Do..Loop循环来侦测 进程的结束，所以那句DoEvents是绝不能少的，不然 
+    你就只能用Ctrl＋Break来退出了。 <br>
+    <strong>三、激活一个正在运行的程序 <br>
+    </strong>让我们来考虑这样一种情况：我们在程序中定义 
+    了某一操作是用Shell语句调用Windows的计算器，当 
+    用户重复这一操作时，计算器已经在运行了。如果简 单地再使用Shell语句将打开计算器的另一个进程。 
+    这显然是不合理的。这时我们需要做的是激活已运行 
+    的计算器，下面这段简单的代码帮我们达到了目的、 
+    相信大家一看就懂。 <br>
+    Private Declare Function FindWindow Lib “user32”Alias “FindWindowA”（ByVal 
+    1pClassName As String，ByVal 1pWindowName As String) As Long <br>
+    Private Declare Function BringWindowToTop lib “user32” （ByVal hwnd As Long）As Long 
+    <br>
+    '以上声明了FindWindow和BringWindowToTop两 个API函数 <br>
+    Private Sub Command1-Click() <br>
+    Dim hCalcWnd As Long <br>
+    hCalcwnd ＝ Findwindow（“SciCalc”，”计算器”） <br>
+    这里SciCalc是计算器的窗口类名，详见下一节 <br>
+    lf hCalcWnd＝0 Then <br>
+    Shell（&quot;CALC.EXE&quot;，vbNormalFocus） <br>
+    Else：BringWindowToTop（hCalcWnd） <br>
+    End lf <br>
+    End sub <br>
+    <strong>四、如何获得窗口的类名 <br>
+    </strong>只是看过上节的读者大部会对窗口的类名提出疑 
+    问，本节就是针对这个问题的。通过本节的内容，你 
+    还能了解到如何跟踪鼠标，并找出它正经过哪个窗口。 
+    好，让我们一步一步地来，这回代码可能稍多一些。 <br>
+    1．建立一个新项目，在窗体的General Decla rations部分写入以下代码，这些语句定义了要用到 
+    的API函数、常量以及结构。 <br>
+    Option Explicit <br>
+    Dim gbCancel As Boolean <br>
+    Private Type POINTAPI <br>
+    X As Long <br>
+    Y As Long <br>
+    End Type <br>
+    Private Declare Function GetCursorPos Lib “user32&quot; （1pPoint As POINTAPI） As 
+    Long <br>
+    Private Declare Function WindowFromPoint Lib &quot;user32”（ByVal xPoint As Long，ByVal 
+    yPoint As long） As Long <br>
+    Private DeClare Function GetClassName Lib “user32”Alias &quot;GetClassNameA”（ByVal 
+    hwnd As Long，ByVal 1pClassName As String，ByVal aMaxCount As Long）As Long <br>
+    2．在窗体上放一个Command1，把标题改成“开 始”，再放一个Label1，以下是事件的代码，也请大家 
+    在相应位置写上。 <br>
+    Private Sub Command1_CliCk() <br>
+    If Command1.Caption ＝&quot;开始&quot; Then <br>
+    Command1.Caption = &quot;停止&quot; <br>
+    Call Track <br>
+    ElSe <br>
+    Command1.Caption＝&quot;开始&quot; <br>
+    gbCancel = True <br>
+    End IF <br>
+    End Sub <br>
+    Private Sub Form_Load() <br>
+    gbCancel = False '初始化循环取消变量 <br>
+    End Sub <br>
+    Private Sub Form_QueryUnload（Cancel As In teger，UnloadMode As Integer） <br>
+    gbCancel = True '确保循环中断 <br>
+    End Sub <br>
+    3．最后是关键部分，自定义的过程Track。 <br>
+    Sub Track() <br>
+    Dim PT_Mouse As POINTAPI <br>
+    Dim 1CurHwnd As Long <br>
+    Dim 1PrvHwnd As Long <br>
+    Dim IX As Long，1Y As Long <br>
+    Dim tClassName As String <br>
+    Dim 1Result As Long <br>
+    1PrvHwnd = 0 <br>
+    Do <br>
+    Call GetCursorPos（PT_Mouse） '获得鼠标位置 <br>
+    1X ＝PT_Mouse.x <br>
+    1Y＝PT_Mouse.Y <br>
+    1CurHwnd ＝ WindowFromPolnt（1X,1Y) '获得鼠 标箭头下窗口的句柄 <br>
+    If gbCancel ＝ True Then Exit Do <br>
+    If 1CurHwnd <> 1PrvHWnd Then '若两值不等则 说明经过不同的窗口，保存新值 <br>
+    1PrvHwnd＝1CurHwnd <br>
+    tClassName ＝ String$（256,&quot; &quot;） '注意引号间 是空格 <br>
+    1Result ＝ GetClassName（1CurHwnd,tClassName,255) '这两句取出类名 <br>
+    tClassName ＝ Left$(tClassName, InStr （tClassName，vbNullChar） -1) <br>
+    Labell，Caption = &quot;鼠标通过:” ＆ tClassName <br>
+    '也可写1CurHwnd以获得窗口句柄 <br>
+    End lf <br>
+    DoEvents '决不可少！切记，切记！ <br>
+    Loop <br>
+    End sub <br>
+    运行此程序，按下&quot;开始”按钮后，鼠标所经过的 
+    窗口的类名将在Labell中显示出来。 <br>
+    终于写到了最后，我对Shell语句总算是知无不 
+    言了。若朋友们能藉本文对Shell语句有更多的了解， 
+    我也就“瞑目”了。</span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

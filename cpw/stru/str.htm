@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>字符串查找</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>字符串查找</strong></p>
+
+<p>//字符串查找<br>
+#include &lt;iostream.h&gt;<br>
+//#include &lt;<br>
+#define MS 20<br>
+&nbsp;&nbsp;&nbsp; char a[MS]=&quot;whatisit&quot;;<br>
+char b[MS]=&quot;*is*&quot;;<br>
+int searchStr(char s1[MS],char s2[MS],int p1,int p2);<br>
+bool chazhao(char a[MS],char b[MS]);<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i;<br>
+cout&lt;&lt;chazhao(a,b);<br>
+cin&gt;&gt;i;<br>
+}<br>
+bool chazhao(char a[MS],char b[MS])<br>
+{<br>
+<br>
+&nbsp;&nbsp;&nbsp; int i;<br>
+&nbsp;&nbsp;&nbsp; i=searchStr(a,b,1,1);<br>
+if(i!=0){i=i-strlen(b)+1;cout&lt;&lt;i&lt;&lt;endl;}<br>
+}<br>
+<br>
+//从s1中第n个开始查找s2第m个开始 返回s2的末尾在s1中的位置<br>
+/*int searchStr(char s1[MS],char s2[MS],int p1)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i;<br>
+for(i=p1<br>
+} */<br>
+bool cmpStr(char s1[MS],char s2[MS],int p1)<br>
+{<br>
+int jc=0;<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=strlen(s2);i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; if(s1[i+p1]!=s2[i])jc=1<br>
+&nbsp;&nbsp;&nbsp; if(jc==1)return true;<br>
+&nbsp;&nbsp;&nbsp; else return false;<br>
+}<br>
+}<br>
+/*&nbsp;&nbsp;&nbsp; int k;<br>
+cout&lt;&lt;p1&lt;&lt;&quot; &quot;&lt;&lt;p2&lt;&lt;endl;<br>
+if(s2[p2]==NULL)<br>
+&nbsp;&nbsp;&nbsp; return p1;<br>
+while(s1[p1]!=NULL)<br>
+{<br>
+if(s1[p1]==s2[p2])<br>
+{<br>
+&nbsp;&nbsp;&nbsp; p1++;p2++;<br>
+k=searchStr(s1,s2,p1,p2);<br>
+if(k==0)<br>
+&nbsp;&nbsp;&nbsp; return 0;<br>
+else<br>
+&nbsp;&nbsp;&nbsp; return k;<br>
+}<br>
+p1++;<br>
+}<br>
+return 0;<br>
+}*/</p>
+</body>
+</html>

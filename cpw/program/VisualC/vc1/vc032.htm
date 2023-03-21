@@ -1,0 +1,179 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">给AutoCAD 增加超级编辑命令 <br>
+      <br>
+      苏州清华技术研究所 黄耕耘       
+      <p>---- AutoCAD在中国有很广泛的用户基础，同时也有很多专业的、业余的开发人员。从R13版本开始，Autodesk 
+      提供了ARX开发工具，面向对象的特性使开发人员如沐春风。有关ARX编程与ADS编程的比较这里不再赘述，此处只讲如何用ARX实现我们所要求的功能，不足之处请指正。 
+      <br>
+      ---- 许多二次开发软件均提供超级编辑命令，如Genius 14、HMCAD 
+      6.0等等。读者或许对这些命令很感兴趣，能不能自己开发类似的功能呢？只要您对C++和ARX编程有一些了解，利用Autodesk提供的ObjectARX 
+      SDK软件包(可以到Autodesk网址上免费下载)，您能很方便的写出此类程序，虽说不能和专业人员提供的超级编辑命令相媲美，但也能给您带来不少方便。本文利用ObjectARX提供的范例程序(缺省安装<br>
+      ObjectARX SDK后的路径是X:OBJECTARXARXLABSLAB07)进行简单的修改即可实现我们所要求的功能。以下是采用ObjectARX 
+      SDK 2.0，在MSVC 5.0编译环境下测试通过。 <br>
+      ---- 首先我们要修改enttemp.h文件： <br>
+      ---- 原文件如下： <br>
+      class EntTemperature : public AcRxObject<br>
+      {<br>
+      public:<br>
+      ACRX_DECLARE_MEMBERS(EntTemperature);<br>
+      virtual double reflectedEnergy(AcDbEntity* pEnt) const = 0;<br>
+      };<br>
+      将斜体部分修改成如下：<br>
+      virtual Adesk::Boolean HgyModify(AcDbEntity* pEnt) <br>
+      const = 0;<br>
+      ---- 因为我们以后要以EntTemperature作为基类，而且HgyModify函数在继承类中要重写并要求实现动态调用，故此处必须声明为虚拟函数。Virtual关健字即为C++面向对象的重要的特性。 
+      <br>
+      ---- 第二、删除tempapp.def文件中的energy文本。 <br>
+      ---- 第三、修改tempapp.cpp文件： <br>
+      ---- 1、 删除CircleTemperature、RigonTemperature及EllipseTemperature类的所<br>
+      有相关内容。 <br>
+      ---- 2、 修改原文件中如下的内容： <br>
+      class DefaultTemperature : public EntTemperature<br>
+      {<br>
+      public:<br>
+      virtual double reflectedEnergy(AcDbEntity* pEnt) const;<br>
+      };<br>
+      double DefaultTemperature::reflectedEnergy<br>
+      (AcDbEntity* pEnt) const<br>
+      {<br>
+      ads_printf(&quot;<br>
+      This entity has no area, and no reflection.<br>
+      &quot;);<br>
+      return -1.0;<br>
+      }<br>
+      修改后的内容如下：<br>
+      class DefaultTemperature : public EntTemperature<br>
+      {<br>
+      public:<br>
+      virtual Adesk::Boolean HgyModify(AcDbEntity* pEnt) const;<br>
+      };<br>
+      <br>
+      Adesk::Boolean DefaultTemperature::<br>
+      HgyModify(AcDbEntity* pEnt) const<br>
+      {<br>
+      ads_printf(&quot;<br>
+      The entity hasn`t defined, <br>
+      and nothing to be modified.<br>
+      &quot;);<br>
+      return Acad::eOk;<br>
+      }<br>
+      为简单起见，我们只对直线和圆定义超级编辑命令，<br>
+      在此定义有关line和circle类。在tempapp.cpp<br>
+      文件中增加CircleTemperature和LineTemperature类，<br>
+      定义如下：<br>
+      class CircleTemperature : public EntTemperature<br>
+      {<br>
+      public:<br>
+      virtual Adesk::Boolean HgyModify(AcDbEntity* pEnt) const;<br>
+      };<br>
+      <br>
+      Adesk::Boolean<br>
+      CircleTemperature::HgyModify(AcDbEntity* pEnt) const<br>
+      {<br>
+      AcDbCircle *pCircle = AcDbCircle::cast(pEnt);<br>
+      if (!pCircle) {<br>
+      ads_printf(&quot;The entity selected is not a circle<br>
+      &quot;);<br>
+      pEnt- &gt;close();<br>
+      return Acad::eNotImplementedYet;<br>
+      }<br>
+      AcGePoint3d p,q;<br>
+      double r;<br>
+      p=P_TO_P(pCircle- &gt;center());<br>
+      <br>
+      if (getPoint((double*)(&amp;p), &quot;Center Point: &quot;, p)== RTNORM<br>
+      &amp;&amp; ads_getdist((double*)(&amp;p), &quot;Blob radius: &quot;, 
+      &amp;r) == RTNORM)<br>
+      {<br>
+      pCircle- &gt;setCenter(p);<br>
+      pCircle- &gt;setRadius(r);<br>
+      pCircle- &gt;close();<br>
+      }<br>
+      return Acad::eOk;<br>
+      }<br>
+      <br>
+      class LineTemperature : public EntTemperature<br>
+      {<br>
+      public:<br>
+      virtual Adesk::Boolean HgyModify(AcDbEntity* pEnt) const;<br>
+      };<br>
+      <br>
+      Adesk::Boolean<br>
+      LineTemperature::HgyModify(AcDbEntity* pEnt) const<br>
+      {<br>
+      AcDbLine *pLine = AcDbLine::cast(pEnt);<br>
+      if (!pLine) {<br>
+      ads_printf(&quot;The entity selected is not a line.<br>
+      &quot;);<br>
+      pEnt- &gt;close();<br>
+      return eNotImplementedYet;<br>
+      }<br>
+      AcGePoint3d p,q;<br>
+      p= P_TO_P (pLine- &gt;startPoint());<br>
+      <br>
+      if (getPoint ((double*)(&amp;p), &quot;From Point: &quot;, p)== RTNORM<br>
+      &amp;&amp; getPoint((double*)(&amp;p), &quot;To point: &quot;, q) == 
+      RTNORM)<br>
+      {<br>
+      pLine- &gt;setStartPoint(p);<br>
+      pLine- &gt;setEndPoint(q);<br>
+      pLine- &gt;close();<br>
+      }<br>
+      return Acad::eOk;<br>
+      }<br>
+      ---- 如您所见，HgyModify函数也要完全重写。至此我们对CircleTemperature和LineTemperature的定义已经完成。上面P_TO_P()只是一个点对点赋值，getPoint()是自定义的取点函数。 
+      增加全局变量：这样我们在初始化或清除内存过程中可以存取该类。 
+      <br>
+      LineTemperature *pLineTemp;<br>
+      CircleTemperature *pCircleTemp;<br>
+      InitApp()函数中更改部分：<br>
+      acedRegCmds- &gt;addCommand(&quot;TEMPERATURE_APP&quot;, <br>
+      &quot;MODIFY&quot;, &quot;MODIFY&quot;,<br>
+      ACRX_CMD_TRANSPARENT, printEnergy);<br>
+      更改程序中别的函数中的相应的部分。<br>
+      注意printEnergy()函数中selectEntity()<br>
+      函数的第二个参数必须是AcDb::kForWrite；<br>
+      ---- 编译后在AutoCAD(如R14)中测试运行，敲入modify后随便选取直线或圆，您就会能体会到超级编辑命令的方便之处。或许您会认为此命令没有什么特别之处，但若您仔细研究lab10子目录中的内容，定义自己的实体如门、窗或机械特征，特别是您自己才会用<br>
+      到的特殊对象，给对象增加此命令，您就会体会到ARX编程的魅力了。<br>
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

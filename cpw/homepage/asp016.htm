@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0095)http://www.chinabyte.com/staticpages/builder/builder_course/GJBC/builder_course_276_1_GJBC.html -->
+<HTML><HEAD><TITLE>ChinaByte--网络学院--课程</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE type=text/css>.a {
+	FONT-SIZE: 11pt
+}
+.b {
+	FONT-SIZE: 9pt
+}
+</STYLE>
+
+<STYLE type=text/css>A:link {
+	COLOR: #0033cc; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #aaaafc; TEXT-DECORATION: none
+}
+A:active {
+	COLOR: #4444ff; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #ffba75; TEXT-DECORATION: underline
+}
+</STYLE>
+
+<SCRIPT language=javascript1.2 src="asp16.files/open.js"></SCRIPT>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY stylesrc="../index1.htm" background="../res/back.gif">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="home_idx1.htm">主页制作</a>&nbsp; 
+      --&gt; </b></span>动态网站设计十八般武艺——ASP篇(十六)</td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" style="font-size: 9pt">
+      <p align="center"><br>
+      &nbsp; <B>动态网站设计十八般武艺——ASP篇(十六)</B></p>
+      <FONT class=a>
+      <P align=right>作 者 : 天 骄 创 作 室<font size="1">：<a href="mailto:shusheng@pchome.net" style="font-size: 9pt">书 
+      生</a></font> </FONT>
+      <p>　</p>
+      <p><font class="a">什 么 是 ADO 存 取 数 据 库 时 的 分 页 显 
+      示？ 如 果 你 使 用 过 目 前 众 多 网 站 上 的 电 子 公 
+      告 板 程 序 的 话， 那 你 应 该 会 知 道 电 子 公 告 板 
+      程 序 为 了 提 高 页 面 的 读 取 速 度， 一 般 不 会 将 
+      所 有 的 帖 子 全 部 在 一 页 中 罗 列 出 来， 而 是 将 
+      其 分 成 多 页 显 示， 每 页 显 示 一 定 数 目 的 帖 子 
+      数， 譬 如 20 条。 想 不 想 了 解 如 何 实 现 分 页 显 
+      示？ 请 看 本 文！</font></p>
+      <FONT class=a>
+      <P>
+      <P>　 　 《动 态 网 站 设 计 十 八 般 武 艺 --ASP 篇》 一 
+      文 从 第 一 期 至 今 已 和 朋 友 们 一 起 度 过 了 大 
+      半 个 年 头， 相 信 通 过 在 这 一 段 时 间 中 的 学 
+      习、 实 践 到 再 学 习、 再 实 践， 大 家 已 经 能 够 
+      熟 练 运 用 ASP 的 内 建 对 象、 ActiveX 组 件 去 编 写 一 
+      些 基 本 的 ASP 应 用 程 序。 从 我 收 到 的 朋 友 们 的 
+      来 信 中 可 以 明 显 的 感 觉 到， 大 家 的 ASP 功 力 正 
+      不 断 地 提 升。 最 近 很 多 朋 友 来 信 希 望 我 写 一 
+      些 ASP 在 现 实 运 用 中 的 实 例。 因 此， 从 本 期 开 
+      始 我 决 定 将《动 态 网 站 设 计 十 八 般 武 艺 --ASP 
+      篇》 的 定 位 从 介 绍 和 学 习 ASP 基 础 知 识 转 向 到 
+      ASP 实 际 运 行 的 探 讨 和 深 化。 应 朋 友 们 的 要 
+      求， 在 本 期 中 我 将 给 大 家 着 重 谈 一 谈“ADO 存 
+      取 数 据 库 时 如 何 分 页 显 示” 的 问 题。 
+      <P>　　 什 么 是 ADO 存 取 数 据 库 时 的 分 页 显 示？ 
+      如 果 你 使 用 过 目 前 众 多 网 站 上 的 电 子 公 告 
+      板 程 序 的 话， 那 你 应 该 会 知 道 电 子 公 告 板 程 
+      序 为 了 提 高 页 面 的 读 取 速 度， 一 般 不 会 将 所 
+      有 的 帖 子 全 部 在 一 页 中 罗 列 出 来， 而 是 将 其 
+      分 成 多 页 显 示， 每 页 显 示 一 定 数 目 的 帖 子 
+      数， 譬 如 20 条。 这 就 是 数 据 库 查 询 的 分 页 显 
+      示， 如 果 你 还 不 明 白， 去 看 看 yahoo 等 搜 索 引 
+      擎 的 查 询 结 果 就 会 明 白 了。 
+      <P>　　 那 么 究 竟 如 何 才 能 做 到 将 数 据 库 的 查 
+      询 结 果 分 页 显 示 呢？ 其 实 方 法 有 很 多， 但 主 
+      要 有 两 种： 
+      <P>　　 一、 将 数 据 库 中 所 有 符 合 查 询 条 件 的 
+      记 录 一 次 性 的 都 读 入 recordset 中， 存 放 在 内 存 
+      中， 然 后 通 过 ADO Recordset 对 象 所 提 供 的 几 个 专 
+      门 支 持 分 页 处 理 的 属 性： PageSize( 页 大 小 )、 
+      PageCount( 页 数 目 ) 以 及 AbsolutePage( 绝 对 页 ) 来 管 理 
+      分 页 处 理。 
+      <P>　　 二、 根 据 客 户 的 指 示， 每 次 分 别 从 符 
+      合 查 询 条 件 的 记 录 中 将 规 定 数 目 的 记 录 数 
+      读 取 出 来 并 显 示。 
+      <P>　　 两 者 的 主 要 差 别 在 于 前 者 是 一 次 性 将 
+      所 有 记 录 都 读 入 内 存 然 后 再 根 据 指 示 来 依 
+      次 做 判 断 分 析 从 而 达 到 分 页 显 示 的 效 果， 而 
+      后 者 是 先 根 据 指 示 做 出 判 断 并 将 规 定 数 目 
+      的 符 合 查 询 条 件 的 记 录 读 入 内 存， 从 而 直 接 
+      达 到 分 页 显 示 的 功 能。 
+      <P>　　 我 们 可 以 很 明 显 的 感 觉 到， 当 数 据 库 
+      中 的 记 录 数 达 到 上 万 或 更 多 时， 第 一 种 方 法 
+      的 执 行 效 率 将 明 显 低 于 第 二 种 方 法， 因 为 当 
+      每 一 个 客 户 查 询 页 面 时 都 要 将 所 有 符 合 条 
+      件 的 记 录 存 放 在 服 务 器 内 存 中， 然 后 在 进 行 
+      分 页 等 处 理， 如 果 同 时 有 超 过 100 个 的 客 户 在 
+      线 查 询， 那 么 ASP 应 用 程 序 的 执 行 效 率 将 大 受 
+      影 响。 但 是， 当 服 务 器 上 数 据 库 的 记 录 数 以 
+      及 同 时 在 线 的 人 数 并 不 是 很 多 时， 两 者 在 执 
+      行 效 率 上 是 相 差 无 几 的， 此 时 一 般 就 采 用 第 
+      一 种 方 法， 因 为 第 一 种 方 法 的 ASP 程 序 编 写 相 
+      对 第 二 种 方 法 要 简 单 明 了 得 多。 
+      <P>　　 在 这 里 作 者 就 以 我 们 常 见 的 ASP BBS 程 序 
+      为 例， 来 给 大 家 分 析 一 下 如 何 在 BBS 程 序 里 实 
+      现 分 页 显 示 功 能， 由 于 我 们 一 般 使 用 的 BBS 程 
+      序 的 数 据 库 记 录 数 和 同 时 访 问 的 人 数 都 不 
+      会 太 多， 所 以 以 下 程 序 实 例 是 使 用 的 先 前 所 
+      介 绍 的 第 一 种 分 页 显 示 方 法。 
+      <P>　　 进 行 ADO 存 取 数 据 库 时 的 分 页 显 示， 其 
+      实 就 是 对 Recordset 的 记 录 进 行 操 作。 所 以 我 们 
+      首 先 必 须 了 解 Reordset 对 象 的 属 性 和 方 法： 
+      <P>　　 BOF 属 性： 目 前 指 标 指 到 RecordSet 的 第 一 
+      笔。 
+      <P>　　 EOF 属 性： 目 前 指 标 指 到 RecordSet 的 最 后 一 
+      笔。 
+      <P>　　 Move 方 法： 移 动 指 标 到 RecordSet 中 的 某 一 
+      条 记 录。 
+      <P>　　 AbsolutePage 属 性： 设 定 当 前 记 录 的 位 置 是 
+      位 于 哪 一 页 AbsolutePosition 属 性： 目 前 指 标 在 
+      RecordSet 中 的 位 置。 
+      <P>　　 PageCount 属 性： 显 示 Recordset 对 象 包 括 多 少“页” 
+      的 数 据。 
+      <P>　　 PageSize 属 性： 显 示 Recordset 对 象 每 一 页 显 
+      示 的 记 录 数。 
+      <P>　　 RecordCount 属 性： 显 示 Recordset 对 象 记 录 的 总 
+      数。 
+      <P>　　 下 面 让 我 们 来 详 细 认 识 一 下 这 些 重 要 
+      的 属 性 和 方 法 
+      <P>　　 一、 BOF 与 EOF 属 性 
+      <P>　　 通 常 我 们 在 ASP 程 序 中 编 写 代 码 来 检 验 
+      BOF 与 EOF 属 性， 从 而 得 知 目 前 指 标 所 指 向 的 
+      RecordSet 的 位 置， 使 用 BOF 与 EOF 属 性， 可 以 得 知 
+      一 个 Recordset 对 象 是 否 包 含 有 记 录 或 者 得 知 移 
+      动 记 录 行 是 否 已 经 超 出 该 Recordset 对 象 的 范 
+      围。 
+      <P>　　 如： &lt; % if not rs.eof then ... %&gt; 
+      <P>　　 &lt; % if not (rs.bof and rs.eof) %&gt; 
+      <P>　　 若 当 前 记 录 的 位 置 是 在 一 个 Recordset 对 
+      象 第 一 行 记 录 之 前 时， BOF 属 性 返 回 true， 反 之 
+      则 返 回 false。 
+      <P>　　 若 当 前 记 录 的 位 置 是 在 一 个 Recordset 对 
+      象 最 后 一 行 记 录 之 后 时， EOF 属 性 返 回 true， 反 
+      之 则 返 回 false。 
+      <P>　　 BOF 与 EOF 都 为 False： 表 示 指 标 位 于 RecordSet 
+      的 当 中。 
+      <P>　　 BOF 为 True： 目 前 指 标 指 到 RecordSet 的 第 一 
+      笔 记 录。 EOF 为 True： 目 前 指 标 指 到 RecordSet 的 最 
+      后 一 笔 记 录。 
+      <P>　　 BOF 与 EOF 都 为 True： 在 RecordSet 里 没 有 任 何 
+      记 录。 
+      <P>　　 二、 Move 方 法 
+      <P>　　 您 可 以 用 Move 方 法 移 动 指 标 到 RecordSet 中 
+      的 某 一 笔 记 录， 语 法 如 下： 
+      <P>　　 rs.Move NumRecords,Start 
+      <P>　　 这 里 的“rs” 为 一 个 对 象 变 量， 表 示 一 
+      个 想 要 移 动 当 当 前 记 录 位 置 的 Recordset 对 象；“NumRecords” 
+      是 一 个 正 负 数 运 算 式， 设 定 当 前 记 录 位 置 的 
+      移 动 数 目；“start” 是 一 个 可 选 的 项 目， 用 来 
+      指 定 记 录 起 始 的 标 签。 
+      <P>　　 所 有 的 Recordset 对 象 都 支 持 Move 方 法， 如 
+      果 NumRecords 参 数 大 于 零， 当 前 记 录 位 置 向 末 尾 
+      的 方 向 移 动； 如 果 其 小 于 零， 则 当 前 记 录 位 
+      置 向 开 头 的 方 向 移 动； 如 果 一 个 空 的 Recordset 
+      对 象 调 用 Move 方 法， 将 会 产 生 一 个 错 误。 
+      <P>　　 MoveFirst 方 法： 将 当 前 记 录 位 置 移 至 第 一 
+      笔 记 录。 
+      <P>　　 MoveLast 方 法： 将 当 前 记 录 位 置 移 至 最 后 
+      一 笔 记 录。 
+      <P>　　 MoveNext 方 法： 将 当 前 记 录 位 置 移 至 下 一 
+      笔 记 录。 MovePrevious 方 法： 将 当 前 记 录 位 置 移 至 
+      上 一 笔 记 录。 
+      <P>　　 Move [n] 方 法： 移 动 指 标 到 第 n 笔 记 录， n 
+      由 0 算 起。 
+      <P>　　 三、 AbsolutePage 属 性 
+      <P>　　 AbsolutePage 属 性 设 定 当 前 记 录 的 位 置 是 位 
+      于 哪 一 页 的 页 数 编 号； 使 用 PageSize 属 性 将 
+      Recordset 对 象 分 割 为 逻 辑 上 的 页 数， 每 一 页 的 
+      记 录 数 为 PageSize( 除 了 最 后 一 页 可 能 会 有 少 于 
+      PageSize 的 记 录 数 )。 这 里 必 须 注 意 并 不 是 所 有 
+      的 数 据 提 供 者 都 支 持 此 项 属 性， 因 此 使 用 时 
+      要 小 心。 
+      <P>　　 与 AbsolutePosition 属 性 相 同， AbsolutePage 属 性 是 
+      以 1 为 起 始 的， 若 当 前 记 录 为 Recordset 的 第 一 行 
+      记 录， AbsolutePage 为 1。 可 以 设 定 AbsolutePage 属 性， 
+      以 移 动 到 一 个 指 定 页 的 第 一 行 记 录 位 置。 
+      <P>　　 四、 AbsolutePosition 属 性 
+      <P>　　 若 您 需 要 确 定 目 前 指 标 在 RecordSet 中 的 
+      位 置， 您 可 以 用 AbsolutePosition 属 性。 
+      <P>　　 AbsolutePosition 属 性 的 数 值 为 目 前 指 标 相 对 
+      於 第 一 笔 的 位 置， 由 1 算 起， 即 第 一 笔 的 
+      AbsolutePosition 为 1。 
+      <P>　　 注 意 , 在 存 取 RecordSet 时， 无 法 保 证 RecordSet 
+      每 次 都 以 同 样 的 顺 序 出 现。 
+      <P>　　 若 要 启 用 AbsolutePosition， 必 须 先 设 定 为 使 
+      用 用 户 端 cursor( 指 针 )， asp 码 如 下： 
+      <P>　　 rs2.CursorLocation = 3 
+      <P>　　 五、 PageCount 属 性 
+      <P>　　 使 用 PageCount 属 性， 决 定 Recordset 对 象 包 括 
+      多 少“页” 的 数 据。 这 里 的“页” 是 数 据 记 录 
+      的 集 合， 大 小 等 于 PageSize 属 性 的 设 定， 即 使 最 
+      后 一 页 的 记 录 数 比 PageSize 的 值 少， 最 后 一 页 
+      也 算 是 PageCount 的 一 页。 必 须 注 意 也 并 不 是 所 
+      有 的 数 据 提 供 者 都 支 持 此 项 属 性。 
+      <P>　　 六、 PageSize 属 性 
+      <P>　　 PageSize 属 性 是 决 定 ADO 存 取 数 据 库 时 如 何 
+      分 页 显 示 的 关 键， 使 用 它 就 可 以 决 定 多 少 记 
+      录 组 成 一 个 逻 辑 上 的“一 页”。 设 定 并 建 立 
+      一 个 页 的 大 小， 从 而 允 许 使 用 AbsolutePage 属 性 
+      移 到 其 它 逻 辑 页 的 第 一 条 记 录。 PageSize 属 性 
+      能 随 时 被 设 定。 
+      <P>　　 七、 RecordCount 属 性 
+      <P>　　 这 也 是 一 个 非 常 常 用 和 重 要 的 属 性， 
+      我 们 常 用 RecordCount 属 性 来 找 出 一 个 Recordset 对 象 
+      包 括 多 少 条 记 录。 如： &lt; % totle=RS.RecordCount %&gt; 
+      <P>　　 在 了 解 了 Recordset 对 象 的 以 上 属 性 和 方 
+      法 后， 我 们 来 考 虑 一 下， 如 何 运 用 它 们 来 达 
+      到 我 们 分 页 显 示 的 目 的。 首 先， 我 们 可 以 为 
+      PageSize 属 性 设 置 一 个 值， 从 而 指 定 从 记 录 组 
+      中 取 出 的 构 成 一 个 页 的 行 数； 然 后 通 过 
+      RecordCount 属 性 来 确 定 记 录 的 总 数； 再 用 记 录 总 
+      数 除 以 PageSize 就 可 得 到 所 显 示 的 页 面 总 数； 
+      最 后 通 过 AbsolutePage 属 性 就 能 完 成 对 指 定 页 的 
+      访 问。 好 象 很 并 不 复 杂 呀， 下 面 让 我 们 来 看 
+      看 程 序 该 如 何 实 现 呢？ 
+      <P>　　 我 们 建 立 这 样 一 个 简 单 的 BBS 应 用 程 
+      序， 它 的 数 据 库 中 分 别 有 以 下 五 个 字 段：“ID”， 
+      每 个 帖 子 的 自 动 编 号；“subject”， 每 个 帖 子 的 
+      主 题；“name”， 加 帖 用 户 的 姓 名；“email”， 用 
+      户 的 电 子 邮 件 地 址；“postdate”， 加 帖 的 时 间。 
+      数 据 库 的 DSN 为“bbs”。 我 们 将 显 示 帖 子 分 页 
+      的 所 有 步 骤 放 在 一 个 名 为“ShowList()” 的 过 程 
+      中， 方 便 调 用。 程 序 如 下： 
+      <P><BR>'----BBS 显 示 帖 子 分 页----<BR>&lt; % Sub ShowList() %&gt;<BR>&lt; 
+      %<BR>PgSz=20 '设定开关，指定每一页所显示的帖子数目，默认为20帖一页<BR>Set 
+      Conn = Server.CreateObject(&quot;ADODB.Connection&quot;)<BR>Set RS = 
+      Server.CreateObject(&quot;ADODB.RecordSet&quot;)<BR>sql = &quot;SELECT * 
+      FROM message order by ID DESC&quot;<BR>'查询所有帖子，并按帖子的ID倒序排列<BR>Conn.Open 
+      &quot;bbs&quot;<BR>RS.open sql,Conn,1,1<BR>If RS.RecordCount=0 then<BR>response.write 
+      &quot;&lt; P&gt;&lt; center&gt;对不起，数据库中没有相关信息！&lt; 
+      /center&gt;&lt; /P&gt;&quot;<BR>else<BR>RS.PageSize = Cint(PgSz) '设定PageSize属性的值<BR>Total=INT(RS.recordcount 
+      / PgSz * -1)*-1 '计算可显示页面的总数<BR>PageNo=Request(&quot;pageno&quot;)<BR>if 
+      PageNo=&quot;&quot; Then<BR>PageNo = 1<BR>else<BR>PageNo=PageNo+1<BR>PageNo=PageNo-1<BR>end 
+      if<BR>ScrollAction = Request(&quot;ScrollAction&quot;)<BR>if ScrollAction 
+      = &quot; 上一页 &quot; Then<BR>PageNo=PageNo-1<BR>end if<BR>if 
+      ScrollAction = &quot; 下一页 &quot; Then<BR>PageNo=PageNo+1<BR>end if<BR>if 
+      PageNo &lt; 1 Then <BR>PageNo = 1<BR>end if<BR>n=1<BR>RS.AbsolutePage = 
+      PageNo<BR>Response.Write &quot;&lt; CENTER&gt;&quot;<BR>position=RS.PageSize*PageNo<BR>pagebegin=position-RS.PageSize+1<BR>if 
+      position &lt; RS.RecordCount then<BR>pagend=position<BR>else <BR>pagend= 
+      RS.RecordCount<BR>end if <BR>Response.Write &quot;&lt; P&gt;&lt; font 
+      color='Navy'&gt;&lt; B&gt;数 据 库 查 询 结 果:&lt; /B&gt;&quot;<BR>Response.Write 
+      &quot;(共有&quot;&amp;RS.RecordCount &amp;&quot;条符合条件的信息,显示&quot;&amp;pagebegin&amp;&quot;-&quot;&amp;pagend&amp;&quot;)&lt; 
+      /font&gt;&lt; /p&gt;&quot;<BR>Response.Write &quot;&lt; TABLE WIDTH=600 
+      BORDER=1 CELLPADDING=4 CELLSPACING=0 BGCOLOR=#FFFFFF&gt;&quot;<BR>Response.Write 
+      &quot;&lt; TR BGCOLOR=#5FB5E2&gt;&lt; FONT SIZE=2&gt;&lt; TD&gt;&lt; B&gt;主 
+      题&lt; /B&gt;&lt; /TD&gt;&lt; TD&gt;&lt; B&gt;用 户&lt; /B&gt;&lt; 
+      /TD&gt;&lt; TD&gt;&lt; B&gt;Email&lt; /B&gt;&lt; /TD&gt;&lt; TD&gt;&lt; 
+      B&gt;发 布 日 期&lt; /B&gt;&lt; /TD&gt;&lt; /FONT&gt;&lt; TR 
+      BGCOLOR=#FFFFFF&gt;&quot;<BR>Do while not (RS is nothing) <BR>RowCount = 
+      RS.PageSize<BR>Do While Not RS.EOF and rowcount &gt; 0 <BR>If n=1 then<BR>Response.Write 
+      &quot;&lt; TR BGCOLOR=#FFFFFF&gt;&quot;<BR>ELSE<BR>Response.Write 
+      &quot;&lt; TR BGCOLOR=#EEEEEE&gt;&quot;<BR>End If<BR>n=1-n %&gt;<BR>&lt; 
+      TD&gt;&lt; span style=&quot;font-size:9pt&quot;&gt;&lt; A 
+      href='view.asp?key=&lt; % =RS(&quot;ID&quot;)%&gt;'&gt;&lt; % 
+      =RS(&quot;subject&quot;)%&gt;&lt; /A&gt;&lt; /span&gt;&lt; /td&gt; <BR>&lt; 
+      TD&gt;&lt; span style=&quot;font-size:9pt&quot;&gt;&lt; % 
+      =RS(&quot;name&quot;)%&gt;&lt; /A&gt;&lt; /span&gt;&lt; /td&gt; <BR>&lt; 
+      TD&gt;&lt; span style=&quot;font-size:9pt&quot;&gt;&lt; a 
+      href=&quot;mailto:&lt; % =RS(&quot;email&quot;)%&gt;&quot;&gt;&lt; % 
+      =RS(&quot;email&quot;)%&gt;&lt; /a&gt;&lt; /span&gt;? /TD&gt;<BR>&lt; 
+      TD&gt;&lt; span style=&quot;font-size:9pt&quot;&gt;&lt; % 
+      =RS(&quot;postdate&quot;)%&gt;&lt; /span&gt;? /td&gt;<BR>&lt; /TR&gt;<BR>&lt; 
+      %<BR>RowCount = RowCount - 1<BR>RS.MoveNext<BR>Loop<BR>set RS = 
+      RS.NextRecordSet<BR>Loop<BR>Conn.Close<BR>set rs = nothing<BR>set Conn = 
+      nothing<BR>%&gt;<BR>&lt; /TABLE&gt;<BR>&lt; FORM METHOD=GET 
+      ACTION=&quot;list.asp&quot;&gt;<BR>&lt; INPUT TYPE=&quot;HIDDEN&quot; 
+      NAME=&quot;pageno&quot; VALUE=&quot;&lt; % =PageNo %&gt;&quot;&gt;<BR>&lt; 
+      % <BR>if PageNo &gt; 1 Then 
+      <BR>response.write &quot;&lt; INPUT TYPE=SUBMIT NAME='ScrollAction' 
+      VALUE=' 上一页 '&gt;&quot;<BR>end if <BR>if RowCount = 0 and PageNo 
+      &lt; &gt;Total then 
+      <BR>response.write &quot;&lt; INPUT TYPE=SUBMIT NAME='ScrollAction' 
+      VALUE=' 下一页 '&gt;&quot;<BR>end if <BR>response.write &quot;&lt; 
+      /FORM&gt;&quot;<BR>End if<BR>%&gt;<BR>&lt; % End Sub %&gt;<BR><BR>
+      <P>　　 相 信 大 家 都 应 该 能 完 全 读 懂 上 面 的 程 
+      序， 因 此 作 者 就 不 在 此 详 细 解 释 了。 值 得 注 
+      意 的 是 在 这 段 程 序 中 运 用 了 一 个 小 技 巧 &lt; 
+      INPUT TYPE=&quot;HIDDEN&quot; NAME=&quot;pageno&quot; VALUE=&quot;&lt; % 
+      =PageNo %&gt;&quot;&gt;， 这 是 用 来 在 每 次 调 用 该 ASP 文 
+      件 时 传 递 数 据 的“暗 道”， 由 于 我 们 需 要 在 
+      每 次 调 用 程 序 时 传 递 代 表 当 前 页 码 的 参 数， 
+      可 能 大 家 会 想 到 使 用 session， 但 是 从 节 省 系 统 
+      资 源 和 通 用 性 来 讲， 用 这 样 一 个 隐 藏 的 form 
+      来 传 递 数 据 将 会 达 到 更 好 的 效 果。 
+      <P>　　 好 了， 又 到 了 说 再 见 的 时 候 了， 如 果 
+      你 没 完 全 看 懂 本 篇 中 所 列 的 程 序， 那 你 必 须 
+      加 把 油， 看 一 看 VbScript 的 语 法； 如 果 你 还 有 某 
+      些 疑 问， 可 以“妹 儿” 我， 我 将 尽 力 解 答； 如 
+      果 你 有 什 么 更 好 的 建 议 也 千 万 要 来 信 告 诉 
+      我 哦 :) 
+      <P>（未 完 待 续） </FONT>
+      <p>　</p>
+    </td>
+  </tr>
+</table>
+</center></div>
+</BODY></HTML>

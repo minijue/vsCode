@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>CSS 第四节</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="home_idx.htm">主页制作</a> 
+    &gt;</b> CSS 第四节: CSS 控制文字定位</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><b>CSS 第四节: CSS 
+    控制文字定位</b></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<p>这一节我们将讨论如何用 CSS 来控制网页中文字定位, 
+    这些性质是 <ul>
+      <li>line-height: 行距 </li>
+      <li>text-align: 向那个方向看齐 </li>
+      <li>vertical-align: 向上还是向下看齐 </li>
+      <li>text-indent: 段落第一行空格 </li>
+      <li>text-transform: 字母的大小写 </li>
+      <li>text-decoration: 给文字加装饰, 比如下滑线 </li>
+    </ul>
+    <h3>行距</h3>
+    <p>我们有时候可能会想把行距加大点使得文字看的清楚一些. CSS <br>
+    中的 line-height 可以取得这种调节 </p>
+    <pre>
+  P.double {line-height: 2}
+</pre>
+    <p>请看下面的比较. </p>
+    <table border="0" cellspacing="8" cellpadding="1" width="500">
+      <tr>
+        <td bgcolor="666666"><table border="0" cellspacing="0" cellpadding="6" width="100%"
+        bgcolor="ffffcc">
+          <tr>
+            <td bgcolor="#FFFFCC">这 一 段 的 行 距 是 正常 的. 这 一 段 的 行 距 是 
+            正常 的. 这 一 段 的 行 距 是 正常 的. 这 一 段 的 行 距 是 正常 的. 
+            <p class="double">这 一 段 的 行 距 是 双 倍 的. 这 一 段 的 行 距 是 双 
+            倍 的. 这 一 段 的 行 距 是 双 倍 的. 这 一 段 的 行 距 是 双 倍 的. 
+            </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <p>你要让 line-height 等于 3 的话, 那行距就更大了. </p>
+    <h3>看齐</h3>
+    <p>一般来说我们都是向左边看齐. 但有的时候也有其他的选择, <br>
+    比如说向右边看齐. </p>
+    <pre>
+    P.right {text-align: right}
+    P.center {text-align: center}
+    P.justify {text-align: justify}
+</pre>
+    <p>请看下面的比较. </p>
+    <table border="0" cellspacing="8" cellpadding="1" width="500">
+      <tr>
+        <td bgcolor="666666"><table border="0" cellspacing="0" cellpadding="6" width="100%"
+        bgcolor="ffffcc">
+          <tr>
+            <td bgcolor="#FFFFCC">这 一 行 左 边 看 齐 <p class="right">这 一 行 右 边 看 
+            齐 </p>
+            <p class="center">这 一 行 在 中 间 </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <p>text-align 可以有 left, right, center, 和 justify </p>
+    <h3>段落的首行空格</h3>
+    <p>如果我们想让第一行的开头空几格, 可以用 text-indent, 比如 </p>
+    <pre>
+  P {text-indent: 1cm}
+</pre>
+    <p>请看下面的例子. </p>
+    <table border="0" cellspacing="8" cellpadding="1" width="500">
+      <tr>
+        <td bgcolor="666666"><table border="0" cellspacing="0" cellpadding="6" width="100%"
+        bgcolor="ffffcc">
+          <tr>
+            <td bgcolor="#FFFFCC"><p class="indent">这 一 段 开 头 空 了 1 厘 米. 这 一 段 
+            开 头 空 了 1 厘 米. 这 一 段 开 头 空 了 1 厘 米. 这 一 段 开 头 空 
+            了 1 厘 米. </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <h3>字母的大小写</h3>
+    <p>这个性质显然跟中文没关系, 但如果我们要处理英文, 你可以<br>
+    用 text-transform 来改变英文的大小写. 比如, 让每个字的<br>
+    第一个字母大写 </p>
+    <pre>
+    P.capitalize {text-transform: capitalize}
+    P.up {text-transform: uppercase}
+    P.low {text-transform: lowercase}
+</pre>
+    <p>请看下面的比较. </p>
+    <table border="0" cellspacing="8" cellpadding="1" width="500">
+      <tr>
+        <td bgcolor="666666"><table border="0" cellspacing="0" cellpadding="6" width="100%"
+        bgcolor="ffffcc">
+          <tr>
+            <td bgcolor="#FFFFCC"><p class="capitalize">All the words' first letter have been 
+            capitalized in this line</p>
+            <p class="up">All the letters are uppercase in this line</p>
+            <p class="low">All the letters are lowercase in this line</td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <h3>文字的装饰</h3>
+    <p>就是在文字上加下滑线, 或中间加条线的. 比如 </p>
+    <pre>
+    P.underline {text-decoration: underline}
+    P.line-through {text-decoration: line-through}
+</pre>
+    <p>请看下面的比较. </p>
+    <table border="0" cellspacing="8" cellpadding="1" width="500">
+      <tr>
+        <td bgcolor="666666"><table border="0" cellspacing="0" cellpadding="6" width="100%"
+        bgcolor="ffffcc">
+          <tr>
+            <td bgcolor="#FFFFCC"><p class="underline">Underline line</p>
+            <p class="line-through">line-through line</td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <p>其实最常用的是我们想去掉联接下面的下滑线. </p>
+    <pre>
+  A {text-decoration: none}
+</pre>
+    <p align="center"><a href="css3.htm">上一节</a></p>
+    <p align="right">本教程转自<a href="http://www.chinajinyang.com/yl/yl.htm"
+    target="_blank">雨菲软件园</a> </td>
+  </tr>
+</table>
+</body>
+</html>

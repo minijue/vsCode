@@ -1,0 +1,384 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title></title>
+</head>
+
+<body bgcolor="#8080C0">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="Vcidx098.htm">Visual 
+    C++/C++</a>--&gt;</b> <font color="#000000">MFC邮递表的中文翻译(第三十二期)</font></span></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<h2 align="center"><font color="#000000"><span style="font-size: 9pt">MFC邮递表的中文翻译</span></font></h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;我是一名mfc程序设计的爱好者,订阅了mfc的maillist,利用业余时间 
+    将它翻译出来,希望能对mfc编程的朋友有所帮助,请朋友们指正.<br>
+    </p>
+    <h3><font color="#FF0000">第三十二期目录</font> <font size="2">杨晓东 1999.3.7</font></h3>
+    <ol>
+      <li><a href="#volq1">WM_LBUTTONDOWN消息</a> </li>
+      <li><a href="#volq2">窗口滚动条</a> </li>
+      <li><a href="#volq3">菜单问题</a> </li>
+      <li><a href="#volq4">ShowWindow()函数</a> </li>
+      <li><a href="#volq5">关闭属性页的帮助</a> </li>
+      <li><a href="#volq6">怎样才能改变光标?</a> </li>
+      <li><a href="#volq7">怎样才能得知当MDI的一个文档关闭了</a> </li>
+      <li><a href="#volq8">数据转换</a> </li>
+    </ol>
+    <p><a name="volq1"></a></p>
+    <p><br>
+    </p>
+    <font color="Red"><h3>WM_LBUTTONDOWN消息</h3>
+    </font><p>问:一个SDI程序中在视里,消息WM_LBUTTONDOWN将视中的内容作一下翻转,但问题 
+    是当我快速按鼠标时总是不能得到正确的WM_LBUTTONDOWN消息.(从spy中看到)<br>
+    &nbsp;&nbsp;&nbsp;我认为问题可能出在重画代码太慢，但我放入了一个空状态，依然没有解决。<br>
+    &nbsp;&nbsp;&nbsp;难道说为一个标准输入设备，我必须实时检测鼠标?</p>
+    <p>答:1)你能保证那些快速击打没有解释成双击？<br>
+    &nbsp;&nbsp;&nbsp;2)当你快速单击鼠标时，你会得到如下消息WM_LBUTTONDOWN, 
+    WM_LBUTTONUP, WM_LBUTTONDBLCLICK, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_LBUTTONDBLCLICK. (这是4次单击的结果).要么你进入控制面板将鼠标的双击调至最快,要么你就不 
+    要击打的这么快. <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq2"></a><br>
+    </p>
+    <font color="Red"><h3>窗口滚动条</h3>
+    </font><p>问:为什么我移动滑动块时没有相应的动作?比如,滑动块总是在最上面,看起来好象 
+    WM_VSCROLL消息没有发送,或者函数OnVScroll()没有收到该消息.</p>
+    <p>答:VC文档CWnd类说明中指出:&quot;CWnd同样也能使你的程序中建立一个新的子窗口.从CWnd 
+    中继承一个类,加入成员变量,用以保存你程序中自定义的数据.并加入消息处理函数,用 
+    以处理直接发向窗口的特定的消息. ...&quot;<br>
+    &nbsp;&nbsp;试一下加入一个继承于CWnd的新类(比如 CMyWnd),在这个类中声明一个成员变量 
+    int vpos和建立一个对WM_VSCROLL (CMyWnd::OnVScroll)的消息映象,把&quot;OnVScroll()&quot; 
+    的所有处理加进去.<br>
+    &nbsp;&nbsp;函数showGraph()将由你的视类调用,在一开始,视类窗口被建立,然后初始化一些成员 
+    变量.<br>
+    </p>
+    <pre>  win = new CMyWnd;
+  win-&gt;Create(...)</pre>
+    <p>你同样也能初始化vpos变量.相信会对你有所帮助.<br>
+    2)看看你的源程序: </p>
+    <pre>void CView::showGraph()
+{
+ vpos = 0; //global variable
+ RECT r;
+ r.top = 50; r.left = 50;
+ r.bottom = r.right = 400;
+ win = new CWnd(); //win is a global pointer to CWnd
+ win-&gt;Create(NULL,&quot; &quot;,WS_BORDER|WS_VISIBLE|
+		    WS_VSCROLL, r,this,111,NULL);
+ win-&gt;SetScrollRange(SB_VERT,0,RANGEMAX);
+}
+
+void CView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+ if (pScrollBar)
+  return;
+ switch(nSBCode)
+ {
+ case SB_PAGEDOWN:
+  vpos += 10;
+  if (vpos &gt; RANGEMAX)
+   vpos = RANGEMAX;
+  break;
+ case SB_PAGEUP:
+  vpos -= 10;
+  if (vpos <0) vpos="0;" break; } win->SetScrollPos(SB_VERT, vpos);
+}</pre>
+    <p>好象有件事情你忘记处理了,那就是在程序中没有初始化滚动条(即没有指定滑动块的 
+    位置),这可能是一切问题的源头. <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq3"></a><br>
+    </p>
+    <font color="Red"><h3>菜单问题</h3>
+    </font><p>问:当鼠标右键单击用户区域时会出现一个上下文敏感的菜单.有什么方法可以取得菜单 
+    弹出时所在屏幕的位置(x,y坐标)?</p>
+    <p>答:我是在OnRButtomDown(UINT nFlags,CPoint point)消息句柄中处理的,X,Y的坐标 
+    取自鼠标点击的位置.<br>
+    </p>
+    <pre>void MyWindow::OnRButtonDown(UINT nFlags, CPoint point)
+{
+    CPoint ScreenPoint;
+    //calculate where the menu should appear, in SCREEN COORDINATES
+    //计算在整个屏幕上的位置,否则点的位置是指用户区域的位置
+    ScreenPoint = point;
+    ClientToScreen(&amp;ScreenPoint);
+
+    UINT CommandId = 0;
+    CMenu MyContextMenu;
+    MyContextMenu.CreatePopupMenu();
+    MyContextMenu.AppendMenu(MF_STRING, ++CommandId, &quot;Command1&quot;);
+    MyContextMenu.AppendMenu(MF_STRING, ++CommandId, &quot;Command2&quot;);
+    MyContextMenu.AppendMenu(MF_STRING, ++CommandId, &quot;Command3&quot;);
+    MyContextMenu..AppendMenu(MF_STRING, ID_SEPARATOR); //to get separator line
+    MyContextMenu.AppendMenu(MF_STRING, ++CommandId, &quot;Command4&quot;);
+    //... (Append as many commands as you like)
+    //指定菜单的类型.
+    UINT Command = (UINT)
+MyContextMenu.TrackPopupMenu(TPM_LEFTALIGN|TPM_NONOTIFY | TPM_RETURNCMD,
+ScreenPoint.x, ScreenPoint.y, pParentWnd);
+    //使用TPM_NONOTIFY | TPM_RETURNCMD返回被选择的菜单命令,0代表没有(比如
+    //点击菜单外面)
+    //using TPM_NONOTIFY | TPM_RETURNCMD returns the chosen command, 0
+for no command (e.g. clicking outside the context menu)
+    //如果你不加入这两个类型,你的父窗口将会从你选的命令中收到WM_COMMAND消息
+    //if you don't use these two styles, your pParentWnd gets WM_COMMAND
+messages for the chosen commands
+
+    MyContextMenu.DestroyMenu();
+
+    //switch is only necessary if you use TPM_NONOTIFY | TPM_RETURNCMD !
+    //switch只在你使用两种类型时才有必要.
+    switch(Command)
+    {
+    case 0:
+	//no command, so do nothing
+	//没有命令,所以不必做任何事情.
+	break;
+    case 1:
+	//whatever
+	break;
+    case 2:
+	//whatever
+	break;
+    case 3:
+	//whatever
+	break;
+    case 4:
+	//whatever
+	break;
+    //... there should be one case for each command
+    default:
+	//just in case I forget to implement a command
+	ASSERT(0);
+	break;
+    }
+}</pre>
+    <p>&nbsp;&nbsp;2)还可以处理WM_CONTEXTMENU消息,它能解决上述问题. <a
+    href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq4"></a><br>
+    </p>
+    <font color="Red"><h3>ShowWindow()函数</h3>
+    </font><p>问:我通过Create(ID...,this)命令从formView视类中建立了一个对话框,我想在 
+    我点击对话框外面时自动关闭它,所以我在对话框OnKillFocus消息中使用命令 
+    ShowWindow(FALSE),但它只有在对话框没有任何控件时才能正常,如果我任意加入 
+    一个控件,那么就不能关闭了.</p>
+    <p>答:试试下面的代码,原理是在激活对话框时,捕获鼠标的动作,当鼠标点击时判断 
+    是否点击在对话框外,是的话就释放对话框.<br>
+    </p>
+    <pre>//定义消息映象,处理鼠标单击及激活
+BEGIN_MESSAGE_MAP(CSmallDlg, CDialog)
+    //{{AFX_MSG_MAP(CSmallDlg)
+    ON_WM_LBUTTONDOWN()
+    ON_WM_ACTIVATE()
+    //}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+void CSmallDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+    CRect rect;
+    GetClientRect(&amp;rect);
+    rect.InflateRect(m_cxBorder, m_cyBorder);
+
+    //Release dialog if the user click outside it.
+    if(!rect.PtInRect(point))
+    {
+       EndDialog(IDCANCEL);
+    }
+
+    CDialog::OnLButtonDown(nFlags, point);
+}
+
+void CSmallDlg::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+    CDialog::OnActivate(nState, pWndOther, bMinimized);
+
+    if( nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
+	    SetCapture();
+    else
+	    ReleaseCapture();
+}
+
+BOOL CSmallDlg::OnInitDialog()
+{
+    CDialog::OnInitDialog();
+
+     m_cxBorder = 4;
+     m_cyBorder = 4;
+
+    //SM_CXDLGFRAME,SM_CYDLGFRAME   NT中取得有WS_DLGFRAMEstyle风格的窗口的高和宽
+    //                              95中已经废弃而采用SM_CX_FIXEDFRAME和SM_CYFIXEDFRAME
+
+    OSVERSIONINFO info;
+    memset((char*)&amp;info, 0, sizeof(OSVERSIONINFO));
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if(GetVersionEx(&amp;info))
+    {  //we don't run on Win32s, so check only two values
+       if(info.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
+       { //On windows 95
+	 m_cxBorder = GetSystemMetrics(SM_CXFIXEDFRAME);
+	 m_cyBorder = GetSystemMetrics(SM_CYFIXEDFRAME);
+       }
+       else
+       { //On NT
+	 m_cxBorder = GetSystemMetrics(SM_CXDLGFRAME);
+	 m_cyBorder = GetSystemMetrics(SM_CYDLGFRAME);
+       }
+    }
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq5"></a><br>
+    </p>
+    <font color="Red"><h3>关闭属性页的帮助</h3>
+    </font><p>问:有一个属性页,我不想用帮助屏幕而移去帮助按钮.</p>
+    <p>答:移去一个标准的按钮你可以OnInitDialog函数中加入以下代码<br>
+    </p>
+    <pre>CWnd* pWnd = GetDlgItem(id);
+if (pWnd){
+    pWnd-&gt;ShowWindow(FALSE);
+}</pre>
+    <p>这里ID是指下面几种:IDOK, IDCANCEL, IDHELP, ID_APPLY_NOW 比如:移去去所有除了OK外的按钮 
+    </p>
+    <pre>BOOL CYourSheet::OnInitDialog(){
+    BOOL bResult = CPropertySheet::OnInitDialog();
+
+    int ids[] = {ID_APPLY_NOW, IDCANCEL};
+    for (int i = 0; i <sizeof ids / sizeof ids[0]; i++){ CWnd* pWnd="GetDlgItem(ids[i]);" if (pWnd){ pWnd->ShowWindow(FALSE);
+        }
+    }
+    return bResult;
+}</pre>
+    <p>&nbsp;&nbsp;2)去除所有属性页中的帮助按钮,你必须设置每个页的标志.比如: 
+    mypage.m_psp.dwFlags &amp;= ~PSP_HASHELP; // for each page. <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq6"></a><br>
+    </p>
+    <font color="Red"><h3>怎样才能改变光标?</h3>
+    </font><p>问:我开发了一个小的应用程序,其中我想将光标改变为一个用户定义的光标,转换是 
+    由用户通过菜单来选择的,为了达到这个目的,我采用了如下步骤1.在PreCreateWindow 
+    中定义了一个hCursor成员变量,并置为空 2.程序的菜单对应函数中,我调用LoadCursor() 
+    和SetCursor(),但光标仍然没有改变.为什么?</p>
+    <p>答:试一下处理WM_SETCURSOR消息: </p>
+    <pre>afx_msg void CMyWindow::OnSetCursor()
+{
+    HCURSOR hCursor = NULL;
+    switch ( cursor )
+    {
+        case arrow:
+            hCursor == AfxGetApp()-&gt;LoadCursor( IDC_MyArrow)
+            break;
+        ...
+    }
+    if ( hCursor != NULL )
+    {
+            ::SetCursor( hCursor )
+            return;
+    }
+
+    CBaseWindowClass::OnSetCursor();
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq7"></a><br>
+    </p>
+    <font color="Red"><h3>怎样才能得知当MDI的一个文档关闭了</h3>
+    </font><p>问:我已经调用了SetModifiedFlag()方法,但为什么在用户关闭文档窗口时仍然没有 
+    方法得知,如果我等到OnCloseDocument()时已经晚了,虽然我设置了标志,但它在改 
+    变时依然没有任何提示,谁能帮助我?</p>
+    <p>答:1)只要用户有所改动就马上调用SetModifiedFlag()函数,多次调用完全没有性能 
+    上的问题.不要等到关闭开始时才调用SetModifiedFlag().<br>
+    2)当用户改动了文档时,在视类中调用&quot;GetDocument()-&gt;SetModifiedFlag(TRUE)&quot;. 
+    例如,如果在视中有一个CEdit控件,加入一个对消息ON_EN_CHANGE的自定义函数(不防 
+    设为OnEditChange()),在这个函数里你就可以调用SetModifiedFlag(). 
+    现在无论用户 什么时候关闭计算机都可以询问是否保存.<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq8"></a><br>
+    </p>
+    <font color="Red"><h3>数据转换</h3>
+    </font><p>问:我在将双精度转为整数时碰上了一个奇怪的事情,这是部分代码: 
+    </p>
+    <pre> m_barradose.Seek((UINT)(m_dosenum * 10));
+ Write_serial(0x01, Hex_to_dec((UINT)(m_dosenum * 10)));
+ m_dose_disp_box.SetModify(0);
+ UpdateData(FALSE);</pre>
+    <p>其中 m_dosenum是双精度类型变量,由一个微调控件控制,其中增大/减少步长为0.1. 
+    因此m_dosenum于0.0开始,然后为0.1, 0.2, 0.3, 0.4,... 等等. 
+    我用调试器跟踪了下列式子的结果, </p>
+    <pre>m_dosenum = 0.70000000000000
+(m_dosenum * 10) = 7.0000000000000
+((UINT)(m_dosenum * 10)) = 7
+....</pre>
+    <p>在增加了一个步长后: </p>
+    <pre>m_dosenum = 0.80000000000000
+(m_dosenum * 10) = 8.0000000000000
+((UINT)(m_dosenum * 10)) = 7</pre>
+    <p>我真的弄不懂为什么最后一个式子没有变化.有趣的是如果将m_dosenum增至0.9,然 
+    后再减至0.8,那么会显示出正确的结果,有谁能告诉我哪儿错了?</p>
+    <p>答:<ul>
+      <li>这就是著名的浮点运算错误,如果你仔细观察,就会发现'正确'的0.8事实上还是 
+        有一个很小的误差.如果你圆整一下数据,就不会出错了.<br>
+        <pre>((UINT)((m_dosenum + 0.05) * 10))</pre>
+      </li>
+      <li>欢迎来到奇妙的浮点运算世界,这里有一个规则特别需要注意:浮点数并不精确. 
+        &nbsp;&nbsp;0.8或者说你在调试器中看到的0.8事实上并不是,有可能是0.79999999999999,然后圆 
+        整得到了0.8,如果采用截尾法那么你就会看到结果是7! &nbsp;&nbsp;那该怎么处理呢?加一个圆整值: 
+        将 <pre>  (UINT)( m_dosenum * 10 )</pre>
+        <p>替换为 </p>
+        <pre>  (UINT)( m_dosenum * 10 + 0.5 )</pre>
+        <p>出于相同的原因,象 </p>
+        <pre>  if ( m_double == 2.0 )</pre>
+        <p>肯定是假的,应该这样写,我通常使用0.00001 </p>
+        <pre>  if( fabs( m_double - 2.0 ) <Epsilon )</pre>
+</pre>
+      </li>
+    </ul>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <hr>
+    <a href="cmfcv33.htm"><div align="center"><center><pre>前一期</a>|<a href="cmfcv31.htm">后一期</a>
+
+<a
+href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供!
+</pre>
+    </center></div></td>
+  </tr>
+</table>
+</center></div>
+
+<p><a name="PageBegin"></a></p>
+<div align="center"><center>
+
+<pre>
+</pre>
+</center></div>
+</body>
+</html>

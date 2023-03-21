@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VB与VC混合编程中处理消息的方法</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>VB与VC混合编程中处理消息的方法</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">文/吴俊峰 录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.09</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>现在越来越多的人彩VB与VC的混合编程:用VB快速开发出漂亮的界面以及外围处理程序,再用VC编写底层的各种操作,例如内存的操作,IO端口的操作等,VC中还可以嵌入汇编语言进行更底层的操作.<br>
+一般的做法是将VC程序编译成DLL,在VB中用DECLARE语句声明DLL中的函数,例如:<br>
+Declare Function SendCommand Lib &quot;c:\windows\hr0506dllmnsr.dll&quot; (CmdNum As 
+Integer) As Boolean<br>
+声明以后,函数SendCommand就可以当作VB自己的函数使用了.<br>
+但是,怎样将VC中的各种消息及时通知VB并且VB能够及时处理呢?这是VB的一个缺陷:不能方便地处理定义WINDOWS的消息.例如在VC中自定义了两条消息:MW_TAPI_DATACOME,<br>
+MW_TAPI_BUSY,在C语言中,用PostMessage(hWnd,MW_TAPI_CONNECTED,0,0);语句可以很方便地将MW_TAPI_CONNECTED消息传递给窗体(窗体句柄为hWnd),在主回调函数中就可以处理了.但是要把这条消息传递给VB,并让VB处理这条消息,并不太容易.虽然在VB5.0以上版本中,可以定义自己的事件,但比较麻烦.这里介绍一种简单的方法,让VB巧妙的处理自定义的消息:<br>
+1.首先将VB窗体中TextBox控件TEXT1的句柄传递给DLL(注意:VB中的TEXTBOX控件有hWnd属性).<br>
+VB中:'声明DLL中的函数<br>
+Declare Function SendhWnd Lib &quot;c:\windows\hr0506dllmnsr.dll&quot; ((ByVal hWnd As<br>
+Long) As Boolean<br>
+'传递TEXT1的句柄<br>
+SendhWnd(text1.hWnd)<br>
+VC中://句柄接收函数<br>
+declspec(dllexport) BOOL GethWnd(HWND hWnd1)<br>
+{hWnd=hWnd1;<br>
+if (hWnd=NULL)<br>
+{return FALSE;}<br>
+return TRUE;}<br>
+2.在VC中用API函数SetWindowText取代PostMessage直接发送消息给VB中的TEXT1控件.<br>
+SetWindowText(hWnd,&quot;MW_TAPI_DATACOM&quot;);<br>
+3.在TEXT1_CHANGE事件中处理消息:<br>
+Private Sub Text1_Change()<br>
+Select case Text1.text<br>
+case MW_TAPI_DATACOME;<br>
+case MW_TAPI_BUSY;<br>
+default;<br>
+End Select<br>
+End Sub<br>
+以上方法在作者编写的&quot;TAPI远程监控系统&quot;中使用,效果很好.<br>
+</p>
+</body>
+</html>

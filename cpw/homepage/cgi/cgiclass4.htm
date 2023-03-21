@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+
+<head>
+<title>cgi简明教程第四章</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../../res/back.JPG">
+
+<p ALIGN="CENTER">　</p>
+
+<table style="font-size: 9pt">
+  <tr VALIGN="TOP">
+    <td VALIGN="TOP"><h2 ALIGN="CENTER">CGI简明教程第四章</h2>
+    <p><a NAME="基本调试环境的建立："></a><b>基本调试环境的建立：</b> </p>
+    <p>我想不是每个阅读教程的朋友有机会接触到服务器之类的东西的。所以在接下去的阅读过程中没有调试环境的朋友将会非常吃力。为了解决这个问题，我特别介绍一种在 
+    win95或nt上建立WEB SITE的方法，以便各位能很好的阅读程序。不过本方法内使用的软件都比较大，如果你不是一个真正的网络发烧友，或许你会放弃这个教程。这个我也没有办法，要知道喜欢一样东西总是要付出代价的。</p>
+    <p><a NAME="1.win95&amp;winnt的Server软件："></a><b>1.win95&amp;winnt的Server软件：<br>
+    </b>首先我要各位弄清楚一个概念，所谓Sever只是指在一台电脑上安装了一个特别的软件。该软件可以提供internet 
+    web site服务。这台电脑不一定要是什么特别好的机 
+    器，只要它能够很好的运行Server软件就可以了。比如我们的个人电脑就可以承担这个任务。 
+    在Windows95下运行的server软件不是很多，而且是属于“业余”的。就是说离真正的商业使用有很大的距离。这主要是windows95平台的局限，比如很差的安全性，不稳定的内存分配系统，混乱的文件系统以及最差的进程管理。不过这些不影响我们使用CGI程序，特别是一个人调试自己的程序，而不是放在<br>
+    internet给数万个人访问。其代表是MS在windows OSR离提供的pws(person web 
+    server)。你可以通过控制面版--&gt;网络--&gt;服务--&gt;Ms--&gt;个人WEB服务器安装它。不过我希望你们最好还是不要使用这个东西，因为它对我们下面的课程没有什么帮助。<br>
+    我曾试验过用它来和我的perl程序相连，但很显然不支持perl。虽然有消息说修改注册表可以解决这个问题，但我到现在还是没有找到方法。 
+    <br>
+    相对而言，Windows NT因为其定位的不同而可以提供较理想的操作平台。而且NT自带有IIS(Internet 
+    Information Server)。不过是2.0版的，如果你有IIS3.0就更好了。到本文写成的时候，IIS已经有了4.0版本。当然我相信不是所有人会去下载这个东西，因为有 
+    104M。 <br>
+    上面讲了这么多，实际上我要给各位推荐的是WebSite for win95&amp;NT。就是说两个操作系统都可以使用它。现在的版本是2.1，有17M。显然是一个很大的软件，不过正如我说的， 
+    喜欢一样东西是有代价的。你可以在http://www.windows95.com里找到这个程序。 
+    WebSite支持winCGI，也支持perl写的CGI程序。显然这是一个好东西，可以满足我们的要求。虽然大了些，不过要是你能找到website 
+    1.1的话也不错，它大概有4M左右。不过我在网上从没发现有下载的地方。 
+    <br>
+    <a NAME="2.Perl for win32"></a><b>2.Perl for win32 <br>
+    </b>Perl,让人激动的名字。我想再也找不到一个编程语言可以如此出色的完成基本CGI程序的开发了。我感谢那些为perl移植做出贡献的朋友们，是他们让我们可以在win平台上使用如此如此强大的Unix工具。 
+    你可以在perl的主页上找到perl for win32版本，当前版本是5.02。你也可以在 
+    http://download.ihw.com.cn里找到perl for win32版本。大概是2.5M。 <br>
+    <a NAME="3.VB"></a><b>3.VB<br>
+    </b>VB是我们写WinCGI程序最好的选择。我推荐各位使用vb4。不是因为vb5不好，只是在 
+    Internet上支持它的文档和免费代码太少了。 <br>
+    <a NAME="4.C&amp;C++"></a><b>4.C&amp;C++</b> <br>
+    这个教程里几乎没有用C&amp;C++写的代码，因为它更适合高级程序员而不是我们这些业余选手。不过你要是一定使用它我也没有意见。 
+    <br>
+    <a NAME="5.安装。"></a><b>5.安装。 <br>
+    </b>好了，我们开始建立基本环境。就是说我们要在自己的机器上建立一个WEB 
+    SITE! 首先安装Website。按照它标准的安装界面，你可以轻松的完成这个工作。缺省情况下它将被安装到c:\website下。我提醒各位注意这几个目录： 
+    </p>
+    <p>cgi-shl:这个是基本的cgi目录，也就是各位朝思暮想的地方！ <br>
+    cgi-win:这个cgi目录里放的是WinCgi程序。 其他的各位自己研究吧。</p>
+    <p>好了，在装完Website后请确认它已经运行。在状态拦地右下角会有一个齿轮地图标，它表示website正在运行。接下去请打开你地浏览器，在url输入你机器的ip地址，如果没有 
+    ip，请输入:127.0.0.1。注意，做这些动作的时候，最好请你使用netscape，而且你不必连上网络！ 
+    如果一切顺利的话，你将看到website的标记，那证明你已经成功了！ <br>
+    接下去我们安装perl。 下载后的perl是一个自解开文件，它会问你安装到哪个目录。<br>
+    缺省是c:\perl，接着它展开并产生几个自目录。在安装结束的时候，它会修改autoexec.bat，把c:\perl\bin加如 
+    path，请一定要这么做，道理我会在下面解释。最后请随便写一个以.cgi或.pl结尾的文本文件。直接双击它，并为它加上关联。.pl或 
+    .cgi的关联文件是c:\perl\bin\perl.exe。这步很重要，不然你无法完成接下去的学习。 
+    那么为什么我们要加路径呢？因为perl是一种文本解释型语言，就是说它没有编译的过程， 
+    只有在运行的时候解释。解释一句运行一句。所以我们必须让系统知道perl.exe在哪里。 
+    <br>
+    <a NAME="6.测试"></a><b>6.测试<br>
+    </b>最后我们进行一个测试。请把下面的两个程序下载并运行它们： <br>
+    1.html文件：这是测试程序的客户端内容，请以test.htm保存它。并把它放在c:\website\hotdocs\ 
+    下，那是你的website缺省的根目录。 <br>
+    test.htm: <br>
+    <ul>
+      <p><i>&lt;html&gt;<br>
+      &lt;title&gt;你的第一个perl测试程序&lt;/title&gt;<br>
+      &lt;body&gt;<br>
+      &lt;h1&gt;你的第一个perl测试程序&lt;h1&gt;&lt;br&gt;<br>
+      &lt;h2&gt;win 平台的环境变量测试&lt;/h2&gt;&lt;br&gt;<br>
+      &lt;form method=&quot;get&quot; acton=&quot;http://127.0.0.1/cgi-shl/env.pl&quot;&gt; <br>
+      &lt;input type=submit value=&quot;查看CGI环境变量&quot;&gt; <br>
+      &lt;/form&gt; <br>
+      &lt;/body&gt;<br>
+      &lt;/html&gt; </i></p>
+    </ul>
+    <p>2.Perl文件：请使用任意一个文本编辑器，输入后以env.pl保存到<br>
+    c:\website\cgi-shl\下。 <ul>
+      <p><i>#! perl</i></p>
+      <p><i>print&quot;Content-type:text/html\n\n&quot;;<br>
+      print&quot;&lt;title&gt;Windows环境变量&lt;/title&gt;&quot;;<br>
+      print&quot;&lt;body&gt;恭喜你的website已经成功&lt;br&gt;&quot;; <br>
+      foreach $key(sort keys %ENV){ <br>
+      print&quot;$key=$ENV{$key}&lt;br&gt;&quot;; }<br>
+      PRINT&quot;&lt;/BODY&gt;&quot;;</i></p>
+    </ul>
+    <p>在完成上面的工作后，请打开浏览器，输入http://127.0.0.1/test.htm。<br>
+    当然如果你的机器是以tcp/ip方式 连在局域网上，请把127.0.0.1改成你的ip地址（还有test.htm里的。）然后按下那个键，当你的浏览器去向另一个 
+    页面的时候，今天的任务就算是完成了。 </td>
+  </tr>
+</table>
+
+<p><a HREF="default.html" tppabs="http://202.96.217.5/~xiaoyi/default.html">返回教程目录 
+</a></p>
+</body>
+</html>

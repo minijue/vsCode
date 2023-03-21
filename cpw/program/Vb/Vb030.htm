@@ -1,0 +1,585 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<style>
+.font { font-size: 11 pt;line-height: 17px; ; font-family: "宋体", "Arial"}
+A:link {text-decoration: none; color: blue}
+A:visited {text-decoration: none; color: blue}
+A:active {text-decoration: none; color: red}
+A:hover {text-decoration: underline; color: red} 
+body { font-size: 11 pt;line-height: 17px; ; font-family: "宋体", "Arial"}
+table {  font-size: 9pt; font-family: "宋体", "Arial"}
+td {  font-size: 9 pt; font-family: "宋体", "Arial"}
+tr {  font-size: 9 pt; font-family: "宋体", "Arial"}
+h1 {  font-size: "40pt"; font-weight=400; font-family: "宋体", "Arial"}
+h2 {  font-size: 32pt; font-weight=400; font-family: "宋体", "Arial"}
+h3 {  font-size: 14pt; font-weight=400; font-family: "宋体", "Arial"}
+h4 {  font-size: 9pt; font-weight=400; font-family: "宋体", "Arial"}
+</style>
+<title>Vbforums-VB论坛电子杂志</title>
+</head>
+
+<body style="font-family: serif, serif; font-size: 9">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx1.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> </span>Vbforums-VB论坛电子杂志(1999.08.02)</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>Vbforums-VB论坛电子杂志(1999.08.02)</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%"><span style="font-size: 9pt"><strong>Q1379: </strong><br>
+    真对不起有一个令我茶饭不思的已经困惑我好多天了还望您帮帮我：（ACCESS）<br>
+    能否在当前打开的数据库中实现对该数据库的压缩(就是工具菜单中-&gt;数据库实用工具选项中的压缩数据库选项)我在当前的数据库中使用了以下的代码:<br>
+    DBEngine.CompactDatabase &quot;c:\Main\Main.mdb&quot;,&quot;c:\Main\Temp.mdb&quot;<br>
+    FileCopy &quot;c:\Main\Temp.mdb&quot;,&quot;c:\Main\Main.mdb&quot;<br>
+    Kill &quot;c:\Main\Temp.mdb&quot;<br>
+    结果系统提醒被压缩并复制的当前数据库必须关闭或该数据库正被打开而不能完成操作因此我在上述代码的第一行添加了CloseCurrentDataBase命令。如下所示：<br>
+    CloseCurrentDataBase<br>
+    DBEngine.CompactDatabase &quot;c:\Main\Main.mdb&quot;,&quot;c:\Main\Temp.mdb&quot;<br>
+    FileCopy &quot;c:\Main\Temp.mdb&quot;,&quot;c:\Main\Main.mdb&quot;<br>
+    Kill &quot;c:\Main\Temp.mdb&quot;<br>
+    结果该行代码一旦运行则当前数据库是关闭了，但似乎也同时忽略了其后的一切操作.这真令小生百思不得其解！！！还望您能够指点迷经. 
+    焦急等待的ZXWZYZ<br>
+    <strong>回答：</strong><br>
+    你在另外一个数据库中做则无此现象发生<br>
+    <strong>- perfectd</strong></span><p><span style="font-size: 9pt"><br>
+    <strong>Q1383: </strong><br>
+    上次我曾问过您，如何用VB编一界面，既可存储数据，又可后台调用“excel”进行打印，当时您教我&quot;access&quot;编窗体和报表，可我又发现一问题： 
+    我是想打印每条记录，而不是把所有的记录打在一张表上（怎么问起庞老师“access”起来了？是不是有点跑题了？ 
+    嘿嘿！）现在我又不知怎么做了。 ;-（ （看来不仅是个VB菜鸟，还是个access 
+    菜…… 
+    ，庞老师一边嘀咕。）说详细一点：我们单位需打印大量的土地证、房产证，每输一条记录，就需把刚才输的数据套打在证的相应位置上，可在Access里怎么才能做到这一点呢？依我想象，在窗体旁边应有一按钮，上书“打印”二字，当每输一条记录，便可进行打印，或者输完许多记录，再一条条记录地打。不知可行否？<br>
+    致 礼！ <br>
+    <strong>回答：</strong><br>
+    参考意见，向这样定格式的精确打印问题，实现方法很多。就单独打印一条记录来说，首先确认录入完成。一种方法是，直接使用Print对象在指定的坐标位置打印相应信息，缺点是无法预览。另一种方法是利用Access或Excel的报表功能画出报表摸版，在一张白纸上使用查询打印指定的记录，连同表格线。再一种方式是，利用VB6.0中的DataReport定制报表模版，使用数据环境中的Command对象查询指定的记录打印，缺点是只能在A4大小的纸张上竖打。<br>
+    <strong>- perfectd</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1400: <br>
+    </strong>制作好一个帮助文件比如是wangqr.hlp,如何在vb程序中实现，采用帮助菜单来访问！！王<br>
+    <strong>回答：</strong>在窗体上放一CommonDialog控件，在菜单单击代码中写入：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CommonDialog1.HelpFile = &quot;路径和帮助文件名称&quot;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CommonDialog1.HelpCommand = cdlHelpContents 
+    &nbsp;&nbsp;&nbsp; '列出帮助主题，若<br>
+    为cdlHelpPartialKey则为列出搜索项目列表。<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CommonDialog1.ShowHelp<br>
+    ——“补丁之家”主人<br>
+    <br>
+    <strong>Q1377: </strong><br>
+    对不起小弟又有一事相求:<br>
+    请问怎样才能捕捉到Shell语句执行时所引起的指定文件不存在的错误。<br>
+    我发现Err语句不行。<br>
+    <strong>回答：</strong>最好的办法是避免这种错误的发生。用DIR函数先判断指定文件是<br>
+    否存在，若不存在，该函数返回&quot;&quot;，若存在，则再执行Shell语句。<br>
+    ——“补丁之家”主人<a href="http://patchhome.soim.net">http://patchhome.soim.net</a><br>
+    <br>
+    <strong>Q1376: </strong><br>
+    我把编译好的VB程序安装好之后，运行中出现错误提示“当调用JET VBA文件时初始化失败”我从别人的机器上把VBAJET32.dll 
+    Copy过来也没用，重装了OFFICE，VB问题依然存在，一个月后就要交程序了，真的很着急，盼救！！！ 
+    <br>
+    <strong>回答：</strong><br>
+    这个问题我也碰到过，安装文件你是用VB自带的安装向导作的吧。我的解决办法有2个。一是在要安装的机器上安装VB，这比较不太实际。另一个办法是用其他的制作安装程序的软件<br>
+    作你的安装程序。比如Wise Installation等等。我用VB自带的制作出现这种问题，但改用Wise 
+    Installation制作后完全正常。<br>
+    ——“补丁之家”主人<br>
+    <br>
+    <strong>Q1364: </strong><br>
+    &nbsp;&nbsp;&nbsp; 谢谢看我的贴子，我拟用VFP来编一个数据录入模块，再由VB编的模块来读取VFP表中各字段的数据并进行各种运算，在编VB读VFP表中数据时不知如何才行，有一网友告知可用SQL语句较方便，可我没有接触过SQL语句，不知SQL语句为何物，故想：<br>
+    1、得到一些有关的学习资料或告知何处有，<br>
+    2、若能为我编一个简单例子说明则更好<br>
+    <strong>回答：</strong><br>
+    实际上VB自己具有非常强大的数据库处理功能。最简单的就是利用DATA控件，将DATA控件放到窗体上，设置Connect属性为FoxPro3.0，在DatabaseName中选定VFP具体的数据库。在RecordSource中选择数据库中的表名。读取字段的方法是：DATA1.Fields(字段顺序0为第一个字段)，或DATA1!字段名，可以赋给相同类型的变量名，再进行运算。为了美观可以将DATA控件的Visible属性设为False。<br>
+    &nbsp;&nbsp;&nbsp; 具体的资料可以找任何一本介绍VB编程的书籍，上面都应有具体介绍。或者可以看一下VB帮助中的有关DATA控件的内容。或为VB5，也可看一看联机手册中关于“数据库编程”方面的内容。<br>
+    ——“补丁之家”主人<br>
+    <br>
+    <strong>Q1368: </strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 我是一名VB初学者，现在有两个问题想问您一下，希望您百忙中帮我一下： 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 1、在VB中如何使用扫描仪（用于读取Barcode的手持式扫描仪）？ 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 2、如何制作一个用于自动得出结果的程序（主要用于计算AQL值），附件是AQL表格，我想在一个文本框中输入一个批量数量，其它数量（如AQL样本大小等） 
+    &nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 等您的回复！回信给我 <br>
+    <strong>ANSWER:</strong><br>
+    1. 在窗体上添加一个文本框，用文本框来读取BARCODE,可以设定LOSTFOCUS事件发生时处理BARCODE。需要注意的是，我用过的两种读码器都必须设定后，才能在条码后自动加回车。具体的设定可参见读码器的说明书<br>
+    <strong>邵今</strong> <a href="mailto:shaojin@990.net">shaojin@990.net</a></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1392: <br>
+    </strong>Hi there,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I'm trying to make a very simple browser 
+    without any control of IE. I've tried microsoft internet transfer control and can only 
+    retrieve the HTML source of a URL (using 'openURL' method). Then how can i realize some 
+    simple function as a normal browser? Like showing a image,hyper link....<br>
+    <strong>A:</strong><br>
+    Now, what you need is not a data transfer control, but a control which can support those 
+    functions you wanted. Microsoft Rich Textbox Control is a good choice. You may read the 
+    online help of VB for details of this control.<br>
+    Best regards.<br>
+    Effun (<a href="mailto:effun@21cn.com">effun@21cn.com</a>)<br>
+    </span></p>
+    <p><span style="font-size: 9pt"><strong>Q1406: <br>
+    </strong>&nbsp;&nbsp;&nbsp; 我想用vb5的winsock编了个用TCP/IP传送数据的。目的是将一个文件传送到对方的机器上。以下是我编的发送程序（不知对不对）。可是接收程序该怎么编呢？应该怎样解决呢？请多多指教！<a
+    href="mailto:gzh2000@163.net">gzh2000@163.net</a><br>
+    ' *********<br>
+    ' * Form1 *<br>
+    ' *********<br>
+    Private Sub Command1_Click()&nbsp; '这里是发送数据<br>
+    &nbsp;&nbsp; Dim P() As Byte 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp; Dim L As Long<br>
+    &nbsp;&nbsp; Dim nL As Long<br>
+    &nbsp;&nbsp; Open &quot;e:\av.zip&quot; For Binary As #1<br>
+    &nbsp;&nbsp; L = LOF(1)<br>
+    &nbsp;&nbsp; nL = 1<br>
+    &nbsp;&nbsp; Do<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If L &lt; 1024 Then 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '发送剩余的<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ReDim G(L)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get #1, nL, P<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Winsock1.SendData P<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exit Do<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Else<br>
+    ReDim P(1023)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get #1, nL, P<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Winsock1.SendData P&nbsp; '每次发送1024 
+    byte<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L = L - 1024<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nL = nL + 1024<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DoEvents<br>
+    &nbsp;&nbsp; Loop While True<br>
+    &nbsp;&nbsp; Close #1<br>
+    End Sub<br>
+    <strong>魏霄鹏</strong></span></p>
+    <p><span style="font-size: 9pt"><br>
+    <strong>A1406:</strong><br>
+    我也很想编一个网上发送和接收文件的程序,我将上面的程序加以改进,并写了接收程序,如下:<br>
+    注意作者文中的变量P()和G()应该一样,可能是笔误.下面是发送和接收的核心关键代码,里面的变量,跟据需要自己定义加入.发送文件:<br>
+    Private Sub Command2_Click() '这是发送命令按钮.<br>
+    &nbsp; <br>
+    &nbsp; If (Dir(Me.Text1) &lt;&gt; &quot;&quot;) Then '在窗体上放一文本框,写上要发送的文件路径及文件名.<br>
+    &nbsp;&nbsp;&nbsp; If (connected = True) Then '网络是否连接上的标识.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim p() As Byte<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim filenum As Integer<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim l As Long<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim nl As Long<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nl = 1 '要读取文件的开始地址.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filenum = FreeFile()<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open Me.Text1 For Binary As #filenum '打开要发送的文件<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = LOF(filenum)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Do<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (l &lt; 1024) Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (l = 0) Then '这一句要加上,否则如果文件长度刚好是1024的整数倍,会出错,我在试验时刚好<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exit Do 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '碰上.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ReDim p(l - 1) As Byte<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get #filenum, nl, p()<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Winsock1.SendData p<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nl = nl + l<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Me.Label2.Caption = &quot;发送:&quot; 
+    &amp; nl - 1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exit Do<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ReDim p(1023) '注意要发送1024字节,下标是0到1023.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get #filenum, nl, p<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Winsock1.SendData p&nbsp; '每次发送1024 
+    byte<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = l - 1024<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nl = nl + 1024<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Me.Label2.Caption = &quot;发送:&quot; 
+    &amp; nl - 1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DoEvents<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loop While True<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Close #filenum<br>
+    &nbsp;&nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MsgBox &quot;未连接!&quot;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exit Sub<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp; MsgBox &quot;不是有效的文件名!&quot;<br>
+    &nbsp; End If<br>
+    End Sub<br>
+    接收文件:在winsock的dataarrival事件中.<br>
+    Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)<br>
+    &nbsp; '在此接收文件数据,将数据存盘.<br>
+    &nbsp; receivebyte = receivebyte + bytesTotal '定义一个变量,来记录接收到的字节数.<br>
+    &nbsp; Dim p() As Byte<br>
+    &nbsp; Me.Winsock1.GetData p, vbByte<br>
+    &nbsp; Put #filenum, , p()<br>
+    &nbsp; Me.Label2.Caption = &quot;接收:&quot; &amp; receivebyte<br>
+    End Sub<br>
+    另外在接收端最后再加上两个commandbutton.如下:<br>
+    Private Sub Command1_Click()<br>
+    &nbsp; '开始接收<br>
+    &nbsp; filenum = FreeFile()<br>
+    &nbsp; Open Me.Text1 For Binary As #filenum<br>
+    End Sub<br>
+    Private Sub Command2_Click()<br>
+    &nbsp; '停止接收<br>
+    &nbsp; Close #filenum<br>
+    End Sub<br>
+    只有按下开始接收按钮时才能允许发送.这样做的好处是,只打开一次文件,接收完后将文件再关闭,避免每次来数据时都要打开和关闭文件.<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    </span></p>
+    <p><span style="font-size: 9pt"><strong>Q1377: <br>
+    </strong>对不起小弟又有一事相求:<br>
+    请问怎样才能捕捉到Shell语句执行时所引起的指定文件不存在的错误。我发现Err语句不行<br>
+    <strong>A1377:</strong><br>
+    用下面的语句.<br>
+    On Error GoTo command1click<br>
+    &nbsp; Shell &quot;d:\tty1.exe&quot;, vbMaximizedFocus<br>
+    &nbsp; Exit Sub<br>
+    command1click:<br>
+    &nbsp; If (Err.Number = 53) Then<br>
+    &nbsp;&nbsp;&nbsp; MsgBox &quot;no this file&quot;<br>
+    &nbsp; End If<br>
+    当然最好在运行其它文件之前,最好用dir函数来判别一下该文件是否存在.<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <br>
+    <strong>A1376：</strong><br>
+    不知用的是VB哪个版本，建议重新安装，有时重新安装或改用其它版本便能解决问题。<br>
+    - 王艳朋</span></p>
+    <p><span style="font-size: 9pt"><strong>Q1375: <br>
+    </strong>我的Form上有一个DBList控件,初始时数据库中已有记录,在打开Form时是显示数据库的第一条记录的,但是DBList的SelectedItem是空的,我希望SelectedItem的内容为第一条记录的BookMark,请教各位如何实现? 
+    <br>
+    <strong>A1375:</strong><br>
+    &nbsp;在dblist1的datasource指定数据控件,datafield指定数据字段,则dblist1的selecteditem自动随当前记录的改变而改变.<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    </span></p>
+    <p><span style="font-size: 9pt"><strong>Q1458: <br>
+    </strong>各位VB好友：<br>
+    去年曾在一报刊上看到用windows的一个API，可在VB中直接调用相关程序打开指定的文件，而不用SHELL函数。例如打开HTML文件，自动启动默认的游览器，打开JPG自动启动已经安装的图形处理软件等。黄雪峰<br>
+    <strong>A1458:</strong><br>
+    Declare Function ShellExecute Lib &quot;shell32.dll&quot; Alias &quot;ShellExecuteA&quot; 
+    (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal 
+    lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long<br>
+    如用默认程序打开文件:<br>
+    call shellexecute(hwnd,&quot;open&quot;,filename,&quot;&quot;,app.path,1)<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <strong>Q1421: </strong><br>
+    我是一名VB爱好者,在我的学习过程中遇到一个问题,想请你帮忙。<br>
+    用Mscomm32.OCX发送大于80H的字符给单片机,Mscomm32.ocx的接收方式为Mscomm1.inputmode=cominputmode 
+    Binary。用计算机发给单片机时, 单片机可以接收到,但单片机发给计算机时, 
+    计算机收到的字符不能显示 ，无法进行处理(由于80-256的ASCII码字符不能显示)MSCOMM1&middot;INPUT的内容。<br>
+    我的E_mail地址为：<a href="mailto:lh-_en@990.net">lh-_en@990.net</a><br>
+    &nbsp;&nbsp;&nbsp; THANK YOU ！<br>
+    此致<br>
+    敬礼<br>
+    Thursday, July 15, 1999<br>
+    <strong>A1421:</strong><br>
+    通信问题以前说的不少了,请看一下以前的论坛.<br>
+    注意接收时用数组接收.<br>
+    如<br>
+    &nbsp;dim myarray() as byte<br>
+    &nbsp;myarray=me.mscomm1.input<br>
+    &nbsp;则数组myarray()里面存的即是收到的数据.<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a> <br>
+    <br>
+    <br>
+    <strong>Q1386: </strong><br>
+    最近我vb编数据库程序时遇一问题，主要是可以生成数据库可却生成不了数据表。代码如下：<br>
+    dim wp as Workspace<br>
+    dim db as Database<br>
+    dim user as Tabledef<br>
+    dim Fuser(1) as Field<br>
+    -----------------------<br>
+    Set wp=DBEngine.Workspaces(0)<br>
+    Set 
+    db=wp.CreateDatabase(App.path+&quot;\mdb\shop.mdb&quot;,dbLangChinesesimplified,dbVersion30)<br>
+    Set user=db.CreateTableDef(&quot;Infomation&quot;) {注：程序从这儿开始就不在执行了,而只是建立了一个数据库，也没有任何提示出错。}<br>
+    Set Fuser(0)=user.CreateField(&quot;Name&quot;,dbText,10)<br>
+    set Fuser(1)=user.CreateField(&quot;Coad&quot;,dbText,8)<br>
+    user.Fields.Append Fuser(0)<br>
+    user.Fields.Append Fuser(1)<br>
+    ......<br>
+    ---------------------<br>
+    由于数据表&quot;Infomation&quot;无法建立因此后边的工作也无法进行(用sql也无济)，请高手给予解答。小弟我在此先行谢过了！！<br>
+    Your Friends<br>
+    <strong>A1386:</strong><br>
+    只要在你的程序最后加上下面一句即可:<br>
+    db.TableDefs.Append user <br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <br>
+    <strong>Q1404: </strong><br>
+    &nbsp;&nbsp; 各位大哥大姐,小弟才从FOXPRO转来,有些水土不服,敬请前辈指点.<br>
+    我的问题是如果在FROM1窗口中放入DATA控件和DBGRID控件显示一数据库,用FROM2窗口来对数据库中的某一条记录进行编辑,请问如何将FROM2中的TEXTBOX等控件与FROM1中的数据记录字段相关联.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    ---周明洁<br>
+    <strong>A1404:</strong><br>
+    &nbsp; 关于数据同步的问题,注意将它们的数据集设定为一样即可.<br>
+    &nbsp; 如下在表单2中写入以下代码,即可将其保持一致.注意在form2中加入一个data1控件, 
+    &nbsp; textbox的datasource设为data1,testbox的datafield自己动手写入要绑定的字段. 
+    &nbsp; 这样form2中的textbox值随form1的记录改变而改变.<br>
+    Private Sub Form_Load()<br>
+    &nbsp; Set Me.Data1.Recordset = Form1.Data1.Recordset<br>
+    End Sub<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <strong>Q1438: </strong><br>
+    怎么实现这样的功能：一个picture上显示一张图，在上面乱画线再擦去，而原图保持不变，即随擦随回显。 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    ccchome<br>
+    <strong>A1438:</strong><br>
+    要想将原图恢复,必须开始将picture1.picture属性保存在一个对象变量里面,要恢复时,在将该对象变量赋值给picture1.picture.如下所示:<br>
+    Dim mypic As Picture '定义对象变量.<br>
+    Set mypic = Picture1.Picture '将该图片变量赋给对象变量.<br>
+    Set Me.Picture1.Picture = mypic '用该句将图片框恢复原样.<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <strong>Q1390: </strong><br>
+    我是一名VB初学者,有一个问题想请教一下.<br>
+    我用DAO对象访问Microsoft Access数据库, 
+    但查看记录时用下列语句出现错误:<br>
+    ，向上移动一个记录。<br>
+    Private Sub Command2_Click()<br>
+    If rc. AbsolutePosition &gt; 1 Then<br>
+    rc. MovePrevious <br>
+    Call displayRecode<br>
+    End If <br>
+    End Sub <br>
+    ，向下移动一个记录。<br>
+    Private Sub Command3_Click()<br>
+    If rc. AbsolutePosition &lt; MaxRecode Then<br>
+    rc. MoveNext <br>
+    Call DisplayRecode<br>
+    End If <br>
+    End Sub<br>
+    MaxRecode 为最大记录号<br>
+    当上移到记录顶或下移到记录尾时，再按上、下键时，错误显示当前无记录。<br>
+    请指教方法，谢谢。<br>
+    <strong>A1390</strong>:<br>
+    当上移到记录顶或下移到记录尾时，再按上、下键时,rc.bof 和rs.eof 
+    属性分别为true,没有当前记录,所以<br>
+    用rc.absoluteposition会出错.其实你不必那么麻烦:<br>
+    用if(not rc.bof) then '向上移动记录. <br>
+    &nbsp;&nbsp;&nbsp; rc. MovePrevious <br>
+    &nbsp; end if<br>
+    用if(not rc.eof) then '向下移动记录. <br>
+    &nbsp;&nbsp;&nbsp; rc. Movenext <br>
+    &nbsp; end if<br>
+    魏霄鹏 <a href="mailto:weixiaopeng@371.net">weixiaopeng@371.net</a><br>
+    <br>
+    <strong>Q1370:</strong><br>
+    我刚开始学VB。我现在想做如下一个应用程序，可限于水平问题，实在无力自己解决，希望您能帮助。 
+    我的构思是这样的：如果我有很多的AVI文件，我希望能依次播放，而不用自己去一一选择；或者能自动选择某个AVI文件播放几次。如果依次播放，可以选择暂停，选择前面已播放的文件，或向后选择。 
+    如果您能帮助，请会信到：<a href="mailto:mond@163.net">mond@163.net</a> 
+    先行谢过。 最好能提供圆代码。<br>
+    <strong>A：</strong><br>
+    请参阅联机手册中的多媒体部分，用MCI函数。<br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1392: </strong><br>
+    Hi there,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I'm trying to make a very simple browser 
+    without any <br>
+    control of IE. I've tried microsoft internet transfer control <br>
+    and can only retrieve the HTML source of a URL (using <br>
+    'openURL' method). Then how can i realize some simple function <br>
+    as a normal browser? Like showing a image,hyper link....<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If it is too hard to do it based on Inet 
+    control, <br>
+    what else control can i use and where can i find them? (except <br>
+    IE's control)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thank you very much!<br>
+    Kai, 7/20/99<br>
+    A:<br>
+    You can use the &quot;Internet Control&quot; ocx. <br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1398: </strong><br>
+    求问: 如何检测到Windows中键盘的状态(比如按下某键)?<br>
+    A：<br>
+    请参阅联机手册。 <br>
+    <strong>- 陆昌廷</strong><br>
+    &nbsp;<br>
+    <strong>Q1409: </strong><br>
+    大峡：在下VB-NEWMAN特慕名请教：<br>
+    Q1：如何拦截键盘操作？既我想将用户的输入存储在一变量中，不管他是对文本框还是对FORM的敲键，总之<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 只要用户敲了键我就要存起来。<br>
+    Q2:VB SOCUSE SAFE 是个什么东东？有何妙用？ <br>
+    Q3：我仅仅想让计算机执行命令而不想有窗口界面，如DOS下的。EXE文件。该如何处置？<br>
+    Q4：题外话：各位高手学VB到今天的地步用了多长的时间 
+    最难之处在哪？令看报上说有一软件可将“*”形密码<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 还原！这是如何实现的？用VB的话怎么实现？（激动的等待……^-^)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; 多谢！<a href="mailto:cslinjin@163.net">cslinjin@163.net</a><br>
+    <strong>A：</strong><br>
+    01 利用TEXT控件的CHANGE事件。<br>
+    03 可以不制作任何一个窗口，创建一个SUB MAIN。<br>
+    <strong>- 陆昌廷</strong><br>
+    &nbsp;<br>
+    <strong>Q1418: <br>
+    </strong>VB大师：<br>
+    &nbsp;&nbsp;&nbsp; 你好，我是一个VB的爱好者，最近在写一个网络记费的程序，可是<br>
+    我遇上一个问题，平时我的程序最小化在后台，一旦用户拨号就<br>
+    让windows通知程序开始记费。不知如何实现，<br>
+    希望尽快给我回信，万分感谢！敬礼〈^_^<br>
+    <strong>A：</strong><br>
+    可以循环调用API中的函数检测是否连上了网。 <br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><br>
+    <strong>Q1436: </strong><br>
+    各位大虾，本人初接触ＶＢ，有一弱智问题请教:我怎样才能一下子创建<br>
+    一个有２００个图像控件的数组呢？<br>
+    <strong>A：</strong><br>
+    使用控件数组。 <br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1441: </strong><br>
+    请教：如何使我的vb程序在login windows 之前运行？启动windows之前呢？多谢先！<br>
+    <strong>A:</strong>编写一个DOS程序，在AUTOEXEC。BAT中加载。因为还没有进入WINDOWS，<br>
+    所以不能调用WINDOWS程序。 <br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1447: <br>
+    </strong>各位大侠<br>
+    &nbsp;&nbsp;&nbsp; 我用VB5的WinSock控件做了一个服务器(sckServer 
+    是用控件数组)<br>
+    和客户端(sckClient)。当我连接成功后，我用sckClient.Close关闭客<br>
+    户端，我服务器的程序里也写了<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Private Sub sckServer_Close(Index As Integer)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sckServer(Index).Close<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; End Sub<br>
+    可是当我再次用sckclient.connect 连接时就出现了以下的错误。<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实时错误'10048'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 地址正在使用<br>
+    怎样才不会出现这种错误呢？请多多指教！gzh2000<br>
+    <strong>A：</strong><br>
+    应该是有一些连接还没有关闭。 <br>
+    <strong>- 陆昌廷</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1458: </strong><br>
+    各位VB好友：<br>
+    去年曾在一报刊上看到用windows的一个API，可在VB中直接调用相关程序打开指定的文件，而不用SHELL函数。例如打开HTML文件，自动启动默认的游览器，打开JPG自动启动已经安装的图形处理软件等。黄雪峰<br>
+    <strong>A：</strong><br>
+    SHELLEXECUTE（不知道有没有拼错）<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    致<br>
+    礼！<br>
+    网易虚拟游&nbsp; <a href="http://NVGDT.yeah.net">http://NVGDT.yeah.net</a><br>
+    戏开发队伍&nbsp; <a href="mailto:NVGDT@netease.com">NVGDT@netease.com</a><br>
+    小头目&nbsp; 陆昌廷（LazyLu） <a href="mailto:LazyLu@163.net">LazyLu@163.net</a><br>
+    <br>
+    <strong>Q1365: </strong><br>
+    我是深圳一家外資公司電腦部的職員,現開發了一套&quot;人事系統&quot;,采用的是三層結構開發,后台用的是SQL 
+    Server, 采用ADO的連結,當時開發的時候,中間層的DLL都是前台直接引用的(二層結構),后來整合的時候,我用 
+    remote auto connect 來連接,使得ADO方面很多參數都得改變,而且主要是速度慢了很多(采用的Active 
+    EXE的形式),跟本無法接受.后來我采用Transaction Server來管理中間層的DLL,方法是先把DLL匯入TS,然后利用TS的打包工具打包成EXE,再到前端運行此EXE以注刪到注刪表,而后再在前台用Createobject引用,連接免強能成功,由于我沒用Transaction 
+    Server內部的東西開發,中間遇到很多問題,特別是連接和ADO的參數問題,還有就是不能用事件(中間層不能定義WithEvents)等殊多問題.請問怎樣從兩層結構轉到三層結(所有DLL已做好,中間層為TRansaction 
+    Server)而不作太大的改變,其詳細步驟怎樣?有什么需注意的地方?中間層事件的用法怎么解決.現在急于完成此項工作,請網友代我解答,我將萬分感謝! 
+    - LXW<br>
+    <strong>A:</strong><br>
+    我目前也在广州一家公司作类似的开发，采用的是Active Dll方式，说说我的作法，不知对你有没有帮助。首先在单机上调试好所有要放入中间层的函数和过程，方法是和写单机版程序一样，在工程中加入模块，把需调试的函数和过程放入模块中，调试无误后，开启一个新的Active 
+    Dll工程，假设工程名为HterpMA, 类模块名为HtBackup，编译成DLL文件后（文件名HterpMA)，你就拥有一个新的引用：<br>
+    HterpMA.HtBackup,把调试好的函数和过程Copy到Dll中，稍做修改，将编译好的DLL文件放SERVER的SYSTEM32下，用REGSVER32注册，客户端采用Internet控件的方式调用，具体做法是，创建一个UserControl,添加一个模块，在模块中放入以下声明， 
+    &nbsp;&nbsp; <br>
+    dim objDataspace as new dataspace <br>
+    dim obj as object<br>
+    要调用DLL中的Backup函数<br>
+    set obj=objdataspace.createobect(&quot;HterpMA.HtBackup&quot;)<br>
+    obj.Backup<br>
+    注意：在UserControl中要引用RDS,好象叫Microsoft remote data serveices什么的这样，由于所有的类库都通过服务器上的中间层调用，客户端不必下载，运行速度会快很多，即使客户端没有装类库，也同样可以运行。由于时间匆忙，不详之处，欢迎来信探讨<br>
+    - <a href="mailto:firechun@163.net">firechun@163.net</a><br>
+    <br>
+    <strong>A1277:</strong><br>
+    firechun: 
+    “在主表与子表之间，根据发票号建立一个一对多的关系，然后利用关联，实行自动查询”的方法可以参阅ACCESS97 
+    自带的数据库“NorthWind.mdb”，先重点看一看其中的“关系”，双击其中的关系连线，选择参照完整性才能建立确切的一对多的关系，注意主表和子表的主索引值必须是唯一的。然后查阅一下“客户订单”和“客户订单子窗体1、2“的设计，注意两个子窗体属性中的链接关系，还要看一看“客户订单子窗体1”的一个“成为当前”的更新事件。<br>
+    相信你弄清了上述关系，再来重新用ACCESS97 
+    设计你的数据库就没什么大的问题了，你会发现其实用ACCESS97 
+    设计一般的数据库挺好的。在此强烈推荐要学用VB开发数据库的朋友先学一下ACCESS97 
+    ，相信会对你大有帮助的。<br>
+    <strong>ACCESS97 爱好者rmjack</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>A1250:</strong><br>
+    1、FORM 名称前面的小图标是通过FORM 属性的ICON属性设置的。<br>
+    2、运行时单击小图表出现的菜单是系统默认的<br>
+    右击产生关联菜单的方法可参阅对象的Popmuen方法帮助<br>
+    <strong>rmjack</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>A1280:<br>
+    </strong>选“查看”——“源文件”，在源文件中复制你需要的东东。<br>
+    <strong>rmjack</strong></span></p>
+    <p><span style="font-size: 9pt"><strong>Q1163:<br>
+    </strong>&nbsp; 您好:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 近日遇一难题: 我在编写一个档案管理程序时,本已调试成功并移植到其他机器上.后来为了完善程序,修改了部分代码.并在此期间安装了VB6(未卸载vb5), 
+    重新制作安装文件(在VB5下),但在向其他机器移植时,出现以下提示(未显示程序画面):<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实时错误 3447<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当调用jetVBA文件时(16位版本的VBAjet.DLL或32位版本的VAjet32.dll)初始化失败,请试着重新安装该返回了错误的 
+    应用程序. 重新安装,提示依旧. 卸载VB6.VB5,恢复原环境-- VB5 sp3, 
+    重新制作安装文件,错误依旧. 查了一下 VB5 帮助,只找到了上面的提示. 
+    同样的安装盘,安在我的机器上,却无上述错误.另外: 编译为P-代码 和 
+    &nbsp; 编译为本地代码 两种方式, 经试验均如此.我对vbajet 了解的不多. 
+    &nbsp; 程序中使用了access数据库,SQL 查询. 后经试验,先安装档案管理程序,后安装vb5,程序恢复正常.又试 
+    着卸载vb5,仍正常.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 看来是某个系统文件出了问题,但究竟是哪一个呢?.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 您能告诉我,我该如何去解决这个难题吗??<br>
+    - 中钧<br>
+    <strong>REPLY:</strong><br>
+    &nbsp;&nbsp;&nbsp; 近日我也遇到的一样的问题,一向你一样卸载VB5重新安装,屡试不成.甚至从做Windows(干净正版的),先装上自制的VB5应用程序,使用时依然有上述错误.好,用VB5编的那就把VB5也装上应该能用了吧.啊...!!!!!!又是一样的错误.嘿嘿,看来是VB6把Windows中的VB5以外的文件改了,那就在没装过VB6的机器上在做一边安装.哈哈,成了.<br>
+    - wjx<br>
+    <br>
+    <br>
+    <strong>Q1255</strong><br>
+    A: me.mouseicon=loadcursor(NULL,IDC_NO)<br>
+    <strong>- maoh</strong>l</span></p>
+    <p><span style="font-size: 9pt"><strong>Q1261<br>
+    </strong>A: treeview<br>
+    <strong>- maoh</strong>l</span></p>
+    <p><span style="font-size: 9pt"><strong>Q1271<br>
+    </strong>A: if ASC(...)&gt;0xA0 then 汉字<br>
+    <strong>- maoh</strong>l<br>
+    <br>
+    <strong>A1253</strong>:<br>
+    简单的很. 每次输入数据时检查其有效性.如:<br>
+    Text1.LostFocus()<br>
+    {<br>
+    &nbsp;&nbsp;&nbsp; dim mydb as database<br>
+    &nbsp;&nbsp;&nbsp; dim myrec as recordset<br>
+    &nbsp;&nbsp;&nbsp; set mydb=currentdb<br>
+    &nbsp;&nbsp;&nbsp; set myrec=mydb.openrecordset(&quot;select * from table where 
+    table.a=&quot; &amp;<br>
+    text1.text)<br>
+    &nbsp;&nbsp;&nbsp; if myrec.recordcount&lt;&gt;0 then msgbox &quot;the data have 
+    existed!!&quot;<br>
+    }<br>
+    <strong>- maoh</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><span style="font-size: 9pt"><p align="center">特别感谢<a
+    href="http://www.nease.net/~jackyyin" target="_blank">VB憩园</a>友情提供</span></td>
+  </tr>
+</table>
+</body>
+</html>

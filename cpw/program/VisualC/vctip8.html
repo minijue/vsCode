@@ -1,0 +1,508 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<meta NAME="doccomm" CONTENT="sss">
+<meta NAME="Template" CONTENT="C:\MSOffice\Template\Sl_BOOK.dot">
+<meta NAME="Author" CONTENT="Cheng Jinxing">
+<title>Visual C++编程技巧之八</title>
+</head>
+
+<body TEXT="#000000" LINK="#0000EE" VLINK="#551A8B" ALINK="#FF0000"
+background="../../res/back.JPG" style="font-size: 9pt">
+
+<p align="center"><strong><font face="Arial" size="4">Visual C++</font><font size="4">编程技巧之八</font></strong></p>
+
+<p align="center">转载于&quot;<a href="http://kahn.xj.cninfo.net/wwchina/"
+target="_blank">程序员集中营</a>&quot;</p>
+
+<p><a HREF="#tip57"><font SIZE="+0" FACE="Times New Roman">57</font><font SIZE="+0">、为什么即使调用</font><font
+SIZE="+0" FACE="Times New Roman">EnableMenuItem</font><font SIZE="+0">菜单项后，菜单项还处于禁止状态</font></a> 
+</p>
+
+<p><a HREF="#tip58"><font SIZE="+0" FACE="Times New Roman">58</font><font SIZE="+0">、如何给系统菜单添加一个菜单项</font></a> 
+</p>
+
+<p><a HREF="#tip59"><font SIZE="+0" FACE="Times New Roman">59</font><font SIZE="+0">、如何确定顶层菜单所占据的菜单行数</font></a> 
+</p>
+
+<p><a HREF="#tip60"><font SIZE="+0" FACE="Times New Roman">60</font><font SIZE="+0">、在用户环境中如何确定系统显示元素的颜色</font></a> 
+</p>
+
+<p><a HREF="#tip61"><font SIZE="+0" FACE="Times New Roman">61</font><font SIZE="+0">、如何查询和设置系统参数</font></a> 
+</p>
+
+<p><a HREF="#tip62"><font SIZE="+0" FACE="Times New Roman">62</font><font SIZE="+0">、如何使用一个预定义的</font><font
+SIZE="+0" FACE="Times New Roman">Windows</font><font SIZE="+0">光标</font></a> </p>
+
+<p><a HREF="#tip63"><font SIZE="+0" FACE="Times New Roman">63</font><font SIZE="+0">、如何确定当前屏幕分辨率</font></a> 
+</p>
+
+<p><a HREF="#tip64"><font SIZE="+0" FACE="Times New Roman">64</font><font SIZE="+0">、如何检索原先的</font><font
+SIZE="+0" FACE="Times New Roman">Task Manager</font><font SIZE="+0">应用程序使用的任务列表</font></a> 
+</p>
+
+<p><a HREF="#tip65"><font SIZE="+0" FACE="Times New Roman">65</font><font SIZE="+0">、如何确定</font><font
+SIZE="+0" FACE="Times New Roman">Windows</font><font SIZE="+0">和</font><font SIZE="+0"
+FACE="Times New Roman">Windows</font><font SIZE="+0">系统目录</font></a> </p>
+
+<p><a HREF="#tip66"><font SIZE="+0" FACE="Times New Roman">66</font><font SIZE="+0">、在哪儿创建临文件</font></a> 
+</p>
+
+<p><a HREF="#tip67"><font SIZE="+0" FACE="Times New Roman">67</font><font SIZE="+0">、如何访问桌面窗口</font></a> 
+</p>
+
+<p><font SIZE="+2"><b>　</b></font> </p>
+
+<p><a NAME="tip57"></a><b><font SIZE="+2"><font FACE="Times New Roman">57</font><font
+FACE="黑体">、为什么即使调用</font><font FACE="Times New Roman">EnableMenuItem</font><font
+FACE="黑体">菜单项后，菜单项还处于禁止状态</font></font></b> </p>
+
+<p><font SIZE="+0">需要将<font FACE="Times New Roman">CFrameWnd:: m_bAutomenuEnable</font>设置为<font
+FACE="Times New Roman">FALSE</font>，如果该数据成员为<font FACE="Times New Roman">TRUE</font>（缺省值），工作框将自动地禁止没有<font
+FACE="Times New Roman">ON_UPDATE_COMMAND_UI</font>或者<font FACE="Times New Roman">ON_COMMAND</font>的菜单项。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Disable MFC from automatically disabling menu 
+items.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">m_bAuoMenuEnable=FALSE;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Now enable the menu item.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CMenu* pMenu=GetMenu ();</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT_VALID (pMenu);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pMenu-&gt;EnableMenuItem 
+(ID_MENU_ITEM,MF_BYCOMMAND | MF_ENABLED);</font> </p>
+
+<p><a NAME="tip58"></a><b><font SIZE="+2"><font FACE="Times New Roman">58</font><font
+FACE="黑体">、如何给系统菜单添加一个菜单项</font></font></b> </p>
+
+<p><font SIZE="+0">给系统菜单添加一个菜单项需要进行下述三个步骤：</font> 
+</p>
+
+<p><font SIZE="+0">首先，使用<font FACE="Times New Roman">Resource Symbols</font>对话（在<font
+FACE="Times New Roman">View</font>菜单中选择<font FACE="Times New Roman">Resource 
+Symbols</font>．．．</font> </p>
+
+<p><font SIZE="+0">可以显示该对话）定义菜单项<font FACE="Times New Roman">ID</font>，该<font
+FACE="Times New Roman">ID</font>应大于<font FACE="Times New Roman">0x0F</font>而小于<font
+FACE="Times New Roman">0xF000</font>；</font> </p>
+
+<p><font SIZE="+0">其次，调用<font FACE="Times New Roman">CWnd::GetSystemMenu</font>获取系统菜单的指针并调用<font
+FACE="Times New Roman">CWnd:: Appendmenu</font>将菜单项添加到菜单中。下例给系统菜单添加两个新的菜单项：</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">int CMainFrame:: OnCreate (LPCREATESTRUCT 
+lpCreateStruct)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Make sure system menu item is in the right 
+range.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT (IDM_MYSYSITEM 
+&amp;0xFFF0)==IDM_MYSYSITEM);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT (IDM-MYSYSITEM&lt;0xF000);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get pointer to system menu.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CMenu* pSysmenu=GetSystemmenu (FALSE);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT_VALID (pSysMenu);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Add a separator and our menu item to system 
+menu.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CString StrMenuItem (_T (&quot;New menu 
+item&quot;));</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pSysMenu-&gt;Appendmenu (MF_SEPARATOR);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pSysMenu-&gt;AppendMenu (MF_STRING, 
+IDM_MYSYSITEM, strMenuitem);</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0">现在，选择系统菜单项时用户应进行检测。使用<font
+FACE="Times New Roman">ClassWizard</font>处理</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">WM_SYSCOMMAND</font>消息并检测用户菜单的<font
+FACE="Times New Roman">nID</font>参数：</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void CMainFrame:: OnSysCommand (UINT nID,LPARAM 
+lParam)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Determine if our system menu item was 
+selected.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if ( (nID &amp; 0xFFF0)==IDM_MYSYSITEM)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//TODO-process system menu item</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">else</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CMDIFrameWnd:: OnSysCommand (nID, lParam);</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0">最后，一个设计良好的<font FACE="Times New Roman">UI</font>应用程序应当在系统菜单项加亮时在状态条显示一个帮助信息，这可以通过增加一个包含系统菜单基<font
+FACE="Times New Roman">ID</font>的串表的入口来实现。</font> </p>
+
+<p><a NAME="tip59"></a><b><font SIZE="+2"><font FACE="Times New Roman">59</font><font
+FACE="黑体">、如何确定顶层菜单所占据的菜单行数</font></font></b> </p>
+
+<p><font SIZE="+0">这可以通过简单的减法和除法来实现。首先，用户需要计算主框窗口的高度和客户区；其次，从主框窗口的高度中减去客户区、框边界以及标题的高度；最后，除以菜单栏的高度。下例成员函数是一个计算主框菜单所占据的行数的代码实现。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">int CMainFrame:: GetMenuRows ()</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CRect rcFrame,rcClient;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">GetWindowRect (rcFrame);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">GetClientRect (rcClient);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">return (rcFrame.Height () -rcClient.Height ()-</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: GetSystemMetrics (SM_CYCAPTION) -</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">(:: getSystemMetrics (SM_CYFRAME) *2)) /</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: GetSystemMetrics (SM_CYMENU);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip60"></a><b><font SIZE="+2"><font FACE="Times New Roman">60</font><font
+FACE="黑体">、在用户环境中如何确定系统显示元素的颜色</font></font></b> 
+</p>
+
+<p><font SIZE="+0">调用<font FACE="Times New Roman">SDK</font>函数<font
+FACE="Times New Roman">GetSysColor</font>可以获取一个特定显示元素的颜色。下例说明了如何在<font
+FACE="Times New Roman">MFC</font>函数<font FACE="Times New Roman">CMainFrameWnd:: 
+OnNcPaint</font>中调用该函数设置窗口标题颜色。</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void CMiniFrameWnd:: OnNcPaint ()</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">dc.SetTextColor (:: GetSysColor (m_bActive ?</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT));</font> 
+</p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip61"></a><b><font SIZE="+2"><font FACE="Times New Roman">61</font><font
+FACE="黑体">、如何查询和设置系统参数</font></font></b> </p>
+
+<p><font SIZE="+0">在<font FACE="Times New Roman">Windows 3.1 SDK</font>中介绍过<font
+FACE="Times New Roman">SDK</font>函数<font FACE="Times New Roman">SystemParametersInfo</font>，调用该函数可以查询和设置系统参数，诸如按键的重复速率设置、鼠标双击延迟时间、图标字体以及桌面覆盖位图等等。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Create a font that is used for icon titles.</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">LOGFONT stFont;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: SystemParametersInfo 
+(SPIF_GETICONTITLELOGFONT,</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">sizeof (LOGFONT), &amp;stFont, 
+SPIF_SENDWININICHANGE);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">m_font.CreateFontIndirect (&amp;stFont);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Change the wallpaper to leaves.bmp.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: SystemParametersInfo (SPI_SETDESKWALLPAPER, 
+0,</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">_T (&quot; forest.bmp&quot;), 
+SPIF_UPDATEINIFILE);</font> </p>
+
+<p><a NAME="tip62"></a><b><font SIZE="+2"><font FACE="Times New Roman">62</font><font
+FACE="黑体">、如何使用一个预定义的</font><font FACE="Times New Roman">Windows</font><font
+FACE="黑体">光标</font></font></b> </p>
+
+<p><font SIZE="+0">调用<font FACE="Times New Roman">CWinApp:: LoadStandardCursor</font>并传送光标标识符。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">BOOL CSampleDialog:: OnSetCursor (CWnd* pWnd, 
+UINT nHitTest, UINT message)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Display wait cursor if busy.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if (m_bBusy)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">SetCursor (AfxGetApp () -&gt;LoadStandardCursor 
+(IDC_WAIT));</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">return TRUE;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">return CDialog:: OnSetCursor (pWnd. 
+nHitTest,message);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip63"></a><b><font SIZE="+2"><font FACE="Times New Roman">63</font><font
+FACE="黑体">、如何确定当前屏幕分辨率</font></font></b> </p>
+
+<p><font SIZE="+0">调用<font FACE="Times New Roman">SDK</font>函数<font
+FACE="Times New Roman">GetSystemMetrics</font>，该函数可以检索有关<font
+FACE="Times New Roman">windows</font>显示信息，诸如标题大小、边界大小以及滚动条大小等等。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Initialize CSize object with screen size.</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CSize sizeScreen (GetSystemMetrics 
+(SM_CXSCREEN),</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">GetSystemMetrics (SM_CYSCREEN));</font> </p>
+
+<p><a NAME="tip64"></a><b><font SIZE="+2"><font FACE="Times New Roman">64</font><font
+FACE="黑体">、如何检索原先的</font><font FACE="Times New Roman">Task Manager</font><font
+FACE="黑体">应用程序使用的任务列表</font></font></b> </p>
+
+<p><font SIZE="+0">原先的<font FACE="Times New Roman">Task Manager</font>应用程序显示顶层窗口的列表。为了显示该列表，窗口</font> 
+</p>
+
+<p><font SIZE="+0">必须可见、包含一个标题以及不能被其他窗口拥有。调用<font
+FACE="Times New Roman">CWnd:: GetWindow</font>可以</font> </p>
+
+<p><font SIZE="+0">检索顶层窗口的列表，调用<font FACE="Times New Roman">IsWindowVisible</font>、<font
+FACE="Times New Roman">GetWindowTextLength</font>以及<font FACE="Times New Roman">GetOwner</font></font> 
+</p>
+
+<p><font SIZE="+0">可以确定窗口是否应该在列表中。下例将把<font
+FACE="Times New Roman">TaskManager</font>窗口的标题填充到列表中。</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void GetTadkList (CListBox&amp;list)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CString strCaption; //Caption of window.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">list.ResetContent (); //Clear list box.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get first Window in window list.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT_VALID (AfxGetMainWnd ());</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CWnd* pWnd=AfxGetMainWnd () -&gt;GetWindow 
+(GW_HWNDFIRST);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Walk window list.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">while (pWnd)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">// I window visible, has a caption, and does not 
+have an owner?</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if (pWnd -&gt;IsWindowVisible () &amp;&amp;</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pWnd -&gt;GetWindowTextLength () &amp;&amp;! 
+pWnd -&gt;GetOwner ())</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Add caption o window to list box.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pWnd -&gt;GetWindowText (strCaption);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">list.AddString (strCaption);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get next window in window list.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pWnd=pWnd-&gt;GetWindow (GW_HWNDNEXT);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip65"></a><b><font SIZE="+2"><font FACE="Times New Roman">65</font><font
+FACE="黑体">、如何确定</font><font FACE="Times New Roman">Windows</font><font
+FACE="黑体">和</font><font FACE="Times New Roman">Windows</font><font FACE="黑体">系统目录</font></font></b> 
+</p>
+
+<p><font SIZE="+0">有两个<font FACE="Times New Roman">SDK</font>函数可以完成该功能。<font
+FACE="Times New Roman">GetWindowsDirectory</font>和<font FACE="Times New Roman">GetSystemDirectory</font>，下例说明了如何使用这两个函数：</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TCHAR szDir [MAX_PATH];</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get the full path of the windows directory.</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: GetWindowsDirectory (szDir, MAX_PATH);</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TRACE (&quot;Windows directory %s\n&quot;, 
+szDir);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get the full path of the windows system 
+directory.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: GetSystemDirectory (szDir, MAX_PATH);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TRACE (&quot;Windows system directory 
+%s\n&quot;, szDir);</font> </p>
+
+<p><a NAME="tip66"></a><b><font SIZE="+2"><font FACE="Times New Roman">66</font><font
+FACE="黑体">、在哪儿创建临文件</font></font></b> </p>
+
+<p><font SIZE="+0">调用<font FACE="Times New Roman">SDK</font>函数<font
+FACE="Times New Roman">GetTemPath</font>可以确定临时文件的目录，该函数首先为临时路径检测<font
+FACE="Times New Roman">TMP</font>环境变量：如果没有指定<font
+FACE="Times New Roman">TMP</font>，检测<font FACE="Times New Roman">TMP</font>环境变量，然后返回到当前目录。下例说明了如何创建一个临时文件。</font> 
+</p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//get unique temporary file.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CString strFile;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">GetUniqueTempName (strFile);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TRY</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Create file and write data.Note that file is 
+closed</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//in the destructor of the CFile object.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CFile file (strFile,CFile:: modeCreate | CFile:: 
+modeWrite);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//write data</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CATCH (CFileException, e)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//error opening file</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">END_CATCH</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Void GetuniqueTempName (CString&amp; 
+strTempName)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Get the temporary files directory.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TCHAR szTempPath [MAX_PATH];</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">DWORD dwResult=:: GetTempPath (MAX_PATH, 
+szTempPath);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT (dwResult);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Create a unique temporary file.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">TCHAR szTempFile [MAX_PATH];</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">UINT nResult=GetTempFileName (szTempPath, _T 
+(&quot;~ex&quot;),0,szTempfile);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT (nResult);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">strTempName=szTempFile;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip67"></a><b><font SIZE="+2"><font FACE="Times New Roman">67</font><font
+FACE="黑体">、如何访问桌面窗口</font></font></b> </p>
+
+<p><font SIZE="+0">静态函数<font FACE="Times New Roman">CWnd:: GetDesktopWindow </font>返回桌面窗口的指针。下例说明了<font
+FACE="Times New Roman">MFC</font>函数<font FACE="Times New Roman">CFrameWnd::BeginModalStae</font>是如何使用该函数进入内部窗口列表的。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void CFrameWnd::BeginModalState ()</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//first count all windows that need to be 
+disabled</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">UINT nCount=0;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">HWND hWnd=:: GetWindow (:: GetDesktopWindow (), 
+GW_CHILD);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">while (hWnd!=NULL)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if (:: IsWindowEnabled (hwnd) &amp;&amp;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CWnd::FromHandlePermanent (hWnd)!=NULL 
+&amp;&amp;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxIsDescendant (pParent-&gt;m_hWnd, hWnd) 
+&amp;&amp;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">:: SendMessage (hWnd, WM_DISABLEMODAL, 0, 0)==0)</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">++nCount;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">hWnd=:: GetWindow (hWnd, GW_HWNDNEXT);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0">…</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+</body>
+</html>

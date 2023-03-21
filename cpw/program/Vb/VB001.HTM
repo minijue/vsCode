@@ -1,0 +1,190 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title></title>
+</head>
+
+<body background="../../res/back.JPG">
+<div align="center"><center>
+
+<table border="0" width="560" height="4" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="570" height="7"><p align="center"><strong><span style="font-size: 9pt">VB调用C程序动态链接库的方法</span></strong></td>
+  </tr>
+  <tr>
+    <td width="570" height="9"><p align="center"><span style="font-size: 9pt">(西安:强 琳 
+    李 论 归云科 雷景辉)</span></td>
+  </tr>
+  <tr>
+    <td width="570" height="8"><span style="font-size: 9pt"><p align="center">录入:江湖小子</span></td>
+  </tr>
+</table>
+</center></div>
+
+<p><span style="font-size: 9pt">摘 要 <br>
+文中介绍了一种实现VB调用C语言程序的方法－动态连接库法，给出了动态链接库制作的一般框架,通过实例描述了动态连接库的实现及其制做方法、编程步骤,这种方法具有普遍的意义。</span></p>
+
+<p><span style="font-size: 9pt">关键词: VB,动态连接库DLL,C程序 <br>
+<br>
+一、引言<br>
+<br>
+Visual Basic( 以下简称VB)是一种可视化的面向对象的编程语言，以其编程简单、快捷等特点，深受广大WINDOWS程序员的青睐。利用VB开发界面友好、操作方便的软件只需很短的时间。但是VB运行速度较慢，对于庞大的科学计算问题，VB的这种慢速会使人难以忍受。C语言是国际上非常流行的一种中级编程语言，以其灵活、高效等优点而获得广泛应用，许多的应用程序都是用C语言在DOS环境下编写而成。那么如何发挥VB和C这两种语言的优势，用VB设计一种良好的for 
+windows界面来调用C语言程序，即实现VB调用C语言程序呢？现有的文献只提到动态链接库（以下简称DLL）可以将这两种语言连接起来，但没有讲动态链接库DLL的制做及其编程方法。本文详细介绍了Borland 
+C环境下制作动态链接库以及VB调用for dos动态链接库的的方法、步骤，并通过实例描述VB调用C程序的全过程。<br>
+<br>
+二、用Borland C编写DLL程序的方法<br>
+<br>
+要想实现VB调用C程序，首先需要用Borland C编写动态连接库DLL程序（假设DLL程序取名为example）。动态链接库包含四个文件：C语言源程序(.C）、模块定义文件（.DEF）、原型函数文件（.H）和工程文件（.PRJ）。下面分别详细介绍一下这四种文件的具体结构。<br>
+1、编写C语言源程序的框架：<br>
+C语言源程序（example.C），它包括三种函数：入口函数、输出函数和终止函数。其具体结构如下：<br>
+/*************************************/<br>
+/* 文件名： example.C */<br>
+/*************************************/<br>
+#include &lt;windows.h&gt;<br>
+/***********入口函数***********/<br>
+int FAR PASCAL LibMain ( HANDLE hInstance,<br>
+WORD wDataSeg,<br>
+WORD cbHeapSize,<br>
+LPSTR lpszCmdLine )<br>
+{<br>
+if (cbHeapSize!=0)<br>
+UnlockData(0);<br>
+return （1）;<br>
+}<br>
+<br>
+/***********输出函数***********/<br>
+<br>
+int FAR PASCAL example(int param1,...,char param n)<br>
+{<br>
+...... /*C语言应用程序*/ <br>
+}<br>
+/***********终止函数***********/<br>
+int FAR PASCAL WEP ( int /*SystemExit*/ )<br>
+{<br>
+return(1);<br>
+}<br>
+以上各组成部分参数的含义：Windows.h头文件，它包含有数据类型的定义、API入口点定义和其它有用的参数信息。PASCAL说明符定义该程序的传递参数和净化堆栈的协定（注意：DLL外部传送的指针必须是远指针FAR）。LibMain带四个参数：<br>
+hInstance、 wDataSeg、cbHeapSize和lpszCmdLine。第一个参数hInstance是DLL事例句柄， 
+wDataSeg参数是数据段（DS）寄存器值，cbHeapSize参数是在模块定义文件中定义的堆的大小，LibMain 
+使用该值使本地堆初始化。lpszCmdLine参数包括命令行信息，但很少被DLL使用。一般来说，这四个参数是制作DLL通用的参数。<br>
+如果不想让DLL数据被封住，那么必须调用unlockdata恢复正常的非锁状态，如果DLL初始化已经成功，DLL则返回1，若不成功则返回0值，且 
+DLL退出系统。<br>
+DLL的输出函数实现用户所要完成的任务，这部分是DLL的核心。它与一般C语言程序不同之处在于无scanf函数。所有的外部指针都是远指针FAR。画直线函数要用lineto函数。<br>
+DLL包括一个终止函数，终止函数有时称为退出函数，它的名字必须是WEP。且它可以被包括在DLL模块定义文件的EXPORTS段中。 
+<br>
+2、模块定义文件（.DEF)的结构和各段的意义<br>
+模块定义文件的结构如下：<br>
+/*************************************/<br>
+/* 文件名： example.DEF */<br>
+/*************************************/<br>
+LIBRARY example /* DLLname */<br>
+DESCRIPTION ' example.DLL'<br>
+EXETYPE WINDOWS<br>
+CODE PRELOAD MOVEABLE DISCARDABLE<br>
+DATA PRELOAD MOVEABLE SINGLE<br>
+HEAPSIZE 1024<br>
+EXPORTS<br>
+example @1<br>
+WEP @2<br>
+关键字LIBRARY是把这个模块视为一个DLL，库的名字example跟在其后，且必须与该库的名字、DEF中的DLL的文件名相一致。DESCRIPTION语句采用一个字符串，其长度可达128个字符，通常用它来保存模块描述的信息。EXETYPE 
+windows语句每个windows应用程序和DLL都需要。DATA语句定义该库数据段的内存属性，关键字MOVEABLE允许内存管理程序在必要时移动内存段，关键字SINGLE是DLL必要，因为DLL总是有一个单一数据段，而不管访问它的应用程序的数量。HEAPSIZE语句用来定义一个DLL局部堆的初始规模，执行局部内存分配的DLL必须在库启动时使该堆初始化，堆的大小被传送给DLL的LiEntry的程序。然后用该堆的大小调用Locallnit使DLL的局部堆初始化。<br>
+EXEPORTS语句定义将被用作来自应用程序或来自其它DLL入口点的程序，windows利用这个信息建立一个序数入口值，序数入口值是一个优化的值，允许动态连接机制更快块操作且使用较少的内存。<br>
+一般来说，模块定义文件（.DEF)的结构除取动态库的名字不同外，其它结构都是固定的。<br>
+3．建立原形函数文件(.H)<br>
+原形函数的功能是进一步声明调用函数的函数名和传递的参数，其形式为：<br>
+/*************************************/<br>
+/* 文件名： example.H */<br>
+/*************************************/<br>
+extern &quot;C&quot; int _export FAR PASCAL example(int param1,...,char param n) ;<br>
+4．建立工程文件(.PRJ)<br>
+工程文件中包含有example.C、example.DEF两个文件后，然后编译连接生成动态链接库即可。<br>
+以上是制作动态连接库的框架，现在通过一个实例介绍制作动态链接库的方法。如要求程序完成功能为：打开一个数据文件读出前两个数据，将这两个数与所传递的两个参数相加，返回它们的和。设该DLL程序的名字为ADD。<br>
+第一步：在Borland C++环境下编辑.C文件、.DEF文件和.H文件，并建立.PRJ文件。如<br>
+（1）编写C语言源程序清单：<br>
+/*************************************/<br>
+/* 文件名： ADD.C */<br>
+/*************************************/<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+#include &lt;io.h&gt;<br>
+#include &lt;alloc.h&gt;<br>
+#include &lt;stdlib.h&gt;<br>
+#include &lt;windows.h&gt;<br>
+#include &lt;math.h&gt;<br>
+#include &lt;stdio.h&gt;<br>
+#include &quot;c:\ADD.h&quot;<br>
+/*入口函数*/<br>
+int FAR PASCAL LibMain (HANDLE hInstance ,<br>
+WORD wDataSeg ,<br>
+WORD cbHeapSize,<br>
+LPSTR lpszCmdLine )<br>
+{<br>
+if (cbHeapSize!=0)<br>
+UnlockData(0);<br>
+return 1;<br>
+}<br>
+/*输出函数*/<br>
+int FAR PASCAL ADD(int x,int y,char *filein)<br>
+{ int a,b；<br>
+fp=fopen(filein,&quot;r&quot;);<br>
+if(fp==NULL) { exit(0);}<br>
+int temp1=0,temp2=0;<br>
+fscanf(fp,&quot;%d&quot;,&amp;a);<br>
+fscanf(fp,&quot;%d&quot;,&amp;b);<br>
+temp1=x+a;<br>
+temp2=y+b;<br>
+temp1=temp1+temp2;<br>
+fclose(fp);<br>
+return(temp1);<br>
+}<br>
+/*退出函数*/<br>
+int FAR PASCAL WEP ( int/*SystemExit*/ )<br>
+{<br>
+return(1);<br>
+}<br>
+2）ADD.DEF文件的程序清单：<br>
+/*************************************/<br>
+/* 文件名： ADD.H */<br>
+/*************************************/<br>
+LIBRARY ADD<br>
+DESCRIPTION 'ADD.DLL'<br>
+EXETYPE WINDOWS<br>
+CODE PRELOAD MOVEABLE DISCARDABLE<br>
+DATA PRELOAD MOVEABLE SINGLE<br>
+HEAPSIZE 1024<br>
+EXPORTS<br>
+ADD @1<br>
+WEP @2<br>
+（3）ADD.H程序清单：<br>
+/*************************************/<br>
+/* 文件名： ADD.H */<br>
+/*************************************/<br>
+extern &quot;C&quot; int _export FAR PASCAL add(int x,int y,char *filein) ;<br>
+（4）建立工程文件：<br>
+在Borland C++环境下的project项中打开open project file项并建立ADD.prj，在add 
+<br>
+item中加入ADD.C文件和ADD.DEF文件即可建立工程文件。<br>
+第二步，在Borland C的options项的Applation中选择Windows DLL，再在Compile中选择Build 
+all，这样就可生成动态链接库ADD.DLL供VB调用。<br>
+<br>
+三、VB3.0调用动态链接库DLL方法<br>
+<br>
+制作好DLL之后，就可以用VB调用它，实现VB调用C程序。VB程序要使用DLL中的函数，首先必须要有特殊的声明，用Declare声明语句在窗体级或模块级或全局模块的代码声明段进行声明，将动态链接库中的函数声明到VB中，供VB程序调用。<br>
+语句格式为：Declare Sub 过程名Lib [ Alias &quot; 别名]（[ByVal 参数AS类型]），或为Declare 
+Function函数名Lib [Alias &quot; 别名]（[ByVal 参数AS类型]）AS类型在声明中首先用Declare关键字表示声明DLL中的函数。在C语言中有的函数类型为VOID，它表示不具有返回值，则必须用关键字Sub将其声明成过程。有的函数具有返回值，则必须用关键字Function将其声明成函数，并且在声明语句的最后要用AS关键字指明函数返回值的类型。<br>
+例如上面的ADD.DLL在VB中就可以声明为：<br>
+Declare Function ADD Lib c:\ADD.dll―ByVal X AS Integer, ByVal Y AS Integer ,ByVal filein 
+as<br>
+string）AS Integer<br>
+通过此声明语句将函数ADD声明到VB中，便可直接调用。<br>
+<br>
+四、结束语<br>
+<br>
+以上详细介绍了Borland C环境下制作动态链接库以及VB调用for dos动态链接库的方法、步骤，并通过实例说明VB调用C语言程序的方法。举例程序ADD经VB3.0编译，在486微机上调试通过。本文介绍的方法具有广泛的意义，也完全适用于C++ 
+语言程序。<br>
+<br>
+</span></p>
+</body>
+</html>

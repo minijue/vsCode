@@ -1,0 +1,165 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在VB中利用API实现窗体的平滑显示&nbsp;<br>
+      <br>
+                           福州 潘晓臻       
+      <p>　Win98的一个新功能是窗体能够平滑显示，那我们是否能编程来实现这种功能呢？答案是肯定的。首先讲述一下原理，其实我并没有让窗体本身平滑地显示，而是在窗体显示之前在窗体的位置上画一系列的矩形，利用视觉暂留让人以为是窗体在从小变大。<br>
+      　　下面就用VB来实现这种功能。<br>
+      　　建立两个窗体form1和form2，在form1上添加如下控件：由五个optionbutton控件组成的控件数组，index为0－4,caption属性分别为“从中间扩散”、“右上到左下”、“左上到右下”、“右下到左上”和“左上到右下”,一个commandbutton，caption属性为“显示窗体”, 添加一个模块，其中代码如下：<br> 
+      　　 Option Explicit<br> 
+      　　`声明所用的API函数、常量和变量&nbsp;<br>
+      　　Public Declare Function GetDC Lib “user32” (ByVal hwnd As Long) As Long<br> 
+      　　 Public Declare Function Rectangle Lib “gdi32” (ByVal hdc As Long, _<br> 
+      　　 ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2_<br> 
+      　　 As Long) As Long<br> 
+      　　 Public Declare Function SelectObject Lib “gdi32” (ByVal hdc As Long, _<br> 
+      　　 ByVal hObject As Long) As Long<br> 
+      　　 Public Declare Function DeleteObject Lib “gdi32”(ByVal hObject As _<br> 
+      　　 Long) As Long<br> 
+      　　 Public Declare Function ReleaseDC Lib “user32” (ByVal hwnd As Long,_<br> 
+      　　 ByVal hdc As Long) As Long<br> 
+      　　 Public Declare Sub Sleep Lib “kernel32” (ByVal dwMilliseconds As Long)<br> 
+      　　 Public Declare Function CreateSolidBrush Lib “gdi32” (ByVal crColor As_<br> 
+      　　 Long) As Long<br> 
+      　　 Public Declare Function GetBkColor Lib “gdi32” (ByVal hdc As Long) As Long<br> 
+      　　 Public hbrush As Long, hdc5 As Long<br> 
+      　　 Public dx As Long, dy As Long<br> 
+      　　 Public rx1 As Long, rx2 As Long, ry1 As Long, ry2 As Long<br> 
+      　　 Public i As Long, j As Long, bcolor As Long<br> 
+      　　 Public ind As Integer<br> 
+      　　 Public DispCnt As Long<br> 
+      　　<br>
+      　　Public Sub showform(win As Form, ind)<br> 
+      　　 DispCnt = 60 `画几个矩形后显示窗体<br> 
+      　　 `下面这段代码用来获得窗体颜色,不用me.backcolor的原因是窗体颜色不一定是系统调色板的颜色,如果用me.backcolor的话颜色可能会不准。<br> 
+      　　 hdc5 = GetDC(0)&nbsp;<br>
+      　　 bcolor = GetBkColor(win.hdc)<br> 
+      　　 hbrush = CreateSolidBrush(bcolor)`设定刷子颜色<br> 
+      　　 Call SelectObject(hdc5, hbrush)<br> 
+      　　 dx = win.Width \ (DispCnt)<br> 
+      　　 dy = win.Height \ (DispCnt)<br> 
+      　　 j = 1<br> 
+      　　 Select Case ind<br> 
+      　　 Case 1<br> 
+      　　 dx = dx \ 2; dy = dy \ 2<br> 
+      　　 For i = DispCnt To 1 Step －1<br> 
+      　　 rx1 = (win.Left ＋ dx ＊ (i － 1)) \ Screen.TwipsPerPixelX<br> 
+      　　 ry1 = (win.Top ＋ dy ＊ (i － 1)) \ Screen.TwipsPerPixelY<br> 
+      　　 rx2 = rx1 ＋ dx ＊ 2 ＊ j \ Screen.TwipsPerPixelX<br> 
+      　　 ry2 = rx1 ＋ dy ＊ 2 ＊ j \ Screen.TwipsPerPixelY<br> 
+      　　 j = j ＋ 1<br> 
+      　　 Call Rectangle(hdc5, rx1, ry1, rx2, ry2)<br> 
+      　　 Sleep (1); Next i<br> 
+      　　Case 2<br> 
+      　　 For i = DispCnt To 1 Step －1<br> 
+      　　 rx1 = (win.Left ＋ win.Width － dx ＊ j) \ Screen.TwipsPerPixelX<br> 
+      　　 ry1 = win.Top \ Screen.TwipsPerPixelY<br> 
+      　　 rx2 = (win.Left ＋ win.Width) \ Screen.TwipsPerPixelX<br> 
+      　　 ry2 = (win.Top ＋ dy ＊ j) \ Screen.TwipsPerPixelY<br> 
+      　　 j = j ＋ 1<br> 
+      　　 Call Rectangle(hdc5, rx1, ry1, rx2, ry2)<br> 
+      　　 Sleep (1); Next i<br> 
+      　　 Case 3<br> 
+      　　 For i = DispCnt To 1 Step －1<br> 
+      　　 rx1 = win.Left \ Screen.TwipsPerPixelX<br> 
+      　　 ry1 = win.Top \ Screen.TwipsPerPixelY<br> 
+      　　 rx2 = rx1 ＋ dx ＊ j \ Screen.TwipsPerPixelX<br> 
+      　　 ry2 = rx1 ＋ dy ＊ j \ Screen.TwipsPerPixelY<br> 
+      　　 j = j ＋ 1<br> 
+      　　 Call Rectangle(hdc5, rx1, ry1, rx2, ry2)<br> 
+      　　 Sleep (1); Next i<br> 
+      　　 Case 4<br> 
+      　　 For i = DispCnt To 1 Step －1<br> 
+      　　 rx1 = (win.Left ＋ dx ＊ (i － 1)) \ Screen.TwipsPerPixelX<br> 
+      　　 ry1 = (win.Top ＋ dy ＊ (i － 1)) \ Screen.TwipsPerPixelY<br> 
+      　　 rx2 = (win.Left ＋ win.Width) \ Screen.TwipsPerPixelX<br> 
+      　　 ry2 = (win.Top ＋ win.Height) \ Screen.TwipsPerPixelY<br> 
+      　　 j = j ＋ 1<br> 
+      　　 Call Rectangle(hdc5, rx1, ry1, rx2, ry2)<br> 
+      　　 Sleep (1); Next i<br> 
+      　　 Case 5<br> 
+      　　 For i = DispCnt To 1 Step －1<br> 
+      　　 rx1 = (win.Left) \ Screen.TwipsPerPixelX<br> 
+      　　 ry1 = (win.Top ＋ win.Height － dy ＊ j) \ Screen.TwipsPerPixelY<br> 
+      　　 rx2 = (win.Left ＋ dx ＊ j) \ Screen.TwipsPerPixelX<br> 
+      　　 ry2 = (win.Top ＋ win.Height) \ Screen.TwipsPerPixelY<br> 
+      　　 j = j ＋ 1<br> 
+      　　 Call Rectangle(hdc5, rx1, ry1, rx2, ry2)<br> 
+      　　 Sleep (1); Next i<br> 
+      　　 End Select<br> 
+      　　Call ReleaseDC(0, hdc5)`释放设备描述表<br> 
+      　　Call DeleteObject(hbrush)`删除刷子<br> 
+      　　End Sub&nbsp;<br>
+      　　在form1中输入如下代码<br>
+      　　Private Sub Command1_Click()`显示窗体<br> 
+      　　Unload Form2<br> 
+      　　Load Form2<br> 
+      　　Form2.Show<br>
+      　　End Sub<br> 
+      　　<br>
+      　　Private Sub Form_Load()<br> 
+      　　 ind = 1`初始化参数<br> 
+      　　End Sub<br> 
+      　　<br>
+      　　Private Sub Option1_Click(Index As Integer)<br> 
+      　　Select Case Index<br> 
+      　　 Case 0<br> 
+      　　 ind = 1<br> 
+      　　 Case 1<br> 
+      　　 ind = 2<br> 
+      　　 Case 2<br> 
+      　　 ind = 3<br> 
+      　　 Case 3<br> 
+      　　 ind = 4<br> 
+      　　 Case 4<br> 
+      　　 ind = 5<br> 
+      　　 Case 5<br> 
+      　　 ind = 6<br> 
+      　　 End Select<br> 
+      　　&nbsp;<br>
+      　　End Sub<br> 
+      　　在form2中输入如下代码<br>
+      　　Private Sub Form_Load()<br> 
+      　　 Call showform(Me, ind)<br> 
+      　　End Sub<br> 
+      　　本程序调用了一些有关系统和绘图的API函数，有利于大家进一步了解API函数的功能。本程序在vb5企业版，Win98中运行通过。     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

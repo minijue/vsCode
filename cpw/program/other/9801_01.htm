@@ -1,0 +1,131 @@
+<html>
+<body text="#000000" bgcolor="#ffffff">
+<table>
+<tr><td width=600>
+<P><center>
+<font color="#0000ff"><h2>
+ 续：“ 如 何 避 免Microsoft 非 标 准Java SDK 的 潜 在 危 险”
+</h2></font>
+</center>
+<hr>
+<p>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>本 文 提 供 更 多 的 技 巧， 使 读 者 能 了 解 怎 样 绕 开Microsoft 的JavaSDK 中 的 错 误( 以 及Netscape 的Communicator 补 丁 中 存 在 的 问 题)</b>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[ 摘 要] 在“ 如 何 避 免Microsoft 非 标 准Java SDK 的 潜 在 危 险” 这 篇 文 章 刊 出 之 后， 读 者 的 反 馈 信 息 蜂 涌 而 至， 其 中 不 少 读 者 指 出 了Microsoft 的Java 开 发 工 具 中 存 在 的 另 外 一 些 潜 在 问 题。 本 文 将 围 绕 着 自 前 一 篇 文 章 刊 出 之 后， 读 者 提 出 的 五 个 具 体 问 题 展 开 讨 论， 提 供 更 多 的 补 充。
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 上 个 月 刊 出 的 文 章“ 如 何 避 免Microsoft 非 标 准Java SDK 的 潜 在 危 险”， 引 来 了 数 量 相 当 可 观 的 读 者 反 馈。 针 对 某 些 读 者 的 评 论， 我 认 为 有 必 要 写 一 篇 后 继 短 文 来 帮 助 我 们 澄 清 几 个 观 点。 以 下 五 个 方 面， 是 我 认 为 需 要 加 以 说 明 的：
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  1. Microsoft 的 应 用 程 序 基 本 类(AFC)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  2. Locale 的 变 化
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  3. 远 程 方 法 调 用(RMI)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  4. 动 作 差 别
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  5. Netscape Communicator 的Java 补 丁。
+<h3>
+Microsoft 的AFC</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 在 前 面 的 文 章 中， 我 曾 声 明 过， 将 应 用 程 序 基 本 类(AFC) 与Internet Explorer
+4.0(IE4) 和Microsoft 的java 软 件 开 发 套 件(SDK) 第 二 版 包 装 在 一 起， 应 当 使 开 发 者 能 够 开 发 出 独 立 于Microsoft Java 环 境 的Java 解 决 方 案。 对 于 这 一 点， 所 需 要 的 唯 一 条 件 就 是Microsoft 必 须 将AFC 的 利 用 范 围 限 制 于Microsoft 的Java 虚 拟 机 之 外。 在 该 文 写 出 之 后，Microsoft 曾 声 称， 就 目 前 而 言， 在 短 期 内， 它 将 不 会 装 备 一 个 包 括IE4 的、 纯Java 版 本 的AFC。 然 而， 它 将 会 为Java 1.0.2 环 境 装 备 一 个 纯Java 版 本 的AFC。 一 旦 这 种 装 备 完 成 了， 开 发 者 就 将 会 通 过AFC， 创 建 交 叉 浏 览 器 解 决 方 案。 值 得 注 意 的 是， 这 两 个 版 本 的 应 用 程 序 开 发 接 口(API) 将 不 会 相 同， 因 为 与IE4 和SDK 装 备 在 一 起 的 版 本 不 但 要 支 持Java
+1.1 事 件 模 式， 而 且 还 要 支 持1.0 事 件 模 式。 我 猜 想， 创 建 与 这 两 个 版 本 都 兼 容 的 方 案 是 有 可 能 的， 就 如Java 1.0 的applet 能 够 在Java 1.1 环 境 中 工 作 一 样。 但 是， 在Java
+1.0.2 版 本 的AFC 发 布 之 前， 所 有 的 结 果 都 不 会 明 朗。
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 同 样， 自 从 上 篇 文 章 刊 出 之 后，Microsoft 发 布 了Macintosh 和Solaris 平 台 的IE4 的 预 备 版。 根 据Microsoft 公 司 的Charles Fitzgerald 的 说 法， 与 这 两 个 版 本 装 备 在 一 起 的AFC 与Windows 环 境 下 的IE4 所 带 的AFC 可 以 兼 容。AFC 的 版 本 可 以 互 相 兼 容， 这 就 允 许 开 发 跨 操 作 系 统 平 台 的AFC 解 决 方 案， 但 仍 不 能 获 得 跨Java 虚 拟 机(cross-Java virtual machine) 的 解 决 方 案。(HP-UX 和AIX 版 本 的IE4 在 不 久 的 将 来 也 能 得 到。)
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 在 此 值 得 提 一 提 的 另 一 条 信 息 是： 由 于AFC 类 并 不 能 实 现 系 列 化(“serializable”)， 它 们 不 能 象bean 兼 容 工 具 应 用JavaBean 组 件 一 样， 被 直 接 应 用。 它 们 目 前 的 应 用 仍 停 留 在 源 码 级 别 上， 而 且 能 够 在 将 来 提 供 系 列 化 功 能， 但 是，Microsoft 仍 未 决 定 开 发AFC 组 件beans。
+
+<h3>Locale 的 变 化</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+ 在 前 一 篇 文 章 中， 谈 到 了locale 类 中 新 增 的 大 约50 个 公 共 实 例 变 量， 以 及 在java.text.resource 包 中 新 增 的 支 持 文 件。 虽 然locale 实 例 变 量 是Microsoft 类 库 专 用 的， 但 是， 给locale 对 象 提 供 支 持 的Java 类， 却 并 不 是 专 门 针 对Microsoft 环 境 的。 这 就 意 味 着 你 仍 可 以 利 用 日 期 及 文 本 格 式 支 持 类 来 支 持 各 种Locale 类。 但 是， 你 不 应 该 使 用Microsoft 专 用 的 常 量。 因 此， 例 如， 你 不 应 当 使 用Microsoft 专 用 的Locale.FINNISH 常 量， 而 应 当 利 用new Locale("fi","FI") 或new Locale("fi","") 来 创 建 一 个 新 的Locale 对 象。
+
+<h3>RMI</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+Microsoft 提 供 了 应 用 于 其Java 虚 拟 机 上 的Sun 的RMI 类， 以 免 你 丢 失 了 上 一 篇 文 章 的 资 源 链 接。 这 点 在 表 面 上 已 于 今 年 八 月 就 已 完 成， 但 如 果 你 不 知 道 查 找rmi.zip， 你 将 发 现 查 找 是 十 分 困 难 的。 现 在， 它 已 和 其 它Java 资 源 列 在 一 起， 可 以 从Microsoft 公 司 得 到。 然 而Microsoft 并 不 提 供 任 何 支 持， 为 了 使 用 与IE4 相 应 的 类， 它 们 必 须 从 本 地 安 装。 任 何 一 个 想 利 用RMI 的applet， 不 能 从Internet 上 下 载RMI 类。 换 句 话 说，RMI 类 必 须 从 可 靠 来 源 获 得( 从 本 地 装 入)。
+
+<h3> 动 作 差 别</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 许 多 读 者 指 出 了 另 外 一 些Microsoft Java 实 现 的 动 作 差 别， 而 且 有 的 读 者 甚 至 还 创 建 了Web 站 点 以 展 示 与 此 相 关 的 问 题。 在 第 一 篇 文 章 中， 由 于 我 主 要 关 注 的 是API 的 差 异， 因 此 有 些 问 题 我 并 没 有 提 及。 在 更 深 入 地 使 用Microsoft Java 类 的 过 程 中， 有 些 读 者 发 现 了 更 多 的 问 题， 这 种 情 况 我 早 有 所 料。 作 为 一 个 开 发 者， 我 们 应 当 意 识 到 这 些 问 题， 并 且 在 可 能 的 情 况 下 绕 开 它 们。Microsoft 已 经 声 明， 有 些 差 别 已 被 当 作bug， 并 且 加 以 了 改 正。 在 被 改 正 的JVM 发 布 之 前， 了 解 这 些 问 题 是 有 好 处 的， 至 少 你 不 必 不 知 所 措 地 去 到 处 乱 找 错 误 的 来 源。
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>untrusted applets 及 框 架 中 的 菜 单 显 示</b>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+ 被 读 者 指 出 的 第 一 个 问 题 与untrusted applet 被 打 开 时 框 架 中 的 显 示 菜 单 有 关。 这 一 错 误 可 以 在http://www.sc-systems.com/public/misc/IE4MenuBug/ 这 一 地 址 看 到。 在IE4 中， 一 个untrusted applet 的 警 告 信 息 看 来 占 据 了 框 架 用 于 显 示 菜 单 条 的 空 间， 然 而 当 用Netscape 浏 览 器 和Internet Explorer 3.0 时， 它 却 显 示 正 常。 尽 管 这 个 测 试 显 示 的 是 在 特 殊 情 况 下IE4 可 能 出 现 的 错 误， 但IE4 中 用 于 显 示 和 测 定 框 架 大 小 的 方 法 是 不 标 准 的。 大 多 数 的 读 者 利 用setSize() 和setVisible() 来 显 示 框 架 时， 不 可 能 遇 上 这 种 错 误。 而 相 反 的 是， 频 繁 调 用addNotify(),setSize(), 并 接 着 调 用setVisible() 的 开 发 者 将 会 遇 上 麻 烦。 你 不 必 直 接 调 用addNotify() 以 创 建 一 个 组 件 的 同 位 类(peer)。 如 果 一 个 程 序 需 要 用 到 只 有 同 位 类 才 能 提 供 的 信 息， 则 可 以 重 载addNotify() 方 法， 先 让 这 个 新 的 方 法 调 用super.addNotify()， 再 在 这 个 重 载 的 方 法 中， 利 用 由super.addNotify() 获 得 的 信 息。
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b> 利 用IE 和SOCKS 代 理 服 务 器</b>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 读 者 所 指 出 的 第 二 个 问 题 与IE 利 用SOCKS 代 理 服 务 器 的 配 置 有 关。 如 果IE 被 配 置 成 利 用SOCKS 代 理 服 务 器 方 式， 那 么 从“jview”(SDK 的Java 命 令 行 载 入 程 序） 启 动 的Java 应 用 程 序 将 利 用 这 个 代 理 服 务 器。 如 果 本 地 的 防 火 墙 不 知 道Internet 的 网 络 配 置， 那 么 当SOCKS 服 务 器 查 询 本 地 主 机 的 地 址 时， 它 执 行 这 个 查 询， 认 为 它 与 通 常 的Internet 名 字 空 间 不 相 符， 因 而 失 败。 很 名 显，Microsoft 实 现 抽 象 的SocketImpl 类， 以 及 对 私 有 的PlainSocketImpl 类 的 进 行 包 装 时， 先 搜 索Windows 的 注 册 信 息， 并 利 用 代 理 服 务 器 主 机 作 为 主 机 名 字 解 析。 一 但 失 败， 与Microsoft 虚 拟 机 捆 绑 在 一 起 的socket 存 取 就 会 抛 出 一 个SocketException 异 常。 但 在JDK 和Netscape 环 境 下， 这 些 工 作 都 是 正 常 的。 想 得 到 此 问 题 的 更 完 全 描 述， 可 参 见http://www.findmail.com/listsaver/advanced-java/4873.html。
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 有 一 个 方 法 可 以 绕 过 这 个 问 题， 但 是 请 记 住， 这 个 问 题 对 于Microsoft 最 新 的IE4 和Java SDK 版 本 来 说， 并 不 是 一 个 新 问 题。Ascent Technology 的Sundar Narasimhan， 一 个 分 布 式 软 件 开 发 者， 提 供 了 下 面 的 方 法： 通 过 下 面 的 一 段 代 码， 删 除“socksProxyHost” 系 统 属 性， 以 避 免 用 到SOCKS 代 理。
+<pre>
+Properties p = System.getProperties();
+if (System.getProperty("java.vendor").equals("Microsoft Corp.")) {
+  p.remove("socksProxyHost");
+}
+</pre>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b> 编 译 差 异：Sun 的javac 和Microsoft 的jvc</b>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 我 们 碰 到 的 第 三 个 问 题 与javac JDK 编 译 器 和jvc SDK 编 译 器 二 者 之 间 的 动 作 差 别 有 关。 当 一 个 内 嵌 类 存 取 一 个 外 部 类 的 私 有 变 量 时，Sun 的Java 编 译 器 对 这 种 情 况 的 处 理， 不 同 于Microsoft 的 编 译 器。 这 看 起 来 意 味 着， 当 创 建 跨Java 系 统 方 案 时， 你 不 应 该 通 过 内 嵌 类 来 存 取 其 外 部 类 的 私 有 变 量， 相 反 的 是， 你 应 该 或 者 为 这 个 变 量 创 建 一 个 存 取 例 程， 或 者 将 这 个 变 量 变 成 包 私 有 变 量。
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 还 发 现 的 其 它 问 题：
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   Toolkit.beep() 在untrusted applets 中 不 允 许 使 用
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   List.setForeground() / setBackground() 这 两 个 方 法 被 省 略
+
+<h3> 有 关Netscape 的 问 题</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 在 有 关Netscape 的 小 问 题 中， 我 已 提 到 过Netscape 通 过 其Communicator 补 丁， 对 其Java 类 库 的 改 变 ─ ─ 及 这 些 改 变 可 能 带 来 的 一 些 麻 烦。Sun 已 经 了 解 到 这 些 问 题， 而 且Netscape 也 已 签 署 了 一 个 协 议， 保 证 在 最 终 版 本 的 发 布 前， 改 正 这 些 错 误。 在 最 终 版 本 的 发 布 之 前， 如 果 你 利 用 了Netscape 的Visual JavaScript 工 具( 当 前 它 仍 还 是beta 版 本)， 借 助JavaBean 来 创 建 解 决 方 案， 那 么 你 就 会 用 到JavaScript 的 非 标 准 的Java 扩 充。 这 意 味 着， 由Visual JavaScript 工 具 创 建 的 程 序， 可 能 在Communicator 环 境 之 外 不 能 工 作。 与 对 付Microsoft 的 专 有 扩 充 一 样， 在 这 些 问 题 被 改 正 之 前， 避 免 使 用Netscape 的 专 有 扩 充。
+<h3>
+结 论</h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 在 对Microsoft 的Java SDK 和IE4 作 了 更 进 一 步 的 考 查 之 后， 我 的 结 论 没 有 改 变。 当 你 想 创 建 一 个 跨Java 平 台 的 实 现 方 案 时， 如 果 利 用 了Microsoft 最 近 推 出 的 新 版 本， 你 就 可 能 发 现 这 一 工 作 变 得 更 加 困 难。AFC 仍 然 不 是 一 个 跨 平 台 的 实 现， 而 且 我 们 不 可 能 在 很 短 的 时 间 内， 得 到 它 对JavaBeans 的 支 持， 尽 管Java 1.0.2 版 本 的AFC 发 布 即 将 来 临。 同 样 地， 如 果 只 用 于Microsoft 环 境，Locale 常 量 的 增 加 就 不 会 象 最 初 所 说 的 那 么 麻 烦， 而 从Microsoft 公 司， 你 也 可 以 得 到RMI 类。
+
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 的 确， 在Microsoft 的Java 实 现 中， 存 在 着 动 作 差 别。 每 个 人 都 希 望 在 一 个 版 本 推 出 之 前， 更 多 的 象 此 类 的 问 题 和 差 别 能 够 得 到 解 决。 由 于 面 临 最 基 本 的 问 题， 可 以 看 得 出，Microsoft 已 经 能 够 对 开 发 者 所 关 心 的 问 题 作 出 更 为 积 极 的 响 应。 对 于JavaSoft，Microsoft 已 经 提 供 了 付 款 支 持 服 务( 如 果 这 个 问 题 最 终 被 认 明 是bug， 则 将 不 收 取 技 术 支 持 费 用。) 最 后， 值 得 一 提 的 是，Microsoft 在10 月 未 发 布 的Java 环 境 修 订 版 中， 对 前 面 所 说 的 菜 单 和Toolkit.beep() bug 都 做 出 了 修 正。 这 个 版 本 还 增 加 了 最 初 版 本 中 遗 漏 了 的ByteArrayOutputStream 方 法。 如 果 你 还 被 这 些 问 题 困 绕 的 话， 你 可 以 在http://www.microsoft.com/java/vm/vmdownload.htm 页 面 下， 下 载 这 一 新 的 版 本。
+<P>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b> 资 源</b>
+<ul><li>Microsoft 的Java SDK 2.0</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.microsoft.com/java/sdk/20/relnotes/intro.htm
+<ul><li>Microsoft 的AFC</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.microsoft.com/java/afc/
+<ul><li>Java 不 兼 容 性 检 测 代 码</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.endware.com/twm/nojava/noj-dev.htm
+<ul><li>Microsoft 提 供 的 应 用 于Microsoft Java 虚 拟 机 的Sun's RMI 类</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.microsoft.com/java/resource/misc.htm
+<ul><li>David Carr' 的 文 章</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.webweek.com/1997/10/20/news/19971020-java.html
+<ul><li>有 关Ascent Technology 的 信 息</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.ascent.com
+<ul><li>内 嵌 类 对 封 装 它 的 类 的 私 有 成 员 的 存 取</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.microsoft.com/java/sdk/20/tools/jvcread.htm
+<ul><li>Microsoft 的 付 款 支 持 页 面</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.microsoft.com/java/sdk/20/support.htm
+
+<hr>
+编 译： 张 智 雄<br>
+文 章 来 源： http://www.javaworld.com/javaworld/jw-12-1997/jw-12-pitfalls.update.html
+</td></tr></table>
+</html>
+</body>
+

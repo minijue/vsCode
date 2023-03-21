@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">实现爆炸后的振动效果<br>
+      <br>
+                               (长春 石琳)       
+      <p>　　在许多游戏软件中，我们经常能看到这样的场面：当某一设施爆炸后，屏幕画面会伴随着轻微的振动，使人感到身临其境。笔者编写了一个函数void MoveView(int x,int y);通过CRT控制器将屏幕视角左上角坐标移至 (x,y)处，使画面相对移动，从而产生振动效果。程序由Borland C＋＋ 2.0编写，采用VGA 12H模式，代码小、速度快、运行效果形象逼真。<br> 
+      　　// filename: SHAKE.cpp<br> 
+      　　// maker: ShiLin<br> 
+      　　＃include<br>
+      　　＃include<br>
+      　　＃include<br>
+      　　＃include<br>
+      　　void MoveView(int x,int y);<br> 
+      　　void main(void){<br> 
+      　　 int gdriver,gmode;<br> 
+      　　 gdriver=DETECT,gmode=0;<br> 
+      　　 initgraph(＆gdriver,＆gmode,"BORLANDCBGI");<br> 
+      　　 rectangle(100,100,200,200);<br> 
+      　　 outtextxy(100,250,"Press Any Key to SHAKE ...");<br> 
+      　　 getch();<br> 
+      　　 for(int i=0;i&lt;20;i＋＋){<br> 
+      　　 MoveView(10－random(20),5－random(10));<br> 
+      　　 delay(50);<br> 
+      　　 }<br> 
+      　　 MoveView(0,0);<br> 
+      　　 getch();<br> 
+      　　 closegraph();<br> 
+      　　 }<br> 
+      　　void MoveView(int x,int y){<br> 
+      　　 union{<br> 
+      　　 unsigned int whole;<br> 
+      　　 char low；<br> 
+      　　 }adr;<br> 
+      　　 unsigned char high,low;<br> 
+      　　 adr.whole=y＊80＋x/8,<br> 
+      　　 low=adr.low,<br> 
+      　　 high=(unsigned char)(adr.whole>>8);<br> 
+      　　 outportb(0x3D4,0X0C);<br> 
+      　　 outportb(0x3D5,high);<br> 
+      　　 outportb(0x3D4,0x0D);<br> 
+      　　 outportb(0x3D5,low);<br> 
+      　　 }      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

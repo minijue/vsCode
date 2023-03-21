@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VisualC++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">C＋＋Builder 3技巧&nbsp;<br>
+      <br>
+                         （成都　陈寒秋）    
+      <p><br>
+      　　Insprise公司（原Borland公司）推出的C＋＋ Builder 3.0是新一代的基于C语言的可视化开发工具。但由于它推出的时间不长，所以有关它的资料不是很多。在这里，我向大家介绍一些使用C＋＋ Builder 3.0编程的技巧。<br> 
+      　　（一）：读写注册表。<br>
+      　　现在的Windows程序大都使用了注册表来存储软件的配置信息。C＋＋ 
+      Builder 3.0中给我们提供了一个TRegistry类帮助我们管理注册表，它有以下几个常用的方法：<br> 
+      　　OpenKey　　 打开一个键值<br> 
+      　　ReadBool　从注册表中读取布尔值<br>
+      　　ReadInteger　从注册表中读取整型值<br>
+      　　ReadString　 从注册表中读取字符串值<br> 
+      　　WriteBool　 向注册表中写入布尔值<br> 
+      　　WriteInteger　向注册表中写入整型值<br>
+      　　WriteString　 向注册表中写入字符串值<br> 
+      　　代码演示：<br>
+      　　TRegistry ＆regkey=＊new TRegistry();<br> 
+      　　regkey.OpenKey(“softwaremyapp”,true);<br>
+      　　regkey.WriteInteger(“Max”,100);<br>
+      　　int x=regkey.ReadInteger(“Max”);<br> 
+      　　delete ＆regkey;<br> 
+      　　注意：使用TRegistry类时应包含头文件。<br>
+      　　（二）：模仿超级链接。<br>
+      　　用过Winamp的朋友知道Winamp的界面中有一些模仿的超级链接，可以把你直接带到它的相关网站中去。下面这个例子就实现了这种功能，当鼠标点击其中的仿超级链接时，你就会直接到达《电脑商情报》的网址：<br>
+      　　新建一个应用，在窗体Form1上添加一个名为Label1的TLabel组件，然后在代码编辑器中添加以下代码：<br>
+      　　void __fastcall TForm1::FormCreate(TObject ＊Sender)<br> 
+      　　{<br>
+      　　 Label1→Cursor=crHandPoint;<br> 
+      　　 Label1→Font→Color=clBlue;<br> 
+      　　 Label1→Font→Style=Label1→Font→Style&lt; Label1→Caption=“http://www.cbinews.com”;<br> 
+      　　}<br>
+      　　<br>
+      　　void __fastcall TForm1::Label1Click(TObject ＊Sender)<br> 
+      　　{<br>
+      　　 ShellExecute(Handle,NULL,Label1→Caption.c_str(),NULL,NULL,SW_SHOWNORMAL);<br> 
+      　　}<br>
+      　　<br>
+      　　void __fastcall TForm1::Label1MouseMove(TObject ＊Sender, TShiftState Shift,<br> 
+      　　 int X, int Y)<br> 
+      　　{<br>
+      　　 Label1→Font→Color=clRed;<br> 
+      　　}<br>
+      　　<br>
+      　　void __fastcall TForm1::FormMouseMove(TObject ＊Sender, TShiftState Shift,<br> 
+      　　 int X, int Y)<br> 
+      　　{<br>
+      　　 Label1→Font→Color=clBlue;<br> 
+      　　}<br>
+      　　注意：本示例应该包含头文件。<br>
+      　　（三）取得Memo的行和列<br>
+      　　新建一个应用，在窗体Form1上添加两个TLabel组件名为Label1，Label2；添加两个TButton组件名为Button1，Button2；添加一个TMemo组件名为Memo1。然后在代码编辑器中添加以下代码。<br>
+      　　void __fastcall TForm1::Button1Click(TObject ＊Sender)<br> 
+      　　{<br>
+      　　Label1→Caption=SendMessage(Memo1→Handle,EM_LINEFROMCHAR,－1,0)＋1;<br>
+      　　}<br>
+      　　<br>
+      　　void __fastcall TForm1::Button2Click(TObject ＊Sender)<br> 
+      　　{<br>
+      　　Label2→Caption=Memo1→SelStart－SendMessage(Memo1→Handle,EM_LINEINDEX,－1,0)＋1;<br>
+      　　}<br>
+      　　这种方法同样适用于RichEdit。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+
+</body>
+
+</html>

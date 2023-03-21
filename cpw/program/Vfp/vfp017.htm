@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Vfp_idx.htm">VFP</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p>　</p>
+      <p align="center">指定一个数，在另外12个数中，求出最接近（近似等于）这个数的组合</p>
+      <p><br>
+      <br>
+      解：<br>
+      &nbsp;&nbsp;&nbsp; 我想以一个非常有趣的数列为例，来叙述这个问题的解决方法。数列 1，1，2，3，5，8，13，21，24，55，89，144，233，377，610，987…任选其中的相邻的两项An与An+1, 可得到分数An/An+1.。n的值越大，分数An/An+1的值越接近一个重要的数：（√5 -1）/2。这个数是个宝贵的数--黄金分割数，程序中取的变量名为GOLD。我们任取12个这样的分数，求最接近于黄金数的一个组合。<br> 
+      &nbsp;&nbsp;&nbsp; 建立一个数据库，其名为SJK.dbf它有四个字段，其中cn 是An/An+1,的值，由程序中的语句repl all cn with a1/a2 
+      自动求出。&nbsp;<br>
+      另一字段 ABS_N_0是An/An+1与黄金数之差的绝对值。程序中由语句repl all abs_n_0 with abs(cn- gold) 
+      求出。为什么要取绝对值？这个问题留给读者琢磨。以下是数据库的内容。<br>
+        cn         abs_n_0     a1    a2<br> 
+    0.61538462    0.00264937    8    13<br> 
+    0.61764706    0.00038693   21    34<br> 
+    0.61805556    0.00002157   89   144<br> 
+    0.62500000    0.00696601    5     8<br> 
+    0.61904762    0.00101363   13    21<br> 
+    0.60000000    0.01803399    3     5<br> 
+    0.61818182    0.00014783   34    55<br> 
+    0.61802575    0.00000824  144   233<br> 
+    0.61803445    0.00000046   610  987<br> 
+    0.61803714    0.00000315   233  377<br> 
+    0.61803279    0.00000120   377  610<br> 
+    0.61797753    0.00005646    55   89<br> 
+      <br> 
+      将这个数据库按安段ABS_N_0排序，即得到一个新的数据库。<br> 
+      <br> 
+        cn         abs_n_0      a1    a2<br> 
+    0.61803445    0.00000046    610  987<br> 
+    0.61803279    0.00000120    377  610<br> 
+    0.61803714    0.00000315    233  377<br> 
+    0.61802575    0.00000824    144  233<br> 
+    0.61805556    0.00002157     89  144<br> 
+    0.61797753    0.00005646     55   89<br> 
+    0.61818182    0.00014783     34   55<br> 
+    0.61764706    0.00038693     21   34<br> 
+    0.61904762    0.00101363     13   21<br> 
+    0.61538462    0.00264937      8   13<br> 
+    0.62500000    0.00696601      5    8<br> 
+    0.60000000    0.01803399      3    5<br> 
+      <br> 
+      我们要的结果：<br> 
+ 610/987，<br> 
+ 377/610<br> 
+ 233/377<br> 
+ 144/233<br> 
+  89/144<br> 
+   55/89<br> 
+   34/55<br> 
+   21/34<br> 
+   13/21<br> 
+    8/13<br> 
+     5/8<br> 
+     3/5<br> 
+      即是最接近黄金分割数的一个序列。<br> 
+      <br> 
+      算法（程序）如下：<br> 
+      SET DECIMAL TO 8<br> 
+      use sjk<br> 
+      <br> 
+      gold= (sqrt(5)-1)/2<br> 
+      repl all cn with a1/a2<br> 
+      repl all abs_n_0 with abs(cn- gold)<br> 
+      <br> 
+      sort on abs_n_0 to sjkpx<br> 
+      use sjkpx<br> 
+      list<br> 
+      <br> 
+      我的以上算法，能使提出问题的朋友满意吗？<br> 
+      <br> 
+      顺便我也提一个问题：证明数列<br> 
+     3/5<br> 
+     5/8<br> 
+    8/13<br> 
+   13/21<br> 
+   21/34<br> 
+   34/55<br> 
+   55/89<br> 
+  89/144<br> 
+ 144/233<br> 
+ 233/377<br> 
+ 377/610<br> 
+ 610/987，<br> 
+      987/1597<br> 
+      ……<br> 
+      的极限是（√5  -1）/2。</p> 
+      <p>　      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

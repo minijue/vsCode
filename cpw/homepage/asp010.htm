@@ -1,0 +1,226 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（十）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （十）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计 —— ASP 篇 （十）<font
+    size="-1"> </p>
+    <p align="right"></font><span style="font-family: 宋体; font-size: 9pt">作者 ： 天 
+    骄 创 作 室　书 生 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　通 过 前 九 篇 的 理 论 
+    和 实 践，相 信 大 家 已 经 对 ASP 有 了 系 统 的 了 解，虽 然 至 
+    今 为 止，我 们 只 学 了 ASP 的 4 个 内 建 对 象，但 已 经 完 全 能 
+    够 写 出 一 些 实 用 的 小 程 序 了。今 天，作 者 将 继 续 给 大 
+    家 讲 解 最 后 一 个 ASP 内 建 对 象 --Server。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　在 开 始 本 次 课 程 之 
+    前，我 仍 要 在 这 里 回 答 一 些 朋 友 们 提 出 的 比 较 普 遍 的 
+    问 题。最 近 仍 有 不 少 朋 友 来 信 问 我，如 何 构 建 服 务 器 
+    端 的 Active Server Page 环 境。我 想 可 能 是 我 在 前 几 篇 中 没 有 
+    讲 清 楚，因 此，在 本 篇 的 开 头 有 必 要 把 这 个 问 题 详 细 
+    阐 述 一 遍。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 ASP 的 应 用 完 全 是 
+    基 于 Microsoft Internet Infomation Server（简 称 IIS）之 上 的，IIS 有 分 别 
+    用 于 Windows NT Server 和 WorkStation 的 两 个 版 本 中（当 然 IIS4.0 也 有 
+    Windows98 版，这 里 暂 且 不 提），其 功 能 几 乎 完 全 相 同，所 不 
+    同 的 只 是 安 装 过 程。一 般 来 说，我 们 使 用 的 都 是 基 于 NT 
+    服 务 器 上 的 IIS 版 本。在 NT Server 的 环 境 中，发 布 信 息、管 
+    理 站 点 的 工 作 一 般 都 是 通 过 IIS 来 完 成 的。通 常 我 们 在 
+    NT4.0 版 本 中 运 行 的 是 IIS2.0 版，但 它 不 具 有 支 持 ASP 的 功 
+    能。ASP 必 须 在 安 装 完 IIS 后 单 独 安 装，安 装 文 件 是 一 个 
+    微 软 发 布 的 ASP 安 装 包，大 约 有 9 兆 多，应 该 可 以 在 微 软 
+    的 网 站 上 下 载。当 IIS2.0 中 增 添 了 支 持 ASP 的 功 能 后，其 也 
+    就 自 动 升 级 为 3.0 版 本。2.0 和 3.0 对 于 WEB 服 务 器 来 说，并 
+    没 有 什 么 大 的 改 动，只 是 单 纯 地 增 加 了 运 行 ASP 的 能 
+    力。当 安 装 完 成 后，运 行 Internet 服 务 管 理 器，你 将 看 到 如 
+    下 画 面: <br>
+    <img border="0" src="images/asp10a.gif" WIDTH="300" HEIGHT="173"> </span></p>
+    <p>　</p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 可 以 到 在 IIS3.0 中 提 
+    供 了 三 种 服 务：WWW、Gopher、FTP，WWW 服 务 为 客 户 浏 览 器 提 交 
+    WEB 页，并 允 许 客 户 访 问 .asp 文 件。当 然，你 可 以 直 接 安 装 
+    最 新 的 IIS4.0 版 本，作 者 也 建 议 各 位 安 装 此 版 本，因 为 它 
+    具 有 更 强 更 高 的 WEB 管 理 机 能 和 安 全 性。在 IIS4.0 中 IIS 的 
+    管 理 界 面 发 生 了 根 本 性 的 改 变，熟 悉 的 Internet 服 务 管 理 
+    器，被 取 而 代 之 为 Microsoft 管 理 控 制 台，简 称 MMC。其 界 面 
+    如 下 图: <br>
+    <img border="0" src="images/asp10b.gif" WIDTH="300" HEIGHT="147"> </span></p>
+    <p>　</p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 那 么 如 何 安 装 IIS4.0 
+    呢？在 NT4.0 上 安 装 IIS4.0 时，你 的 系 统 中 必 须 已 经 安 装 了 
+    NT SP3，以 及 Internet Explorer4.01，注 意 这 里 的 Internet Explorer 的 版 本 
+    必 须 是 4.01，版 本 号 为 4.72.3110.8。这 点 很 重 要，否 则 你 将 不 
+    能 安 装 IIS4.0。作 者 为 了 安 装 该 版 本 特 意 花 费 了 一 个 晚 
+    上 在 微 软 的 站 点 上 升 级 IE 版 本。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 IIS 支 持 虚 拟 目 
+    录，通 过 在“服 务 器 属 性”对 话 框 中 的“目 录”标 签 可 以 
+    管 理 虚 拟 目 录。建 立 虚 拟 目 录 对 于 管 理 WEB 站 点 具 有 非 
+    常 重 要 的 意 义。首 先，虚 拟 目 录 隐 藏 了 有 关 站 点 目 录 
+    结 构 的 重 要 信 息。因 为 在 浏 览 器 中，客 户 通 过 选 择“查 
+    看 源 代 码”，很 容 易 就 能 获 取 页 面 的 文 件 路 径 信 息，如 
+    果 在 WEB 页 中 使 用 物 理 路 径，将 暴 露 有 关 站 点 目 录 的 重 
+    要 信 息，这 容 易 导 致 系 统 受 到 攻 击。其 次，只 要 两 台 机 
+    器 具 有 相 同 的 虚 拟 目 录，你 就 可 以 在 不 对 页 面 代 码 做 
+    任 何 改 动 的 情 况 下，将 WEB 页 面 从 一 台 机 器 上 移 到 另 一 
+    台 机 器。还 有 就 是，当 你 将 WEB 页 面 放 置 于 虚 拟 目 录 下 
+    后，你 可 以 对 目 录 设 置 不 同 的 属 性，如：Read、Excute、Script。读 
+    访 问 表 示 将 目 录 内 容 从 IIS 传 递 到 浏 览 器。而 执 行 访 问 
+    则 可 以 使 在 该 目 录 内 执 行 可 执 行 的 文 件。当 你 需 要 使 
+    用 ASP 时，就 必 须 将 你 存 放 .asp 文 件 的 目 录 设 置 为“Excute（执 
+    行）”。作 者 建 议 大 家 在 设 置 WEB 站 点 时，将 HTML 文 件 同 ASP 
+    文 件 分 开 放 置 在 不 同 的 目 录 下，然 后 将 HTML 子 目 录 设 置 
+    为“读”，将 ASP 子 目 录 设 置 为“执 行”，这 不 仅 方 便 了 对 
+    WEB 的 管 理，而 且 最 重 要 的 提 高 了 ASP 程 序 的 安 全 性，防 
+    止 了 程 序 内 容 被 客 户 所 访 问。因 为 在 今 年 7 月 底 的 时 
+    候 IIS 被 一 些 网 络 高 手 发 现 了 一 个 可 怕 的 bug，那 就 
+    是，当 你 在 一 个 站 点 的 .asp 文 件 后 加 上 ::$DATA 后，客 户 将 
+    能 在 浏 览 器 中 看 到 该 .asp 文 件 的 所 有 源 代 码，这 对 于 一 
+    个 站 点 来 说 是 非 常 可 怕 的。当 然 微 软 已 经 针 对 这 个 bug，编 
+    写 了 补 丁，但 是 为 了 彻 底 杜 绝 这 种 可 能 性 的 发 生，作 
+    者 还 一 建 议 大 家 不 要 将 .asp 所 在 的 目 录 设 置 为 可 读。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 我 想，现 在 各 位 应 
+    该 已 经 完 全 了 解 ASP 的 服 务 器 端 设 置 了，下 面 我 们 就 进 
+    入 正 题 -- 学 习 ASP 的 最 后 一 个 内 建 对 象 Server。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Server 对 象 提 供 对 服 
+    务 器 上 的 方 法 和 属 性 的 访 问 , 其 中 大 多 数 方 法 和 属 性 
+    是 作 为 实 用 程 序 的 功 能 服 务 的。有 了 Server 对 象，你 就 可 
+    以 在 服 务 器 上 启 动 ActiveX 对 象 例 程，并 使 用 Active Server 服 
+    务 提 供 象 HTML 和 URL 编 码 这 样 的 函 数。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 一、语 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Server.property|method </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 二、属 性 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 ScriptTimeout 超 时 
+    值，在 脚 本 运 行 超 过 这 一 时 间 之 后 即 作 超 时 处 理。如 
+    下 代 码 指 定 服 务 器 处 理 脚 本 在 100 秒 后 超 时。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 &lt; % 
+    Server.ScriptTimeout=100 %&gt; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 里 需 要 注 意 的 
+    是，通 过 使 用 元 数 据 库 中 的 AspScriptTimeout 属 性 可 以 为 Web 服 
+    务 或 Web 服 务 器 设 置 缺 省 的 ScriptTimeout 值。ScriptTimeout 属 性 不 
+    能 设 置 为 小 于 在 元 数 据 库 中 指 定 的 值。例 如，如 果 
+    NumSeconds 设 置 为 60，而 元 数 据 库 设 置 包 含 了 默 认 值 90 
+    秒，则 脚 本 在 90 秒 后 超 时。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 三、方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、HTMLEncode 方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 HTMLEncode 方 法 允 许 你 
+    对 特 定 的 字 符 串 进 行 HTML 编 码，虽 然 HTML 可 以 显 示 大 部 
+    分 你 写 入 ASP 文 件 中 的 文 本，但 是 当 你 需 要 实 际 包 含 HTML 
+    标 记 中 所 使 用 的 字 符，就 会 遇 到 问 题。这 是 因 为，当 浏 
+    览 器 读 到 这 样 的 字 符 串 时，会 试 图 进 行 解 释。例 如 下 
+    面 的 这 段 文 本 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 是 对 HTMLEncode 方 法 
+    的 测 试。&lt; br&gt; 这 里 应 该 不 会 另 起 一 行。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 会 被 浏 览 器 显 示 
+    为 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 是 对 HTMLEncode 方 法 
+    的 测 试。 <br>
+    　　 这 里 应 该 不 会 另 起 一 行。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 为 了 避 免 此 类 问 
+    题，我 们 就 需 要 使 用 Server 对 象 的 HTMLEncode 方 法，采 用 对 应 
+    的 不 由 浏 览 器 解 释 的 HTML Character Code 替 代 HTML 标 记 字 符。所 
+    以，用 下 面 的 代 码 才 能 显 示 正 确 的 HTMLEncode 字 符 串，从 而 
+    在 浏 览 器 中 按 你 的 需 要 输 出 文 本。 <br>
+    　　&lt; %<br>
+    　　Response.write Server.HTMLEncode(&quot; 这 是 对 HTMLEncode 方 法 的 测 
+    试。&lt; br&gt; 这 里 应 该 不 会 另 起 一 行。&quot;)%&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、URLEncode 方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 就 象 HTMLEncode 方 法 使 
+    客 户 可 以 将 字 符 串 翻 译 成 可 接 受 的 HTML 格 式 一 样，Server 
+    对 象 的 URLEncode 方 法 可 以 根 据 URL 规 则 对 字 符 串 进 行 正 确 
+    编 码，当 字 符 串 数 据 以 URL 的 形 式 传 递 到 服 务 器 时，在 
+    字 符 串 中 不 允 许 出 现 空 格，也 不 允 许 出 现 特 殊 字 
+    符。为 此，如 果 你 希 望 在 发 送 字 符 串 之 前 进 行 URL 编 
+    码，可 以 使 用 Server.URLEncode 方 法。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 3、MapPath 方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 MapPath 方 法 将 指 定 
+    的 相 对 或 虚 拟 路 径 映 射 到 服 务 器 上 相 应 的 物 理 目 录 
+    上。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 语 法 如 下 
+    :Server.MapPath(Path) </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Path 指 定 要 映 射 物 
+    理 目 录 的 相 对 或 虚 拟 路 径。若 Path 以 一 个 正 斜 杠 (/) 或 反 
+    斜 杠 (\) 开 始，则 MapPath 方 法 返 回 路 径 时 将 Path 视 为 完 整 的 
+    虚 拟 路 径。若 Path 不 是 以 斜 杠 开 始，则 MapPath 方 法 返 回 同 
+    .asp 文 件 中 已 有 的 路 径 相 对 的 路 径。这 里 需 要 注 意 的 是 
+    MapPath 方 法 不 检 查 返 回 的 路 径 是 否 正 确 或 在 服 务 器 上 
+    是 否 存 在。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 对 于 下 列 示 例，文 
+    件 data.txt 和 包 含 下 列 脚 本 的 test.asp 文 件 都 位 于 目 录 
+    C:\Inetpub\Wwwroot\asp 下。C:\Inetpub\Wwwroot 目 录 被 设 置 为 服 务 器 的 
+    宿 主 目 录。下 列 示 例 使 用 服 务 器 变 量 PATH_INFO 映 射 当 前 
+    文 件 的 物 理 路 径。以 下 脚 本 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 &lt; %= 
+    server.mappath(Request.ServerVariables(&quot;PATH_INFO&quot;))%&gt; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 输 出 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 
+    c:\inetpub\wwwroot\asp\test.asp </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 由 于 下 列 示 例 中 
+    的 路 径 参 数 不 是 以 斜 杠 字 符 开 始 的，所 以 它 们 被 相 对 
+    映 射 到 当 前 目 录，此 处 是 目 录 C:\Inetpub\Wwwroot\asp。以 下 脚 本 
+    <br>
+    　　&lt; %= server.mappath(&quot;data.txt&quot;)%&gt;<br>
+    　　&lt; %= server.mappath(&quot;asp/data.txt&quot;)%&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 输 出 <br>
+    c:\inetpub\wwwroot\asp\data.txt<br>
+    c:\inetpub\wwwroot\asp\asp\data.txt<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 4、CreateObject 方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Server.CreateObject 恐 怕 
+    是 ASP 中 最 为 实 用，也 是 最 强 劲 的 功 能 了。它 用 于 创 建 
+    已 经 注 册 到 服 务 器 上 的 ActiveX 组 件 实 例。这 是 一 个 非 常 
+    重 要 的 特 性，因 为 通 过 使 用 ActiveX 组 件 能 够 使 你 轻 松 地 
+    扩 展 ActiveX 的 能 力，正 是 使 用 了 ActiveX 组 件，你 可 以 实 现 
+    至 关 重 要 的 功 能，譬 如 数 据 库 连 接、文 件 访 问、广 告 显 
+    示 和 其 他 VBScript 不 能 提 供 或 不 能 简 单 地 依 靠 单 独 使 用 
+    ActiveX 所 能 完 成 的 功 能。正 是 因 为 这 些 组 件 才 使 得 ASP 具 
+    有 了 强 大 的 生 命 力。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 其 语 法 如 下： </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 
+    Server.CreateObject(&quot;Component Name&quot;) </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 默 认 情 况 下，由 
+    Server.CreateObject 方 法 创 建 的 对 象 具 有 页 作 用 域。这 就 是 
+    说，再 当 前 ASP 页 处 理 完 成 之 后，服 务 器 将 自 动 破 坏 这 
+    些 对 象。如 果 要 创 建 有 会 话 或 应 用 程 序 作 用 域 的 对 
+    象，可 以 使 用 &lt; OBJECT&gt; 标 记 并 设 置 SESSION 或 APPLICATION 的 
+    SCOPE 属 性，也 可 以 在 对 话 及 应 用 程 序 变 量 中 存 储 该 对 
+    象。如 下 例 程 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 &lt; % Set 
+    Session(&quot;ad&quot;) = Server.CreateObject(&quot;MSWC.AdRotator&quot;)%&gt; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 里 需 要 注 意 的 
+    是，不 能 创 建 与 内 建 对 象 同 名 的 对 象 实 例，否 则，如 下 
+    列 脚 本 将 返 回 错 误。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 &lt; % Set Response = 
+    Server.CreateObject(&quot;Response&quot;) %&gt; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 至 今 为 止，我 们 已 
+    经 学 习 完 了 ASP 所 有 的 内 建 对 象，不 知 大 家 是 不 是 很 兴 
+    奋？其 实 ASP 是 很 简 单 的，只 要 大 家 不 断 的 实 践，相 信 一 
+    段 时 间 后 都 不 难 成 为 ASP 的 高 手。从 下 一 篇 起 作 者 将 开 
+    始 介 绍 ASP 内 建 ActiveX 组 件，这 也 是 ASP 运 用 中 非 常 重 要 和 
+    实 用 的 一 部 分。敬 请 关 注。 </span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

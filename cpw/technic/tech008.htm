@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>远望资讯</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+.f{font-size: 12px;line-height: 15px;}
+A:link {text-decoration: none; color: blue}
+A:visited {text-decoration: none; color: "#54646D"}
+A:active {text-decoration: none}
+A:hover {text-decoration: underline; color: 000080} 
+-->
+</style>
+</head>
+
+<body>
+<div align="center"><center>
+
+<table border="0" width="720" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="718" height="29" bgcolor="#E8FFFF"><table border="1" width="32%"
+    bordercolor="#800000" cellspacing="0" cellpadding="2" height="30" style="font-size: 9pt">
+      <tr>
+        <td width="100%" bgcolor="#4264B5" bordercolor="#FFFFFF"><p align="center"><font
+        color="#FFFFFF">资料整理<span class="f">&middot;</span><a
+        href="http://fasoft.yeah.net" target="_blank" style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" bgcolor="#E8FFFF"><br>
+    <span class="f"><strong>Win95无盘工作站之Novell篇</strong><br>
+    <br>
+    　　阿冰时常接到询问无盘工作站如何建立的电话，不敢怠慢，本期就为大家介绍如何建立基于Novell网络的Win95无盘工作站。如果您对Novell网不太熟悉，可以看看本刊1998年1～5期。此外，计划于上半年刊登如何建立基于NT网络的Win95无盘工作站的文章，希望能帮助大家。<br>
+    <br>
+    　　Win95完善的网络功能全面支持LAN和WAN，使希望实现资源共享的用户的组网工作变得简单、方便。一般来说，Win95工作站在网络中的安装方法有3种。①有硬盘。Win95在Novell网、Win95对等网、Windows 
+    NT3种典型局域网中的连接与应用非常广泛，已为网络用户所熟知。②无硬盘，安装Windows 
+    NT Server服务器，再在服务器中安装Win95。Windows NT中设置Win95无盘工作站远程启动的方法，在一般关于Windows 
+    NT的书籍中均有介绍，正逐渐被人们采用。③无硬盘，安装NetWare服务器，再在服务器中安装Win95。在Novell网中以无盘工作站远程启动Win95的技术，一般报刊中少有介绍，可以说还鲜为人知。本文将以Novell 
+    NetWare4.1为例，介绍设置Win95无盘工作站远程启动的方法，以及如何在Win95无盘工作站上运行Win95应用程序，供感兴趣的读者参考。<br>
+    　　网络环境如下。服务器的操作系统为NetWare4.1，所用网卡为NE2000兼容网卡，服务器名为HYNFH；硬盘划分为两个卷——系统卷SYS和数据卷DATA，服务器CONTEXT:OU=SUNIT.0=UNIT；有盘工作站一台，操作系统为Win95，所用网卡为NE2000兼容网卡；无盘工作站10台，所用网卡为NE2000兼容网卡；16口HUB一台。附用户注册正本及NET.CFG内容如下:<br>
+    用户注册正本为:<br>
+    MAP DISPLAY OFF<br>
+    MAP F:=SYS:\<br>
+    MAP H:=DATA:\<br>
+    SET COMSPEC=F:\LOGIN\COMMAND.COM<br>
+    MAP INS S1:=SYS:\LOGIN<br>
+    MAP INS S2:=SYS:\PUBLIC<br>
+    MAP DISPLAY ON<br>
+    MAP<br>
+    NET.CFG内容为:<br>
+    LINK DRIVE NE2000<br>
+    INT 3<br>
+    PORT 300<br>
+    FRAME ETHERNET_802.3<br>
+    NETWORK DOS REQUESTER<br>
+    FIRST NETWORK DRIVE=F<br>
+    <br>
+    一、安装设置Win95无盘工作站的远程启动<br>
+    <br>
+    　　1.在服务器上安装Win95网络版<br>
+    　　在有盘Win95工作站中将服务器HYNFH上的DATA卷映射(MAP)为H，然后将Win95光盘装入光驱开始安装。安装时指定目录为H:\PWIN95，这样安装完成后，Win95网络版共享文件将存放在服务器的H:\PWIN95目录下。<br>
+    　　2.创建安装文件<br>
+    　　以超级用户身份登录入网，在H:\PWIN95目录下为Win95文件设置只读和共享属性，即执行命令FLAG*.* 
+    +ROSH/S。然后用文本编辑建立安装Win95用户文件时将需要的MSBATCH.INF文件，内容如下:<br>
+    [SETUP]<br>
+    EXPRESS=0<br>
+    VERIFY=0<br>
+    CCP=0<br>
+    INSTALLTYPE=3<br>
+    PRODUCTID=<br>
+    PRODUCTTYPE=1<br>
+    UNINSTALL=0<br>
+    [NETWORK]<br>
+    WORKSTATIONSETUP=1<br>
+    DISPLAYWORKSTATIONSETUP=1<br>
+    DISPLAY=1<br>
+    HDBOOT=0<br>
+    RPLSETUP=0<br>
+    SAVESUBOOT=1<br>
+    <br>
+    　　3.制作工作站启动盘<br>
+    　　制作一张DOS6.22系统盘，将NetWare4.1客户上网文件拷入其中。完成后的软盘中应包含下列文件:AUTOEXEC.BAT、CONFIG.SYS、HIMEM.SYS、EMM386.EXE、BIND.VLM、AUTO.VLM、LSL.COM、IPXODI.COM、NE2000.COM、NET.CFG、VLM.EXE。<br>
+    　　4.使用NETADMIN实用程序建立Win95用户<br>
+    　　以超级用户身份登录入网，利用NETADMIN菜单实用程序为Win95用户建立一个独立的组织单元OU=WINUSER，并建立Win95用户USER1，赋予用户USER1对H:\PWIN95拥有RF权限；建立Win95用户目录H:\WINUSER\USER1，赋予用户USER1对该目录拥有RWCM权限；建立Win95用户数据存放目录H:\WINDATA\USER1，赋予用户USER1对该目录拥有S权限。最后，修改用户注册正本，内容如下:<br>
+    MAP DISPLAY OFF<br>
+    MAP F:=SYS:\<br>
+    MAP H:=DATA:\<br>
+    MAP ROOT K:DATA:\SUNIT\LOGIN_NAME<br>
+    MAP ROOT P:=DATA:\WINDATA\LOGIN_NAME<br>
+    SET COMSPEC=C:\COMMAND.COM<br>
+    MAP INS S1:=SYS:\LOGIN<br>
+    MAP INS S2:=SYS:\PUBLIC<br>
+    MAP INS S3:=DATA:\PWIN95<br>
+    MAP INS S4:=DATA:\WINUSER\USER1<br>
+    MAP INS S5:=DATA:\WINUSER\USER1\SUBOOT<br>
+    MAP DISPLAY ON<br>
+    MAP<br>
+    <br>
+    　　5.安装Win95用户文件<br>
+    　　用前面制作的软盘启动计算机，以超级用户身份登录入网，在DOS状态下执行MAP 
+    INS S2:=H:\PWIN95，然后在H:\PWIN95目录下执行下述命令进行安装：“SETUP 
+    MSBATCH.INF/T:H:\WINUSER\USER1\TEMP/S/I”。在程序提示输入安装路径时键入H:\WINUSER\USER1；在系统提示即将搜索即插即用设备时，选择“更新文件列表”并取消所有硬件搜索选项；在选择网卡型号时选择NE2000兼容网卡并添加IPX/SPX协议。随后，插入一张空白软盘以制作Win95启动盘，完成后将制作好的启动盘在其它计算机上复制一份并将源盘妥善保存，再对复制的Win95启动盘作一些修改，即将Win95的COUNTRY.SYS和RAMDRIVE.SYS文件拷入其中，并编辑其中的AUTOEXEC.BAT和CONFIG.SYS两个文件，修改后的内容如下。<br>
+    AUTOEXEC.BAT内容为:<br>
+    @ECHO OFF<br>
+    COPY COMMAND.COM C:\&gt;NUL<br>
+    SET COMSPEC=C:\COMMAND.COM<br>
+    LH LSL<br>
+    LH NE2000<br>
+    LH IPXODI<br>
+    COPY *.VLM C:\&gt;NUL<br>
+    COPY VLM.EXE C:\&gt;NUL<br>
+    C:\<br>
+    VLM/MC<br>
+    F:<br>
+    CX OU=WINUSER.O=UNIT<br>
+    LOGIN USER1<br>
+    CONFIG.SYS<br>
+    DEVICE=COUNTRY.SYS,001,437,A:\COUNTRY.SYS(必须加此语句，否则用软盘进网时死机)<br>
+    DEVICE=HIMEM.SYS<br>
+    DEVICE=EMM386.EXE<br>
+    DEVICE=RAMDRIVE 300 256 512/A<br>
+    LASTDRIVE=Z<br>
+    FILES=100<br>
+    <br>
+    　　在有盘工作站上，用上述制作的Win95启动软盘重新启动计算机，以用户USER1身份登录入网，Win95将会继续安装用户配置文件。安装完成后，重新启动计算机，进入DOS状态，以超级用户身份登录入网，进入H:\WINUSER\USER1，执行命令:<br>
+    ATTRIB *.DAT -S-R-H<br>
+    ATTRIB A:\*.* -S-R-H<br>
+    COPY SYSTEM.DAT A:\<br>
+    然后建立目录F:\WINBOOT，拷贝A盘上的所有文件到F:\WINBOOT目录下，修改用户注册正本，将A盘根目录映射为F:\WINBOOT目录，即执行MAP 
+    ROOT A：=SYS:\WINBOOT。重新启动计算机，以用户USER1身份登录上网进入Win95完成软盘启动，将安装完成后的H:\WINUSER\SYSTEM.DAT和USER.DAT拷贝至启动盘A:\,作一备份。<br>
+    <br>
+    　　6.建立远程启动映像文件<br>
+    　　用Win95启动软盘重新启动计算机，以超级用户身份登录入网，进入SYS:\SYSTEM，执行命令DOSGEN 
+    A:\WIN95.SYS生成Win95远程启动映像文件WIN95.SYS，为WIN95.SYS文件设置共享属性，并将其复制到F:\LOGIN目录下。进入F:\LOGIN目录，编辑BOOTCONF.SYS文件，指定工作站网络地址。BOOTCONF.SYS文件中每一行格式为:<br>
+    　　Ox网络地址，工作站网址=该工作站的远程启动映像文件名(如WIN95.SYS)<br>
+    　　其中，网络地址可查AUTOEXEC.BAT文件，工作站网址由工作站上网卡的BOOTROM给出。<br>
+    <br>
+    　　7.修改SYSTEM.INI文件<br>
+    　　完成以上工作后再进入H:\PWIN95，修改SYSTEM.INI文件，在[386增强方式]一项中将PAGINGFILE=H:\WINUSER\USER1\WIN386.SWP改为PAGINGFILE=P:\WIN386.SWP。<br>
+    <br>
+    　　8.重新启动无盘工作站，以USER1身份登录入网即完成所有安装工作。<br>
+    <br>
+    二、安装运行Win95应用程序<br>
+    <br>
+    　　首先由超级用户从软盘启动进入Win95，安装新的Win95应用程序，安装完成后将H:\WINUSER目录中的SYSTEM.DAT和USER.DAT文件拷贝到A:\，然后用该软盘按照上述第6步的方法重新生成远程启动映像文件即可。 
+    </span></td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#E8FFFF" height="6"><hr size="1" color="#808080">
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#E8FFFF" height="14"><span class="f">中国程序员网站版权所有</span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

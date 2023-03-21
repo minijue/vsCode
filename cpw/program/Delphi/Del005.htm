@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>Delphi3.0中数据的导出</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是：<a href="Del_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Delphi</a> <b>&gt;</b> Delphi3.0中数据的导出</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><font color="#000000"><strong>Delphi3.0中数据的导出</strong></font></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">用户通常希望能在一些字处理程序中直接获取数 
+    据库中的数据。Delphi功能如此强大，当然不会错过这 
+    些方面的应用。以下介绍三种导出方式：<br>
+    <strong>一、数据导出为EXCEL和WORD文档 <br>
+    </strong>通过Delphi提供的OLE可以方便地访问其他提 供OLE接口的应用程序，例如EXCEL、WORD等。 
+    EXCEL中提供的完善的数据处理功能，使得数据导出 到EXCEL成为一个迫切的需要。 
+    <br>
+    主要的工作步骤为： <br>
+    1．创建连接及工作簿。 <br>
+    2．读取数据库数据并写入EXCEL文档。 <br>
+    3．保存结果并退出ExCEL。 <br>
+    主要的过程示例如下： <br>
+    procedure GenerteXLSFile(strFileName:string); <br>
+    &nbsp; var <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; ExcelApp,MyWorkBook:Variant; <br>
+    &nbsp; begin <br>
+    &nbsp;&nbsp;&nbsp; try <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ExcelApp:=CreateOleObject('Excel.Application'); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyWorkBook:=CreateOleobject('Excel.Sheet'); <br>
+    &nbsp;&nbsp;&nbsp; except <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; application.Messagebox('无法打开Xls文件，请确认已 
+    经安装EXCEL.',&quot;,mb_OK+mb_IconStop); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exit; <br>
+    &nbsp;&nbsp;&nbsp; end; <br>
+    &nbsp;&nbsp;&nbsp; MyworkBook:=ExcelApp.workBooks.Add; <br>
+    &nbsp;&nbsp;&nbsp; //在此处插入读数据库及写Excel文档的代码 <br>
+    &nbsp;&nbsp;&nbsp; try <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyWorkBook.saveas(strFileName); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyWorkBook.close; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ExcelApp.Quit; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ExcelApp:=Unassigned; //释放VARIANT变量 <br>
+    &nbsp;&nbsp;&nbsp; except //当存为一个已有的文档而又不覆盖时将 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyWorkBook.close; //产生一个例外 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ExcclApp.Quit; <br>
+    &nbsp;&nbsp;&nbsp; end; <br>
+    &nbsp; end; <br>
+    其中写Excel文档的关键语句如下： <br>
+    MyWorkBook.WorkSheets[1].Cells[1,1].Value: ='1234'; <br>
+    相关的对象参考可以在OFFICE目录下的帮助文 件VBAXLS.HLP中找到。 <br>
+    Delphi还提供了一个与WORD连接的例子供开 
+    发者参考，不过没有考虑到中文WORD所以“Insert query”按键无效，只能把窗体的标题修改为“简体中文 
+    (中国)”。必须把其中判断语种的语句从 <br>
+    if(Lang='Englist(US)')or(Lang='Englist(UK)')then <br>
+    修改为 <br>
+    if Lang<>'Englist(US)'then <br>
+    //不等号的右边随便写一个字符串即可 <br>
+    这样就可以在中文版的WORD中看到查询的结果了。 <br>
+    <strong>二、数据导出为TXT文档 <br>
+    </strong>利用Delphi中的QuickRep控件可以把打印结果 
+    输出为文本格式。示例如下： <br>
+    MyQuickRep.ExportFilter:=TQRAscillExportFilter.Create('C:\test.txt'); <br>
+    MyQuickRep.Prepare; <br>
+    MyQuickRep.ExportFilter.Free; <br>
+    <strong>三、数据导出为HTML文档 <br>
+    </strong>同样地，可以通过QuickRep控件把打印结果输出 为HTML格式。示例如下： 
+    <br>
+    MyQuickRep.ExportFilter:=TQRAsciiExportFilter.Create('C:\test.htm'); <br>
+    MyQuickRep.Prepare; <br>
+    MyQuickRep.ExportFilter.Free; </span></td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><span style="font-size: 9pt">中国程序员网站版权所有</span></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

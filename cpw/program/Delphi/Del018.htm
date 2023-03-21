@@ -1,0 +1,140 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">Delphi</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">在Delphi中不使用VCL库建立窗口&nbsp;   
+      <p><br>
+      　　Borland的Delphi语言中提供了类似于VB中ActiveX的VCL控件库，利用它建立程序界面是十分方便的，但是这也带来了一个问题，就是即使建立一个非常简单的窗口，Delphi也会将所有的控件编译进去，使得程序十分庞大（通过常规方式建立一个仅包含一个窗口，不响应任何消息的程序的尺寸大概就有至少200K字节以上）。<br>
+      　　这里，我向大家介绍一个不使用VCL库建立窗口的方法。首先打开一个文本编辑器（例如NotePad），然后在其中输入以下的程序代码：<br>
+      　　program Project2;<br> 
+      　　uses<br>
+      　　 Windows;<br> 
+      　　const<br>
+      　　 AppName = ‘Windows’;<br> 
+      　　 WM_DESTROY = 2;<br> 
+      　　 WM_LBUTTONUP = 514;<br> 
+      　　{＄R ＊.RES}<br> 
+      　　//窗口处理函数<br>
+      　　function WindowProc(Window:Hwnd;Amessage,wParam,<br> 
+      　　 lParam:LongInt):LongInt;stdcall;export;<br> 
+      　　begin<br>
+      　　 WindowProc:=0;<br> 
+      　　 case AMessage of<br> 
+      　　 WM_DESTROY:<br> 
+      　　 begin<br> 
+      　　 PostQuitmessage(0);<br> 
+      　　 Exit;<br> 
+      　　 end;<br> 
+      　　 WM_LBUTTONUP:<br> 
+      　　 begin<br> 
+      　　 PostQuitmessage(0);<br> 
+      　　 Exit;<br> 
+      　　 end;<br> 
+      　　 end;<br> 
+      　　 WindowProc := DefWindowProc(Window,AMessage,wParam,lParam);<br> 
+      　　end;<br>
+      　　<br>
+      　　//注册窗口函数<br>
+      　　function WinRegister:Boolean;<br> 
+      　　var<br>
+      　　 WindowClass:TWndClass;<br> 
+      　　begin<br>
+      　　WindowClass.style:=cs_hredraw or cs_vRedraw or cs_NoClose;<br> 
+      　　 WindowClass.lpfnWndProc := @WindowProc;<br> 
+      　　 WindowClass.cbClsExtra := 0;<br> 
+      　　 WindowClass.cbWndExtra := 0;<br> 
+      　　 WindowClass.hInstance := Hinstance;<br> 
+      　　 WindowClass.hIcon := LoadIcon(0,idi_Application);<br> 
+      　　 WindowClass.hCursor := LoadCursor(0,idc_Arrow);<br> 
+      　　WindowClass.hbrBackground:=HBrush(COLOR_BTNFACE);<br>
+      　　 WindowClass.lpszMenuName := nil;<br> 
+      　　 WindowClass.lpszClassName := AppName;<br> 
+      　　<br>
+      　　 Result:=RegisterClass(WindowClass)&lt;>0;<br> 
+      　　end;<br>
+      　　<br>
+      　　//建立工具栏窗口函数<br>
+      　　function WinCreate:HWnd;<br> 
+      　　var<br>
+      　　 hWindow:Hwnd;<br> 
+      　　 pcharTemp:PChar;<br> 
+      　　begin<br>
+      　　 hWindow:=CreateWindowEx(WS_EX_RTLREADING or WS_EX_TOOLWINDOW,<br> 
+      　　 AppName,‘Samples Window’,ws_OverlappedWindow,<br> 
+      　　 cw_UseDefault,cw_UseDefault,cw_UseDefault,cw_UseDefault,0,0,<br> 
+      　　 Hinstance,nil);<br> 
+      　　 if hWindow&lt;>0 then<br> 
+      　　 begin<br> 
+      　　 pcharTemp:=‘Samples’;<br> 
+      　　 ShowWindow(hWindow,cmdShow);<br> 
+      　　 TextOut(GetWindowDC(hWindow),10,50,pcharTemp,7);<br> 
+      　　 UpdateWindow(hWindow);<br> 
+      　　 end;<br> 
+      　　<br>
+      　　 Result:=hWindow;<br> 
+      　　end;<br>
+      　　<br>
+      　　var<br>
+      　　 AMessage:TMsg;<br> 
+      　　 hWindow:HWnd;<br> 
+      　　begin //主程序部分<br> 
+      　　 if not WinRegister then<br> 
+      　　 begin<br> 
+      　　 MessageBox(0,‘窗口注册失败’,nil,mb_ok);<br> 
+      　　 Exit;<br> 
+      　　 end;<br> 
+      　　 hWindow:=WinCreate;<br> 
+      　　 if hWindow=0 then<br> 
+      　　 begin<br> 
+      　　 MessageBox(0,‘建立窗口失败’,nil,mb_ok);<br> 
+      　　 Exit;<br> 
+      　　 end;<br> 
+      　　 While GetMessage(AMessage,0,0,0)do<br> 
+      　　 begin<br> 
+      　　 TranslateMessage(AMessage);<br> 
+      　　 DispatchMessage(AMessage);<br> 
+      　　 end;<br> 
+      　　 Halt(AMessage.wParam);<br> 
+      　　end.<br>
+      　　将上面的内容以 Project2.dpr 为文件名保存到Delphi的Bin目录中，然后使用Delphi中的DCC32来编译工程文件，具体的使用方法是：<br> 
+      DCC32 Project2.dpr 。在编译过程中可能有一些警告（Warning）消息，不要理会。编译完成后，在Bin目录下会产生一个Project2.exe的文件，查看一下，这个文件是不是“缩水”了很多呢？在我的机器上编译出来的程序只有17K左右，这同使用C＋＋编译的程序大小几乎没有什么两样。分析上面的程序，使用C＋＋编写过Windows下程序的读者可能会觉得十分的熟悉，的确，同C＋＋编写一样。在Delphi中不使用VCL编写窗口界面也需要三个函数：窗口建立函数、窗口注册函数和窗口消息处理函数。在上面的程序中，函数WinCreate是窗口建立函数，这个函数通过CreateWindowsEx函数建立一个工具栏窗口，窗口建立成功后显示窗口并在窗口中10，50的位置输出“Samples”。WindowProc函数是窗口消息处理函数，这个函数只处理两个消息：WM_DESTROY和WM_LBUTTONUP。在得到这两个消息后退出。WinRegister是窗口注册函数，这个函数注册WinCreate建立的窗口并禁止窗口系统菜单的“关闭”项，同时将WindowProc定义为窗口消息处理函数。<br> 
+      　　对于使用Pascal语言，对C＋＋不熟悉的朋友来说，只要根据自己的需要对上面的程序稍微做一些修改，就可以编写同C＋＋编写出来的一样“苗条”的程序了。<br>
+      　　以上程序在Borland Delphi4.0，Win98下编译通过。    
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+
+</body>
+
+</html>

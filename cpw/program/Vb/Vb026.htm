@@ -1,0 +1,159 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>编制自已的电话录音小程序</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vbidx099.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> <font
+    color="#000000">编制自已的电话录音小程序</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><span style="font-size: 9pt"><strong>编制自已的电话录音小程序</strong></span></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>或许你会认为用计算机进行电话录音需要昂贵的专用软件，其实只要懂得VB和Access的一些基本知识，我们也可以自己制作一个具备电话录音、录音数据保存、查询功能的小系统。大概只需1500元左右，其费用主要用于增添所需的声卡、音箱及具有语音功能的Modem（当然还有你的脑力劳动），比起两三万元的专用录音软件，可以说是物美价廉了。<br>
+    &nbsp;&nbsp; 首先介绍该系统的工作原理：利用VB5.0的OLE容器控件，在运行时创建嵌入对象的方法，激活在WIN95注册过的录音软件，将输入到声卡的电话语音信号录制为WAV文件，嵌入OLE容器控件中。由于把OLE容器控件与某个数据库绑定，在声音文件嵌入OLE容器控件的同时也存入了数据库。以下将详细地介绍小系统的实现过程，主要有设备的连接、数据库的建立、简单的VB编程。<br>
+    <strong>一、设备的连接</strong><br>
+    &nbsp;&nbsp; 设备的连接主要指Modem与电话线、电话机，Modem与声卡之间的连接方式。先将墙上的电话进线插到Modem的接口上，再用另一根电话线接在Modem与电话机之间，把Modem与电话机串联起来。Modem与电话机之间的顺序必须被考虑到。如果电话进线先进入电话机，当提起电话听筒时，信号将先被电话机截取，而不能进入Modem。接下来用双向音频输入输出线把Modem的SPK端口和声卡的LINE 
+    INC端口连起来；将Modem的声音信号输入到声卡。好了，完成设备的连接后，我们就可以开始进行软件方面的制作了。<br>
+    <strong>二、用Access建立一个收藏录音数据的数据库</strong><br>
+    &nbsp;&nbsp; 
+    首先建立一个存放声音数据的数据库，数据库可以是存储在Microsoft 
+    Jet数据库引擎中的Microsoft<br>
+    Access、dBASE、Microsoft Foxpro、Excel等。由于需保存的数据并不复杂，我选用了小型而易用的Microsoft 
+    Access97，建立一个名为Recorder的数据库来管理录音数据。在Recordeer数据库中生成表Recording，该表包含四个字段：ID、录音文件、Day、Time。结构如下：<br>
+    -----------------------------------------------<br>
+    字段名称&nbsp;&nbsp; 数据类型&nbsp;&nbsp; 字段属性<br>
+    -----------------------------------------------<br>
+    ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 自动编号&nbsp;&nbsp; 递增<br>
+    录音齐件&nbsp;&nbsp; OLE对象<br>
+    Day&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 日期/时间&nbsp; 默认值=Date();格式=长日期<br>
+    Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 日期/时间&nbsp; 默认值=Time();格式=长时间<br>
+    ------------------------------------------------<br>
+    &nbsp;&nbsp; 把数据库Recorder保存在C:\下，以待后用。数据库方面的工作暂时到此为止，接着将要用VB来编写一个小程序，实现录音、自动将数据存入数据库的功能。<br>
+    <strong>三、用VB5.0 建立录音小程序</strong><br>
+    &nbsp;&nbsp; 在VB5.0下新建一“标准EXE”工程，打开工程中的空白窗体Form1。在Form1上添加各种控件。<br>
+    1．在Form1上添加Data控件<br>
+    &nbsp;&nbsp; 将Data控件添加到窗体上，Data控件属性设置如下：<br>
+    -------------------------------------------<br>
+    （名称）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data1<br>
+    -------------------------------------------<br>
+    Connect&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Access<br>
+    DatabaseName&nbsp;&nbsp;&nbsp;&nbsp; C:\RECORDER.mdb<br>
+    Recordsource&nbsp;&nbsp;&nbsp;&nbsp; recording<br>
+    -------------------------------------------<br>
+    &nbsp;&nbsp; 以上属性设置把Data控件绑定到刚才建立的Access数据库Recorder的recording表。<br>
+    2．在Form1上添加Text Box控件<br>
+    &nbsp;&nbsp; 在Form1上添加三个Text Box控件，并在适当位置增添相应的标签。文本框属性设置如下：<br>
+    ------------------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text Box控件1 
+    &nbsp;&nbsp;&nbsp; Text Box控件2&nbsp;&nbsp;&nbsp; Text Box控件3<br>
+    ------------------------------------------------------------<br>
+    （名称）&nbsp;&nbsp;&nbsp; Text1 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text2 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text3<br>
+    Data Field&nbsp; ID 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Day 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Time<br>
+    Datasource&nbsp; Data1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    Data1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data1<br>
+    ------------------------------------------------------------<br>
+    &nbsp;&nbsp; 以上属性设置使三个Text Box绑定到Data控件，用于从与Data控件连接的数据库中分别显示字段ID、Day、Time。<br>
+    3．在Form1上添加OLE容器控件<br>
+    &nbsp;&nbsp; 在Form1上添加OLE容器控件，属性设置如下：<br>
+    ----------------------------------<br>
+    （名称）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OLE1<br>
+    ----------------------------------<br>
+    Data Field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 录音文件<br>
+    Datasource&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data1<br>
+    Autoactivate&nbsp;&nbsp;&nbsp;&nbsp; 2-Doubleclick<br>
+    ---------------------------------- <br>
+    &nbsp;&nbsp; 通过属性设置把它与Data控件绑定，从Recorder数据库中显示字段“声音文件”。当OLE容器中的录音数据被更新时，被更新或新增的声音对象将自动被写回数据库。当双击OLE容器中的数据时，将自动播放声音文件。<br>
+    4．在Form1上添加Command Button控件<br>
+    &nbsp;&nbsp; 添加两个Command Button控件到Form1上，其中一个命令按钮用于调用录音机以录制通话数据，并将录音的声音数据嵌入到OLE容器中。该按钮属性设置如下：<br>
+    ---------------------<br>
+    （名称）&nbsp;&nbsp;&nbsp; Command1<br>
+    ---------------------<br>
+    Caption&nbsp;&nbsp;&nbsp;&nbsp; 开始录音<br>
+    ---------------------<br>
+    双击Command1，在Private Sub Command1_Click()中输入以下代码：<br>
+    Data1.DatabaseName=&quot;C:\recorder.mdb&quot;<br>
+    Data1.Recordsource=&quot;Recording&quot;<br>
+    Data1.Refresh '创建一条新记录<br>
+    Data1.Recordset.AddNew '创建一个嵌入声音对象<br>
+    OLE1.CreateEmbed &quot;&quot;,&quot;SOUNDREC&quot; '激活WIN95附件下的录音机<br>
+    OLE1.DoVerb 0<br>
+    End Sub<br>
+    &nbsp;&nbsp; 另一个按钮用于关闭程序，属性设置如下：<br>
+    ----------------------<br>
+    （名称）&nbsp;&nbsp;&nbsp;&nbsp; Command2<br>
+    ----------------------<br>
+    Caption&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 退出<br>
+    ---------------------- <br>
+    双击Command2，在Private Sub Command2_Click()中输入以下代码：<br>
+    Unload Form1<br>
+    End<br>
+    End Sub<br>
+    5．编写Form1的Activate过程<br>
+    &nbsp;&nbsp; Form1的Activate过程代码，用于在Form1打开的同时打开通信软件SuperVoice2.2并激活Command1的功能。双击Form1，弹出编写代码窗口，在对象下拉列表中选择Form，在过程下拉列表中选择Activate，在Pri<br>
+    vate Sub Form_Activate()中输入以下代码：<br>
+    '激活Command1的功能<br>
+    Call Command1_Click<br>
+    '调用安装在d:\supervoc\program\中的通信程序SuperVoice2.2，来启动Modem的语音功能<br>
+    dim tel<br>
+    tel=shell(&quot;d:\supervoc\program\supervoc.exe&quot;,1)<br>
+    appactivate tel<br>
+    End Sub<br>
+    <strong>四、程序运行结果</strong><br>
+    &nbsp;&nbsp; 保存工程，并将其生成可执行程序“录音.EXE”，放在C:\下面。好了，大功告成。现在退出VB，试一试<br>
+    在WIN95下运行。<br>
+    &nbsp;&nbsp; 当双击“录音.EXE”时，程序自动打开通信软件SuperVoice2.2（一般购买Modem时都随机附送SuperVoice2.2），在SuperVoice2.2的系统设置中将语音输入设备设为电话听筒，及启动SuperVoice2.2时弹出仿真电话拨号盘（只需在第一次使用时设置）。设为电话听筒的好处是通话时不需要麦克风，直接使用电话机。接着出现窗体Form1，并自动启动附件下的录音机。进行通话录音时，单击仿真电话拔号盘上的免提键及录音机上的录制按钮，开始录音。录制的声音文件被嵌入OLE容器中，同时被写到与OLE容器连接的数据库Recorder.mdb中，并自动生成录音的日期时间。除了录音功能外，还可以通过点击Data控件上的箭头按钮选择记录查询，双击OLE容器（显示为喇叭图标）；自动播放选择的通话录音。如果再给窗体Form1添上DBComboBox、DBGrid控件，将使其查询功能更为完善。<br>
+    &nbsp;&nbsp; 顺便提一下，刚写完这篇文章，我又找到一个可在Win95注册的录音软件，就是创新的SoundO'LE，由于界面漂亮且没有限制录音长度（附件的录音机的录音长度只有一分钟），我将准备拿它来取代那土里上气的录音机，使得我的小程序更具专业性。<br>
+    &nbsp;&nbsp; 以上代码在VB5.0、Win95系统上调试通过。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

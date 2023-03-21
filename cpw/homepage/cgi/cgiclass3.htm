@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+
+<head>
+<title>CGI简明教程第三章</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../../res/back.JPG">
+
+<p ALIGN="CENTER"><span style="font-size: 9pt"><strong>CGI简明教程第三章<br>
+</strong></span></p>
+
+<table style="font-size: 9pt">
+  <tr VALIGN="TOP">
+    <td VALIGN="TOP"><b>传送方法：<br>
+    </b>所谓方法是指调用CGI程序的途径。事实上，要执行程序时，你用一种方法向服务器提出请求，此请求定义了程序如何接受数据。 
+    下面介绍最常用的两种方法：get和post <p><a NAME="1.GET"></a><b>1.GET</b> 
+    当使用这种方法时，CGI程序从环境变量QUERY_STRING获取数据。QUERY_STRING 
+    被称为环境变量，就是这种环境变量把客户端的数据传给服务器。为了解释和执行 
+    程序，CGI必须要分析（处理）此字符串。<br>
+    当你想从服务器获得数据并且不改变服务 
+    器上的数据时，你应该选用GET。但如果你的字符串长度超过了一定长度，那么还是选用POST方法。 
+    </p>
+    <p><a NAME="2.POST"></a><b>2.POST</b> 使用POST方法时，WEB服务器通过stdin(标准输入)，向CGI程序传送数据。服务器 
+    在数据的最后没有使用EOF字符标记，因此程序为了正确的读取stdin,必须使用CONTENT_LENGTH 
+    。当你发送的数据将改变<br>
+    Web服务器端的数据或者你想给CGI程序传送的数据超过了1024 
+    字节，这是url的极限长度，你应该使用post方法。 </p>
+    <p><a NAME="3.实现方法："></a><b>3.实现方法：<br>
+    </b>上次讲过html中的&lt;Form&gt;标签，对于传送数据方法的定义也在这个标签里定义。 
+    如下： </p>
+    <p><b>&lt;form name=&quot;guyi's form&quot; 
+    action=&quot;http://www.yourname.com/cgi/your.cgi&quot; method=GET&gt; <br>
+    </b>定义了一个以get方法传送数据的form，它的服务端程序是http://www.yourname.com/cgi/your.cgi. 
+    <br>
+    同样的如下的定义将使用post方法。 <br>
+    <b>&lt;form method=post&gt;</b></td>
+  </tr>
+</table>
+
+<p><a HREF="default.html" tppabs="http://202.96.217.5/~xiaoyi/default.html">返回CGI教程目录</a></p>
+</body>
+</html>

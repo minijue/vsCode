@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">如何在Windows操作系统中改变文件打开方式&nbsp;<br>
+      <br>
+                       （合肥 张建军 滕明贵 韩莹）       
+      <p>　　在Windows 95／NT／98操作系统中改变文件打开方式的问题，又可称为改变文件类型关联的问题，即把某类型（扩展名）的文件与某应用程序关联，例如通常当双击＊.txt文件时系统自动调用Notepad.exe。本文介绍利用Windows注册表编辑器Regedit.exe手工或编程改变文件打开方式的方法，并提供程序实例。<br> 
+      　　一、基本思路：<br>
+      　　1、注册表编辑器Regedit.exe是用于更改系统注册表设置的高级工具，包含了关于系统配置及运行的重要信息，默认访问路径为C:\Windows\Regedit.exe。双击Regedit.exe图标，运行注册表编辑器。在左侧显示栏内看到HKEY_CLASSES_ROOT、KEY_CURRENT_USER、HKEY_LOCAL_MACHINE等主键。与文件类型有关的所有主键、键名、键值都存放在HKEY_CLASSES_ROOT下。<br>
+      　　◆双击HKEY_CLASSES_ROOT，向下拖动滚动条，找到.txt主键，右侧显示栏内“txtfile”说明：在HKEY_CLASSES_ROOT下有一txtfile主键，其下存放了打开＊.txt文件应用程序的有关信息。<br>
+      　　◆向下拖动滚动条，找到txtfile主键，右侧显示栏内“文本文档”为文件类型描述。双击txtfile，DefaultIcon右侧显示栏内“shell32.dll,－152”为＊.txt文件的图标；shell\open\command，右侧显示栏内“C:\WINDOWS\NOTEPAD.EXE ％1”为打开＊.txt文件的应用程序名称及参数。　　改变打开文件方式的方法（例如用VISIO打开＊.exc文件）：<br>
+      　　◆手工：打开系统注册表，在HKEY_CLASSES_ROOT下找到.exc及另一主键名，找到此主键，将shell\open\command右侧显示栏内“C:\WINDOWS\NOTEPAD.EXE ％1”改为“C:\VISIO.EXE ％1”（假设VISIO.EXE的访问路径是C:\，具体视情况而定），按F5刷新系统注册表。<br> 
+      　　◆编程：利用VB、Delphi、C＋＋Builder等读写系统注册表，可自动改变文件打开方式。本文提供VB、Delphi编程实例。<br>
+      　　二、编程实例：<br>
+      　　㈠利用VB编程<br>
+      　　1、在VB5.0 IDE中，新建工程Project1，在Form1上添加命令按钮Command1。<br> 
+      　　2、选择菜单“工程”—“添加模块”—“模块”—“打开”，在Project1中添加模块Moudle1。<br>
+      　　3、在Moudle1“通用—声明”部分声明API函数和常量。<br>
+      　　Const REG_SZ = 1<br> 
+      　　Global Const HKEY_CLASSES_ROOT = ＆H80000000<br> 
+    Declare Function OSRegQueryValueEx Lib “advapi32”Alias&nbsp;<br>
+      “RegQueryValueExA”(ByVal hKey As Long, ByVal lpszValueName As String,<br> 
+      ByVal dwReserved As Long, lpdwType As Long, lpbData As Any, cbData As Long) As Long<br> 
+      <br> 
+      　　Declare Function OSRegOpenKey Lib “advapi32”Alias&nbsp;<br>
+      “RegOpenKeyA”(ByVal hKey As Long, ByVal lpszSubKey As String,&nbsp;<br>
+      phkResult As Long) As Long<br> 
+      <br> 
+      　　Declare Function OSRegSetValueEx Lib“advapi32”Alias&nbsp;<br>
+      “RegSetValueExA”（ByVal hKey As Long, ByVal lpszValueName As String,<br> 
+ ByVal dwReserved As Long, ByVal fdwType As Long, lpbData As Any,&nbsp;<br>
+      ByVal cbData As Long) As Long<br> 
+      <br> 
+      　　Declare Function OSRegCloseKey Lib“advapi32”Alias<br> 
+      “RegCloseKey”(ByVal hKey As Long) As Long<br> 
+      <br> 
+      　　4、在Moudle 1中编写函数。<br> 
+      　　Function RegOpenKey(ByVal hKey As Long, ByVal lpszSubKey As String,<br> 
+      phkResult As Long) As Boolean<br> 
+      　　 Dim lResult As Long<br> 
+      　　 On Error GoTo 0 ` 关闭错误陷阱<br> 
+      　　 lResult = OSRegOpenKey(hKey, lpszSubKey, phkResult)<br> 
+      　　 If lResult = 0 Then<br> 
+      　　 RegOpenKey = True<br> 
+      　　 Else<br> 
+      　　 RegOpenKey = False<br> 
+      　　 End If<br> 
+      　　End Function<br> 
+      　　Function RegSetStringValue(ByVal hKey As Long, ByVal strValueName As String,<br> 
+      ByVal strData As String, Optional ByVal fLog) As Boolean<br> 
+      　　 Dim lResult As Long<br> 
+      　　 On Error GoTo 0<br> 
+      　　 lResult = OSRegSetValueEx(hKey, strValueName, 0＆, REG_SZ, ByVal strData,&nbsp;<br>
+      LenB(StrConv(strData, vbFromUnicode)) ＋ 1)<br> 
+      　　 If lResult = 0 Then<br> 
+      　　 RegSetStringValue = True<br> 
+      　　 Else<br> 
+      　　 RegSetStringValue = False<br> 
+      　　 End If<br> 
+      　　End Function<br> 
+      　　Function StripTerminator(ByVal strString As String) As String<br> 
+      　　 Dim intZeroPos As Integer<br> 
+      　　 intZeroPos = InStr(strString, Chr＄(0))<br> 
+      　　 If intZeroPos > 0 Then<br> 
+      　　StripTerminator=Left＄(strString, intZeroPos － 1)<br> 
+      　　 Else<br> 
+      　　 StripTerminator = strString<br> 
+      　　 End If<br> 
+      　　End Function<br> 
+      　　Function RegQueryStringValue(ByVal hKey As Long, ByVal strValueName As String,<br> 
+      strData As String) As Boolean<br> 
+      　　 Dim lResult As Long<br> 
+      　　 Dim lValueType As Long<br> 
+      　　 Dim strBuf As String<br> 
+      　　 Dim lDataBufSize As Long<br> 
+      　　 RegQueryStringValue = False<br> 
+      　　 On Error GoTo 0<br> 
+      　　 lResult = OSRegQueryValueEx(hKey, strValueName, 0＆, lValueType, ByVal 0＆,&nbsp;<br>
+      lDataBufSize)<br>
+      　　 If lResult = ERROR_SUCCESS Then<br> 
+      　　 If lValueType = REG_SZ Then<br> 
+      　　 strBuf = String(lDataBufSize, “”)<br> 
+      　　 lResult = OSRegQueryValueEx(hKey, strValueName, 0＆, 0＆, ByVal strBuf,&nbsp;<br>
+      lDataBufSize)<br>
+      　　 If lResult = ERROR_SUCCESS Then<br> 
+      　　 RegQueryStringValue = True<br> 
+      　　 strData = StripTerminator(strBuf)<br> 
+      　　 End If<br> 
+      　　 End If<br> 
+      　　 End If<br> 
+      　　End Function<br> 
+      　　5、双击Command1，编写Click事件代码。<br>
+      　　Private Sub Command1_Click()<br> 
+      　　 Dim hKey As Long<br> 
+      　　 Dim MyReturn As Long<br> 
+      　　 Dim MyData As String<br> 
+      　　 MyReturn = OSRegOpenKey(HKEY_CLASSES_ROOT, “.exc”, hKey)<br> 
+      　　MyReturn=RegQueryStringValue(hKey,“”,MyData)<br>
+      　　MyReturn=OSRegOpenKey(HKEY_CLASSES_ROOT, MyData＋“\shell\open\command”,hKey)<br> 
+      　　 MyReturn = RegSetStringValue(hKey,“”,“c:\visio.exe 1％”, False)<br> 
+      　　 If MyReturn Then<br> 
+      　　 MsgBox “改变文件打开方式成功！”,vbInformation,“请注意”<br> 
+      　　 Else<br> 
+      　　 MsgBox “改变文件打开方式失败！”,vbExclamation,“请注意”<br> 
+      　　 End If<br> 
+      　　 OSRegCloseKey (hKey)<br> 
+      　　End Sub<br> 
+      　　6、按F5运行程序，在简体中文Windows95／NT／98、VB5.0／6.0环境中调试通过。<br>
+      　　㈡利用Delphi编程<br>
+      　　1、在Delphi3.0 IDE中，新建工程Project1，在Form1上添加按钮Button1。<br> 
+      　　2、在uses子句中添加Registry。<br>
+      　　3、双击Button1，编写Click事件代码。<br>
+      　　procedure TForm1.Button1Click(Sender: TObject);<br> 
+      　　var<br>
+      　　 MyRegistry : TRegINIFile;<br> 
+      　　 Return:string;<br> 
+      　　begin<br>
+      　　 try<br> 
+      　　 MyRegistry := TRegINIFile.Create(``);<br> 
+      　　MyRegistry.RootKey := HKEY_CLASSES_ROOT;<br> 
+      　　 Return:=MyRegistry.ReadString (`.gid`,``,`No! Not Found the Key!`);<br> 
+      　　 MyRegistry.WriteString(Return,``,`这只是一个演示！`);<br> 
+      　　 MyRegistry.WriteString(Return＋`\DefaultIcon`,``,`c:\visio.exe,1`);<br> 
+      　　 MyRegistry.WriteString(Return＋`\shell\open\command`,``,`c:\visio.exe ％1`);&nbsp;<br>
+      　　 finally<br> 
+      　　 MyRegistry.Free;<br> 
+      　　 end;<br> 
+      　　 ShowMessage(`改变文件打开方式成功！`);<br> 
+      　　end;<br>
+      　　4、按F9运行程序，在简体中文Windows95／NT／98、Delphi3.0／4.0环境中调试通过。     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

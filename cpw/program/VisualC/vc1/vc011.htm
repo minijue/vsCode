@@ -1,0 +1,520 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0055)http://person.zj.cninfo.net/~yao/document/vc/vc001.html -->
+<HTML><HEAD><TITLE>用VC++5.0 实 现 多 线 程 的 调 度 和 处 理</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY background="" bgProperties=fixed>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center"><b>用VC++5.0 实 现 多 线 程 的 调 度 和 处 理</b> 
+      <H3>一 多 任 务， 多 进 程 和 多 线 程</H3> 
+      <P><FONT color=#ffffff>----</FONT> Windows95 和WindowsNT 操 作 系 统 支 持 多 任 务  
+      调 度 和 处 理， 基 于 该 功 能 所 提 供 的 多 任 务 空 间， 程 序 员 可 以 完 全 控 制 应 用 程 序 中 每 一 个  
+      片 段 的 运 行， 从 而 编 写 高 效 率 的 应 用 程 序。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 所 谓 多 任 务 通 常 包 括 这 样 两 大 类： 多 进 程 和 多  
+      线 程。 进 程 是 指 在 系 统 中 正 在 运 行 的 一 个 应 用 程 序； 线 程 是 系 统 分 配 处 理 器 时 间 资 源 的  
+      基 本 单 元， 或 者 说 进 程 之 内 独 立 执 行 的 一 个 单 元。 对 于 操 作 系 统 而 言， 其 调 度 单 元 是 线  
+      程。 一 个 进 程 至 少 包 括 一 个 线 程， 通 常 将 该 线 程 称 为 主 线 程。 一 个 进 程 从 主 线 程 的 执 行 开  
+      始 进 而 创 建 一 个 或 多 个 附 加 线 程， 就 是 所 谓 基 于 多 线 程 的 多 任 务。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 开 发 多 线 程 应 用 程 序 可 以 利 用32 位Windows 环  
+      境 提 供 的Win32 API 接 口 函 数， 也 可 以 利 用VC++ 中 提 供 的MFC 类 库 进 行 开 发。 多 线 程 编 程  
+      在 这 两 种 方 式 下 原 理 是 一 样 的， 用 户 可 以 根 据 需 要 选 择 相 应 的 工 具。 本 文 重 点 讲 述  
+      用VC++5.0 提 供 的MFC 类 库 实 现 多 线 程 调 度 与 处 理 的 方 法 以 及 由 线 程 多 任 务 所 引 发 的 同  
+      步 多 任 务 特 征， 最 后 详 细 解 释 一 个 实 现 多 线 程 的 例 程。 </P> 
+      <H3>二 基 于MFC 的 多 线 程 编 程</H3> 
+      <P><FONT color=#ffffff>----</FONT> <B>1 MFC 对 多 线 程 的 支 持</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> MFC 类 库 提 供 了 多 线 程 编 程 支 持， 对 于 用 户 编  
+      程 实 现 来 说 更 加 方 便。 非 常 重 要 的 一 点 就 是， 在 多 窗 口 线 程 情 况 下，MFC 直 接 提 供 了 用 户  
+      接 口 线 程 的 设 计。 </P> 
+      <P><FONT color=#ffffff>----</FONT> MFC 区 分 两 种 类 型 的 线 程： 辅 助 线 程（Worker  
+      Thread） 和 用 户 界 面 线 程(UserInterface Thread)。 辅 助 线 程 没 有 消 息 机 制， 通 常 用 来  
+      执 行 后 台 计 算 和 维 护 任 务。MFC 为 用 户 界 面 线 程 提 供 消 息 机 制， 用 来 处 理 用 户 的 输 入， 响  
+      应 用 户 产 生 的 事 件 和 消 息。 但 对 于Win32 的API 来 说， 这 两 种 线 程 并 没 有 区 别， 它 只 需 要 线  
+      程 的 启 动 地 址 以 便 启 动 线 程 执 行 任 务。 用 户 界 面 线 程 的 一 个 典 型 应 用 就 是 类CWinApp， 大  
+      家 对 类CwinApp 都 比 较 熟 悉， 它 是CWinThread 类 的 派 生 类， 应 用 程 序 的 主 线 程 是 由 它 提  
+      供， 并 由 它 负 责 处 理 用 户 产 生 的 事 件 和 消 息。 类CwinThread 是 用 户 接 口 线 程 的 基 本  
+      类。CWinThread 的 对 象 用 以 维 护 特 定 线 程 的 局 部 数 据。 因 为 处 理 线 程 局 部 数 据 依 赖 于  
+      类CWinThread， 所 以 所 有 使 用MFC 的 线 程 都 必 须 由MFC 来 创 建。 例 如， 由run-time 函  
+      数_beginthreadex 创 建 的 线 程 就 不 能 使 用 任 何MFC API。 </P> 
+      <P><FONT color=#ffffff>----</FONT> <B>2 辅 助 线 程 和 用 户 界 面 线 程 的 创 建 和 终  
+      止</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> 要 创 建 一 个 线 程， 需 要 调 用 函  
+      数AfxBeginThread。 该 函 数 通 过 参 数 重 载 具 有 两 种 版 本， 分 别 对 应 辅 助 线 程 和 用 户 界 面  
+      线 程。 无 论 是 辅 助 线 程 还 是 用 户 界 面 线 程， 都 需 要 指 定 额 外 的 参 数 以 修 改 优 先 级， 堆 栈 大  
+      小， 创 建 标 志 和 安 全 特 性 等。 函 数AfxBeginThread 返 回 指 向CWinThread 类 对 象 的 指 针。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 创 建 助 手 线 程 相 对 简 单。 只 需 要 两 步： 实 现 控 制  
+      函 数 和 启 动 线 程。 它 并 不 必 须 从CWinThread 派 生 一 个 类。 简 要 说 明 如 下： </P> 
+      <P><FONT color=#ffffff>----</FONT> 1. 实 现 控 制 函 数。 控 制 函 数 定 义 该 线 程。 当 进  
+      入 该 函 数， 线 程 启 动； 退 出 时， 线 程 终 止。 该 控 制 函 数 声 明 如 下： </P> 
+      <P><FONT color=#ffffff>----</FONT> UINT MyControllingFunction( LPVOID  
+      pParam ); </P> 
+      <P><FONT color=#ffffff>----</FONT> 该 参 数 是 一 个 单 精 度32 位 值。 该 参 数 接 收 的 值  
+      将 在 线 程 对 象 创 建 时 传 递 给 构 造 函 数。 控 制 函 数 将 用 某 种 方 式 解 释 该 值。 可 以 是 数 量 值，  
+      或 是 指 向 包 括 多 个 参 数 的 结 构 的 指 针， 甚 至 可 以 被 忽 略。 如 果 该 参 数 是 指 结 构， 则 不 仅 可  
+      以 将 数 据 从 调 用 函 数 传 给 线 程， 也 可 以 从 线 程 回 传 给 调 用 函 数。 如 果 使 用 这 样 的 结 构 回  
+      传 数 据， 当 结 果 准 备 好 的 时 候， 线 程 要 通 知 调 用 函 数。 当 函 数 结 束 时， 应 返 回 一 个UINT 类  
+      型 的 值 值， 指 明 结 束 的 原 因。 通 常， 返 回0 表 明 成 功， 其 它 值 分 别 代 表 不 同 的 错 误。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 2. 启 动 线 程。 由 函 数AfxBeginThread 创 建 并 初  
+      始 化 一 个CWinThread 类 的 对 象， 启 动 并 返 回 该 线 程 的 地 址。 则 线 程 进 入 运 行 状 态。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 3. 举 例 说 明。 下 面 用 简 单 的 代 码 说 明 怎 样 定 义  
+      一 个 控 制 函 数 以 及 如 何 在 程 序 的 其 它 部 分 使 用。 </P><PRE>UINT MyThreadProc( LPVOID pParam )
+{
+    CMyObject* pObject = (CMyObject*)pParam;
+    if (pObject == NULL ||
+        !pObject-&gt;IsKindOf(RUNTIME_CLASS(CMyObject)))
+    return -1;    // 非 法 参 数
+    … …// 具 体 实 现 内 容
+    return 0;    // 线 程 成 功 结 束
+}
+
+// 在 程 序 中 调 用 线 程 的 函 数
+ … …
+pNewObject = new CMyObject;
+AfxBeginThread(MyThreadProc, pNewObject);
+	 … …
+      	 创 建 用 户 界 面 线 程 有 两 种 方 法。
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 第 一 种 方 法， 首 先 从CWinTread 类 派 生 一 个 类（  
+      注 意 必 须 要 用 宏DECLARE_DYNCREATE 和 IMPLEMENT_DYNCREATE 对 该 类 进 行 声 明 和 实 现）；  
+      然 后 调 用 函 数AfxBeginThread 创 建CWinThread 派 生 类 的 对 象 进 行 初 始 化 启 动 线 程 运 行。  
+      除 了 调 用 函 数AfxBeginThread 之 外, 也 可 以 采 用 第 二 种 方 法， 即 先 通 过 构 造 函 数 创 建  
+      类CWinThread 的 一 个 对 象， 然 后 由 程 序 员 调 用 函 数::CreateThread 来 启 动 线 程。 通 常  
+      类CWinThread 的 对 象 在 该 线 程 的 生 存 期 结 束 时 将 自 动 终 止， 如 果 程 序 员 希 望 自 己 来 控  
+      制， 则 需 要 将m_bAutoDelete 设 为FALSE。 这 样 在 线 程 终 止 之 后 类CWinThread 对 象 仍 然 存  
+      在， 只 是 在 这 种 情 况 下 需 要 手 动 删 除CWinThread 对 象。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 通 常 线 程 函 数 结 束 之 后， 线 程 将 自 行 终 止。  
+      类CwinThread 将 为 我 们 完 成 结 束 线 程 的 工 作。 如 果 在 线 程 的 执 行 过 程 中 程 序 员 希 望 强 行  
+      终 止 线 程 的 话， 则 需 要 在 线 程 内 部 调 用AfxEndThread(nExitCode)。 其 参 数 为 线 程 结 束  
+      码。 这 样 将 终 止 线 程 的 运 行， 并 释 放 线 程 所 占 用 的 资 源。 如 果 从 另 一 个 线 程 来 终 止 该 线  
+      程， 则 必 须 在 两 个 线 程 之 间 设 置 通 信 方 法。 如 果 从 线 程 外 部 来 终 止 线 程 的 话， 还 可 以 使  
+      用Win32 函 数（CWinThread 类 不 提 供 该 成 员 函 数）：BOOL TerminateThread(HANDLE  
+      hThread,DWORD dwExitcode)。 但 在 实 际 程 序 设 计 中 对 该 函 数 的 使 用 一 定 要 谨 慎， 因 为  
+      一 旦 该 命 令 发 出， 将 立 即 终 止 该 线 程， 并 不 释 放 线 程 所 占 用 的 资 源， 这 样 可 能 会 引 起 系 统  
+      不 稳 定。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 如 果 所 终 止 的 线 程 是 进 程 内 的 最 后 一 个 线 程，  
+      则 在 该 线 程 终 止 之 后 进 程 也 相 应 终 止。 </P> 
+      <P><FONT color=#ffffff>----</FONT> <B>3 进 程 和 线 程 的 优 先 级 问 题</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> 在Windows95 和WindowsNT 操 作 系 统 当 中， 任 务  
+      是 有 优 先 级 的， 共 有32 级， 从0 到31， 系 统 按 照 不 同 的 优 先 级 调 度 线 程 的 运 行。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 1) 0-15 级 是 普 通 优 先 级， 线 程 的 优 先 级 可 以  
+      动 态 变 化。 高 优 先 级 线 程 优 先 运 行， 只 有 高 优 先 级 线 程 不 运 行 时， 才 调 度 低 优 先 级 线 程 运  
+      行。 优 先 级 相 同 的 线 程 按 照 时 间 片 轮 流 运 行。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 2) 16-30 级 是 实 时 优 先 级， 实 时 优 先 级 与 普 通  
+      优 先 级 的 最 大 区 别 在 于 相 同 优 先 级 进 程 的 运 行 不 按 照 时 间 片 轮 转， 而 是 先 运 行 的 线 程 就  
+      先 控 制CPU， 如 果 它 不 主 动 放 弃 控 制， 同 级 或 低 优 先 级 的 线 程 就 无 法 运 行。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 一 个 线 程 的 优 先 级 首 先 属 于 一 个 类， 然 后 是 其  
+      在 该 类 中 的 相 对 位 置。 线 程 优 先 级 的 计 算 可 以 如 下 式 表 示： </P> 
+      <P><FONT color=#ffffff>----</FONT> 线 程 优 先 级= 进 程 类 基 本 优 先 级+ 线 程 相 对 优 先  
+      级 </P> 
+      <P><FONT color=#ffffff>----</FONT> 进 程 类 的 基 本 优 先 级： </P><PRE>	IDLE_PROCESS_CLASS
+	NORMAL_PROCESS_CLASS
+	HIGH_PROCESS_CLASS
+	REAL_TIME_PROCESS_CLASS
+ 线 程 的 相 对 优 先 级：
+	THREAD_PRIORITY_IDLE  
+（ 最 低 优 先 级， 仅 在 系 统 空 闲 时 执 行）
+	THREAD_PRIORITY_LOWEST		        
+	THREAD_PRIORITY_BELOW_NORMAL      
+   THREAD_PRIORITY_NORMAL   （ 缺 省）
+	THREAD_PRIORITY_ABOVE_NORMAL	        
+	THREAD_PRIORITY_HIGHEST		        
+	THREAD_PRIORITY_CRITICAL  （ 非 常 高 的 优 先 级）
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> <B>4 线 程 同 步 问 题</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> 编 写 多 线 程 应 用 程 序 的 最 重 要 的 问 题 就 是 线 程  
+      之 间 的 资 源 同 步 访 问。 因 为 多 个 线 程 在 共 享 资 源 时 如 果 发 生 访 问 冲 突 通 常 会 产 生 不 正 确  
+      的 结 果。 例 如， 一 个 线 程 正 在 更 新 一 个 结 构 的 内 容 的 同 时 另 一 个 线 程 正 试 图 读 取 同 一 个  
+      结 构。 结 果， 我 们 将 无 法 得 知 所 读 取 的 数 据 是 什 么 状 态： 旧 数 据， 新 数 据， 还 是 二 者 的 混 合  
+      ？ </P> 
+      <P><FONT color=#ffffff>----</FONT> MFC 提 供 了 一 组 同 步 和 同 步 访 问 类 来 解 决 这 个  
+      问 题， 包 括： </P> 
+      <P><FONT color=#ffffff>----</FONT> 同 步 对 象：CSyncObject, CSemaphore,  
+      CMutex, CcriticalSection 和CEvent ； 同 步 访 问 对 象：CMultiLock 和 CSingleLock 。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> 同 步 类 用 于 当 访 问 资 源 时 保 证 资 源 的 整 体 性。  
+      其 中CsyncObject 是 其 它 四 个 同 步 类 的 基 类， 不 直 接 使 用。 信 号 同 步 类CSemaphore 通 常 用  
+      于 当 一 个 应 用 程 序 中 同 时 有 多 个 线 程 访 问 一 个 资 源（ 例 如， 应 用 程 序 允 许 对 同 一  
+      个Document 有 多 个View） 的 情 况； 事 件 同 步 类CEvent 通 常 用 于 在 应 用 程 序 访 问 资 源 之 前  
+      应 用 程 序 必 须 等 待（ 比 如， 在 数 据 写 进 一 个 文 件 之 前 数 据 必 须 从 通 信 端 口 得 到） 的 情 况；  
+      而 对 于 互 斥 同 步 类CMutex 和 临 界 区 同 步 类CcriticalSection 都 是 用 于 保 证 一 个 资 源 一  
+      次 只 能 有 一 个 线 程 访 问， 二 者 的 不 同 之 处 在 于 前 者 允 许 有 多 个 应 用 程 序 使 用 该 资 源（ 例  
+      如， 该 资 源 在 一 个DLL 当 中） 而 后 者 则 不 允 许 对 同 一 个 资 源 的 访 问 超 出 进 程 的 范 畴， 而 且  
+      使 用 临 界 区 的 方 式 效 率 比 较 高。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 同 步 访 问 类 用 于 获 得 对 这 些 控 制 资 源 的 访  
+      问。CMultiLock 和 CSingleLock 的 区 别 仅 在 于 是 需 要 控 制 访 问 多 个 还 是 单 个 资 源 对 象。  
+      </P> 
+      <P><FONT color=#ffffff>----</FONT> <B>5 同 步 类 的 使 用 方 法</B> </P> 
+      <P><FONT color=#ffffff>----</FONT> 解 决 同 步 问 题 的 一 个 简 单 的 方 法 就 是 将 同 步 类  
+      融 入 共 享 类 当 中， 通 常 我 们 把 这 样 的 共 享 类 称 为 线 程 安 全 类。 下 面 举 例 来 说 明 这 些 同 步  
+      类 的 使 用 方 法。 比 如， 一 个 用 以 维 护 一 个 帐 户 的 连 接 列 表 的 应 用 程 序。 该 应 用 程 序 允 许3  
+      个 帐 户 在 不 同 的 窗 口 中 检 测， 但 一 次 只 能 更 新 一 个 帐 户。 当 一 个 帐 户 更 新 之 后， 需 要 将 更  
+      新 的 数 据 通 过 网 络 传 给 一 个 数 据 文 档。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 该 例 中 将 使 用3 种 同 步 类。 由 于 允 许 一 次 检 测3  
+      个 帐 户， 使 用CSemaphore 来 限 制 对3 个 视 窗 对 象 的 访 问。 当 更 新 一 个 帐 目 时， 应 用 程 序 使  
+      用CCriticalSection 来 保 证 一 次 只 有 一 个 帐 目 更 新。 在 更 新 成 功 之 后， 发CEvent 信 号， 该  
+      信 号 释 放 一 个 等 待 接 收 信 号 事 件 的 线 程。 该 线 程 将 新 数 据 传 给 数 据 文 档。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 要 设 计 一 个 线 程 安 全 类， 首 先 根 据 具 体 情 况 在  
+      类 中 加 入 同 步 类 做 为 数 据 成 员。 在 例 子 当 中， 可 以 将 一 个CSemaphore 类 的 数 据 成 员 加 入  
+      视 窗 类 中， 一 个CCriticalSection 类 数 据 成 员 加 入 连 接 列 表 类， 而 一 个CEvent 数 据 成 员  
+      加 入 数 据 存 储 类 中。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 然 后， 在 使 用 共 享 资 源 的 函 数 当 中， 将 同 步 类 与  
+      同 步 访 问 类 的 一 个 锁 对 象 联 系 起 来。 即， 在 访 问 控 制 资 源 的 成 员 函 数 中 应 该 创 建 一  
+      个CSingleLock 或 CMultiLock 的 对 象 并 调 用 该 对 象 的Lock 函 数。 当 访 问 结 束 之 后， 调  
+      用UnLock 函 数， 释 放 资 源。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 用 这 种 方 式 来 设 计 线 程 安 全 类 比 较 容 易。 在 保  
+      证 线 程 安 全 的 同 时， 省 去 了 维 护 同 步 代 码 的 麻 烦， 这 也 正 是OOP 的 思 想。 但 是 使 用 线 程 安  
+      全 类 方 法 编 程 比 不 考 虑 线 程 安 全 要 复 杂， 尤 其 体 现 在 程 序 调 试 过 程 中。 而 且 线 程 安 全 编  
+      程 还 会 损 失 一 部 分 效 率， 比 如 在 单CPU 计 算 机 中 多 个 线 程 之 间 的 切 换 会 占 用 一 部 分 资 源。  
+      </P> 
+      <H3>三 编 程 实 例</H3> 
+      <P><FONT color=#ffffff>----</FONT> 下 面 以VC++5.0 中 一 个 简 单 的 基 于 对 话 框 的MFC  
+      例 程 来 说 明 实 现 多 线 程 任 务 调 度 与 处 理 的 方 法， 下 面 加 以 详 细 解 释。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 该 例 程 当 中 定 义 两 个 用 户 界 面 线 程， 一 个 显  
+      示 线 程(CDisplayThread) 和 一 个 计 数 线 程(CCounterThread)。 这 两 个 线 程 同 时 操 作 一 个  
+      字 符 串 变 量m_strNumber， 其 中 显 示 线 程 将 该 字 符 串 在 一 个 列 表 框 中 显 示， 而 计 数 线 程 则  
+      将 该 字 符 串 中 的 整 数 加1。 在 例 程 中， 可 以 分 别 调 整 进 程、 计 数 线 程 和 显 示 线 程 的 优 先 级。  
+      例 程 中 的 同 步 机 制 使 用CMutex 和CSingleLock 来 保 证 两 个 线 程 不 能 同 时 访 问 该 字 符 串。  
+      同 步 机 制 执 行 与 否 将 明 显 影 响 程 序 的 执 行 结 果。 在 该 例 程 中 允 许 将 将 把 两 个 线 程 暂 时 挂  
+      起， 以 查 看 运 行 结 果。 例 程 中 还 允 许 查 看 计 数 线 程 的 运 行。 该 例 程 中 所 处 理 的 问 题 也 是 多  
+      线 程 编 程 中 非 常 具 有 典 型 意 义 的 问 题。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 该 程 序 执 行 时 主 要 有 三 个 用 于 调 整 优 先 级 的  
+      组 合 框， 三 个 分 别 用 于 选 择 同 步 机 制、 显 示 计 数 线 程 运 行 和 挂 起 线 程 的 复 选 框 以 及 一 个  
+      用 于 显 示 运 行 结 果 的 列 表 框。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 在 本 程 序 中 使 用 了 两 个 线 程 类CCounterThread  
+      和CDisplayThread， 这 两 个 线 程 类 共 同 操 作 定 义 在CMutexesDlg 中 的 字 符 串 对  
+      象m_strNumber。 本 程 序 对 同 步 类CMutex 的 使 用 方 法 就 是 按 照 本 文 所 讲 述 的 融 入 的 方 法  
+      来 实 现 的。 同 步 访 问 类CSingleLock 的 锁 对 象 则 在 各 线 程 的 具 体 实 现 中 定 义。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 下 面 介 绍 该 例 程 的 具 体 实 现： </P> 
+      <P><FONT color=#ffffff>----</FONT> 1 利 用AppWizard 生 成 一 个 名 为Mutexes 基 于 对  
+      话 框 的 应 用 程 序 框 架。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 2 利 用 对 话 框 编 辑 器 在 对 话 框 中 填 加 以 下 内  
+      容： 三 个 组 合 框， 三 个 复 选 框 和 一 个 列 表 框。 三 个 组 合 框 分 别 允 许 改 变 进 程 优 先 级 和 两 个  
+      线 程 优 先 级， 其ID 分 别 设 置 为：IDC_PRIORITYCLASS、IDC_DSPYTHRDPRIORITY  
+      和IDC_CNTRTHRDPRIORITY。 三 个 复 选 框 分 别 对 应 着 同 步 机 制 选 项、 显 示 计 数 线 程 执 行 选  
+      项 和 暂 停 选 项， 其ID 分 别 设 置 为IDC_SYNCHRONIZE、IDC_SHOWCNTRTHRD 和IDC_PAUSE。 列 表  
+      框 用 于 显 示 线 程 显 示 程 序 中 两 个 线 程 的 共 同 操 作 对 象m_strNumber， 其ID 设 置  
+      为IDC_DATABOX。 </P> 
+      <P><FONT color=#ffffff>----</FONT> 3 创 建 类CWinThread 的 派 生  
+      类CExampleThread。 该 类 将 作 为 本 程 序 中 使 用 的 两 个 线 程 类：CCounterThread  
+      和CDisplayThread 的 父 类。 这 样 做 的 目 的 仅 是 为 了 共 享 两 个 线 程 类 的 共 用 变 量 和 函 数。  
+      </P><PRE> 在CExampleThread 的 头 文 件 中 填 加 如 下 变 量：
+          	CMutexesDlg * m_pOwner;// 指 向 类CMutexesDlg 指 针
+		BOOL m_bDone;// 用 以 控 制 线 程 执 行
+         及 函 数：
+	void SetOwner(CMutexesDlg* pOwner) 
+{ m_pOwner=pOwner; };// 取 类CMutexesDlg 的 指 针
+	 然 后 在 构 造 函 数 当 中 对 成 员 变 量 进 行 初 始 化：
+		m_bDone=FALSE;// 初 始 化 允 许 线 程 运 行
+		m_pOwner=NULL;// 将 该 指 针 置 为 空
+		m_bAutoDelete=FALSE;// 要 求 手 动 删 除 线 程 对 象
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 4 创 建 两 个 线 程 类CCounterThread  
+      和CdisplayThread。 这 两 个 线 程 类 是CExampleThread 的 派 生 类。 分 别 重 载 两 个 线 程 函 数  
+      中 的::Run() 函 数， 实 现 各 线 程 的 任 务。 在 这 两 个 类 当 中 分 别 加 入 同 步 访 问 类 的 锁 对  
+      象sLock， 这 里 将 根 据 同 步 机 制 的 复 选 与 否 来 确 定 是 否 控 制 对 共 享 资 源 的 访 问。 不 要 忘 记  
+      需 要 加 入 头 文 件#include "afxmt.h"。 </P><PRE> 计 数 线 程::Run() 函 数 的 重 载 代 码 为：
+int CCounterThread::Run() 
+{
+	BOOL fSyncChecked;// 同 步 机 制 复 选 检 测
+	unsigned int nNumber;// 存 储 字 符 串 中 整 数
+
+	if (m_pOwner == NULL)
+		return -1;
+	// 将 同 步 对 象 同 锁 对 象 联 系 起 来
+CSingleLock sLock(&amp;(m_pOwner-  &gt; m_mutex));
+	while (!m_bDone)// 控 制 线 程 运 行， 为 终 止 线 程 服 务
+	{
+	// 取 同 步 机 制 复 选 状 态
+                  fSyncChecked =
+ m_pOwner-  &gt; IsDlgButtonChecked(IDC_SYNCHRONIZE);
+	// 确 定 是 否 使 用 同 步 机 制
+	if (fSyncChecked)
+		sLock.Lock();
+	// 读 取 整 数
+_stscanf((LPCTSTR) m_pOwner-  &gt; m_strNumber, _T(&quot;%d&quot;), &amp;nNumber);
+	nNumber++;// 加1
+	m_pOwner- &gt;m_strNumber.Empty();// 字 符 串 置 空
+	while (nNumber != 0) // 更 新 字 符 串
+	{
+m_pOwner-  &gt; m_strNumber += (TCHAR) ('0'+nNumber%10);
+          nNumber /= 10;
+	}
+	// 调 整 字 符 串 顺 序
+	m_pOwner- &gt;m_strNumber.MakeReverse();
+	// 如 果 复 选 同 步 机 制， 释 放 资 源
+	if (fSyncChecked)
+		sLock.Unlock();
+	// 确 定 复 选 显 示 计 数 线 程
+	if (m_pOwner- &gt;IsDlgButtonChecked(IDC_SHOWCNTRTHRD))
+		m_pOwner- &gt;AddToListBox(_T(&quot;Counter: Add 1&quot;));
+	}// 结 束while
+
+	m_pOwner- &gt;PostMessage(WM_CLOSE, 0, 0L);
+	return 0;
+}
+    显 示 线 程 的::Run() 函 数 重 载 代 码 为：
+    int CDisplayThread::Run() 
+    {
+	BOOL fSyncChecked;
+	CString strBuffer;
+
+	ASSERT(m_pOwner != NULL);
+	if (m_pOwner == NULL)
+		return -1;
+	CSingleLock sLock(&amp;(m_pOwner- &gt;m_mutex));
+	while (!m_bDone)
+	{
+fSyncChecked = m_pOwner- &gt;        
+     IsDlgButtonChecked(IDC_SYNCHRONIZE);
+	if (fSyncChecked)
+		sLock.Lock();
+	// 构 建 要 显 示 的 字 符 串
+	strBuffer = _T(&quot;Display: &quot;);
+	strBuffer += m_pOwner- &gt;m_strNumber;
+	if (fSyncChecked)
+		sLock.Unlock();
+	// 将 字 符 串 加 入 到 列 表 框 中
+	m_pOwner- &gt;AddToListBox(strBuffer);
+	}// 结 束while
+	m_pOwner- &gt;PostMessage(WM_CLOSE, 0, 0L);
+	return 0;
+}
+
+      3 在CMutexesDlg 的 头 文 件 中 加 入 如 下 成 员 变 量：
+		CString m_strNumber;// 线 程 所 要 操 作 的 资 源 对 象
+		CMutex m_mutex;// 用 于 同 步 机 制 的 互 斥 量
+		CCounterThread* m_pCounterThread;// 指 向 计 数 线 程 的 指 针
+		CDisplayThread* m_pDisplayThread;// 指 向 显 示 线 程 的 指 针
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 首 先 在 对 话 框 的 初 始 化 函 数 中 加 入 如 下 代 码 对  
+      对 话 框 进 行 初 始 化： </P><PRE>	BOOL CMutexesDlg::OnInitDialog()
+{
+	 … …
+	// 初 始 化 进 程 优 先 级 组 合 框 并 置 缺 省 为 NORMAL
+	CComboBox* pBox;
+	pBox = (CComboBox*) GetDlgItem(IDC_PRIORITYCLASS);
+	ASSERT(pBox != NULL);
+	if (pBox != NULL){
+		pBox- &gt;AddString(_T(&quot;Idle&quot;));
+		pBox- &gt;AddString(_T(&quot;Normal&quot;));
+		pBox- &gt;AddString(_T(&quot;High&quot;));
+		pBox- &gt;AddString(_T(&quot;Realtime&quot;));
+		pBox- &gt;SetCurSel(1); 
+	}
+	// 初 始 化 显 示 线 程 优 先 级 组 合 框 并 置 缺 省 为 NORMAL
+pBox = (CComboBox*) GetDlgItem(IDC_DSPYTHRDPRIORITY);
+	ASSERT(pBox != NULL);
+	if (pBox != NULL){
+	    pBox- &gt;AddString(_T(&quot;Idle&quot;));
+	    pBox- &gt;AddString(_T(&quot;Lowest&quot;));
+	    pBox- &gt;AddString(_T(&quot;Below normal&quot;));
+	    pBox- &gt;AddString(_T(&quot;Normal&quot;));
+	    pBox- &gt;AddString(_T(&quot;Above normal&quot;));
+	    pBox- &gt;AddString(_T(&quot;Highest&quot;));
+	    pBox- &gt;AddString(_T(&quot;Timecritical&quot;));
+	    pBox- &gt;SetCurSel(3); 
+	}
+	// 初 始 化 计 数 线 程 优 先 级 组 合 框 并 置 缺 省 为 NORMAL
+pBox = (CComboBox*) GetDlgItem(IDC_CNTRTHRDPRIORITY);
+	ASSERT(pBox != NULL);
+	if (pBox != NULL){
+		pBox- &gt;AddString(_T(&quot;Idle&quot;));
+		pBox- &gt;AddString(_T(&quot;Lowest&quot;));
+		pBox- &gt;AddString(_T(&quot;Below normal&quot;));
+		pBox- &gt;AddString(_T(&quot;Normal&quot;));
+		pBox- &gt;AddString(_T(&quot;Above normal&quot;));
+		pBox- &gt;AddString(_T(&quot;Highest&quot;));
+		pBox- &gt;AddString(_T(&quot;Timecritical&quot;));
+		pBox- &gt;SetCurSel(3); 
+	}
+	// 初 始 化 线 程 挂 起 复 选 框 为 挂 起 状 态
+	CButton* pCheck = (CButton*) GetDlgItem(IDC_PAUSE);
+	pCheck- &gt;SetCheck(1);
+	// 初 始 化 线 程
+	m_pDisplayThread = (CDisplayThread*)
+		AfxBeginThread(RUNTIME_CLASS(CDisplayThread), 
+					   THREAD_PRIORITY_NORMAL,
+					   0, 
+					   CREATE_SUSPENDED);
+	m_pDisplayThread- &gt;SetOwner(this);
+
+	m_pCounterThread = (CCounterThread*)
+		AfxBeginThread(RUNTIME_CLASS(CCounterThread), 
+					   THREAD_PRIORITY_NORMAL,
+					   0, 
+					   CREATE_SUSPENDED);
+	m_pCounterThread- &gt;SetOwner(this);
+	 … …
+}
+	 然 后 填 加 成 员 函 数：
+	void AddToListBox(LPCTSTR szBuffer);// 用 于 填 加 列 表 框 显 示
+	 该 函 数 的 实 现 代 码 为：
+void CMutexesDlg::AddToListBox(LPCTSTR szBuffer)
+{
+	CListBox* pBox = (CListBox*) GetDlgItem(IDC_DATABOX);
+	ASSERT(pBox != NULL);
+	if (pBox != NULL){
+		int x = pBox- &gt;AddString(szBuffer);
+		pBox- &gt;SetCurSel(x);
+		if (pBox- &gt;GetCount()  &gt; 100)
+			pBox- &gt;DeleteString(0);
+	}
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 然 后 利 用ClassWizard 填 加 用 于 调 整 进 程 优 先  
+      级、 两 个 线 程 优 先 级 以 及 用 于 复 选 线 程 挂 起 的 函 数。 </P><PRE>	 调 整 进 程 优 先 级 的 代 码 为：
+	void CMutexesDlg::OnSelchangePriorityclass() 
+{
+	DWORD dw;
+	// 取 焦 点 选 项
+CComboBox* pBox = (CComboBox*) GetDlgItem(IDC_PRIORITYCLASS);
+	int nCurSel = pBox- &gt;GetCurSel();
+	switch (nCurSel)
+	{
+	case 0:
+		dw = IDLE_PRIORITY_CLASS;break;
+	case 1:
+	default:
+		dw = NORMAL_PRIORITY_CLASS;break;
+	case 2:
+		dw = HIGH_PRIORITY_CLASS;break;
+	case 3:
+		dw = REALTIME_PRIORITY_CLASS;break;
+	}
+	SetPriorityClass(GetCurrentProcess(), dw);// 调 整 优 先 级
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 由 于 调 整 两 个 线 程 优 先 级 的 代 码 基 本 相 似， 单  
+      独 设 置 一 个 函 数 根 据 不 同 的ID 来 调 整 线 程 优 先 级。 该 函 数 代 码 为： </P><PRE>void CMutexesDlg::OnPriorityChange(UINT nID)
+{
+	ASSERT(nID == IDC_CNTRTHRDPRIORITY || 
+		   nID == IDC_DSPYTHRDPRIORITY);
+	DWORD dw;
+	// 取 对 应 该ID 的 焦 点 选 项
+	CComboBox* pBox = (CComboBox*) GetDlgItem(nID);
+	int nCurSel = pBox- &gt;GetCurSel();
+	switch (nCurSel)
+	{
+	case 0:
+		dw = (DWORD)THREAD_PRIORITY_IDLE;break;
+	case 1:
+		dw = (DWORD)THREAD_PRIORITY_LOWEST;break;
+	case 2:
+dw = (DWORD)THREAD_PRIORITY_BELOW_NORMAL;break;
+	case 3:
+	default:
+		dw = (DWORD)THREAD_PRIORITY_NORMAL;break;
+	case 4:
+dw = (DWORD)THREAD_PRIORITY_ABOVE_NORMAL;break;
+	case 5:
+		dw = (DWORD)THREAD_PRIORITY_HIGHEST;break;
+	case 6:
+		dw = (DWORD)THREAD_PRIORITY_TIME_CRITICAL;break;
+	}
+	if (nID == IDC_CNTRTHRDPRIORITY)
+		m_pCounterThread- &gt;SetThreadPriority(dw);// 调 整 计 数 线 程 优 先 级
+	else
+		m_pDisplayThread- &gt;SetThreadPriority(dw);// 调 整 显 示 线 程 优 先 级
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 这 样 线 程 优 先 级 的 调 整 只 需 要 根 据 不 同 的ID 来  
+      调 用 该 函 数： </P><PRE>void CMutexesDlg::OnSelchangeDspythrdpriority() { OnPriorityChange(IDC_DSPYTHRDPRIORITY);}
+void CMutexesDlg::OnSelchangeCntrthrdpriority() 
+{ OnPriorityChange(IDC_CNTRTHRDPRIORITY);}
+	 复 选 线 程 挂 起 的 实 现 代 码 如 下：
+void CMutexesDlg::OnPause() 
+{
+	// 取 挂 起 复 选 框 状 态
+	CButton* pCheck = (CButton*)GetDlgItem(IDC_PAUSE);
+	BOOL bPaused = ((pCheck- &gt;GetState() &amp; 0x003) != 0);
+	if (bPaused)	{
+		m_pCounterThread- &gt;SuspendThread();
+		m_pDisplayThread- &gt;SuspendThread();
+	}// 挂 起 线 程
+	else	{
+		m_pCounterThread- &gt;ResumeThread();
+		m_pDisplayThread- &gt;ResumeThread();
+	}// 恢 复 线 程 运 行
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 程 序 在::OnClose() 中 实 现 了 线 程 的 终 止。 在 本  
+      例 程 当 中 对 线 程 的 终 止 稍 微 复 杂 些。 需 要 注 意 的 是 成 员 变 量m_bDone 的 作 用， 在 线 程 的 运  
+      行 当 中 循 环 检 测 该 变 量 的 状 态， 最 终 引 起 线 程 的 退 出。 这 样 线 程 的 终 止 是 因 为 函 数 的 退  
+      出 而 自 然 终 止， 而 非 采 用 强 行 终 止 的 方 法， 这 样 有 利 于 系 统 的 安 全。 该 程 序 中 使 用  
+      了PostMessage 函 数， 该 函 数 发 送 消 息 后 立 即 返 回， 这 样 可 以 避 免 阻 塞。 其 实 现 的 代 码 为：  
+      </P><PRE>	void CMutexesDlg::OnClose() 
+{
+	int nCount = 0;
+	DWORD dwStatus;
+	// 取 挂 起 复 选 框 状 态
+	CButton* pCheck = (CButton*) GetDlgItem(IDC_PAUSE);
+	BOOL bPaused = ((pCheck- &gt;GetState() &amp; 0x003) != 0);
+	
+if (bPaused == TRUE){
+		pCheck- &gt;SetCheck(0);// 复 选 取 消
+		m_pCounterThread- &gt;ResumeThread();// 恢 复 线 程 运 行
+		m_pDisplayThread- &gt;ResumeThread();
+	}
+
+	if (m_pCounterThread != NULL){
+VERIFY(::GetExitCodeThread(m_pCounterThread- &gt;m_hThread, &amp;dwStatus));
+// 取 计 数 线 程 结 束 码
+		if (dwStatus == STILL_ACTIVE){
+			nCount++;
+			m_pCounterThread- &gt;m_bDone = TRUE;
+		}// 如 果 仍 为 运 行 状 态， 则 终 止
+		else{
+			delete m_pCounterThread;
+			m_pCounterThread = NULL;
+		}// 如 果 已 经 终 止， 则 删 除 该 线 程 对 象
+	}
+	
+	if (m_pDisplayThread != NULL){
+VERIFY(::GetExitCodeThread(m_pDisplayThread- &gt;m_hThread, &amp;dwStatus));
+// 取 显 示 线 程 结 束 码
+		if (dwStatus == STILL_ACTIVE){
+			nCount++;
+			m_pDisplayThread- &gt;m_bDone = TRUE;
+		}// 如 果 仍 为 运 行 状 态， 则 终 止
+		else{
+			delete m_pDisplayThread;
+			m_pDisplayThread = NULL;
+		}// 如 果 已 经 终 止， 则 删 除 该 线 程 对 象
+	}
+	if (nCount == 0)// 两 个 线 程 均 终 止， 则 关 闭 程 序
+CDialog::OnClose();
+	else // 否 则 发 送WM_CLOSE 消 息
+PostMessage(WM_CLOSE, 0, 0);
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT> 在 例 程 具 体 实 现 中 用 到 了 许 多 函 数， 在 这 里 不  
+      一 一 赘 述， 关 于 函 数 的 具 体 意 义 和 用 法， 可 以 查 阅 联 机 帮 助。</P> 
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p> 
+</BODY></HTML> 

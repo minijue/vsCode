@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Vfp_idx.htm">Visual Foxpro</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p>　</p>
+</center>
+    <p align="center">VFP中的表单和菜单为何一闪而过</p>
+    <p align="left">----我在VisualFoxpro3.0中用表单设计器和菜单设计器设计的表单和菜单，在Foxpro下运行正常，但编译成.exe文件后，运行时却为何一闪而过？<br>
+    <br>
+    ----这个问题涉及到VFP中的事件循环控制。事件循环控制的目的是为了等待用户进行操作。<br>
+    <br>
+    ----在VFP的应用程序中，最好通过一个主程序来控制整个应用程序。在主程序中先进行系统初始化，然后使用命令readevents启动事件循环，应用程序将处在所有最后显示的用户界面元素控制之下。比如显示表单设计器设计的表单formone.scx，可在主程序中执行下面的两个命令：<br>
+    <br>
+    doformformone.scx<br>
+    <br>
+    readevents<br>
+    <br>
+    ----另一个命令clearevents用于停止事件处理，在它之后的程序段将继续执行。但对于表单和菜单之类需挂起的处理过程，如果主文件中没有包含readevents或等价的命令，在开发环境下是可以正确运行的，但编译成.exe文件后，处理过程将显示片刻，然后立即退出，这就是“一闪而过”的原因。<br>
+    </td>    
+  </tr>    
+</table>    
+</div>    
+
+</body>
+
+</html>

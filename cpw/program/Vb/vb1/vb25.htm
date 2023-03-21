@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="vb25.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用VB进行移位操作      
+      <p>&nbsp;&nbsp;&nbsp; VB没有提供移位操作的指令和函数,只提供and(与)、or(或)、xor(异或)、eqv(同或)、not(非)等几个运算符,而编程时有时需要对一个字节进行移位操作(如进行加密),怎么办?其实只用and、or二个运算符即可搞掂。例如要将变量byte1的第八位置1(假设byte1的二进制值为01001101),则只需byte1 or &amp;h80 (即01001101 or 10000000),如要将第八位置0，则只需byte1 and &amp;h7f。请看下面程序段是如何实现循<br> 
+      环左移的：<br> 
+      <br> 
+      Public Function byteleft(byte1 As Byte, n As Integer) As Byte `将byte1左移n位<br> 
+      Dim intem As Byte `临时变量<br> 
+      Dim intem1 As Byte `临时变量<br> 
+      Dim x, y As Integer<br> 
+      intem1 = byte1<br> 
+      For x = 1 To n `移多少位就循环多少次<br> 
+      For y = 8 To 1 Step -1 `从第八位(左边第一位)开始循环左移<br> 
+      Select Case y<br> 
+      Case 8<br> 
+      If (intem1 And &amp;H80) = &amp;H80 Then `如果临时变量intem1的第八位是1,<br> 
+      intem = &amp;H1 `则将临时变量intem置1,<br> 
+      Else<br> 
+      intem = &amp;H0 `反之置0<br> 
+      End If<br> 
+      Case 7<br> 
+      If (intem1 And &amp;H40) = &amp;H40 Then `如果临时变量intem1的第七位是1,<br> 
+      intem1 = intem1 Or &amp;H80 `则将其第八位置1(其它位不变),<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;H7F `反之将第八位置0(其它位不变)<br> 
+      End If<br> 
+      Case 6<br> 
+      If (intem1 And &amp;H20) = &amp;H20 Then `操作与上面相同<br> 
+      intem1 = intem1 Or &amp;H40<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HBF<br> 
+      End If<br> 
+      Case 5<br> 
+      If (intem1 And &amp;H10) = &amp;H10 Then<br> 
+      intem1 = intem1 Or &amp;H20<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HDF<br> 
+      End If<br> 
+      Case 4<br> 
+      If (intem1 And &amp;H8) = &amp;H8 Then<br> 
+      intem1 = intem1 Or &amp;H10<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HEF<br> 
+      End If<br> 
+      Case 3<br> 
+      If (intem1 And &amp;H4) = &amp;H4 Then<br> 
+      intem1 = intem1 Or &amp;H8<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HF7<br> 
+      End If<br> 
+      Case 2<br> 
+      If (intem1 And &amp;H2) = &amp;H2 Then<br> 
+      intem1 = intem1 Or &amp;H4<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HFB<br> 
+      End If<br> 
+      Case 1<br> 
+      If (intem1 And &amp;H1) = &amp;H1 Then<br> 
+      intem1 = intem1 Or &amp;H2<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HFD<br> 
+      End If<br> 
+      If intem = &amp;H1 Then `移完第一位后,如果intem是1(即第八位是1)<br> 
+      intem1 = intem1 Or &amp;H1 `则将intem1的第一位置1<br> 
+      Else<br> 
+      intem1 = intem1 And &amp;HFE `反之置0<br> 
+      End If<br> 
+      End Select<br> 
+      Next y<br> 
+      Next x<br> 
+      byteleft = intem1 `将intem1的值返回给函数名<br> 
+      End Function<br> 
+      参照此程序段，不难实现循环右移。<br> 
+      (此程序段在VB5上调试通过。)<br> 
+      <br> 
+      广西南宁江南路尾经济技术开发区岸丰电子公司 黄光      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

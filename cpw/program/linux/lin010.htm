@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>1</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="linuxidx.htm">Unix/Linux</a> 
+    &gt;</b> </span>UNIX 口令安全简介</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong>UNIX 口令安全简介</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">作者：岑志伟</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">&nbsp;&nbsp;&nbsp; 由于UNIX是Internet最流行的服务器操作系统，因此它的安全性倍受关注。而这种安全主要靠口令实现。UNIX的口令仅仅存储在一个加密后的文本文件中，文件一般储存在/etc目录下，名称为passwd。历史上，UNIX口令加密算法曾经历过几次修正，现在普遍采用DES算法。用DES算法对口令文件进行25次加密。而对每次DES加密产生的结果，都要用2的56次方次查找才能进行一次遍历，所以理论上要破解这样的口令，其工作量是不可想象的。<br>
+    <br>
+    　　但是，在口令的设置过程中，却有许多其它个人因素在起作用，许多人就是利用这些因素来解密的。由于口令安全性的考虑，人们会被禁止把口令写在纸上，因此很多人都设法使自己的口令容易记忆，而这就给黑客提供了可乘之机。<br>
+    <br>
+    　　贝尔实验室的计算机安全专家R.Morris和K.Thompson提出了这样一种攻击的可能性：可以根据用户的信息建立一个他可能使用的口令的字典，比如：他父亲的名字、女朋友的生日或名字，街道的名字等等。然后对这个字典进行加密，每次拿出一个经过加密计算的条目与口令文件比较，若一致，口令就被猜到了。<br>
+    <br>
+    　　一般说来，这种攻击策略是很有效的，请想问一下自己：你的口令是否与身边的某些东西有关呢？<br>
+    <br>
+    　　事实上，在得到某人的个人资料后，整个破译过程只需一个简单的C程序即可完成。比如：<br>
+    <br>
+    　　有一组子程序可对/etc/passwd文件进行方便的存取，可读取文件到入口项或写入新的入口项等等。<br>
+    <br>
+    　　getpwuid()函数即可从/etc/passwd文件中获取指定的UID的入口项。getpwnam()函数则对于指定的登录名，在/etc/passwd文件检索入口项。<br>
+    <br>
+    　　以上两个子程序返回一指向passwd结构的指针，该结构定义在/usr/include/pwd.h中，定义如下:<br>
+    <br>
+    struct passwd {<br>
+    char * pw_name; /* 登录名 */<br>
+    char * pw_passwd; /* 加密后的口令 */<br>
+    uid_t pw_uid; /* UID */<br>
+    gid_t pw_gid; /* GID */<br>
+    char * pw_age; /* 代理信息 */<br>
+    char * pw_comment; /* 注释 */<br>
+    char * pw_gecos;<br>
+    char * pw_dir; /* 主目录 */<br>
+    char * pw_shell; /* 使用的shell */<br>
+    char * pw_shell; /* 使用的shell */<br>
+    };<br>
+    <br>
+    　　getpwent()，setpwent()，endpwent()等函数则可对口令文件作后续处理。<br>
+    <br>
+    　　首次调用getpwent()，可打开/etc/passwd文件并返回指向文件中第一个入口项的指针，并保持调用之间文件的打开状态，再调用getpwent()便可顺序地返回口令文件中的各入口项。而调用setpwent()又可把口令文件的指针重新置为文件的开始处，最后使用完口令文件后调用endpwent()可关闭口令文件。<br>
+    <br>
+    　　所以，攻击者只需建立一个字典文件，然后调用现成的DES加密例程来加密字典文件中的每一条目，再用上述函数打开口令文件，进行循环比较就很容易得到破获到密码。<br>
+    <br>
+    　　人们记忆犹新的1998年11月2日因特网蠕虫，就是用这种方法来破密的。<br>
+    <br>
+    　　当然，很多当代的UNIX系统都针对这种进攻策略采取了相应的防范措施，比如将口令与用户信息分开存放，限制用户登录的尝试次数等。<br>
+    <br>
+    　　相对与此，现在还出现了另一些窃取口令的方法，其中之一就被叫做特洛伊木马。比如，你可能在你的终端上发现如下信息：<br>
+    Please enter your user name to logon:<br>
+    Your password:<br>
+    <br>
+    　　然后，你就老老实实的输入了你的口令。殊不知，这很可能是一个模仿登录信息的特洛伊木马程序，他会记录你的口令，然后传给入侵者。<p>　</td>
+  </tr>
+</table>
+</body>
+</html>

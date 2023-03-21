@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb012.htm -->
+<!-- Copyright 1999 网页制作人：姚征   http://yaozheng.yeah.net  --><HTML><HEAD><TITLE>监视程序的编制</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>TD {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+PRE {
+	FONT-FAMILY: Times New Roman; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visula C</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <P align=center><STRONG>监视程序的编制 <BR><BR>(哈尔滨 赵晓辉)</STRONG></P> 
+      <P>　　监视程序，这个名字听起来似乎很陌生。它的用途主要是在后台监视系统中关键信息的改变，比如注册表的改变及硬盘上由于文件操作引起的改变等等。<BR>　　也许有人会问了，编制这样的程序有什么价值呢？硬盘上文件改变了，我只要在资源管理器里点一点不就全都清楚了吗？问题当然不会这样简单，如今大家的硬盘都已经用G来做单位了，一块4.3G的硬盘中，大大小小的文件全都加起来也会有若干万（相信新购机的朋友会考虑IBM10.1G的大硬盘，那文件数量将更加不可想象），更何况那些看不见的系统文件和隐藏文件了。再加上注册表，那其中的条条款款，数量也丝毫不逊于硬盘上的文件。要想随时知道自己机器是否有所变动，绝对不是一件很轻松的事。而监视程序就可以随时检测到这些变化，帮助我们了解这些情况。<BR>　　当然这只是监视程序的一部分作用，它最大的作用就是可以记录下某个软件安装前后系统的改变，从而为卸载这个软件提供重要的依据。虽然Windows自带了一个Uninstall  
+      Shield，但是它似乎并不能很干净地把原来的软件卸掉，每次卸载总会留下一些讨厌的残渣，致使系统中的垃圾信息不断增长，我们的硬盘空间也总是莫名其妙地越用越少。因此，一些号称能够完全卸载软件的专用卸载工具应运而生。在这其中，有一些就运用了监视系统的技术，比如Uninstaller  
+      Manager和RegMonitor。<BR>　　下面我们开始讨论如何编程实现这一监视功能。首先介绍几个重要的api函数：<BR>　　FindFirstChangeNotification(  
+      )；<BR>　　FindNextChangeNotification( )；<BR>　　WaitForSingleObject( )；  
+      <BR>　　其中FindFirstChangeNotification（lpzpath，fwatchsubtree，fdwfilter）中的lpzpath表示要监视的路径名，fwatchsubtree判断是否查看子目录，fdwfilter为要监视的事件，函数执行成功后返回一个句柄。 
+      <BR>　　参数fdwfilter取值及其含义如下：<BR>　　FILE_NOTIFY_CHANGE_FILE_NAME　　查看指定目录下任何文件名的改变<BR>　　FILE_NOTIFY_CHANGE_DIR_NAME　　查看指定目录下任何目录名的改变<BR>　　FILE_NOTIFY_CHANGE_SIZE　　查看指定目录下文件大小的改变<BR>　　FILE_NOTIFY_CHANGE_ATTRIBUTES　　查看指定目录下文件属性的改变<BR>　　FindNextChangeNotification（hchange），hchange为FindFirstChangenNotification返回的句柄，其作用是请求系统<BR>在下次检测到相应改变时发出改变通知消息句柄。当函数成功返回后，应用程序可通过WaitForMultipleObjects或WaitfForSingleObject来等待发生改变的通知。WaitForSingleObject（hchange，dwmilliseconds）中hchange为FindFirstChangeNotification　返回的句柄，dwmilliseconds为等待时间值，指定等待完成需要的时间，单位为毫秒。该值为－1时表示时间无限长。最好在结束监视程序之前先用FindCloseChangeNotification(hchange)来关闭句柄。<BR>　　下面给出一个简单的实例，其功能就是监视c：\pwin98目录下是否有文件发生变化。一旦有重命名、创建或删除情况发生时，通过Edit控件给出提示。 
+      <BR>　　//<BR>　　－－－－－－－－－－－－－－－－<BR>　　＃include <BR>　　＃pragma  
+      hdrstop<BR>　　<BR>　　＃include “Unit1.h”<BR>　　//－－－－－－－－－－－－－－－－<BR>　　＃pragma  
+      package(smart_init)<BR>　　＃pragma resource “＊.dfm”<BR>　　TForm1  
+      ＊Form1;<BR>　　//－－－－－－－－－－－－－－－－－<BR>　　__fastcall  
+      TForm1::TForm1(TComponent＊ Owner)<BR>　　 :  
+      TForm(Owner)<BR>　　{<BR>　　}<BR>　　//－－－－－－－－－－－－－－－－－－－<BR>　　<BR>　　void  
+      __fastcall TForm1::FormCreate(TObject ＊Sender)<BR>　　{<BR>　　DWORD  
+      dwWaitStatus; <BR>　　HANDLE dwChangeHandle;  
+      //返回通知的句柄<BR>　　dwChangeHandle=FindFirstChangeNotification(<BR>　　“C:\\PWIN98”,false,FILE_NOTIFY_CHANGE_FILE_NAME);  
+      //设置返回通知的句柄<BR>　　if(dwChangeHandle==INVALID_HANDLE_VALUE)<BR>　　//判断是否设置成功 
+      <BR>　　 ExitProcess(GetLastError(　)); <BR>　　while(true){  
+      //设置循环，监视是否有<BR>　　dwWaitStatus=WaitForSingleObject(dwChangeHandle,－1);  
+      //通知返回<BR>　　switch(dwWaitStatus){<BR>　　case  
+      0:<BR>　　Edit1－&gt;Text=“Something Changed”;  
+      //给出提示<BR>　　FindCloseChangeNotification(dwcChangeHandle);  
+      //关闭句柄<BR>　　exit(EXIT_SUCCESS);  
+      //退出程序<BR>　　default:<BR>　　ExitProcess(GetLastError(　));<BR>　　}<BR>　　}<BR>　　}<BR>　　程序在C＋＋Builder4／PWin98下通过，由于C＋＋Builder语言很标准，所以很容易扩展到其他编程语言环境中去。<BR>　　此例说明如何监视硬盘中文件变化，对于注册表，则有函数RegNotifyChangeKeyValue（  
+      ）可以实现类似功能，这里暂省略之。<BR>　　怎么样，看过本文，是否对Uninstaller　Manager和Reg  
+      Monitor这样的软件有了更深入的了解。在Windows编程中，有些API函数起到了重要的作用，可以让程序实现很多高级的功能。因为API函数是按照C语言语法给出的，所以C＋＋Builder有着得天独厚的优势，对API函数和宏支持得非常好。不好，怎么跑题了？<BR>　　还愣着干吗，难道你还不想赶快动手编制一个自己的Uninstaller  
+      Manager吗？</P>   
+      <p>　   
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+<p>　</p> 
+</BODY></HTML> 

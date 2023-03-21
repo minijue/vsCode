@@ -1,0 +1,241 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Vfp_idx.htm">VFP</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">基于JPEG格式的图像数据库实现<br>
+      <br>
+                          作者：江明富　　      
+      <p><br>
+      <br>
+      　　用VFP5.0开发多媒体应用时，存储图像通常使用的是BMP格式。然而，由于幅面较大的BMP图像存储时占用存储空间较大，对于要管<br>
+      理大量图像的应用，硬盘空间的占用将成为一个大问题。在众多图像文件格式中JPEG格式压缩率最高，用JPEG格式将图像压缩20倍后，图<br>
+      像仍然很清晰。VFP5.0能处理JPEG图像吗？回答是肯定的，我们可以利用Wang图像控件达到目的。<br>
+      <br>
+      　　Wang图像控件由Wang图像编辑控制、图像扫描控制、图像管理控制及图像缩略图控制组成，它是一组Windows 95自带的控件，选择安<br> 
+      装Windows 95附件中的映像即可安装该控件。<br> 
+      <br> 
+      　　Wang图像控件提供了图像扫描、图像打印、图像缩放、图像旋转、在图像上加标签、生成缩略图、图像文件管理等功能，并且这些功能<br>
+      的实现都可编程控制。这些控件的详细资料请参看Windows 95目录下的HelpWangocxd.hlp。<br> 
+      <br> 
+      　　一、图像的扫描输入、存储、显示<br>
+      <br>
+      　　创建“表单1.SCX”(见图)。插入Wang图像扫描对象imgscan的方法是，在表单中插入“OLE容器控件”，出现“Insert Object”窗口<br> 
+      后，选“Insert Control”，在“Object Type”列表中选择“Wang图像扫描控制”，再点“OK”按钮；插入Wang图像编辑对象imgedit1，<br> 
+      将其AutoRefresh属性置为.T.，ImagePalette属性置为3，ImageControl属性置为imgscan；再插入其它对象（按钮名称:左旋90度:btnleft,<br> 
+      扫描:btnscan,保存：btnsave,退出：btnexit），并置text1.value=100，btnsave.enabled=.f.<br> 
+      <br> 
+      　　btnscan.click过程为：<br>
+      <br>
+      　　if thisform.imgscan.scanneravailable()＆＆如果安装了扫描仪thisform.imgscan.DestImageControl=′imgedit1′＆＆扫描到<br> 
+      imgedit1thisform.imgscan.scanto=0thisform.imgscan.startscan＆＆开始扫描if thisform.imgscan.statuscode=0＆＆扫描成功<br> 
+      <br> 
+      　　thisform.btnsave.enabled=.t.＆＆允许保存endif<br>
+      <br>
+      　　elsemessagebox(′扫描仪未安装好′,16)<br>
+      <br>
+      　　endif<br>
+      <br>
+      　　btnsave.click过程（保存按钮）为：<br>
+      <br>
+      　　local m.fn<br> 
+      <br> 
+      　　m.fn=sys(3)＋′.jpg′<br>
+      <br>
+      　　thisform.imgedit1.saveas(m.fn,1,6,6,64,.f.)&nbsp;<br>
+      <br>
+      　　＊把图像以JPEG格式存在临时文件中这里把64改为128、256、<br>
+      ....、16384 ，可得到不同压缩率<br> 
+      <br> 
+      　　appe memo pic from (fn) overwrite＆＆图像存入数据库<br> 
+      <br> 
+      　　erase (fn)<br> 
+      <br> 
+      　　btnexit.click过程为：<br>
+      <br>
+      　　thisform.release<br>
+      <br>
+      　　btnleft.click过程为：<br>
+      <br>
+      　　if thisform.imgedit1.imagedisplayed()＆＆如果已经显示了图像<br> 
+      <br> 
+      　　thisform.imgedit1.rotateleft＆＆左旋90度<br>
+      <br>
+      　　endif<br>
+      <br>
+      　　text1.valid过程为：<br>
+      <br>
+      　　thisform.imgedit1.zoom=this.value＆＆改变图像显示大小<br>
+      <br>
+      　　表单1的init过程为：<br>
+      <br>
+      　　if eof()<br> 
+      <br> 
+      　　append blank<br> 
+      <br> 
+      　　endif<br>
+      <br>
+      　　public grph＆＆下面几条命令实现JPG图像的显示<br> 
+      <br> 
+      　　grph=sys(3)＋′.jpg′<br>
+      <br>
+      　　if not empty(pic)＆＆如果本记录已经存有图像copy memo pic<br> 
+      <br> 
+      　　to (grph)thisform.imgedit1.image=m.grph＆＆就显示图像<br> 
+      thisform.imgedit1.displaythisform.btnsave.enabled=.t.<br> 
+      <br> 
+      　　endif<br>
+      <br>
+      　　这里把JPG图像存储在二进制备注型字段中。假设表文件image.dbf有一二进制备注型字段pic（下同），执行下列语句：<br>
+      <br>
+      　　use image<br> 
+      <br> 
+      　　...＆＆把记录指针定位到所需位置<br>
+      <br>
+      　　do form表单1.SCX<br> 
+      <br> 
+      　　可以扫描图像存入当前记录，如果当前记录已存有图像，也可修改（旋转）已有图像。如果经常修改库中的图像，FPT文件会不断增<br>
+      大，可打开库，执行Pack命令。<br>
+      <br>
+      　　<br>
+      <br>
+      　　二、在报表中插入数据库中存储的图像<br>
+      <br>
+      　　在VFP5.0的报表中，只能插入“图片／OLE绑定型控<br>
+      <br>
+      　　件”，图片只支持BMP格式，故为了在报表中打印JPG图像，必须在打印前将JPG格式转换成BMP格式。下面新建报表imagerpt.frm，在<br>
+      “页标头”部分插入了一“域控件”，“表达式”位置填入pimage(),由pimage.prg临时生成要打印的图片文件（同一页面中要打印多张图<br>
+      片时，生成多个临时文件），在“细节”部分插入一“图片／OLE绑定型控件”，在其“图片来源”中，填入文件名(tmp)；pimage.prg<br>
+      内容如下：<br>
+      <br>
+      　　if file(tmp)<br> 
+      <br> 
+      　　erase (tmp)＆＆删除前一页生成的JPG文件<br> 
+      <br> 
+      　　tmp=left(m.tmp,12)&nbsp;<br>
+      <br>
+      　　erase (tmp)＆＆删除前一页生成的BMP文件<br> 
+      <br> 
+      　　endif<br>
+      <br>
+      　　tmp=sys(3)＋′.jpg′<br>
+      <br>
+      　　if not empty(pic)<br> 
+      <br> 
+      　　copy memo pic to (tmp)＆＆生成JPG文件<br> 
+      <br> 
+      　　myform.imgedit.image=m.tmp<br>
+      <br>
+      　　myform.imgedit.display<br>
+      <br>
+      　　myform.imgedit.saveas(m.tmp＋′.bmp′,3,7,1,0,.t.)＆＆转<br>
+      换成BMP文件<br>
+      <br>
+      　　myform.imgedit.cleardisplay＆＆清除显示的图像<br>
+      <br>
+      　　tmp=m.tmp＋′.bmp′<br>
+      <br>
+      　　endif<br>
+      <br>
+      　　return&nbsp;<br>
+      <br>
+      　　这里设计的报表不能单独运行，因为使用的对象在报表中没有定义，要用下面这段程序调用：<br>
+      <br>
+      　　private myform,tmp<br> 
+      <br> 
+      　　MyForm = CREATEOBJECT(″form″)<br> 
+      <br> 
+      　　＊在表单中加入图像编辑控件<br>
+      <br>
+      　　MyForm.AddObject(″imgedit″,″olecontrol″,<br>
+      ″wangimage.editctrl.1″)<br>
+      <br>
+      　　tmp=sys(3)＋′.bmp′<br>
+      <br>
+      　　use image<br> 
+      <br> 
+      　　report form imagerpt preview for not empty(pic)<br> 
+      <br> 
+      　　if file(m.tmp)<br> 
+      <br> 
+      　　erase (tmp)<br> 
+      <br> 
+      　　tmp=left(m.tmp,12)<br>
+      <br>
+      　　erase (tmp)<br> 
+      <br> 
+      　　endif<br>
+      <br>
+      　　release myform<br> 
+      <br> 
+      　　三、图像的引入和导出<br>
+      <br>
+      　　图像的引入是指把现有的图像文件加入数据库，图像的导出是指把库中存储的图像取出，供其它程序使用。<br>
+      <br>
+      　　Wang图像编辑控件能识别BMP、JPG、TIFF等格式的文件，用下面这段程序可将现有文件转换成JPG格式，存入数据库中：<br>
+      　　private myform,tmp<br> 
+      <br> 
+      　　MyForm = CREATEOBJECT(″form″)<br> 
+      <br> 
+      　　MyForm.AddObject(″imgedit″,″olecontrol″,<br>
+      ″wangimage.editctrl.1″)<br>
+      <br>
+      　　tmp=sys(3)＋′.jpg′<br>
+      <br>
+      　　use image<br> 
+      <br> 
+      　　...＆＆定位记录到所需位置<br>
+      <br>
+      　　myform.imgedit.image=′要入库的图像文件名′<br>
+      <br>
+      　　myform.imgedit.display<br>
+      <br>
+      　　myform.imgedit.saveas(m.tmp,1,6,6,64,.t.)＆＆转换成JPG文<br>
+      件<br>
+      <br>
+      　　append memo pic from (tmp) overwrite<br> 
+      <br> 
+      　　use<br>
+      <br>
+      　　erase (tmp)<br> 
+      <br> 
+      　　release myform      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p><br> 
+</p> 
+ 
+</body> 
+ 
+</html> 

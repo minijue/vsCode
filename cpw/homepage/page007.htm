@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="home_idx1.htm">主页制作</a>--&gt;</b> 
+    </span>计数器程序源代码</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>计数器程序源代码</strong></p>
+    <p><br>
+    <br>
+    <br>
+    --------------------------------------------------------------------------------<br>
+    <br>
+    &lt;%<br>
+    '*******************************************************<br>
+    '* ASP 101 Sample Code - http://www.asp101.com *<br>
+    '* *<br>
+    '* This code is made available as a service to our *<br>
+    '* visitors and is provided strictly for the *<br>
+    '* purpose of illustration. *<br>
+    '* *<br>
+    '* Please direct all inquiries to webmaster@asp101.com *<br>
+    '*******************************************************<br>
+    %&gt;<br>
+    <br>
+    &lt;%<br>
+    ' Declare our vaiables<br>
+    Dim objFSO, objCountFile ' object vars for FSO and File<br>
+    Dim strCountFileName ' filename of count text file<br>
+    Dim iCount ' count variable<br>
+    Dim bUseImages ' boolean whether or not to use images<br>
+    Dim I ' standard looping var<br>
+    <br>
+    <br>
+    ' Determine whether we use images or plain text<br>
+    ' You could just set this to True or False instead<br>
+    bUseImages = CBool(Request.QueryString(&quot;images&quot;))<br>
+    <br>
+    ' Compute our count file's filename<br>
+    ' This is based on the file from which you call count.asp<br>
+    ' It basically takes that name and appends a .cnt so I don't<br>
+    ' accidently overwrite any files. If for some reason you have<br>
+    ' a file named script_name.asp.cnt then change this or watch out!<br>
+    strCountFileName = Server.MapPath(Request.ServerVariables(&quot;SCRIPT_NAME&quot;) &amp; 
+    &quot;.cnt&quot;)<br>
+    <br>
+    <br>
+    ' Create FileSystemObject to deal with file access<br>
+    Set objFSO = Server.CreateObject(&quot;Scripting.FileSystemObject&quot;)<br>
+    <br>
+    ' Open the file as a text stream (1 = ForReading, True = Create)<br>
+    Set objCountFile = objFSO.OpenTextFile(strCountFileName, 1, True)<br>
+    <br>
+    ' Read the current count from the file<br>
+    If Not objCountFile.AtEndOfStream Then<br>
+    ' Set value to contents of the file<br>
+    iCount = CLng(objCountFile.ReadAll)<br>
+    Else<br>
+    ' If no file exists or it's empty start at 0<br>
+    iCount = 0<br>
+    End If<br>
+    <br>
+    ' Close the file and destroy the object<br>
+    objCountFile.Close<br>
+    Set objCountFile = Nothing<br>
+    <br>
+    <br>
+    ' Increment the count<br>
+    iCount = iCount + 1<br>
+    <br>
+    <br>
+    ' Overwrite existing file and get a text stream to new one<br>
+    Set objCountFile = objFSO.CreateTextFile(strCountFileName, True)<br>
+    <br>
+    ' Write updated count<br>
+    objCountFile.Write iCount<br>
+    <br>
+    ' Close the file and destroy the object<br>
+    objCountFile.Close<br>
+    Set objCountFile = Nothing<br>
+    <br>
+    <br>
+    ' Destroy the FSO object<br>
+    Set objFSO = Nothing<br>
+    <br>
+    <br>
+    ' We're all done with the hard part<br>
+    ' All that's left is to display the results<br>
+    If bUseImages Then<br>
+    ' Loop through the count integer showing each digit<br>
+    ' You can grab the images one at a time or get the zip<br>
+    ' http://www.asp101.com/samples/download/counter_imgs.zip<br>
+    For I = 1 to Len(iCount)<br>
+    ' Output the IMG tag using the right digit<br>
+    Response.Write &quot;&lt;IMG SRC=&quot;&quot;./images/digit_&quot;<br>
+    Response.Write Mid(iCount, I, 1)<br>
+    Response.Write &quot;.gif&quot;&quot; ALT=&quot;&quot;&quot;<br>
+    Response.Write Mid(iCount, I, 1)<br>
+    Response.Write &quot;&quot;&quot; WIDTH=&quot;&quot;20&quot;&quot; 
+    HEIGHT=&quot;&quot;27&quot;&quot;&gt;&quot;<br>
+    Next 'I<br>
+    Else<br>
+    ' No image wanted just show the variable<br>
+    Response.Write iCount<br>
+    End If<br>
+    %&gt;<br>
+    <br>
+    </td>
+  </tr>
+</table>
+</center></div>
+
+<p>　</p>
+</body>
+</html>

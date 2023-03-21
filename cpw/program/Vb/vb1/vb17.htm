@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">如何在VB中判断Windows9x的运行模式<br>
+      <br>
+                         创意软件工作室　植国贤      
+      <p><br>
+      　　在Windows下编程，经常发现有不少功能Windows系统已经做了，如果能够直接调用，就可省去不少程序的编写，并能提高程序的运行效率。在很多情况下，我们都可以用“Ctrl ＋ X”、“Ctrl ＋ C”、 “Ctrl ＋ V”和“Ctrl ＋ Z”分别进行“剪切”、“复制”、“粘贴”和“撤消”操作，由此想到，如果我们能够在程序中调用系统的这些功能，就无需为如何实现这些操作而操心了。经过不断的探索，终于发现SendMessage和PostMessage能够担此重任，真是如获至宝，于是迫不及待地把它们介绍给各位朋友。<br> 
+      　　用VB5的“API浏览器”可以很容易地找到这两个API 函数：<br> 
+      　　Declare Function SendMessage Lib “user32” Alias&nbsp;<br>
+      “SendMessageA” _(ByVal hwnd As Long, ByVal wMsg As Long,&nbsp;<br>
+      ByVal wParam As Long, _lParam As Any) As Long<br> 
+      　　Declare Function PostMessage Lib “user32” Alias&nbsp;<br>
+      “PostMessageA” _(ByVal hwnd As Long, ByVal wMsg As Long,&nbsp;<br>
+      ByVal wParam As Long, _ByVal lParam As Long) As Long<br> 
+      　　这两个函数的功能几乎是一样的，只是SendMessage是直接调用Windows函数来发送消息，只有这个消息完全被处理后此函数才返回，而PostMessage则给窗体的消息队列增加一个消息，这个消息将在未来某个时候进行正常事件处理时得到处理。以下仅以SendMessage为例。<br>
+      　　函数中虽然有四个参数，但关键的是前两个：hwnd 和wMsg。Hwnd是句柄，Microsoft Windows应用程序中的每个窗体和控件都拥有一个句柄，通过句柄可以指明函数的操作对象；wMsg是一个十六进制数，代表了函数要发送的具体消息。<br> 
+      　　下面以具体例子说明如何用SendMessage实现“剪切”、“复制”、“粘贴”、“撤消” 和“删除”功能:<br> 
+      　　在窗体中放置一个文本框Text1和五个按钮，分别执行以上五种功能，编写以下程序。<br>
+      　　Option Explicit<br> 
+      　　Private Declare Function SendMessage Lib “user32” Alias&nbsp;<br>
+      “SendMessageA” _(ByVal hwnd As Long, ByVal wMsg As Long,&nbsp;<br>
+      ByVal wParam As Long, _lParam As Any) As Long<br> 
+      　　Const WM_CUT = ＆H300<br> 
+      　　Const WM_COPY = ＆H301<br> 
+      　　Const WM_PAST = ＆H302<br> 
+      　　Const WM_CLEAR = ＆H303<br> 
+      　　Const WM_UNDO = ＆H304<br> 
+      　　Dim fb As Long<br> 
+      　　<br>
+      　　Private Sub cmdClear_Click()<br> 
+      　　 fb = PostMessage(Text1.hwnd, WM_CLEAR, 0, 0)<br> 
+      　　End Sub<br> 
+      　　Private Sub cmdCopy_Click()<br> 
+      　　 fb = SendMessage(Text1.hwnd, WM_COPY, 0, 0)<br> 
+      　　End Sub<br> 
+      　　Private Sub cmdCut_Click()<br> 
+      　　 fb = SendMessage(Text1.hwnd, WM_CUT, 0, 0)<br> 
+      　　End Sub<br> 
+      　　Private Sub cmdPast_Click()<br> 
+      　　 fb=SendMessage(Text1.hwnd, WM_PAST, 0, 0)<br> 
+      　　End Sub<br> 
+      　　Private Sub cmdUndo_Click()<br> 
+      　　 fb=SendMessage(Text1.hwnd, WM_UNDO, 0, 0)<br> 
+      　　End Sub<br> 
+      　　除了TextBox外SendMessage 还可以对RitchTextBox和ComboBox等进行操作,只要相应改变hwnd参数即可。 
+      <br>
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

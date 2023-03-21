@@ -1,0 +1,165 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>用VB5读写注册表实例</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vbidx099.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> 用VB5读写注册表实例</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>用VB5读写注册表实例</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>首先新建一个工程，在新建的窗体上添加以下控件并设置相应属性：<br>
+    控件名&nbsp;&nbsp;&nbsp;&nbsp; 属性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 值<br>
+    Label1&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 注册表键值：<br>
+    Label2&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 注册姓名：<br>
+    Label3&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 空<br>
+    Label4&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 注册公司：<br>
+    Label5&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 空<br>
+    Label6&nbsp;&nbsp;&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 空<br>
+    Text1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空<br>
+    Text2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空<br>
+    Command1&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 写入注册表<br>
+    Command2&nbsp;&nbsp; Caption&nbsp;&nbsp;&nbsp;&nbsp; 退出<br>
+    然后，在程序的声明部分添加如下代码：<br>
+    Private Declare Function RegCreateKey Lib &quot;advapi32.dll&quot; Alias 
+    &quot;RegCreateKeyA&quot; (ByVal hKey As Long, ByVal lpSubKey As String, phkResult As 
+    Long) As Long<br>
+    Private Declare Function RegQueryValueEx Lib &quot;advapi32.dll&quot; Alias 
+    &quot;RegQueryValueExA&quot; (ByVal hKey As Long, ByVal lpValueName As String, ByVal 
+    lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long<br>
+    Private Declare Function RegSetValueEx Lib &quot;advapi32.dll&quot; Alias 
+    &quot;RegSetValueExA&quot; (ByVal hKey As Long, ByVal lpValueName As String, ByVal 
+    Reserved As Long, ByVal dwType As Long, lpData As Any, ByVal cbData As Long) As Long<br>
+    Const error_success = 0&amp;<br>
+    Const error_baddb = 1009&amp;<br>
+    Const error_badkey = 1010&amp;<br>
+    Const error_cantopen = 1011&amp;<br>
+    Const error_cantread = 1012&amp;<br>
+    Const error_cantwrite = 1013&amp;<br>
+    Const error_registry_recovered = 1014&amp;<br>
+    Const error_registry_corrupt = 1015&amp;<br>
+    Const error_registry_io_failed = 1016&amp;<br>
+    Const hkey_classes_root = &amp;H80000000<br>
+    Const hkey_current_user = &amp;H80000001<br>
+    Const hkey_local_machine = &amp;H80000002<br>
+    Const REG_SZ = 1<br>
+    Const regkey = &quot;software\My Soft\My program&quot;<br>
+    接着为各个控件添加代码，代码如下：<br>
+    Private Sub Command1_Click()<br>
+    Dim keyvalue As String<br>
+    Dim retvalue As Long<br>
+    Dim keyid As Long<br>
+    retvalue = RegCreateKey(hkey_local_machine, regkey, keyid)<br>
+    keyvalue = Text1.Text<br>
+    retvalue = RegSetValueEx(keyid, &quot;注册名&quot;, 0&amp;, REG_SZ, ByVal keyvalue, 
+    Len(keyvalue) + 1)<br>
+    keyvalue = Text2.Text<br>
+    retvalue = RegSetValueEx(keyid, &quot;注册公司&quot;, 0&amp;, REG_SZ, ByVal keyvalue, 
+    Len(keyvalue) + 1)<br>
+    If Text1.Text &lt;&gt; &quot;&quot; And Text2.Text &lt;&gt; &quot;&quot; Then<br>
+    &nbsp;&nbsp;&nbsp; Label3.Caption = Text1.Text<br>
+    &nbsp;&nbsp;&nbsp; Label5.Caption = Text2.Text<br>
+    End If<br>
+    End Sub<br>
+    <br>
+    Private Sub Command2_Click()<br>
+    Unload Me<br>
+    End<br>
+    End Sub<br>
+    <br>
+    Private Sub Form_Load()<br>
+    Dim retvalue As Long<br>
+    Dim result As Long<br>
+    Dim keyid As Long<br>
+    Dim keyvalue As String<br>
+    Dim subkey As String<br>
+    Dim bufsize As Long<br>
+    Label6.Caption = regkey<br>
+    retvalue = RegCreateKey(hkey_local_machine, regkey, keyid)<br>
+    If retvalue = 0 Then<br>
+    &nbsp;&nbsp;&nbsp; subkey = &quot;注册名&quot;<br>
+    &nbsp;&nbsp;&nbsp; retvalue = RegQueryValueEx(keyid, subkey, 0&amp;, REG_SZ, 0&amp;, 
+    bufsize)<br>
+    &nbsp;&nbsp;&nbsp; If bufsize &lt; 2 Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = &quot;&quot;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; retvalue = RegSetValueEx(keyid, subkey, 0&amp;, 
+    REG_SZ, ByVal keyvalue, Len(keyvalue) + 1)<br>
+    &nbsp;&nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = String(bufsize + 1, &quot; &quot;)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; retvalue = RegQueryValueEx(keyid, subkey, 
+    0&amp;, REG_SZ, ByVal keyvalue, bufsize)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = Left$(keyvalue, bufsize - 1)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text1.Text = keyvalue<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp; Label3.Caption = keyvalue<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; subkey = &quot;注册公司&quot;<br>
+    &nbsp;&nbsp;&nbsp; retvalue = RegQueryValueEx(keyid, subkey, 0&amp;, REG_SZ, 0&amp;, 
+    bufsize)<br>
+    &nbsp;&nbsp;&nbsp; If bufsize &lt; 2 Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = &quot;&quot;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; retvalue = RegSetValueEx(keyid, subkey, 0&amp;, 
+    REG_SZ, ByVal keyvalue, Len(keyvalue) + 1)<br>
+    &nbsp;&nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = String(bufsize + 1, &quot; &quot;)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; retvalue = RegQueryValueEx(keyid, subkey, 
+    0&amp;, REG_SZ, ByVal keyvalue, bufsize)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyvalue = Left$(keyvalue, bufsize - 1)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Text2.Text = keyvalue<br>
+    &nbsp;&nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp;&nbsp; Label5.Caption = keyvalue<br>
+    End If<br>
+    End Sub<br>
+    好了，存盘，按F5运行程序，在两个Text中分别写入你的“注册姓名”和“注册公司”的名称，然后单击<br>
+    “写入注册表”按钮，现在打开“注册表编辑器”，找到HKEY_LOCAL_MACHINE\SOFTWARE\My 
+    Soft\My Program，看看右边是不是生成了“注册名”和“注册公司”两个键值，是的话，恭喜你，你成功了。有问题请发E-mail：<a
+    href="mailto:lifu@telekbird.com.cn">lifu@telekbird.com.cn</a></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

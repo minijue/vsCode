@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+<title>用Delphi“玩”编程（4）</title>
+</head>
+
+<body leftmargin="3"
+style="color: rgb(0,128,128); font-family: 宋体; font-size: 9pt; line-height: 17px">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt"><font color="#000000">现在的位置是：</font><font
+    color="#0000FF"><a href="Del_idx.htm"><strong>Delphi</strong></a></font><font
+    color="#000000">&nbsp; <b>&gt;</b></font> <font color="#000000">用Delphi“玩”编程（4）</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><font size="1" color="#000000"><span
+    style="font-size: 9pt">用Delphi“玩”编程（4）</span></font></p>
+    <p><font color="#000000">&nbsp;&nbsp;&nbsp; 
+    经过前三期的学习你是否喜欢上易学好用的Delphi呢？要程序实现各种奇妙的功能（特别是希望在运行期实现），一定要编写代码。我们的程序中已写过不少代码，它们都是用Pascal语言编写的。<br>
+    &nbsp;&nbsp;&nbsp; Delphi的编程语言是以Pascal为基础的。Pascal语言具有可读性好、编写容易的特点，这使得它很适合作为基础的开发语言。同时，使用编译器创建的应用程序只生成单个可执行文件(.EXE)，正是这种结合，使得Pascal成为Delphi这种先进开发环境的编程语言。<br>
+    &nbsp;&nbsp;&nbsp; Pascal语言包含众多编程知识，这区区几百字远不能囊括。在此我们只说个大概结构，使大家对源程序结构有一定的了解。再向各位提供几个实用招式和有趣的实例。相信掌握了这几招后，面对普通编程，你都可以大概应付。打开我们前面的程序如下，每行旁附中文注释：<br>
+    &nbsp;&nbsp;&nbsp; unit Unit1;（1、单元首部语句）<br>
+    &nbsp;&nbsp;&nbsp; interface（2、接口部分。用于声明程序中引用的单元、常量、类型、变量、过程和函数）<br>
+    &nbsp;&nbsp;&nbsp; uses 单元引入部分<br>
+    &nbsp;&nbsp;&nbsp; Windows, Messages, SysUtils, Classes, Graphics, Controls, <br>
+    &nbsp;&nbsp;&nbsp; Forms, Dialogs,MPlayer, StdCtrls, ExtCtrls, ComCtrls;<br>
+    &nbsp;&nbsp;&nbsp; Type<br>
+    &nbsp;&nbsp;&nbsp; TForm1 = class(TForm)<br>
+    &nbsp;&nbsp;&nbsp; Button1: TButton;<br>
+    &nbsp;&nbsp;&nbsp; Button2: TButton; 类型声明<br>
+    &nbsp;&nbsp;&nbsp; Memo1: TMemo;<br>
+    &nbsp;&nbsp;&nbsp; MediaPlayer1: TMediaPlayer;<br>
+    &nbsp;&nbsp;&nbsp; Button3: TButton;<br>
+    &nbsp;&nbsp;&nbsp; procedure Button1Click(Sender: TObject); 过程（函数）声明<br>
+    &nbsp;&nbsp;&nbsp; procedure Button2Click(Sender: TObject);<br>
+    &nbsp;&nbsp;&nbsp; private<br>
+    &nbsp;&nbsp;&nbsp; { Private declarations }<br>
+    &nbsp;&nbsp;&nbsp; public<br>
+    &nbsp;&nbsp;&nbsp; { Public declarations }<br>
+    &nbsp;&nbsp;&nbsp; end;<br>
+    &nbsp;&nbsp;&nbsp; var 引用声明<br>
+    &nbsp;&nbsp;&nbsp; Form1: TForm1;<br>
+    &nbsp;&nbsp;&nbsp; Implementation（3、实现部分。我们写的语句都在这部分。它通过许多“过程&quot;实现我们要求的功 
+    &nbsp;&nbsp;&nbsp; 能。）<br>
+    &nbsp;&nbsp;&nbsp; {＄R ＊.DFM}<br>
+    &nbsp;&nbsp;&nbsp; procedure TForm1.Button1Click(Sender: TObject);<br>
+    &nbsp;&nbsp;&nbsp; begin<br>
+    &nbsp;&nbsp;&nbsp; MediaPlayer1.Close;一个“过程&quot;<br>
+    &nbsp;&nbsp;&nbsp; Memo1.Lines.Text:='This is my project.';<br>
+    &nbsp;&nbsp;&nbsp; end;<br>
+    &nbsp;&nbsp;&nbsp; procedure TForm1.Button2Click(Sender: TObject);<br>
+    &nbsp;&nbsp;&nbsp; begin<br>
+    &nbsp;&nbsp;&nbsp; close; <br>
+    &nbsp;&nbsp;&nbsp; end;<br>
+    &nbsp;&nbsp;&nbsp; end。（4、结束部分）<br>
+    &nbsp;&nbsp;&nbsp; 你会发现程序中有很多“声明&quot;，“声明&quot;就好像给对象一个姓名并向电脑报到。只有作出声明，使 
+    &nbsp;&nbsp;&nbsp; 用时电脑才懂得你在“叫&quot;哪个对象做事。在上一期我们也曾把“i&quot;声明为实数。在Delphi中，我们几乎不用考虑声明，因为Delphi会自动生成大部分的代码和几乎全部的声明。只有一些自定义函数需要我们去声明。看看我们的程序，只有寥寥几行是我们键入的。Delphi在努力减轻我们的负担。另一个值得注意的地方是：Pascal语言规定，每一语句都用“；&quot;作结尾，千万别忘了这小东西。<br>
+    &nbsp;&nbsp;&nbsp; 
+    由于文字所限，大家一定还觉得不够过瘾，但也只好暂时告别。实用招数和趣味例子将在下一期隆重登场，各位记得来捧场啊!</font></p>
+    <p>　</td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

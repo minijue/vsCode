@@ -1,0 +1,134 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>在VFP5中映射网络驱动器</title>
+</head>
+
+<body>
+
+<table align="center" border="0" cellPadding="0" cellSpacing="0" width="615">
+<TBODY>
+</TBODY>
+</table>
+
+<table align="center" border="0" cellPadding="2" cellSpacing="0" width="615">
+<TBODY>
+</TBODY>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" bgcolor="#4264B5"
+    height="30" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%"><p align="center"><font color="#FFFFFF">资料整理<span class="f">&middot;</span><a
+        href="http://fasoft.yeah.net" target="_blank" style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong>在VFP5中映射网络驱动器</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+  <tr>
+    <td width="100%" align="left">　<table align="center" border="0" cellPadding="2"
+    cellSpacing="0" width="750">
+      <tr>
+        <td width="746" style="font-size: 9pt">　　在小型的办公自动化网络中，有时需要在程序中建立网络映射，来实现资源共享、文件传输等功能。VFP5本身并未提供类似函数，但我们可以利用Windows 
+        API函数来实现上述功能。Windows API函数中与建立网络映射有关的函数有以下两个：<br>
+        　　WNetAddConnection()建立网络映射；<br>
+        　　WNetCancelConnection()断开网络映射。<br>
+        　　下面分别对上述两个函数进行说明。<br>
+        　　WNetAddConnection()用来建立网络映射，它包含3个参数：<br>
+        　　LpszNetPath:字符串，要映射的网络路径名和共享名，如：“\\remotehost\sharedrv”；<br>
+        　　LpszPassword:字符串。共享资源的口令，由服务器端提供；<br>
+        　　LpszLocalName：字符串,即映射到本地的驱动器盘符，如：“F：”、“G：”。<br>
+        　　返回值：<br>
+        　　WN_SUCCESS=0＆＆成功<br>
+        　　WN_NOT_SUPPORTED=50＆＆函数不被支持<br>
+        　　WIN_OUT_OF_MEMORY=8＆＆系统内存不足<br>
+        　　WN_NET_ERROR=59＆＆网络发生错误<br>
+        　　WN_BAD_POINTER=487＆＆无效指针<br>
+        　　WN_BAD_NETNAME=67＆＆无效网络名<br>
+        　　WN_BAD_LOCALNAME=1200＆＆无效本地名<br>
+        　　WN_BAD_PASSWORD=86＆＆无效口令<br>
+        　　WN_ACCESS_DENIED=5＆＆访问被拒绝<br>
+        　　WN_ALREADY_CONNECTED=85＆＆此连接已经建立(重复建立)<br>
+        　　WNetCancelConnection()用来断开网络映射，它包含2个参数；<br>
+        　　LpszName:字符串，需断开的驱动器盘符。<br>
+        　　bForce:逻辑型，用LOGN数据类型表达。是否强行断开。<br>
+        　　返回值：<br>
+        　　WN_SUCCESS=0＆＆成功<br>
+        　　WN_NOT_SUPPORTED=50＆＆函数不被支持<br>
+        　　WN_OUT_OF_MEMORY=8＆＆系统内存不足<br>
+        　　WN_NET_ERROR=59＆＆网络发生错误<br>
+        　　WN_BAD_POINTER=487＆＆无效指针<br>
+        　　WN_BAD_VALUE=87＆＆网络名LpszName无效<br>
+        　　WN_NOT_CONNECTED=2250＆＆无须断开的连接<br>
+        　　WN_OPEN_FILES=2401＆＆需断开的连接中有打开的文件，则参数bForce被设为False。<br>
+        　　假设NT服务器ser_host中有一共享目录，(名为drive1)利用将服务器上的共享目录映射到本地(Win95／98)，然后将本机器根目录下的config.sys文件传送到此目录下，断开连接。其中还用到一个拷贝文件的API函数：<br>
+        　　CopyFile(lpExistingFileName，lpNewFileName,bFailIfExists)<br>
+        　　参数含义为：<br>
+        　　lpExistingFileName(字符串)，源文件名；<br>
+        　　lpNewFileName(字符串)，目标文件名；<br>
+        　　bFailIfExists(逻辑型)，如果目标文件已存在，是否返回错误信息；<br>
+        　　此函数返回0表示复制失败，1表示复制成功，源程序如下：<br>
+        　　FileName:Connect.prg<br>
+        　　Func:Remote File Copy<br>
+        　　set talk off<br>
+        　　set esca off<br>
+        　　Declare Long WNetAddConnection in ″mpr.dll″String lpszNetPath,String 
+        lpszPassword,String lpszLocalName ＆＆声明API函数<br>
+        　　WNetAddCommection<br>
+        　　Declare Long WNetCancelConnection in″mpr.dll″ String lpszName,Long bForce 
+        ＆＆声明API函数WNetCancelConnection<br>
+        　　Declare Long CopyFile in　″kernel32″ String lpExistingFileName,String 
+        lpNewFileName,Long bFailIfExists ＆＆声明API函数CopyFile<br>
+        　　messagebox(str(WNetAddConnection(′xjserver\bak′,′g:′))) ＆＆建立连接<br>
+        　　messagebox(str(CopyFile)(″c:\config.sys″,″g:\config.sys″,1))) 
+        ＆＆拷贝文件，如果目录文件存在，则覆盖。<br>
+        　　messagebox(str(WNetCancelConnection(′g:′,1))) ＆＆断开连接<br>
+        　　set esca on<br>
+        　　End Connect.prg<br>
+        　　程序中利用messagebox函数显示返回信息。<br>
+        <b>(山东　潘雷)</b></td>
+      </tr>
+</TBODY>
+    </table>
+    <table align="center" border="0" cellPadding="2" cellSpacing="0" width="615">
+<TBODY>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="left"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="left">中国程序员网站版权所有</td>
+  </tr>
+  <tr>
+    <td width="100%" align="left"></td>
+  </tr>
+</table>
+
+<p><br>
+</p>
+</body>
+</html>

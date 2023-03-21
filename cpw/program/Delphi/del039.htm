@@ -1,0 +1,225 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在Delphi 程 序 中 维 护DBF 数 据 库&nbsp;<br>
+      <br>
+                                        王 发 军&nbsp;      
+      <p><br>
+      <br>
+      ---- 由 于Delphi 开 发 的 易 用 性 和 快 速 性， 很 多 原 来 使 用Foxpro 和Visual Foxpro编 程 的 程 序 员 转 向 了Delphi ． 但 由 于 工 作 上 或 其 它 的 原 因， 原 来 的 应 用 
+      系 统 尤 其 是 应 用 数 据， 不 可 能 被 一 下 丢 弃， 因 而 需 要 用Delphi 来 维 护xBase 
+      数 据 库 的 应 用 系 统 ． 本 文 总 结 了 在 工 作 和 学 习 中 的 经 验， 与 广 大Delphi 
+      程 序 员 和 爱 好 者 共 享 ．&nbsp;<br>
+      ---- 在 下 面 讨 论 中， 主 要 应 用 了BDE 的 函 数 ．Delphi1.0 没 有 提 供BDE 函 数 的 
+      帮 助 文 件， 请 参 见 DelphiDoc 中 的DbiTypes.int、DbiProcs.int 和DbiErrs.int 三 个 文 
+      件； 在Delphi3.0/4.0 中 可 参 见BDE 帮 助 文 件 ． 本 文 讨 论 的DBF 数 据 库 操 作 主 
+      要 有： 真 正 删 除 记 录、 显 示 被 删 除 记 录、 获 取 当 前 记 录 号、 设 置 查 询 匹 
+      配 方 式、 恢 复 被 删 除 记 录 ．&nbsp;<br>
+      一 ． 真 正 删 除 记 录<br> 
+      ---- 在Delphi 程 序 中， 用TTable 或TQuery 构 件 的 方 法Delete 执 行 删 除 记 录 的 操 
+      作 时， 执 行 的 是 软 删 除， 即 相 当 于Foxpro 中 的"Set Delete Off" 的 效 果， 仅 将 
+      记 录 用 星 号"*" 标 记 为 删 除， 实 际 并 没 有 数 据 库 中 进 行 物 理 上 的 删 除 ． 
+      要 进 行 真 正 的 删 除， 需 要 进 行Pack Table 的 操 作 ．&nbsp;<br>
+      ---- 在Delphi 程 序 中 真 正 删 除 记 录， 需 要 调 用BDE 函 数， 函 数 名 为DbiPackTable，&nbsp;<br>
+      函 数 原 型 为：&nbsp;<br>
+      function DbiPackTable ( hDb : hDBIDb;hCursor :<br> 
+ hDBICur; pszTableName : PChar;<br> 
+      pszDriverType : PChar; bRegenIdxs : Bool ): DBIResult;<br> 
+      ---- 其 中,hDb 为 数 据 库TDatabse 的 句 柄，hCursor 为 数 据 表TTable 的 句 柄，pszTableName 
+      为 要 删 除 记 录 的 数 据 表 的 名 称，pszDriverType 为 要 删 除 记 录 的 数 据 表 的 类 型，bRegenIdxs 表 示 是 否 在 删 除 记 录 后 自 动 更 新 索 引 文 件 ．&nbsp;<br>
+      ---- 在 上 面 前 四 个 参 数 中，hDb 不 能 为NULL ．hCursor、pszTableName、pszDriverType 
+      可 以 为 NULL， 但 必 须 提 供 足 够 的 信 息 来 标 识 数 据 表 的 文 件 名 称 和 类 型， 
+      当hCursor 不 为 空 时， pszTableName 和pszDriverType 可 以 为NULL； 当pszTableName 为 数 
+      据 表 的 路 径 和 文 件 名 时，hCursor 和pszDriverType 可 以 为NULL ．&nbsp;<br>
+      ---- 值 得 注 意 的 是， 在 删 除 记 录 时， 如 果 用Table 来 实 现， 则Table 必 须 以Exclusive=True 的 方 式 打 开 ． 下 面 就 是 一 个 典 型 的 例 子 ．&nbsp;<br>
+      首先，应在uses语句加上DbiTypes,DbiProcs,DbiErrs.<br>
+      { Pack一个DBF数据表,DbfTable包含了数据表的信息 }<br> 
+      function PackDbfTable( DbfTable : TTable ) : boolean;<br> 
+      var<br> 
+   errResult : DBIResult;<br> 
+      begin<br> 
+     if not DbfTable.Exclusive then&nbsp;<br>
+      {如果不是以独占方式,操作失败 }<br> 
+        begin<br> 
+             result := false;<br> 
+             exit;<br> 
+        end;<br> 
+     {进行删除操作 }<br> 
+     errResult := DbiPackTable( DbfTable.dbHandle,<br> 
+    DbfTable.handle, NIL, NIL, true );<br> 
+      <br> 
+     {根据返回结果,返回成功与否的标志 }<br> 
+     if errResult = DBIERR_NONE then<br> 
+     {没有错误,操作成功 }<br> 
+        result := true<br> 
+     else{没有错误,操作失败 }<br> 
+        result := false;<br> 
+      end;<br> 
+      二 ． 显 示 或 不 显 示 被 软 删 除 记 录<br> 
+      ---- 当DBF 数 据 库 中 的 记 录 被 软 删 除 后， 缺 省 情 况 下 在TDBGrid 等 数 据 库 构 
+      件 中 是 看 不 见 这 些 记 录 的 ． 我 们 可 以 用BDE 函 数 来 控 制 是 否 显 示DBF 数 
+      据 库 中 被 软 删 除 的 记 录， 就 象 在Foxpro 中 利 用 语 句 Set Delete ON/OFF 那 样 ．&nbsp;<br>
+      ---- 　 　 要 用 到 的 函 数 名 为DbiSetProp， 函 数 原 型 为&nbsp;<br>
+      function DbiSetProp ( hObj : hDBIObj; iProp&nbsp;<br>
+      : Longint; iPropValue : Longint): DBIResult;<br> 
+      ---- 该 函 数 用 来 设 置DBI 对 象 中 某 个 属 性 的 值. 其 中,hObj 为DBI 对 象 名 称， 
+      我 们 这 里 为 数 据 表TTable 的 句 柄；iProp 为 属 性 名 称， 我 们 用 的 是 软 删 除 
+      属 性curSOFTDELETEON；iPropValue 为 属 性 值， 我 们 用True 或False 表 示 是 否 使 软 删&nbsp;<br>
+      除 的 记 录 被 显 示 ．&nbsp;<br>
+      ---- 　 　 下 面 就 是 一 个 典 型 的 例 子 ．&nbsp;<br>
+      ---- 　 　 同 样， 应 在uses 语 句 加 上DbiTypes,DbiProcs,DbiErrs.&nbsp;<br>
+      {显示DBF数据表中的软删除记录,<br>
+      DbfTable包含了数据表的信息,DeleteOn&nbsp;<br>
+      表示是否显示,True表示显示 }<br> 
+      function SetDbfDelete( DbfTable :&nbsp;<br>
+      TTable ; DeleteOn : boolean ) : boolean;<br> 
+      var<br> 
+   errResult : DBIResult;<br> 
+      begin<br> 
+     result := false; {操作失败时,返回False }<br> 
+      <br> 
+     {如果数据表没有打开,则操作失败 }<br> 
+     if ( not DbfTable.active ) then exit;<br> 
+      <br> 
+     {进行设置显示操作 }<br> 
+     errResult := DbiSetProp( hDBIObj(DbfTable.Handle),&nbsp;<br>
+      curSOFTDELETEON,<br>
+      LongInt( DeleteOn ));<br> 
+     if errResult = DBIERR_NONE then<br> 
+      {没有错误,则操作成功 }<br> 
+        begin<br> 
+             result := true;<br> 
+             DbfTable.refresh;<br> 
+        end;<br> 
+      end;<br> 
+      三 ． 获 取 当 前 记 录 号<br> 
+      ---- 在 用Foxpro 时,RecNo() 函 数 用 惯 了， 在Delphi 程 序 没 有 这 样 的 函 数 觉 得 
+      别 扭 ． 下 面 我 们 可 以 用BDE 函 数 获 取 当 前 记 录 在 数 据 集 中 的 记 录 号 ． 
+      ---- 要 用 到 的 函 数 名 为DbiGetRecord， 函 数 原 型 为&nbsp;<br>
+      function DbiGetRecord (hCursor : hDBICur;&nbsp;<br>
+      eLock : DBILockType; pRecBuff : Pointer;<br> 
+      precProps : pRECProps ): DBIResult;<br> 
+      ---- 该 函 数 用 来 取 得 当 前 记 录 的 一 些 属 性 ． 其 中，hCursor 可 为 数 据 集 
+      的Handle，eLock 为 对 记 录 加 锁 的 类 型，pRecBuff 存 放 记 录 的 缓 冲 区， precProps 
+      为 记 录 属 性 集 ．&nbsp;<br>
+      ---- 　 　 下 面 就 是 一 个 典 型 的 例 子 ． 　　<br>
+      同样，应在uses语句加上 DbiTypes,DbiProcs,DbiErrs. {取得当前记录的记录号 }&nbsp;<br>
+      function RecNo( ADbfTable : TTable ) : LongInt;var RecordProps: RecProps;&nbsp;<br>
+      begin Result := 0; {返回0表示函数执行失败 } with ADbfTable do begin {如果数据集处于非活<br> 
+      动状态,则执行失败 } if not active then exit; {使数据集的当前记录与实际 的当前记录的位置<br> 
+      一致 } UpdateCursorPos; {取得当前记录的属性, 主要是记录的位置 }&nbsp;<br>
+      if DBIERR_NONE &lt; > DbiGetRecord (Handle, dbiNOLOCK, nil, @RecordProps) then exit;<br> 
+      {发生错误,则操作失败 } Result := RecordProps.iPhyRecNum; {取得记录号 } end; end;&nbsp;<br>
+      四 ． 设 置 查 询 匹 配 方 式( 精 确 匹 配/ 非 精 确 匹 配)<br> 
+      ---- 在 用Foxpro 时，Set Exact ON/OFF 对 数 据 查 询 影 响 很 大 ． 在Delphi 中， 我 们&nbsp;<br>
+      同 样 可 以 进 行 这 样 的 设 置 ．&nbsp;<br>
+      ---- 　 　 要 用 到 的 函 数 名 为DbiSetProp， 这 次 用 的 属 性 名 称iProp 为curINEXACTON，&nbsp;<br>
+      属 性 值iPropValue 为 True 或False，True 表 示Set Exact OFF ．&nbsp;<br>
+      ---- 　 　 下 面 就 是 一 个 典 型 的 例 子 ．&nbsp;<br>
+      同样，应在uses语句加上DbiTypes,DbiProcs,DbiErrs.<br>
+      <br>
+      {设置匹配方式，DbfTable&nbsp;<br>
+      包含了数据表的信息,ExactOn&nbsp;<br>
+      表示是否精确匹配,True表示是 }<br> 
+      function SetDbfExact( DbfTable :&nbsp;<br>
+      TTable ; ExactOn : boolean ) : boolean;<br> 
+      var<br> 
+   errResult : DBIResult;<br> 
+      begin<br> 
+     {如果没有打开,则操作失败 }<br> 
+     if ( not DbfTable.active ) then<br> 
+        begin<br> 
+             result := false;<br> 
+             exit;<br> 
+        end;<br> 
+      <br> 
+     {进行设置显示操作 }<br> 
+     errResult := DbiSetProp( hDBIObj(DbfTable.Handle),<br> 
+     curINEXACTON,<br> 
+   LongInt( not ExactOn ));<br> 
+      <br> 
+     if errResult = DBIERR_NONE then<br> 
+      {没有错误,操作成功 }<br> 
+        result := true<br> 
+     else{发生错误,操作失败 }<br> 
+        result := false;<br> 
+      end;<br> 
+      五 ． 恢 复 被 软 删 除 的 记 录<br> 
+      ---- 在Delphi 应 用 程 序 中， 对DBF 数 据 表 执 行 的 删 除 操 作 为 软 删 除 操 作 ． 
+      由 于 物 理 记 录 并 没 有 从 数 据 表 中 删 除， 我 们 就 可 以 恢 复 被 软 删 除 的 
+      记 录， 只 要 去 掉 删 除 标 志 即 可 ．&nbsp;<br>
+      ---- 　 　 要 用 到 的 函 数 名 为DbiUndeleteRecord， 函 数 原 型 为：&nbsp;<br>
+      function DbiUndeleteRecord&nbsp;<br>
+      ( hCursor : hDBICur ): DBIResult;<br> 
+      ---- 其 中，hCursor 可 为 数 据 集 的Handle ．&nbsp;<br>
+      ---- 　 　 下 面 就 是 一 个 典 型 的 例 子 ．&nbsp;<br>
+      　　同样，应在uses语句加上DbiTypes,DbiProcs,DbiErrs.<br>
+      <br>
+      {恢复被软删除的记录 }<br> 
+      function UndeleteRecord<br> 
+      ( DbfTable : TTable ) : boolean;<br> 
+      begin<br> 
+      Result := false;<br> 
+ {返回false表示函数执行失败 }<br> 
+      <br> 
+      with DbfTable do<br> 
+      begin<br> 
+        {如果数据集处于非<br> 
+    活动状态,则执行失败 }<br> 
+        if not active then exit;<br> 
+      <br> 
+        {使数据集的当前记录与<br> 
+   实际的当前记录的位置一致 }<br> 
+        UpdateCursorPos;<br> 
+      <br> 
+        {恢复被软删除的记录 }<br> 
+        if DBIERR_NONE &lt; > DbiUndeleteRecord( Handle ) then<br> 
+           exit;{发生错误,操作失败 }<br> 
+      <br> 
+         result := true; {操作成功 }<br> 
+      end;<br> 
+      end;<br> 
+      ---- 上 面 是Delphi 操 作DBF 数 据 表 的 几 个 常 见 例 子， 希 望Delphi 会 给Delphi 程 
+      序 员 带 来 越 来 越 多 的 方 便， 不 会 让Delphi 程 序 员 感 到 约 束 ．&nbsp;<br>
+      ---- 以 上 程 序 在PWin98+Delphi3.0 下 调 试 通 过 ．      
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p><br>
+</p>
+
+</body>
+
+</html>

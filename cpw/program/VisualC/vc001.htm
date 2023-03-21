@@ -1,0 +1,272 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Visual FoxPro扩展程序库的编写要点</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<p align="center"><strong><span style="font-size: 9pt"><font face="Arial" size="4">Visual 
+FoxPro</font><font size="4">扩展程序库的编写要点</font></span></strong></p>
+
+<p align="center"><span style="font-size: 9pt">录入/江湖小子</span></p>
+
+<p><span style="font-size: 9pt">摘要: 本文介绍用C/C++编制Visual FoxPro扩燕尾服程序库的基本要点，并给出一些参数传递的例子。<br>
+<br>
+关键词: Visual FoxPro扩展程序库<br>
+<br>
+Visual FoxPro的扩展程序库由C或C++编写，可以访问Visual FoxPro的“应用程序接口”(API)，大大扩展了Visual 
+FoxPro的原有功能。本文即介绍编制扩展程序库的基本要点。<br>
+<br>
+编制扩展程序库有一定的软件要求。首先，由于Visual FoxPro是一个32位的应用程序，所以必须使用一32位编译器来连编该程序库，笔者推荐使用Microsoft 
+VisualC++TM4.1版。其次需要Visual FoxPro“应用程序接口”的头文件（PRO_EXT.H）以及导入库（WINAPIMS.LIB），这两个文件均在Visual 
+FoxPro的API子目录下。<br>
+<br>
+对于有C语言编程经验的程序员来说，写扩展程序库的难点在于要搞清：扩展程序库本身的框架、数据类型和数据结构以及扩展程序库与Visual 
+FoxPro环境的数据交换约定。下面主要介绍这三点。<br>
+<br>
+一、 扩展程序库的基本结构<br>
+程序库由四部分组成：<br>
+1、#include 语句<br>
+#include &lt;pro_ext.h&gt;;<br>
+2、函数定义<br>
+void Function _ Name (ParamBlk*parm)<br>
+{<br>
+\\函数代码<br>
+}<br>
+3、FoxInfo结构<br>
+FoxInfo myFoxInfo[]\{<br>
+{&quot;FUNCTION_N&quot;,(FPFI)Function_Name,<br>
+ParmCount,ParmTypes},<br>
+};<br>
+FoxInfo结构用于在Visual FoxPro和库之间传递函数名和参数描述信息。“myFoxInfo&quot;<br>
+为FoxInfo型的变量。注意在该数组中可以包含多个FoxInfo结构行。<br>
+ParmCount指定在ParmTYpes字符串中描述的参数个数，或者下列标志值之一：<br>
+值 说明<br>
+INTERNAL 指明该函数不能直接从Visual FoxPro调用<br>
+CALLONLOAD 指明该函数在加载时调用。<br>
+CALLONUNLOAD 指明该函数的卸载库，或发出Visual FoxPro的QUIT命 
+令时调用<br>
+注：CALLONLOAD和CALLONUNLOAD均不能调用那些返回结果给Visual<br>
+FoxPro的函数。<br>
+ParmTYpes描述每个参数的数据类型。下表列出ParmTYpes的有效值。<br>
+值 描述<br>
+““ 无参数<br>
+“?” 能传递任意类型<br>
+“C” 字符型参数<br>
+“D” 日期型参数<br>
+“I” 整型参数<br>
+“L” 逻辑型参数<br>
+“N” 数值型参数<br>
+“R” 引用<br>
+“T” 日期时间型参数<br>
+“Y” 货币型参数<br>
+4、Foxtable 结构<br>
+FoxTable myFoxTable={<br>
+(FoxTable *)0,sizeof(myFoxInfo) /<br>
+sizeof(FoxInfo),myFoxInfo<br>
+}<br>
+该结构第一个参数是Visual FoxPro内部使用的一个指针，必须初始化为0；第二个参数是该程序库定义的Visual 
+FoxPro外部例程数目；第三个参数实际为该程序库FoxInfo结构的变量名。如读者的FoxInfo型变量名为myFoxInfo，建议读者直接使用上面这个例子。<br>
+<br>
+二、Visual FoxPro API数据类型与数据结构<br>
+1、数据类型<br>
+Visual FoxPro API定义的数据类型见下表<br>
+数据类型 说明<br>
+EDLINE 用于编辑窗口中打开的文件，指明文件中某一行的行号，首行 
+为1。<br>
+EDPOS 用于编辑窗口中打开的文件，指明文件中某个字符的偏移位置 
+。<br>
+FCHAN 文件通道。每个由Visual FoxPro打开的文件，或通过API用 _FCreate()和_FOpen()打开的文件，都被分配一个FAHAN<br>
+FPFI 指向一个返回一个整数值的函数的32位指针。<br>
+ITEMID 为菜单中某一命令指定的唯一标识。<br>
+MENUID 指定给一个菜单的唯一标识。<br>
+MHANDLE 一个唯一标识，每一个由Visual FoxProw分配的内存块，或通 过API用_AllocHand()分配的内存块都具有这样一个标识。可以 
+使用_HandToPtr()返回引用到它的指针。<br>
+NTI 名称表索引。每个内存变量和表字段的名称在该表中都有一项 
+。<br>
+WHANDLE 窗口句柄。每一个由Visual FoxPro打开的窗口，或者通过API 用_Wopen()<br>
+打开的窗口都有这样一个唯一的标识。<br>
+2、数据结构<br>
+Visual FoxPro API定义的数据结构见下表：<br>
+Visual FoxPro API数据类型<br>
+结构说明<br>
+EventRec 一个结构，用于描述在某个给定的时刻系统正在进行的操作。FoxInfo 
+前面已介绍<br>
+FoxTable 前面已介绍<br>
+Locator 在“数据交换”中详细介绍<br>
+ParamBlk 在“数据交换”中详细介绍<br>
+Parameter 在“数据交换”中详细介绍<br>
+Point 一个结构，定义了屏幕上一个点的水平和垂直坐标。坐标按行 
+号和列号指定。<br>
+Rect 一个结构，定义了屏幕上一个矩形的坐标。该矩形的左上角由 
+(top,left)定义，右下角由(bottom-1,right-1)定义。坐标按 
+行号和列号指定。<br>
+Value 在“数据交换”中详细介绍<br>
+<br>
+Visual FoxPro API数据结构<br>
+<br>
+三、扩展程序库与Visual FoxPro环境的数据交换<br>
+扩展程序库与Visual FoxPro环境的数据交换分两部分：程序库从Visual 
+FoxPro接受参数；程序库返回值给Visual FoxPro。<br>
+1、扩展程序库从Visual FoxPro接受参数<br>
+程序库中定义的函灵敏实际上只接受一个参数：一个指向参数块的指针。该参数块在ParamBlk结构中定义，保存了有关Visual 
+FoxPro函数传递来的参数的全部信息。<br>
+所以函数申明必须是如下格式：<br>
+void FunctionName(ParamBlk*parm)<br>
+ParamBlk结构定义包含在PRO_EXE.H中：<br>
+/*库函数的参数列表*/<br>
+typedef struct{<br>
+short int pCount:/*传递的参数个数*/<br>
+Paramneter[1]:/* pCount个参数*/<br>
+}ParamBlk;<br>
+包含在ParamBlk结构中的parameter数据类型是一个含有一个Value结构和一个Locator结构的联合。当函数被Visual 
+FoxPro调用时，可用这些结构来访问传递给它的参数。Parametet数据类型、Value结构和Locator结构都在PRO_EXT.H中定义：<br>
+/*给库函数的参数*/<br>
+typedefunion{<br>
+Value val;<br>
+Locator loc;<br>
+}Parameter<br>
+/*一个表达式的值*/<br>
+typedef struct{<br>
+char ev_type;<br>
+char ev_padding;<br>
+short ev_width;<br>
+unsigned ev_length;<br>
+long ev_long;<br>
+double ev_real;<br>
+ccy ev_currency;<br>
+MHANDLE ev_handle;<br>
+ULONG ev_object;<br>
+}value;<br>
+/*一个表或内存变量的引用*/<br>
+typedef struct{<br>
+char 1_type;<br>
+short 1_where<br>
+l_NTI，<br>
+l_offset，<br>
+l_subs，<br>
+l_subl，l_sub2；<br>
+｝Locator<br>
+Visual FoxPro程序可按值或引用将变量传给库函数。默认时，内存变量的传递方式取决于SETUDFPARMS。其他变量(比如数组或字段)和表达通过值来传递。<br>
+要强制一个变量按引用传递，可在该变量引用之前加上@操作符。要强制一个变量按值传递，可把该变量用括号括起来。每个参数的信息保存在一个Value或者一个Locator结构中，按值的调用由value结构处理；按引用的调用则由Locator结构处理。下表说明了Value结构中各域与参数类型的对应关系：<br>
+数据类型 ev_type ev_width ev_length ev_long ev_real ev_handle ev_currency<br>
+字符型 ‘C’ 字符串长度 字符串的<br>
+MHANDLE<br>
+数值型 `N' 显示宽度 小数位 双精度<br>
+整型 `I’ 显示宽度 长整型<br>
+日期型 `D' 日期<br>
+日期时间型 `T' 日期+(秒<br>
+/86400.0)<br>
+<br>
+货币型 `Y' 显示宽度 货币值<br>
+逻辑型 `L'<br>
+备注型 `M' FCHAN 0或1 备注字 备注字段编 <br>
+段长度 移量<br>
+通用型 `G' FCHAN 备注字 备注字段编<br>
+段长度 移量<br>
+Null `O' 数据类型<br>
+<br>
+下表说明了Locator结构中各域的含义：<br>
+结构元素 用法<br>
+l_type `R'<br>
+l_where -1表示内存变量，或为一工作区号<br>
+l_NTI 名称表索引<br>
+l_offset 字段偏移量<br>
+l_sub 0为内存变量，或为一下标数(如是数组)<br>
+l_sub1 第一下标(如果数组)<br>
+l_sub2 第二下标(如果维数组)<br>
+<br>
+下面是接收参数的几个例子：<br>
+(1)接收一个数型参数<br>
+long long_var；<br>
+long_var=pann-&gt;P［0］.Val.ev_long；<br>
+(2)接收一个日期型参数<br>
+double date；<br>
+date=parm-&gt;P［0］val.ev_real；<br>
+(3)通过传值方式接收一个字符串<br>
+char buf［256］；<br>
+MHANDLE pvar；<br>
+pvar=parm-&gt;P［0］val.ev_handle；<br>
+<br>
+_HLock(pvar)；<br>
+<br>
+_MemMove(buf,HandToPtr(pvar),parm-&gt;；<br>
+<br>
+P［0］.val.ev_length)<br>
+HUnlock(pvar)<br>
+为确保该字符串以‘＼0’结尾，可令buf［255］=‘＼0’；<br>
+(4)通过引用方式接收一个字符串<br>
+char buf［256］；<br>
+Value val,*pval；<br>
+Locator *loc；<br>
+<br>
+int errcode；<br>
+loc=&amp;parm-&gt;p［0］.loc；<br>
+pval=&amp;val；<br>
+if（（（errcode=_lode(loc,pvar))!=0)；<br>
+_Error(-errcode);<br>
+//为确保以‘＼0’结尾，要加1字节的空间<br>
+<br>
+if (!_SetHandSize(pvar-&gt;ev_handle,pvar-&gt;<br>
+ev_length+1))<br>
+_Error(182)_；<br>
+//字符串尾加‘＼0’<br>
+<br>
+*((char*)_HandToPtr(pvar-&gt;ev_handle)+pvar-&gt;<br>
+ev_length)=`＼0'<br>
+_HLock(pvar)；<br>
+<br>
+_MernMove(buf,_HandToPtr(pvar),pvar-&gt;<br>
+<br>
+ev_length+1<br>
+<br>
+<br>
+_HUnLock(pvar)<br>
+<br>
+2、返回值给Visual FoxPro<br>
+返回值给Visual FoxPro，可以使用在PRO_EXT.H中说明的API函数；<br>
+函数 说明<br>
+RetCHar(char*string) 返回一个以null终止的字符串。<br>
+_RetDateStr(char*string) 返回一个日期值。日期格式是mm/dd/yy［yy］。<br>
+_RetDateTimeStr(Char*string) 返回一个日期时间值。格式为mm/dd/yy［yy］hh:mm:ss。<br>
+_RetFloat(double flt int width int dec 返回一个浮点值。<br>
+_RetInt(longival int width) 返回一个整型值<br>
+_RetCurrency(CCY cval int width) 返回一个货币值。<br>
+_RetLogical(int flag) 返回一个逻辑值。0为“假”；非0为真。<br>
+_RetVal(Value*val) 传递一个完整的Visual FoxPro Value结构构；利用此函数，<br>
+除备 注之外的任何Visual FoxPro数据类型都可返回。必须调用 _RetValo来返回一个包含内嵌null字符的字符串，或返回一个 
+NULL值。<br>
+这些API函数十分好用，但有一个缺点；一个函数只能有一个返还信息。作为一个C语言程序员，对函数原型中形参的作用一定不陌生。究其根本，形参其实指示了一片内存区域，被调函数对该区域操作。函数结束后，信息保留在此内存区域，“返还”给主调函数。Visual 
+FoxPro中按引用传递参数与之很相似。笔者根据此原理，成功的编写了几个引用返还信息的子程序。见示例；<br>
+(1)通过引用方式返回一个整型数<br>
+Locator*lo<br>
+Value temp<br>
+int errorcode<br>
+lo=&amp;parm-&gt;p［0］.loc<br>
+temp.ev_long=num//num<br>
+temp.ev_type=`I'<br>
+temp.ev_width=10;<br>
+if((errorcode=Stroe(lo,&amp;temp))!=0<br>
+_Error(-errorcode)<br>
+(2)通过引用方式返回一个字符串<br>
+Locator*lo;<br>
+Vahue temp<br>
+int errcode<br>
+lo=&amp;parm-P［0］.loc<br>
+temp.ev_type=`C',<br>
+temp.ev_length=tength;//length为字符串长度<br>
+if((temp.ev_handle=_AllocHand(length)=0)<br>
+(Error(182)//内存不够<br>
+_Hlock(temp.ev_handle;//string为返回字符串指针<br>
+_MemMove(HandToPtr(temp.ev_handle)stringlength);<br>
+_HUnLock(temp.ev_handle);<br>
+if((errorcode=_store(lo,&amp;temp))!=-<br>
+_Error(-errorcode)<br>
+<br>
+以上只介绍了编制Visual FoxPro扩展程序库的基本知识，读者如想处理自己的实际问题，还需要根据情况仔细分析。<br>
+</span></p>
+</body>
+</html>

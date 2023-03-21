@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>灯塔问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>灯塔问题</strong></p>
+
+<p>//灯塔问题<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;fstream.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+int sz[11][11],cf=1,k,n,a[20],b[20],c[20];<br>
+void shuru(void);<br>
+void shuchu(void);<br>
+bool panduan(void);<br>
+void goujian(void);<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,j,lj=0,d;<br>
+&nbsp;&nbsp;&nbsp; shuru();<br>
+for(i=1;i&lt;=n;i++)cf=cf*2;<br>
+for(i=0;i&lt;cf;i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; d=i;<br>
+&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++)<br>
+&nbsp;&nbsp;&nbsp; {sz[n][n-j+1]=d%2;d=d/2;}<br>
+&nbsp;&nbsp;&nbsp; goujian();<br>
+&nbsp;&nbsp;&nbsp; if(panduan()==true){lj=lj+1;shuchu();}<br>
+}<br>
+cout&lt;&lt;&quot;共有&quot;&lt;&lt;lj&lt;&lt;&quot;种情况&quot;&lt;&lt;endl;<br>
+getch();<br>
+}<br>
+void goujian(void)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i1,j1;<br>
+&nbsp;&nbsp;&nbsp; for(i1=n-1;i1&gt;0;i1--)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+for(j1=1;j1&lt;=i1;j1++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; if(sz[i1+1][j1]==1&amp;&amp;sz[i1+1][j1]==1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sz[i1][j1]=0;<br>
+&nbsp;&nbsp;&nbsp; if(sz[i1+1][j1]==0&amp;&amp;sz[i1+1][j1+1]==0)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sz[i1][j1]=0;<br>
+&nbsp;&nbsp;&nbsp; if(sz[i1+1][j1]==1&amp;&amp;sz[i1+1][j1+1]==0)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sz[i1][j1]=1;<br>
+&nbsp;&nbsp;&nbsp; if(sz[i1+1][j1]==0&amp;&amp;sz[i1+1][j1+1]==1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sz[i1][j1]=1;<br>
+}<br>
+}<br>
+}<br>
+bool panduan()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int pd=1,j1;<br>
+for(j1=1;j1&lt;=k;j1++)<br>
+&nbsp;&nbsp;&nbsp; if(sz[a[j1]][b[j1]]!=c[j1]) pd=0;<br>
+if(pd==0) return false;else return true;<br>
+}<br>
+void shuchu(void)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i2,j2;<br>
+for(i2=1;i2&lt;=n;i2++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; for(j2=1;j2&lt;=n-i2;j2++) cout&lt;&lt;&quot; &quot;;<br>
+for(j2=1;j2&lt;=i2;j2++) cout&lt;&lt;sz[i2][j2]&lt;&lt;&quot; &quot;;<br>
+cout&lt;&lt;endl;<br>
+&nbsp;&nbsp;&nbsp; }<br>
+cout&lt;&lt;endl;<br>
+}<br>
+void shuru(void)<br>
+{<br>
+//&nbsp;&nbsp;&nbsp; char filename[18];<br>
+ifstream input;<br>
+// cout&lt;&lt;&quot;Input filename:&quot;;<br>
+// cin&gt;&gt;filename;<br>
+// input.open(filename);<br>
+input.open(&quot;dt.txt&quot;);<br>
+input&gt;&gt;n;<br>
+k=0;<br>
+do{<br>
+&nbsp;&nbsp;&nbsp; k++;<br>
+input&gt;&gt;a[k]&gt;&gt;b[k]&gt;&gt;c[k];<br>
+}while((a[k]!=0)&amp;&amp;(b[k]!=0));<br>
+k--;<br>
+}</p>
+</body>
+</html>

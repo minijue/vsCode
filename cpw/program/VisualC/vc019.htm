@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>软件试用次数的限制</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a>&gt;</b> 软件试用次数的限制</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>软件试用次数的限制</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">软件试用次数的限制有很多种方法，其关键是把次数这个值存储在哪 
+    里。本文介绍一种方法，通过改变文件 
+    的时间来存储试用次数，从而限制软 件的试用。 <br>
+    <strong>一、通过改变文件时间来限制软件的试用次数 <br>
+    </strong>&nbsp;&nbsp;&nbsp; 在MS-DOS中，文件的时间是 通过一个16位的值来保存的，位 
+    15~11用来保存小时数，位10~5用 来保存分钟数，位4~0用来保存秒钟 
+    数。这个16位的值正好可以被我们用 
+    来保存试用次数。例如，在下面的示例 
+    程序中，笔者就使用了保存分钟数的 
+    位来保存试用次数。运行一下示例程 
+    序，我们可以看到，只是文件时间的分 钟数加了1，一般人很难察觉，这种方 
+    法有比较好的隐蔽性。 <br>
+    <strong>二、示例程序中所涉及的中断 <br>
+    </strong>1．中断21H的功能3DH <br>
+    &nbsp;&nbsp;&nbsp; 用途：打开文件用于读。写或补 充。 <br>
+    &nbsp;&nbsp;&nbsp; 调用寄存器:AH=3DH，AL=00H，DS:DX=文件名； <br>
+    &nbsp;&nbsp;&nbsp; 返回寄存器:CF 复位--成功，AX=文件把柄。 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CF 
+    置位--出错，AX=错误代码。 <br>
+    &nbsp; 2．中断21H的功能3EH <br>
+    &nbsp;&nbsp;&nbsp; 用途：强迫清除所有缓冲区，更新目录，使文件把 
+    柄无效。 <br>
+    &nbsp;&nbsp;&nbsp; 调用寄存器：AH＝3EH，BX＝文件把柄； <br>
+    &nbsp;&nbsp;&nbsp; 返回寄存器：CF 复位--成功，AX被破坏, <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    CF 置位--出错，AX=错误代码。 <br>
+    &nbsp; 3．中断21H的功能57H、子功能00H <br>
+    &nbsp;&nbsp;&nbsp; 用途：读出文件被最后修改的日期和时间。 <br>
+    &nbsp;&nbsp;&nbsp; 调用寄存器：AX＝5700H，BX=文件把柄； <br>
+    &nbsp;&nbsp;&nbsp; 返回寄存器：CF 复位--成功，CX=文件时间， DX=文件日期， 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    CF 置位--出错，AX=错误代码。 <br>
+    &nbsp; 4。中断21H的功能57H、子功能01H <br>
+    &nbsp;&nbsp;&nbsp; 用途：将文件最后被修改过的日期和时间信息变 
+    成指定值。 <br>
+    &nbsp;&nbsp;&nbsp; 调用寄存器：AX=5701H，BX=文件把柄，CX= 新时间，DX=新日期； 
+    <br>
+    &nbsp;&nbsp;&nbsp; 返回寄存器：CF 复位--成功， <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    CF 置位--出错，AX=错误代码。 <br>
+    <strong>三、示例程序 <br>
+    </strong>#include &lt;sidio.h&gt;<br>
+    #include &lt;dos.h&gt;<br>
+    #include &lt;conio.h&gt;<br>
+    int count( )<br>
+    {<br>
+    &nbsp; union REGS inregs,outregs;<br>
+    &nbsp; strut SREGS segs;<br>
+    &nbsp; unsigned handle;<br>
+    &nbsp; unsigned times;<br>
+    &nbsp; / * 打开文件 * /<br>
+    &nbsp; inregs.h.ah =0x3d;<br>
+    &nbsp; inregs.h.al =0;<br>
+    &nbsp; scgread(&amp; segs);<br>
+    &nbsp; inregs.x.dx =&quot;test.exe&quot;;<br>
+    &nbsp; intdosx(&amp; inregs, &amp; outregs, &amp; segs);<br>
+    &nbsp; if(outregs.x.cflag) return(0);<br>
+    &nbsp;&nbsp;&nbsp; else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / * 读取文件日期时间 * /<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; handle = Outregs.x.ax;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.ax = 0x5700;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.bx = handle;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; intdosx(&amp; inregs, &amp; outregs, 
+    &amp;segs);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; times = (outregs.x.cx &amp;0x7e0)&gt; 
+    &gt; 5;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(times &lt;40)/ * 
+    试用次数可以通过改变此处的'40'来实现 * /<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.ax = 
+    0x5701;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.bx = 
+    handle;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.cx = 
+    outregs.x.cx + 0x20; / * 试用次数计数 * /<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.dx = 
+    outregs.x.dx;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; intdosx(&amp; 
+    inregs, &amp; outregs, &amp; segs); / * 重置日期时间 * /<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return(2);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else return(1);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / * 关闭文件 * /<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.h.ah = 0x3e;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inregs.x.bx = handle;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; intdosx(&amp; inregs, &amp; outregs, 
+    &amp; segs);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    }<br>
+    main()<br>
+    {<br>
+    &nbsp; int flag;<br>
+    &nbsp; flag = count();<br>
+    &nbsp; if(flag==0) printf(&quot;此软件为试用版，请勿任意修改!\ n&quot;);<br>
+    &nbsp; if(flag==1) printf(&quot;此软件为试用版，您的试用次数已满!\n&quot;);<br>
+    &nbsp; if(flag==2) printf(&quot;此软件为试用版，欢迎试用!\n&quot;);<br>
+    }</span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

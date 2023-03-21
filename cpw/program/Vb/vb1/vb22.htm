@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在Access数据库中实现密码管理的另一种方式&nbsp;<br>
+      <br>
+                          河北陡河发电厂计算机部   王小娟&nbsp;      
+      <p><br>
+      ---- 大 家 都 知 道， 数 据 库 的 安 全 性 是 很 重 要 的， 它 直 接 影 响 到 数 据 
+      库 的 广 泛 应 用。 用 户 可 以 采 用 任 意 一 种 方 法 来 保 护 数 据 库 应 用 程 
+      序， 也 可 以 将 几 种 方 法 结 合 起 来 使 用。 利 用Access 数 据 库 自 身 提 供 的 
+      加 密 功 能 及 其 他 保 护 方 法 是 很 容 易 的， 我 就 不 多 说 了。 在Access 数 据 
+      库 中， 嵌 入 了 一 种 很 强 的 数 据 库 操 作 语 言 — —Visual Basic 语 言， 所 以 
+      可 以 采 用Visual Basic 编 写 程 序， 来 实 现 一 些 复 杂 的 功 能。 下 面 将 介 绍 
+      如 何 在Visual Basic 程 序 中 实 现 加 密 功 能， 以 确 保 数 据 的 安 全 性。&nbsp;<br>
+      ---- 对 于 一 些 公 司 来 说， 职 员 的 工 资 管 理 是 一 个 不 大 不 小 的 问 题。 
+      有 时， 领 导 需 要 了 解 一 段 时 间 内 每 个 职 员 的 收 入 如 何， 以 便 掌 握 各 
+      项 奖 金 的 发 放 情 况。 为 此， 我 设 计 了 一 个“ 工 资 管 理” 数 据 库， 可 以 
+      按 时 间 进 行 查 询， 并 根 据 所 选 的 工 资 类 别 进 行 统 计。 为 了 防 止 其 他 
+      人 查 看 此 数 据 库， 我 采 用“ 独 占” 方 式 给 数 据 库 设 置 了 密 码。 这 种 方 
+      法 也 有 一 定 的 局 限 性， 如 果 用 户 恰 巧 提 供 了 正 确 的 数 据 库 密 码， 该 
+      方 法 就 不 能 控 制 用 户 对 数 据 库 进 行 操 作。&nbsp;<br>
+      ---- 为 了 进 一 步 防 止 职 员 查 看 工 资 的 统 计 结 果（ 即 有 些 奖 金 并 不 是 
+      公 开 的， 除 领 导 以 外 的 其 他 人 不 应 该 知 道 工 资 数 目）， 我 又 创 建 了 
+      一 个 密 码 表， 设 置 好 密 码， 记 住 并 将 其 隐 藏 起 来（ 先 选 中“ 密 码 表”， 
+      再 单 击“ 窗 口” 菜 单 中 的“ 隐 藏” 命 令， 即 可 把 此 表 隐 藏 起 来）。 然 后， 
+      在“ 职 工 工 资 对 话 框” 窗 体 中， 添 加“ 密 码” 文 本 框， 并 在“ 预 览” 及“ 打 印” 的 事 件 过 程 中 加 入 下 列 语 句：&nbsp;<br>
+      DoCmd.ApplyFilter , "密码 = Forms!<br> 
+      职工工资对话框!PassText"<br> 
+      If Not IsNull([密码]) Then<br> 
+     /*其他代码*/<br> 
+      Else<br> 
+    MsgBox "请输入正确的密码！"<br> 
+    PassText.SetFocus<br> 
+      End If<br> 
+      /*其他代码*/<br> 
+      ---- 这 样， 就 实 现 了 双 重 加 密 功 能。 即 使 用 户 能 进 入 数 据 库， 如 果 第 
+      二 次 没 有 提 供 正 确 的 密 码， 他 也 不 能 预 览 和 打 印 一 定 时 间 范 围 的 统 
+      计 结 果。 这 就 进 一 步 限 制 了 用 户 的 非 授 权 访 问。&nbsp;<br>
+      ---- 为 了 提 高 数 据 库 的 安 全 性， 每 隔 一 段 时 间 都 应 更 改 密 码。 为 此， 
+      在“ 职 工 工 资 对 话 框” 窗 体 中， 我 又 添 加 了 一 个“ 更 改 密 码” 子 窗 体， 
+      在 此 窗 体 中 加 入 下 列 代 码， 即 可 随 时 更 改 密 码：&nbsp;<br>
+      Private Sub确定_Click()<br> 
+      On Error GoTo Err_确定_Click<br> 
+   DoCmd.ApplyFilter , "密码<br> 
+ = Forms!更改密码!Text1"<br> 
+   If IsNull([密码]) Then<br> 
+      MsgBox ("密码不正确，&nbsp;<br>
+      请再输入一次")<br>
+      Text1.SetFocus<br>
+      GoTo Exit_确定_Click:<br> 
+   End If<br> 
+   If Text3.Value &lt; > Text2.Value Then<br> 
+      Text3.SetFocus<br> 
+      MsgBox ("请输入正确的确认密码")<br> 
+   Else:<br> 
+  密码 = Text3.Value<br> 
+   DoCmd.Close<br> 
+   End If<br> 
+      Exit_确定_Click:<br> 
+    Exit Sub<br> 
+      Err_确定_Click:<br> 
+    MsgBox Err.Description<br> 
+      Resume Exit_确定_Click<br> 
+   End Sub<br> 
+      ---- 更 改 密 码 后， 应 记 住 此 密 码， 以 备 以 后 使 用。&nbsp;<br>
+      ---- 设 计 好 程 序， 并 将 有 关 代 码 隐 藏 起 来（ 与 隐 藏“ 表” 的 方 法 相 同）， 
+      以 防 其 他 人 修 改 或 偷 看。 这 里 介 绍 的 方 法 只 是 在 程 序 中 实 现 加 密 功 能 
+      的 一 个 小 技 巧， 在 其 他 数 据 库 管 理 中， 也 可 采 用 此 方 法 进 行 加 密。 也 
+      许 存 在 更 为 简 洁 的 方 法， 有 待 大 家 在 编 程 过 程 中 发 掘 出 来 并 互 相 交 流。 
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

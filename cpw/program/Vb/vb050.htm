@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://person.zj.cninfo.net/~yao/document/vb/vb001.htm -->
+<HTML><HEAD><TITLE>用Visual Basic 4.0对象封装继承代码</TITLE>
+<META content="text/html; charset=gb_2312-80" http-equiv=Content-Type>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是：<a href="../progidx.htm"> <b>编程技巧</b></a> <b> --&gt; 
+      <a href="Vbidx099.htm">Visual Basic</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+<P align=center>用Visual Basic 4.0对象封装继承代码</P> 
+<P align=center>微软公司供稿</P> 
+</center>摘要  
+      <BR>实用意味着不丢弃有价值的东西。过去二十年中开发的大部分代码仍有价值，重写它们将是一笔巨额开销。如何解决这个问题呢？是回到我们开始的地方吗？不，那只会使我们裹足不前。阻止旧的语言的任何新的发展吗？考虑到我们所谓新的开发实际上是对旧的系统的增强，这也不太可能。对已存在的代码进行回收利用吗？也许这是个解决方案！已经执行了多年的代码可以考虑再利用。当然，为了成为当前平台上的目标，这些代码必须在微机环境下工作。这是完全可能的，因为已有应用程序的逻辑结构和代码本身都可载入到小型机环境中。<BR>Microsoft  
+      Visual Basic  
+      编程系统4.0版提供了许多将继承代码集成到新的应用程序中的方法。它的创建对象功能使开发者可以将继承代码接口的技术细节隐藏到一个性质及方式集合中。<BR>为什么要使用继承代码和语言？  
+      <BR>本文中所说的继承代码是指用第三代语言如COBOL或FORTRAN编写并以一定方式组织结构的典型代码。也就是说，定义继承代码的不仅是其使用的语言，还包括其组织结构。例如，用C语言编写的串行执行程序通常也可以认为是一个继承应用程序，尽管大部分继承代码是用COBOL或FORTRAN编写的。有几个因素影响到继承代码的继续使用。其中最重要的两点是已有代码的巨大数量及继承开发者的宝贵技术，这是通过多年的开发代码经验才获得的，应该充分利用。<BR>几十亿行代码<BR>据报道现在已有的COBOL代码多达数十亿行，且每年还要增加数百万行。大部分大型系统的开发仍是利用所谓继承语言。这种现象并非是对当前技术方向的误解造成，而是由于业界的基本现实。世界上许多已有的系统是用这些语言实现的，且大部分开发人员仍在继续使用它们。即使所有这些系统的开发立刻停止，维护工作也将延续到下个世纪。<BR>FORTRAN在科学和工程领域仍作为创建技术软件的理想工具而占统治地位。由于这种语言的结构极适于有效计算，尤其是对精确的向量计算及统计分析，它不可能被忽略。用FORTRAN写的大部分代码能极好地用于模块化开发环境中。<BR>越来越多的新的开发工作正用更新的语言来完成，但同时也存在问题。继承代码包含许多描述公司如何操作的业务规则，这些代码可以翻译成新的语言，但这需要对开发人员的再次培训及相当的重写时间。培训一些继承开发者使用当前最新的技术和语言并非一项简单的任务，尤其是从COBOL到C++的转变。然而，训练这些人使用Visual  
+      Basic  
+      4.0，并继续借用他们在继承代码的开发过程中获得的技能是可能的。<BR>要利用这些技能则要求继承代码可以封装到可再利用的模块中，使其能被当前的各种语言访问。然而，这个过程首先要求理解继承代码的功能如何实现。这种理解也许很难达到，因为这些老的系统中很大一部分并不一定能完全被其开发人员理解，他们对代码的了解通常是第三手的。<BR>有一些用继承代码写的应用程序，典型的如报表产生程序和实用函数，可以在独立模式下运行。如果有这些应用程序的源代码，那么通常只需小小的修改，它们就可作为再使用的代码。通过修改代码利用的途径，应用程序能变成一个可重置的模块，如果需要，将来它们可用另一种语言重写。<BR>即使继承代码不被理解（或不存在），不愿使用新语言的开发人员仍可用继承语言来写新的代码。这个功能使那些善于使用继承系统的人的技术得以继续发挥作用，它将他们的技术同时用于对老系统的维护和新的开发工作中。经过一段时间，这些人会越来越多地学习新的语言并渐渐精于新技术。<BR>借用开发技能<BR>大量合作开发者仍在用继承代码工作。他们维护并开发增强用COBOL，RPG，BAL和FORTRAN写的系统。为了完成好他们的工作，他们需要相当多的技巧和实际经验。这些经验不应在MIS  
+      工厂向新技术的快速转变中丢失。实际上，这些技能可用来增强新创建系统的功能。每个在他的技术被认为是过时时离去的职员都是公司损失的一笔财富，这个损失是很可观的。我们的想法是不改变这些开发者的所作所为，而是改变他们建立系统的方式。<BR>例如，即使一个大型的MIS工厂决定从今天起只使用state-of-the  
+      -art开发语言，他们仍需投入相当多的精力维护当前的继承代码。通常由当前的开发人员处理这项任务，这有两个原因：（1）停止所有的维护工作是很危险的；（2）大部分维护人员不愿将他们的工作仅限于维护，他们也想参与新系统的开发。利用本文给出的方法，他们可同时作到这两点：他们可与新的开发小组一起工作并发挥其知识与技能，从而将他们的技术用到新系统的开发中。<BR> 
+      <P>传统的与基于元件的应用程序设计的对比  
+      <BR>有继承代码开发经验的人员需要培训如何以小片为单位创建系统。这种方式与传统的用诸如COBOL的语言编写代码截然不同。后者的开发人员创建大型的完整系统，它们只有为数极少的可分离部分。这类系统的代码再利用多半取决于开发人员对过去的项目中各独立的代码库的维护工作。不幸的是，这种方式不太适于个人之间的代码共享。图1说明了利用第三代语言，或3GL的传统应用程序设计。<BR><BR>图1.&nbsp;&nbsp;&nbsp; 
+      利用3GL语言的传统应用程序设计<BR>另一方面，多年来这种传统方式与计算机技术结构完全适应。大部分系统都是带有输入输出终端的大型集中处理式机器。所有处理在一个物理设备上完成，且所有存储及外围设备都在同一个物理空间内。图2显示了此类系统的基本配置。<BR><BR><BR><BR>图2.&nbsp;&nbsp;&nbsp;&nbsp; 
+      从顶层看主机体系结构<BR>随着计算机技术的发展，硬件趋于更小的网络平台。这种趋势反过来也促使软件系统形成一种客户机/服务器模式，其进程被分配到几个不同的平台完成。这种方式使进程之间彼此互相隔离，而通过一定接口连接其函数功能。图3显示了一个典型的客户机/服务器体系结构。<BR><BR><BR>图3.&nbsp;&nbsp;&nbsp; 
+      一个典型的客户机/服务器体系结构<BR>这种客户机/服务器方式非常有效，因为它使系统各元件的开发可以充分利用其所在的硬件平台。当然，这种方式要求从传统方式到系统构造的改变。开发者可以将软件看成一个提供各种服务的元件集合，而不是一个大型的整体系统。<BR><BR><BR><BR>图４·&nbsp;&nbsp;&nbsp; 
+      一个基于服务的体系结构<BR>Microsoft Solutions Framework  
+      使软件发展成为一系列能被其他应用程序访问的服务元件集合。客户/服务器体系结构使系统中离散的函数开发更加简易，它形成了一种非常结构化的开发方式。图4显示了一个作为一组元件开发的系统。这些服务元件是可执行代码而不是源代码，这意味着它们可作为完整的，通过测试并可替代的对象来共享和再利用。<BR>Microsoft  
+      Solutions  
+      Framework之后的开发过程被分成一些更小的项目的集合，每个项目创建一个小型的可再利用系统。在早期的开发周期中，这些系统必须作为独立的模块（或元件）识别和装载。这些项目的目标是创建既可被当前系统也可被其它系统再利用的模块。这种方式实际上能保证高度的再利用率。<BR>基于服务的体系结构对服务的分割取决于应用程序。例如，业务服务通常装在服务器上，但也可装在客户机上。<BR>为基于服务的体系结构创建应用程序的开发小组通常由两个独立的部分组成：方案设计组和元件设计组。前者将用户和业务需求提炼成一些独立的概念，并定义代表这些概念的元件。后者将这些元件变成稳定的可再利用的高质量代码。然后方案设计组将已有的以及新的元件组合成一个应用程序。<BR>利用动态链接库的基于元件的设计技术  
+      <BR>本文叙述了继承代码如何编译成可直接被Visual Basic 4.0引用并封装进Visual Basic  
+      4.0对象的函数及例程。这些对象保持了原代码的函数功能，同时还具有Visual Basic  
+      4.0创建的代码的典型的安装使用的简易性。结果对下面两个领域的开发者来说都具有优越性：继承代码开发者更易开发，使用Visual Basic  
+      4.0的开发者也更得心应手。<BR>整个过程有如下几步。第一步是将继承代码变成动态链接库，或DLL。第二步是将DLL封装到Visual Basic  
+      4.0 OLE对象中并在一个基于Visual Basic 4.0的应用程序中测试此DLL。第三步是将DLL转变成一个独立执行的对象，它将DLL  
+      的服务提供给任何可使用OLE的开发工具。<BR>DLL所扮演的角色<BR>一个DLL  
+      是一系列编译过的代码，它在运行时被链接成可执行代码。而静态链接库在编译时被链接进其他代码中。前者意味者应用程序被分成好几片开发，而后者说明最终产品是一整个可执行文件。一个DLL是一种类型的元件。<BR>静态链接与动态链接主要有如下两点不同：首先，静态链接在编译-链接阶段将所有的代码模块存储到.EXE文件中，无需任何其它可执行文件来保证执行例程的完整性。其次，静态链接产生的可执行模块更大且维护代价更高。<BR>而使用DLL时，程序在编译-链接周期会被告知缺少哪些例程以及哪些DLL中包含这些例程。编译器最终产生的可执行程序不包含DLL中的代码，而是DLL的名字以及指示例程在DLL中位置的指针。<BR>当程序执行时，装载器在DLL中寻找程序需要的代码例程并将其装入内存以供程序使用。<BR>还可以通过修改DLL来改变调用主程序的功能而不必替换主程序。此外，DLL可以被好几个应用程序共享。例如一个屏幕驱动器，它的代码可被编译到一个操作环境的每一个可执行程序中，但这很不实用。如果用一个DLL来实现，这些代码可以是一个独立的文件，它随显示硬件的改变而改变或更新。<BR>DLL还有其他好处。如果某个例程使用大量的安装选项参数，所有这些代码必须在一个静态库中，而利用DLL设计的系统只需装入与已选参数有关的代码。在处理象屏幕驱动器这样的代码时这种方式十分有用。<BR>说明语句<BR>说明语句是Visual  
+      Basic 4.0与DLL通讯的桥梁。说明语句可用于表格或代码模块的说明部分。通过说明语句，函数或子例程对Visual Basic  
+      4.0来说就象是其语言内部本身的例程一样。下面是一个典型的说明语句：<BR>Declare Sub CREATE Lib  
+      "acctstat.dll" _<BR>(ISAMFileStatus As FileStatusType, TargetPath As  
+      PathType)<BR>注意此例程名为CREATE且位于库文件ACCTSTAT.DLL中。它使用两个参数：一个用户定义类型称为FileStatusType，另一个用户定义类型称为PathType。此例程没有返回值，因此被说明为Sub。<BR>在这个说明语句之后，Visual  
+      Basic  
+      4.0就可以使用例程CREATE了。<BR>任何在客户基础上创建DLL的函数都需要一个适当的说明语句。这种语句的创建对有经验的开发者来说并不困难，然而，如果没有对被调用例程的一些底层知识，这却是一项棘手的任务。（本文稍后叙述的OLE封装过程将帮助解决此困难。如果需要关于说明语句的更进一步信息，请参阅Microsoft  
+      Visual Basic 4.0 Programmer's Guide。）<BR>调用DLL<BR>从Visual Basic  
+      4.0中激活DLL很简单，与调用此语言中的任何其它函数或子例程完全一样。例如，下面的代码段即调用了前面的CREATE例程：<BR>gTargetPath.PathString  
+      = gsIsamFileName<BR>Call CREATE(IsamFileStatus, gTargetPath)<BR>MsgBox  
+      IsamFileStatus.Message<BR>这段代码将要创建的文件名赋给gTargetPath变量（它是一个结构）的PathString域，并调用CREATE子例程。返回信息传递到IsamFileStatus结构的Message域中。注意结构的使用并非必须的，而是为了通讯的方便，此例中是与COBOL，它使用结构变量的频率很高。<BR>上例中对子例程的调用还可通过如下方式实现：<BR>CREATE  
+      IsamFileStatus, gTargetPath<BR>这种替代方式也可完全为Visual Basic  
+      4.0接受，尽管Call的使用使代码可读性更强。<BR>DLL的元件<BR>源代码<BR>DLL中包含的源代码与任何可执行程序大体类似。唯一的区别是DLL没有主程序。它被称为函数或子例程。<BR>DEF文件<BR>为了定义动态链接库中执行的函数和子例程，必须创建一个.DEF文件描述主要的接口。函数名是定义的，但所有参数必须由开发者决定。这就是OLE对调用过程的简化之处。类型可在OLE内部处理，DLL的内部细节对开发者来说是透明的。请注意许多编译器都有不用.DEF文件创建DLL的技术。这通过输出函数的与编译器有关的参数来实现。<BR>参数<BR>参数说明是DLL的定义中最复杂的过程之一。如果一个参数没有正确说明，系统就有可能产生内存错误并引起应用程序终止运行。仔细查看继承代码文档以保证对参数大小的正确定义是非常重要的。<BR>最易创建一个编译过的DLL的语言是C。尽管C并不是一个真正的继承语言（除了对Visual  
+      Basic 4.0的最热心的支持者），它建立了一个良好的基础。如果您使用C的经验丰富，您便有了理解DLL创建及OLE封装的基础。C在为Visual  
+      Basic 4.0开发高度优化的实用程序上也不失为一种很好的语言。封装优化C代码的一个很好的例子是Visual Basic 4.0 Remote  
+      Data Object，它将ODBC  
+      API的复杂性对用户隐藏起来从而更易使用。<BR>创建一个简单的封装DLL<BR>要创建一个简单的封装DLL，请激活Microsoft Visual  
+      C++开发系统2.2或更新版本并指定所需的新项目。说明这是一个Windows操作系统的DLL并指出项目文件将放在哪里。您开始并不一定要将项目与文件相关联。请注意这是一个32位的编译，因此建立DLL外部链接的参数与16位编译不同。<BR>然后您就可以打开一个新文件并将其标以.C后缀来创建一个源文件。下面一段简单的源文件将输入的整数变成两倍值。<BR>#include  
+      "stdarg.h"<BR>long __stdcall _lDouble(long *lValue)<BR>{<BR>return *lValue  
+      +  
+      *lValue;<BR>}<BR>函数的返回值是加倍后的值，初始值不变。<BR>编译DLL<BR>从Project菜单中选择Compile并保证Calling  
+      Convention被设置为_stdcall。这个调用协议与.DEF文件都是为了保证外部名称与例程的内部名一致。C++编译器假定函数名都将在C++程序中用到，因而这些名称被修改成符合相应语法。<BR>项目中使用的.DEF文件如下：<BR>LIBRARY  
+      DOUBLE<BR>CODE&nbsp;&nbsp;&nbsp; PRELOAD MOVEABLE  
+      DISCARDABLE<BR>DATA&nbsp;&nbsp;&nbsp; PRELOAD  
+      MOVEABLE<BR>EXPORTS<BR>&nbsp;&nbsp;&nbsp; _lDouble&nbsp;&nbsp;&nbsp;  
+      @1<BR>在Visual Basic 4.0中运行DLL<BR>DLL通过以下语句链接到基于Visual Basic  
+      4.0的程序中。通常，它在一行内：<BR>Declare Function lDouble Lib  
+      "h:\vboledll\winrel\DOUBLE.DLL" _ <BR>Alias "_lDouble" (ByRef lValue As  
+      Long) As Long<BR>注意 您必须确保标志了DLL的所在地。如果它位于项目目录下，您必须明确说明此目录在什么地方。如果Visual  
+      Basic  
+      4.0缺省的项目目录即DLL所在的目录，您就可以输入DLL的名字。如果它在缺省目录中找不到则搜索DLL的路径，Windows操作系统先搜索\WINDOWS目录，然后是\WINDOWS\SYSTEM目录。<BR>创建一个带文本盒（输入数字“1”作为文本性质）的表格以及一个命令按钮。在命令按钮Click事件中，放置如下代码：<BR>Dim  
+      lValue As  
+      Long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '  
+      Declare a temporary variable.<BR>lValue =  
+      Val(Text1.Text)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' Set the  
+      value of the variable.<BR>lValue =  
+      lDouble(lValue)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' Call the  
+      DLL.<BR>Text1.Text =  
+      Str$(lValue)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' Rewrite the  
+      value in the text  
+      box.<BR>运行此代码，注意每按一下按钮文本盒中的值则加倍（直到值溢出）。<BR>在一个OLE服务器中放置DLL<BR>现在您有了DLL函数，您可以将它放到一个OLE服务器中，这个过程已被Visual  
+      Basic 4.0大大简化。OLE服务器的创建大都包括创建类型库及OLE服务器信息注册之类的事件。Visual Basic  
+      4.0已为您处理好这些过程，使您能将更多时间花在处理业务事件而不是安装问题上。<BR>正如此处所描述的，使用的第一个对象是一个进程外服务器。进程外服务器比进程内服务器具有更多的继承函数功能，因为它能作为一个独立的程序运行。其它进程可以访问它的函数。进程内服务器在应用程序的内存空间中运行，提供更快的数据传送但要牺牲一些功能。这些在本文稍后将作更详细的讨论。<BR>（刚刚开发的C例程实现底层功能，能更好地装进进程内服务器的空间，然而，由于这是一个在OLE服务器上实现DLL的例子，它被简化到每次只执行进程的一步。下一节中将有一个进程内服务器的例子。）将DLL放到一个对象中是件简单的事情。一个基于Visual  
+      Basic  
+      4.0的项目必须用一个类模块创建。此模块中也许有说明语句。对象的名字应能被外部访问，且允许参数传递。）<BR>您必须采取如下几步保证其正确工作：<BR>1.将类的性质如下定义：<BR><BR><BR><BR>Instancing性质可被设置为单用户或多用户但不能设置NotCreatable选项。如果此对象要与外部通讯则应设置Public性质，当然，还必须设置Name性质。<BR>Creatable  
+      SingleUse设置使应用程序每次初始化此对象时都装入服务器的一份新的拷贝。Creatable MultiUse  
+      设置使此对象能被共享，每个对象共享同一份服务。这是一个问题，因为Visual Basic  
+      4.0是一个单线程的系统，也就是说，一个多用户的服务一次只能被一个应用程序使用，在此期间它将阻塞所有其它试图使用其功能的用户。<BR>2.在Tools菜单中，单击Optiongs，选Project  
+      标签。将Project StartMode设为OLE Server。<BR>3.在您的模块中将Startup  
+      Form设为类似Main()的东西。您只有在显示一些信息时才需要一个startup form。<BR>4.将Project Name  
+      设为DoubleClass 。<BR>5.设置Application Description 使Object Browser  
+      可以查看已有的对象。<BR>6.如下编写Property Let和Property Get例程：<BR>Option  
+      Explicit<BR>Private glNumber As  
+      Long<BR>-----------------------<BR>Property Let lNumber(lInput As  
+      Long)<BR>glNumber = lDouble(lInput)&nbsp;&nbsp;&nbsp;&nbsp; ' Go ahead and  
+      double it.<BR>End Property<BR>-----------------------<BR>Property Get  
+      lNumber() As Long<BR>lNumber = glNumber<BR>End  
+      Property<BR>7.如下编写OLE服务器中的Module：<BR>Option Explicit<BR>Declare Function  
+      lDouble Lib "h:\vboledll\winrel\DOUBLE.DLL" _ <BR>Alias "_lDouble" (ByRef  
+      lValue As Long) As Long<BR>----------------<BR>Public Sub main()<BR>End  
+      Subsidiary<BR>8.运行OLE服务器。<BR>9.运行Visual Basic 4.0的一个单独的实例，其客户代码如下：<BR>'  
+      General declaration section.<BR>Option Explicit<BR>Dim oDoubleObj As  
+      Object<BR>' Code in the form.<BR>Private Sub  
+      Command1_Click()<BR>oDoubleObj.lNumber = Val(Text1.Text)<BR>Text1.Text =  
+      oDoubleObj.lNumber<BR>End Sub<BR>------------------<BR>Private Sub  
+      Form_Load()<BR>Set oDoubleObj =  
+      CreateObject("doubleOOP.DoubleClass")<BR>End Sub<BR>如果您找不到正在测试的Visual  
+      Basic 4.0对象的性质，单击工具栏中的Object Browser  
+      按钮则可查看可用的性质和方式。<BR>10.检查以保证结果与预期一致。<BR>在OLE  
+      对象中访问FORTRAN<BR>现在一个进程外服务器已经创建好了，让我们建立一个与现实更接近一点（当然，只是一点点）的应用程序：一个利用FORTRAN  
+      DLL执行计算的统计对象。由于这是一个没有用户接口的实用程序，它将按一个进程内服务器实现。在这里，我们将利用Microsoft Fortran  
+      PowerStation version  
+      4.0创建DLL代码。<BR>创建一个进程内服务器与创建一个进程外外服务器总体说来没有太大区别，除了前者不能创建非模式对话框。因此，进程内服务器对实用函数是很有用的。<BR>FORTRAN  
+      子例程是用FORTRAN语言如下说明：<BR>SUBROUTINE FSTATS [DLLEXPORT](dSamp, dMean, dSD,  
+      dVar,  
+      lSize)<BR>也许您会认为由于系统创建了名字FSTATS，它也可以被外部进程使用，然而，事实并非总是如此。<BR>此项目没有创建.DEF文件，尽管可以创建一个，因此DLL的开发者对实际输出的名字的控制要少一点。这有什么不同吗？<BR>对于这个编译器（还有Visual  
+      C++和其它编译器），答案是肯定的。输出函数的名字并非总是与代码中的一致，除非您在.DEF文件中规定这样命名。例程的用户必须知道文件名才可以访问此例程。您在代码中赋给函数的名字不能保证与输出的一样。另外还要注意在32位的编程环境中所有的函数名都是对大小写敏感的。这使对它们的访问进一步复杂化。<BR>程序DUMPBIN.EXE（在Visual  
+      C++编译器的BIN子目录下）能帮助解决这些问题。使用命令dumpbin/EXPORTS  
+      meansd.dll可得到输出函数的名字。DLL示例程序的输出看上去是这样：<BR>Microsoft (R) COFF Binary File  
+      Dumper Version 2.60.5135<BR>Copyright (C) Microsoft Corp 1992-1995. All  
+      rights reserved.<BR>Dump of file meansd.dll<BR>File Type: DLL<BR>Section  
+      contains the following Exports for meansd.dll<BR>0  
+      characteristics<BR>30201B0C time date stamp Wed Aug 02 20:40:44  
+      1995<BR>0.00 version<BR>1 ordinal base<BR>2 number of functions<BR>2  
+      number of names<BR>ordinal hint name<BR>1 0 _FSTATS@20 (00001010)<BR>2 1  
+      _TEST@0 (00001000)<BR>Summary<BR>1000 .data<BR>1000 .idata<BR>1000  
+      .rdata<BR>1000 .reloc<BR>1000  
+      .text<BR>有两样东西被输出：FSTATS程序和一个测试函数，它用来更好地显示这个实用程序。FSTATS程序被引用为_FSTATS@20，它说明传递的参数占用20个字节的堆栈空间，函数_TEST@0不占堆栈空间（它没有参数）。<BR>必须修改Visual  
+      Basic 4.0的说明语句以处理变化的名字。对FSTATS来说，处理如下：<BR>Public Declare Sub FSTATS Lib  
+      "h:\vboledll\MEANSD.DLL" _ <BR>Alias "_FSTATS@20" _<BR>(ByRef dSamp As  
+      Double, _<BR>ByRef dMean As Double, _<BR>ByRef dSD As Double, _<BR>ByRef  
+      dVar As Double, _<BR>ByRef lSize As  
+      Long)<BR>注意通过所有的4字节寻址（传递了5个参数），子例程的调用占用了20字节的堆栈空间。示例数组（dSamp）是作为一个指针传给第一个数组元件的。<BR>进程内服务器的处理与进程外服务器稍微有些不同。一开始，您就必须把它作为一个进程内服务器来测试。这是因为进程内服务器不能象进程外服务器那样在运行时调试。确保Options对话框的Advanced  
+      Options 标签中选中了Use OLE DLL Restrictions  
+      。（即使将它作为一个进程外服务器运行您也可以选中它。）<BR>激活项目的步骤与进程外服务器一样。调用例程的代码如下。注意方法是传递参数的。<BR>Option  
+      Explicit<BR>Dim Sample As Object<BR>-------------------<BR>Private Sub  
+      Command1_Click()<BR>Dim dVars(100) As Double<BR>Dim dSD As Double<BR>Dim  
+      dVar As Double<BR>Dim dMean As Double<BR>Dim lNum As Long<BR>dVars(1) =  
+      100#<BR>dVars(2) = 200#<BR>dVars(3) = 300#<BR>dVars(4) = 400<BR>lNum =  
+      4<BR>' Load the sample data.<BR>Sample.LoadData dVars(), lNum<BR>' Recover  
+      the statistics.<BR>Text1.Text = Sample.Mean<BR>Text2.Text =  
+      Sample.StandardDev<BR>End Sub<BR>--------------------<BR>Private Sub  
+      Form_Load()<BR>' Create an instance of the object.<BR>Set Sample =  
+      CreateObject("Statinproc.Sample")<BR>End  
+      Sub<BR>---------------------<BR>Private Sub Form_Unload(Cancel As  
+      Integer)<BR>' Ensure the object is cleaned up.<BR>Set Sample =  
+      Nothing<BR>End Sub<BR>对象中的代码如下所示：<BR>Private dStandardDeviation As  
+      Double<BR>Private dMean As Double<BR>Private dVar As  
+      Double<BR>------------------------<BR>Property Get Mean() As Double<BR>'  
+      Return the value of the mean.<BR>Mean = dMean<BR>End  
+      Property<BR>------------------------<BR>Property Get StandardDev() As  
+      Double<BR>' Return the value of the standard deviation.<BR>StandardDev =  
+      dStandardDeviation<BR>End Property<BR>------------------------<BR>' The  
+      method loads the data and calls the statistical function.<BR>Public Sub  
+      LoadData(dArray() As Double, lSize As Long)<BR>' Call the calculation  
+      function, saving the results<BR>' in the local copies of mean and standard  
+      deviation.<BR>Call FSTATS(dArray(1), dMean, dStandardDeviation, dVar,  
+      lSize)<BR>End  
+      Sub<BR>进程内和进程外服务器<BR>现在我们看到了两种OLE服务器，问题是，它们有什么区别？事实上，它们的区别是很本质的。下表显示了大致情况。<BR><BR><BR>一个显著的不同是实例。进程内服务器可在每个调用进程内创建一个实例，从而允许服务器的多重实例而不会引起任何冲突。另一方面，进程外服务器是作为一个单线程的应用程序运行的。每个调用进程外服务器实例的进程必须共享资源，每次只能有一个进程使用资源。如果进程外服务器被创建为一个单用户对象，这就不是一个问题了，因为每个对象都会创建一个新的实例，而一个多用户对象不会在每次创建时都生成一个新的实例。由于它是按单线程运行的，它不可能同时被两个（或更多）进程使用。<BR>如果实现的方式合理的话，进程内通讯的速度并不是一个真正的问题。如果使用一个进程外服务器，参数必须以一大组为单位传递，且只使用一个通讯脉冲。这说明进程外服务器能很好地包含屏幕和核心程序的辅助应用程序。进程内服务器能很好地包含实用程序，如在数据库访问层和处理业务规则的特殊函数中。<BR>其它问题<BR>上节中叙述的过程可被任何可以创建DLL的语言使用，这使Visual  
+      Basic 4.0成为一种组合和简化与许多语言的接口的链接性语言。Visual Basic  
+      4.0甚至可以在一个OLE对象内组合几个DLL的函数。<BR>其它能包含在Visual Basic 4.0 DLLs中的语言有：COBOL,  
+      Pascal  
+      和汇编语言。实现技术与本文中描述的实质上一样。如果您想使用其它语言创建一个DLL，建议您仔细阅读其文档说明以确保您在编译和链接步骤中使用了正确的参数。这里使用的例子主要是32位的，因为这种对象最灵活。它们可以在进程内，进程外使用，还可远程使用。<BR>许多厂商为创建DLL制造了32位编译器。当您选择继承编译器时，注意它必须支持DLL的创建。将继承编译器产生的DLL集成到Visual  
+      Basic 4.0中与前面叙述的没有什么区别。<BR>Visual Basic  
+      4.0对象使访问其它语言的代码成了一件普通的事情。直接调用DLL非常复杂，看看Windows  
+      API的说明代码，您就可以发现一些很有趣的语法。而对象的实现和使用却很简单。例如，您可以通过Object  
+      Browser查看哪些接口可用，从而简化开发，使再利用成为现实。<BR><BR>将代码分发给用户<BR>Visual Basic  
+      4.0在它的环境中处理对象的注册。然而，当您在分发对象时，必须在目的系统中为它们注册。Visual Basic 4.0 中的Setup  
+      Toolkit和大量其它的市场上可买到的工具都能完成此功能。对象不会自动注册（或注销），因此您必须编写适当的代码处理这个过程。这个任务很简单，且Visual  
+      Basic  
+      4.0的文档中有详细的说明。<BR>远程对象<BR>现在可以创建一个对象了，下一步考虑这个对象的使用。许多应用程序的设计可能要求OLE对象位于本地机器上，但Visual  
+      Basic  
+      4.0有一个独特的功能使用户可以从另一台机器上远程运行一个进程外服务器。代码实际上是真正在另一台机器上执行，因而您的进程便可以在等待结果的同时仍自由地做本地机所需要的一切。<BR>这意味着您在Visual  
+      Basic 4.0中创建的任何进程外服务器可以在其它机器上从Visual Basic  
+      4.0中调用执行。例如，您可以从另一台机器上调用一个信贷程序检查一个客户的信贷情况，同时继续您的定货工作。远程进程可以在结束信贷检查时发出指示并将结果传给您而不浪费本地机器的任何CPU周期。我们的工具使实际的分配工作变得非常简单。正如本文所描述的，所有的工作集中到对象的创建上。<BR>这个功能为应用程序的分配提供了许多选择。例如，一个业务规则可能位于一台单独维护的服务器上以保持信息总是最新的。通过Remote  
+      Automation，包含业务规则的最新模块的分配变成了简单的更换服务器上的对象，而不是给每个用户发送一份代码的新拷贝。结果，维护和管理的费用大大降低。<BR>在继承代码中，OLE对象和相应DLL都可以位于远程机器上。当系统的代码逻辑上发生变化时，系统的每个用户也之随变化，这就形成了整个系统的几乎同步更新。<BR>在Visual  
+      Basic 4.0 Enterprise  
+      Edition中包含能使您将服务器放到其它机器上的工具。<BR>注意：OLE服务器的主机必须运行Windows NT version  
+      3.51或Windows 95。<BR>实际上，这些工具设置了每台机器的注册，使OLE 例程误以为进程是在本地。从Visual Basic  
+      4.0的角度看，这没有什么不同；从系统的角度看，差别很显著；而从开发者的角度看，所要做的只是运行一个远程管理工具，选择服务器的位置，并运行应用程序。<BR>远程服务器的内容不在本文的讨论范围，但相信创建OLE对象的最难的部分我们已经为您在这里做了。剩下较有趣的分发服务器的部分只是一些拷贝代码到服务器中以及点几下鼠标的问题了。</P> 
+<P align=left>　</P> 
+    <center>    
+    
+      <p>　    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+</BODY></HTML> 

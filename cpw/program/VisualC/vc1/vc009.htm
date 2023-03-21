@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://person.zj.cninfo.net/~yao/document/vc/vc005.htm -->
+<HTML><HEAD><TITLE>创建适用于多种容器的控件</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>P {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <P align=center><STRONG>创建适用于多种容器的控件</STRONG> </P>
+      <P align=right><STRONG>作 者 : Raymond Cirincione著 <A  
+      href="mailto:emailaddress@188.net">阿良</A>译</STRONG> </P> 
+      <P>　　  
+      即使是一个符合OLE标准的控件，在不同的ActiveX容器里其行为也会偶尔不同。不能成功地适应容器之间的差别将严重影响控件在某些容器内的应用，甚至导致控件完全无法在个别容器使用。  
+      </P> 
+      <P>　　 本文讨论使用Visual  
+      C++创建控件时如何适应容器相关的需求，特别是为大范围内使用而开发ActiveX控件时必须执行的策略。例如，如何解决诸如许可、线程、内容检验、键盘事件响应等问题。  
+      </P> 
+      <P>　　 一、关于ActiveX控件 </P> 
+      <P>　　 在具体讨论容器之间的差别前（这种差别使得为多种容器开发ActiveX控件复杂化），有必要回顾一下何谓ActiveX控件以及它的创建过程。  
+      </P> 
+      <P>　　 ActiveX控件可以看成是实现了标准OLE接口的COM对象。所有的控件都必须最终定位于某种容器，如Visual  
+      Basic、Visual  
+      C++、IE浏览器。容器使用标准的OLE接口和控件协商。例如，容器可以创建、定制、存储控件以便以后使用。容器和ActiveX控件之间的所有交互都通过标准的OLE接口进行，由此，ActiveX控件追随了“黑盒”这一思想。控件的用户除了需要了解它的外部接口外，并不需要知道它的内部工作过程。只要开发工具（容器）以及编程语言理解并使用标准的OLE接口，就可以在多种容器中使用ActiveX控件。当然，这仅仅是理论；在实践中，没有两种容器是相同的，开发者必须把握它们之间的不同之处。  
+      </P> 
+      <P>　　  
+      创建ActiveX控件开始于选择开发工具。可供选择的工具很多，从VB到Delphi到VJ++。本文由VC++为出发点讨论控件创建。使用VC++可以获得更快的执行速度和对创建过程更多的控制，以及最大范围的平台SDK和API支持。VC++提供了MFC  
+      ActiveX控件向导来简化ActiveX控件的创建。这个向导引导您通过创建控件外壳的每一步。向导提出的第一个问题是是否需要许可。 </P> 
+      <P>　　 二、许可控件 </P> 
+      <P>　　  
+      控件操作有两个不同的环境：运行时和设计时。一个需要许可证的控件包含几个接口用于设计时限制某些访问。缺乏适当许可的用户只能在运行环境下使用该控件，而不能在设计环境下使用它。如果打算在企业内部、Internet、本地Intranet上使用控件，一般会避免使用许可证。然而，如果是出售商业产品或打算限制设计时访问控件的能力，就应该利用许可所带来的优点。  
+      </P> 
+      <P>　　  
+      如果选择许可某个控件，控件向导就自动加入了必要的接口并创建可定制的许可文件（LIC）。剩下必须做的工作只是修改主文档（如myprojectCTL.CPP）中几个变量。请修改许可文件的内容使之符合许可证键：  
+      </P> 
+      <P>　　 static const TCHAR BASED_CODE </P> 
+      <P>　　 _szLicFileName[] = _T("control.lic"); </P> 
+      <P>　　 static const WCHAR BASED_CODE </P> 
+      <P>　　 _szLicString[] ="My Unique Validation String"; </P> 
+      <P>　　  
+      在许可文件可用之后，开发工具经常在工程内缓冲控件的许可证键。如果许可文件本身不再可用，应用程序就使用缓冲的许可证键验证控件。在桌面环境下这是可行的，但在Internet（和Intranet）环境下并没有内建的机制以通过HTML安全地缓冲这个许可信息。  
+      </P> 
+      <P>　　 有两种方法解决这个问题。第一，可以使用Microsoft的一个叫LPK_Tool.exe的工具，它是Microsoft Internet  
+      Client  
+      SDK的一部份。LPK_Tool.exe能够将许可文件转换为可在HTML文档内引用的加密文件。IE能够在实例化一个需要许可证的控件时从LPK文件提取许可信息：  
+      </P> 
+      <P>　　  
+      第二个办法需要定制控件的许可验证例程。例如，它可以询问容器自己正处于设计模式还是运行模式。控件所继承的类（COleControl）包含成员函数AmbientUserMode，此函数在控件处于设计模式时返回TRUE。  
+      </P> 
+      <P>　　  
+      然而，并非所有容器响应此查询（包括IE浏览器）。此时AmbientUserMode总是返回TRUE；换句话说，它总是假定控件是在设计模式下。如果容器错误地响应查询，可以写一个函数强制控件认为自己处于运行模式，这样就可以避免这个限制了：  
+      </P> 
+      <P>　　 BOOL CCtrl::OptimisticAmbientUserMode(){ </P> 
+      <P>　　 BOOL bUserMode; </P> 
+      <P>　　 if (!GetAmbientProperty( </P> 
+      <P>　　 DISPID_AMBIENT_USERMODE, </P> 
+      <P>　　 VT_BOOL, &amp;bUserMode)) </P> 
+      <P>　　 bUserMode = TRUE; </P> 
+      <P>　　 //如果容器没有回答则假定为运行模式 </P> 
+      <P>　　 return bUserMode;} </P> 
+      <P>　　 三、线程模型和资源共享 </P> 
+      <P>　　  
+      Microsoft的两种线程模型，单线程和单元模型，同样使得在多种容器内使用控件复杂化。单线程控件在单一线程内执行所有对象；单元线程控件可在任何时候任何线程内执行一个对象。  
+      </P> 
+      <P>　　  
+      某些情况下可能需要将特定资源全局化以便控件的所有实例访问。例如，如果控件的多个实例执行许多数据库操作，此时需要为所有实例创建单一的、共享的数据库连接，而不是为每个实例单独创建连接（其它的情况还包括只有一个可用资源的情形，例如设备上下文或端口）。  
+      </P> 
+      <P>　　  
+      在单元模型线程环境下共享资源时有一个重大问题需要解决。例如，两个线程能够同时尝试使用同一个资源。这可能导致数据错误或其它非预期的结果。那么，容器如何才能知道控件是单元模型线程安全的？在类工厂（类对象）调用UpdateRegistry期间控件写入数据到注册表。当控件为线程安全时常量  
+      </P> 
+      <P>　　 afxRegApartmentThreading通知容器： </P> 
+      <P>　　 BOOL CCtrl::C3CtrlFactory::UpdateRegistry( </P> 
+      <P>　　 BOOL bRegister){ </P> 
+      <P>　　 if (bRegister) </P> 
+      <P>　　 return </P> 
+      <P>　　 AfxOleRegisterControlClass( </P> 
+      <P>　　 AfxGetInstanceHandle(), </P> 
+      <P>　　 m_clsid, m_lpszProgID, </P> 
+      <P>　　 IDS_MYCTL, IDB_MYCTL, </P> 
+      <P>　　 afxRegApartmentThreading, </P> 
+      <P>　　 _dwMyCtlOleMisc, _tlid, </P> 
+      <P>　　 _wVerMajor, _wVerMinor); </P> 
+      <P>　　 else </P> 
+      <P>　　 return </P> 
+      <P>　　 AfxOleUnregisterClass(m_clsid, </P> 
+      <P>　　 m_lpszProgID);} </P> 
+      <P>　　  
+      看起来似乎能够通过将该值改为0（标记控件非单元模型安全）解决问题。但如果希望在尽可能多的容器内支持该控件，就必须使控件支持单元模型线程。这是因为，一些开发环境容器如VJ++，需要控件支持单元模型线程。另外，单元模型线程能够让IE在创建新窗口时更高效地使用ActiveX控件。  
+      </P> 
+      <P>　　  
+      使用信号量避免两个线程同时访问临界区，可以解决在实例（和线程）之间共享数据（或唯一资源）所引起的问题。类似地，通过创建资源池可以避开受限资源问题。例如，可以让控件从数据库连接池选择一个连接，从而在访问数据库时可以获得可用连接且不影响其它线程。  
+      </P> 
+      <P>　　 四、支持内容检验 </P> 
+      <P>　　  
+      许多可定制的控件允许用户检验其内容。这种检验一般在用户结束编辑一个控件并移动焦点时执行。在失去输入焦点时Windows发送WM_KILLFOCUS消息给控件。一般地，控件应该提供一个机会给所有使用它的程序员响应这个重要事件。一些开发工具，如VB，能够在控件获得和失去焦点时自动提供事件；但也有的容器不能。因而，更为稳妥的办法是加入自己定制的事件，以确保总是给程序员机会回应此事件。  
+      </P> 
+      <P>　　  
+      在VC++中，可以使用ClassWizard为控件加入失去焦点时执行检验的定制事件。按Ctrl+W启动ClassWizard，然后单击ActiveX  
+      Events属性页以及Add Event按钮。接下来，输入“ctlLostFocus”作为External name，Internal  
+      Name自动设为FireCtlLostFocus。由于该事件不需要参数，因而忽略参数表并单击OK按钮。现在显示Message  
+      Maps属性页，从可用消息列表中选择WM_KILLFOCUS，单击Add  
+      Function按钮，此时ClassWizard为控件加入了消息处理函数。单击Edit Code按钮直接进入编辑： </P> 
+      <P>　　 void CCtrl::OnKillFocus(CWnd* </P> 
+      <P>　　 pNewWnd) { </P> 
+      <P>　　 COleControl::OnKillFocus( _ </P> 
+      <P>　　 pNewWnd); </P> 
+      <P>　　 FireCtlLostFocus();} </P> 
+      <P>　　 不管是什么容器，可以通过上述步骤为控件加入检验功能。 </P> 
+      <P>　　 使用同样的步骤可以加入WM_SETFOCUS消息的处理过程和FireCtlGotFocus事件。 </P> 
+      <P>　　 五、响应键盘和鼠标事件 </P> 
+      <P>　　  
+      许多控件需要让用户利用箭头键改变显示，比如在文本之间移动作为插入点的闪烁线条，或是在容器内移动以获得更好的定位精度。然而，有时容器也利用相同的按键，如IE使用向下的箭头键滚动HTML文档，此时控件在获得焦点时并不能够响应箭头键。  
+      </P> 
+      <P>　　  
+      通过覆盖CWnd类的PreTranslateMessage函数可以重新收回由容器对象控制的箭头键（以及其它键）的控制权。只要监视WM_KEYDOWN消息并过滤出需要的事件，然后在需要响应某个按键的时候，调用OnKeyDown并返回True。  
+      </P> 
+      <P>　　  
+      如果是在MDI窗口内使用ActiveX控件，而另一个窗口部分地隐藏该MDI窗口，可能会遇到另外一个问题：单击ActiveX控件并不能使MDI窗口移到最前面（即激活）。这是由于MDI窗口不能得知用户在ActiveX控件上的鼠标单击事件，因而无法作出响应并把自己设为活动窗口。  
+      </P> 
+      <P>　　 要是能够让父窗口（在这里是指MDI窗口）获知ActiveX控件上的单击事件，就可以解决这个问题。一个简单的办法是由控件发送WM_  
+      PARENTNOTIFY消息给父窗口以通知该鼠标单击事件。WM_  
+      PARENTNOTIFY消息在控件被创建、破坏或用户在控件上按鼠标键的时候发送。通过设置合适的扩展风格位，可以确保用户按鼠标键时控件发送该消息。首先覆盖控件的PreCreateWindow虚函数。传递给这个函数的参数CREATESTRUCT包含dwExStyle成员，使用该成员可以检查或修改用于创建控件的扩展风格位：  
+      </P> 
+      <P>　　 BOOL CCtrl::PreCreateWindow(CREATESTRUCT&amp; cs){ </P> 
+      <P>　　 cs.dwExStyle &amp;= </P> 
+      <P>　　 ~WS_EX_NOPARENTNOTIFY; </P> 
+      <P>　　 return </P> 
+      <P>　　 COleControl::PreCreateWindow(cs);} </P> 
+      <P>　　 这个修改导致用户在控件上按鼠标键时控件的缺省鼠标处理过程发送WM_PARENTNOTIFY消息，父窗口可以利用这个机会激活自己。  
+</P> 
+      <P>　　 六、使用常量 </P> 
+      <P>　　  
+      另一个有关容器的问题涉及到常量处理。OLE控件经常有以枚举量为值的属性。例如一个叫ScrollBars的属性使用下列枚举量，必须在部件类库定义：  
+      </P> 
+      <P>　　 typedef enum { </P> 
+      <P>　　 sbNone = 0, </P> 
+      <P>　　 sbAutomatic = 1, </P> 
+      <P>　　 sbAlwaysOn =2,} ctlScrollBarConstants; </P> 
+      <P>　　  
+      然而，并非所有的容器能够读取这些枚举定义以用于开发环境（如VBScript）。作为一个控件开发者，可以提供一个附加的文件用于定义这些常量在不同开发环境下的值，或者提供另外的方法来获得这些枚举量。对于后者，具体实现时可在控件中加入对应于枚举量的方法。  
+      </P> 
+      <P>　　 例如，可以加入三个方法：sbNone、sbAutomatic、sbAlwaysOn，它们的返回值分别对应于枚举量： </P> 
+      <P>　　 short CCtrl::sbNone (){ </P> 
+      <P>　　 return 0;} </P> 
+      <P>　　 short CCtrl::sbAutomatic (){ </P> 
+      <P>　　 return 1;} </P> 
+      <P>　　 short CCtrl::sbAlwaysOn (){ </P> 
+      <P>　　 return 2;} </P> 
+      <P>　　 在此基础上就可以使用这些方法在任何开发环境（容器）设置ScrollBars的属性了： </P> 
+      <P>　　 ctl.ScrollBars = ctl.sbAutomatic <BR>（全文完）</P> 
+      <P  
+      align=center><STRONG>本文来自chinabyte网站(http://www.chinabyte.com)</STRONG></P>     
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p> 
+</BODY></HTML> 

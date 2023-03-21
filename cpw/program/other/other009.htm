@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>中国电脑教育报</title>
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt;line-height:18px}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+</head>
+
+<body leftmargin="3" style="font-family: 宋体; font-size: 9pt; line-height: 17px"
+bgcolor="#8080C0">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b> <font color="#0000FF"><a
+    href="oth_idx.htm">其它</a></font>--&gt;</b> <font color="#000000">用Pascal编音响程序</font></span></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><font color="#000000"><span style="font-size: 9pt"><strong><big>用Pascal编音响程序</big></strong><br>
+    </span>邱朱胜</font></p>
+    <p align="left"><font color="#000000">&nbsp;&nbsp;&nbsp; turbo.pascal语言为我们提供了三个过程,过程sound的语法为:sound(frequercy),参数frequency表示频率,单位为赫兹,过程delay的语法为:delay(duration),参数duration是以毫秒为单位表示的延时时间;过程nosound用来关闭扬声器。<br>
+    &nbsp;&nbsp;&nbsp; 近日我用pascal 5.0编了以下一个模拟电话铃声的小程序,声音十分逼真,如果把程序中的数字更改将会发出其它声音,例如把delay(trunc(200＊d))中的200改为2000就会发出逼真警笛声.十分有趣.感兴趣的朋友可在这个基础上增加或修改一些语句,把它变成能奏出动听音乐的程序。<br>
+    program sm(input,output);<br>
+    uses crt;<br>
+    procedure m(f:integer;d:real);<br>
+    begin<br>
+    sound(f);<br>
+    delay(trunc(200＊d))<br>
+    end;<br>
+    var i:integer;<br>
+    begin<br>
+    for i:=1 to 15 do<br>
+    begin<br>
+    m(650,10);<br>
+    m(520,10);<br>
+    nosound;<br>
+    end;<br>
+    end.<br>
+    </font></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

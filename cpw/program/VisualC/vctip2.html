@@ -1,0 +1,222 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<meta NAME="doccomm" CONTENT="sss">
+<meta NAME="Template" CONTENT="C:\MSOffice\Template\Sl_BOOK.dot">
+<title>Visual C++ 编程技巧之二</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<p align="center"><strong><font face="Arial" size="4">Visual C++ </font><font size="4">编程技巧之二 
+</font></strong></p>
+
+<p align="center"><span style="font-size: 9pt">转载于&quot;<a
+href="http://kahn.xj.cninfo.net/wwchina/" target="_blank">程序员集中营</a>&quot;</span></p>
+
+<p><a HREF="#tip9"><font SIZE="+0" FACE="Times New Roman">9. </font><font SIZE="+0">如何改变窗口的图标</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip10"><font SIZE="+0" FACE="Times New Roman">10. </font><font SIZE="+0">如何改变窗口的缺省风格</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip11"><font SIZE="+0" FACE="Times New Roman">11. </font><font SIZE="+0">如何将窗口居中显示</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip12"><font SIZE="+0" FACE="Times New Roman">12. </font><font SIZE="+0">如何让窗口和 
+</font><font SIZE="+0" FACE="Times New Roman">MDI</font><font SIZE="+0">窗口一启动就最大化和最小化</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip13"><font SIZE="+0" FACE="Times New Roman">13. </font><font SIZE="+0">如何使程序保持极小状态</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip14"><font SIZE="+0" FACE="Times New Roman">14. </font><font SIZE="+0">如何限制窗口的大小</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><a HREF="#tip15"><font SIZE="+0" FACE="Times New Roman">15. </font><font SIZE="+0">如何使窗口不可见？</font></a> 
+</p>
+
+<p><a HREF="#tip16"><font SIZE="+0" FACE="Times New Roman">16. </font><font SIZE="+0">如何使窗口始终在最前方</font><font
+SIZE="+0" FACE="Times New Roman">?</font></a> </p>
+
+<p><font SIZE="+2"><b>　</b></font> </p>
+
+<p><a NAME="tip9"></a><b><font SIZE="+2"><font FACE="Times New Roman">9. </font><font
+FACE="黑体">如何改变窗口的图标</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">向窗口发送 <font FACE="Times New Roman">WM_SECTION</font>消息。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Example:</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">HICON hIcon=AfxGetApp() -&gt;LoadIcon(IDI_ICON);</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT(hIcon);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxGetMainWnd() 
+-&gt;SendMessage(WM_SECTION,TRUE,(LPARAM) hIcon);</font> </p>
+
+<p><a NAME="tip10"></a><b><font SIZE="+2"><font FACE="Times New Roman">10. </font><font
+FACE="黑体">如何改变窗口的缺省风格</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">重栽 <font FACE="Times New Roman">CWnd:: PreCreateWindow </font>并修改<font
+FACE="Times New Roman">CREATESTRUCT</font>结构来指定窗口风格和其他</font> </p>
+
+<p><font SIZE="+0">创建信息<font FACE="Times New Roman">.</font></font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Example: Delete &quot;Max&quot; Button and Set 
+Original Window's Position and Size</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">BOOL CMainFrame:: PreCreateWindow (CREATESTRUCT 
+&amp;cs)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">cs.style &amp;=~WS_MAXINIZEMOX;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">cs.x=cs.y=0;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">cs.cx=GetSystemMetrics(SM_CXSCREEN/2);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">cs.cy=GetSystemMetrics(SM_CYSCREEN/2);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">return CMDIFramewnd ::PreCreateWindow(cs);</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip11"></a><b><font SIZE="+2"><font FACE="Times New Roman">11. </font><font
+FACE="黑体">如何将窗口居中显示</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Easy, Call Function CWnd:: Center Windows</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Example(1): Center Window( ); //Relative to it's 
+parent</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">// Relative to Screen</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Example(2): Center Window(CWnd:: 
+GetDesktopWindow( ));</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">//Relative to Application's MainWindow</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxGetMainWnd( ) -&gt; Center Window( );</font> </p>
+
+<p><a NAME="tip12"></a><b><font SIZE="+2"><font FACE="Times New Roman">12. </font><font
+FACE="黑体">如何让窗口和</font> <font FACE="Times New Roman">MDI</font><font
+FACE="黑体">窗口一启动就最大化和最小化</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">先说窗口。</font> </p>
+
+<p><font SIZE="+0">在 <font FACE="Times New Roman">InitStance </font>函数中设定 <font
+FACE="Times New Roman">m_nCmdShow</font>的 取值<font FACE="Times New Roman">.</font></font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">m_nCmdShow=SW_SHOWMAXMIZED ; //</font>最大化</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">m_nCmdShow=SW_SHOWMINMIZED ; //</font>最小化</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">m_nCmdShow=SW_SHOWNORMAL ; //</font>正常方式</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">MDI</font>窗口<font
+FACE="Times New Roman">:</font></font> </p>
+
+<p><font SIZE="+0">如果是创建新的应用程序<font FACE="Times New Roman">,</font>可以用 
+<font FACE="Times New Roman">MFC AppWizard </font>的<font FACE="Times New Roman">Advanced 
+</font>按钮并在</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">MDI</font>子窗口风格组中检测最大化或最小化<font
+FACE="Times New Roman">; </font>还可以重载 <font FACE="Times New Roman">MDI Window </font>的</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">PreCreateWindow</font>函数，设置<font
+FACE="Times New Roman">WS_MAXMIZE or WS_MINMIZE;</font></font> </p>
+
+<p><font SIZE="+0">如果从 <font FACE="Times New Roman">CMDIChildWnd </font>派生<font
+FACE="Times New Roman">,</font>调用 <font FACE="Times New Roman">OnInitialUpdate</font>函数中的 
+<font FACE="Times New Roman">CWnd::Show</font></font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">Window</font>来指定 <font
+FACE="Times New Roman">MDI Child Window</font>的 风格。</font> </p>
+
+<p><a NAME="tip13"></a><b><font SIZE="+2"><font FACE="Times New Roman">13. </font><font
+FACE="黑体">如何使程序保持极小状态</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">很有意思的 问题</font> </p>
+
+<p><font SIZE="+0">这么办<font FACE="Times New Roman">: </font>在恢复程序窗体大小时， 
+<font FACE="Times New Roman">Windows</font>会发送<font FACE="Times New Roman">WM_QUERY-OPEN</font>消息，</font> 
+</p>
+
+<p><font SIZE="+0">用 <font FACE="Times New Roman">ClassWizard</font>设置成员函数 <font
+FACE="Times New Roman">OnQueryOpen() ,add following code:</font></font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Bool CMainFrame:: OnQueryOpen( )</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Return false;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><a NAME="tip14"></a><b><font SIZE="+2"><font FACE="Times New Roman">14. </font><font
+FACE="黑体">如何限制窗口的大小</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">也就是 <font FACE="Times New Roman">FixedDialog</font>形式。 <font
+FACE="Times New Roman">Windows </font>发送 <font FACE="Times New Roman">WM_GETMAXMININFO</font>消息来跟踪<font
+FACE="Times New Roman">,</font></font> </p>
+
+<p><font SIZE="+0">响应它<font FACE="Times New Roman">,</font>在 <font
+FACE="Times New Roman">OnGetMAXMININFO </font>中写代码<font FACE="Times New Roman">:</font></font> 
+</p>
+
+<p><a NAME="tip15"></a><b><font SIZE="+2"><font FACE="Times New Roman">15. </font><font
+FACE="黑体">如何使窗口不可见？</font></font></b> </p>
+
+<p><font SIZE="+0">很简单<font FACE="Times New Roman">,</font>用<font
+FACE="Times New Roman">SW_HIDE </font>隐藏窗口，可以结合 <font
+FACE="Times New Roman">FindWindow,ShowWindow </font>控制<font FACE="Times New Roman">.</font></font> 
+</p>
+
+<p><a NAME="tip16"></a><b><font SIZE="+2"><font FACE="Times New Roman">16. </font><font
+FACE="黑体">如何使窗口始终在最前方</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">两种途径<font FACE="Times New Roman">.</font></font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">BringWindowToTop(Handle);</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">SetWindowPos</font>函数，指定窗口的 
+最顶风格<font FACE="Times New Roman">,</font>用<font FACE="Times New Roman">WS_EX_TOPMOST</font>扩展窗口的 
+风格</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Example:</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void ToggleTopMost( CWnd *pWnd)</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ASSERT_VALID(pWnd);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">pWnd -&gt;SetWindowPos(pWnd-&gt; GetStyle( ) 
+&amp;WS_EX_TOPMOST)?</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">&amp;wndNoTopMOST: 
+&amp;wndTopMost,0,0,0,0,SSP_NOSIZE|WSP_NOMOVE);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+</body>
+</html>

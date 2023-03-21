@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>在VFP中控制IE</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel="stylesheet" href="../images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是：<a href="Vfp_idx.htm">Visual Foxpro</a> 
+    <b>&gt;</b> 在VFP中控制IE</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font class="p11" color="#000000"><b>在VFP中控制IE</b></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>&nbsp;&nbsp; VFP5.0提供了非常完整的OLE设计技术，利用这一技术可以在程序中方便地调用其他对象完成特定功能，实现多个应用系统的集成，加强程序的功能，方便用户的操作，比如：调用WORD、EXCEL、IE等。本文介绍怎样在VFP中调用IE，从而实现对特定网站的访问，如设计一个表单，使用户单击主页按钮，程序就可以自动调用IE，访问《电脑爱好者》的主页。<br>
+    &nbsp;&nbsp; 设计原理：IE是支持OLE自动执行的应用系统，安装成功后，在注册表中注册了自动执行类名，支持一些属性和方法，可以用VFP建立该OLE对象，并执行相关的属性和方法，从而实现控制。IE注册的类名为：InternetExplorer.Application（不同系统可能不同，可通过regedit.exe程序查阅Hkey_Classes_Root项目，找出类名），其相关的属性和方法如下：<br>
+    属性：<br>
+    Visible：是否显示IE，.T.为显示<br>
+    FullBar：是否全屏显示，.T.为全屏显示<br>
+    Width：IE宽度<br>
+    Height：IE高度<br>
+    Top：IE左上端点竖直坐标<br>
+    Left：IE左上端点的水平坐标<br>
+    方法：<br>
+    GOHOME：访问预设的主页<br>
+    GOSERACH：搜索功能<br>
+    GOBACK：返回上一页<br>
+    GOFORWORD：进入下一页<br>
+    NAVIGATE()：进入指定的网站<br>
+    QUIT：退出IE<br>
+    设计步骤：<br>
+    （1）进入VFP，新建一表单，其INIT代码为：<br>
+    public ie40&nbsp; &amp;&amp;对象名ie40为公共变量<br>
+    ie40=CREATEOBJECT(&quot;InternetExplorer.Application&quot;)&nbsp; &amp;&amp;建立IE自动执行对象<br>
+    ie40.Visible=.T.&nbsp; &amp;&amp;显示IE<br>
+    （2）表单中加入四个命令按钮。<br>
+    其标题和CLICK事件代码为：<br>
+    标题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CLICK代码<br>
+    主页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ie40.NAVIGATE('http://www.cfan.cn.net') &nbsp; 
+    &amp;&amp;进入《电脑爱好者》主页<br>
+    上一页&nbsp;&nbsp;&nbsp; ie40.GOBACK&nbsp; &amp;&amp;返回上一页<br>
+    下一页&nbsp;&nbsp;&nbsp; ie40.GOFORWRD&nbsp; &amp;&amp;进入下一页<br>
+    退出&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ie40.QUIT<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; release ie40<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; thisform release&nbsp; &amp;&amp;退出IE，结束表单<br>
+    &nbsp;&nbsp; 
+    运行该表单，点击【主页】，即可进入《电脑爱好者》主页，点击【上一页】和【下一页】可以前后翻页，点击【退出】可以结束操作。该表单只是一简单示例，若加入其它属性和方法可以实现更多的控制。</td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">中国程序员网站版权所有</td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

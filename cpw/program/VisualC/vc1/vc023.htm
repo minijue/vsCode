@@ -1,0 +1,164 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VISUALC++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">如何在C＋＋Builder中检测硬件&nbsp;<br>
+      <br>
+                           （西安　杨洪辰）</p>
+      <p><br>
+      <br>
+      　　在我们编写的程序中常常要和硬件打交道,那么如何在程序中确定系统中是否有该设备,<br>
+      它的运行状态又是怎样的呢？对于初学者来说，这个问题常常不好解决，其实只需简单地利<br>
+      用几个API函数，硬件的问题并不神秘。下面就让我们一起看看在C＋＋ Builder中是如何<br> 
+      检测硬件的。<br> 
+      　　1. 检测CPU的型号<br> 
+      　　先让我们从最简单的做起，看一看自己的CPU型号。首先，在C＋＋ Builder中画出图1<br> 
+      所示的窗体，在下面的几个例子中我们将一直使用这个窗体作示范，它包括一个用来激活测<br> 
+      试的Button和一个用来显示结果的Memo。我们可以用GetSystemInfo这个API获得CPU的型<br> 
+      号。将下列代码添加到Button的Click事件里就可以了：<br> 
+      　　void __fastcall TForm1::Button1Click(TObject ＊Sender)<br> 
+      　　{<br>
+      　　//获得CPU型号<br>
+      　　SYSTEM_INFO systeminfo;<br> 
+      　　GetSystemInfo (＆systeminfo);<br> 
+      　　Memo1→Lines→Add(“您的CPU类型是:”＋String( systeminfo.dwProcessorType ));<br> 
+      　　}<br>
+      　　运行它，点击Test试试，CPU型号出来了吧！<br>
+      　　2.检测内存状态<br>
+      　　获得内存状态的方法和CPU型号差不多，只是他用到的是另外一个API：GlobalMemoryStatus。<br>
+      其中，成员dwTotalPhys用来获得物理内存总量，而dwAvailPhys顾名思义是有效物理内存<br>
+      的意思。我们只要把下面几行代码加到上面程序的后面就可以了（不用重做，下同）：<br>
+      　　//获得内存状态<br>
+      　　MEMORYSTATUS memory;<br> 
+      　　memory.dwLength =sizeof(memory); //初始化<br> 
+      　　GlobalMemoryStatus(＆memory);<br>
+      　　Memo1→Lines→Add(“您的物理内存是(Mb):”＋String(int(memory.dwTotalPhys /1024/1024)));<br> 
+      　　Memo1→Lines→Add(“其中可用内存是(Kb):”＋String(int( memory. /1024)));<br> 
+      　　怎么样，看出点门道了么？两段程序的格式几乎一模一样，其实，GetSystemInfo和<br>
+      GlobalMemoryStatus还可以获得许多其他有关CPU和内存的信息，就按照上面的格式去套<br>
+      就行了，更详细的资料可以去看C＋＋ Builder4的Help。<br> 
+      　　3. 检测可用硬盘空间<br> 
+      　　好了，经过前面两个简单问题的热身，我们来处理一个稍微复杂的问题：我们知道安<br>
+      装程序大都有一个检测硬盘空间的过程，那么这是怎么实现的呢?他用到的是API函数<br>
+      GetDiskFreeSpace，这个函数输入一个参数：目标盘的路径；返回四个参数，依次是每簇<br>
+      的扇区数、每扇区的字节数、空闲的簇数、总簇数。假如我们需要检测C盘的总容量和可用<br>
+      容量，那么可以把以下代码加到上面的程序中：<br>
+      　　//获得C盘可用空间<br>
+      　　DWORD sector,byte,cluster,free;<br> 
+      　　long int freespace,totalspace;<br> 
+      　　GetDiskFreeSpace(“C:”,＆sector,＆byte,＆free,＆cluster); //获得返回参数<br> 
+      　　totalspace=int(cluster)＊int(byte)＊int(sector)/1024/1024; //计算总容量<br> 
+      　　freespace=int(free)＊int(byte)＊int(sector)/1024/1024; //计算可用空间<br> 
+      　　Memo1→Lines→Add(“C盘总空间(Mb):”＋String(totalspace));<br>
+      　　Memo1→Lines→Add(“C盘可用空间(Mb):”＋String(freespace));<br>
+      　　怎么样?现在可以自己做安装程序了吧！<br>
+      　　4. 检测CD－ROM<br> 
+      　　我们在编写程序时常常需要读取CD－ROM，可是究竟哪一个盘符是光驱呢？有人是将最<br>
+      后一个盘符当作光驱的，但是当遇到双光驱或者MO的情况时常常会出错。其实这个问题用<br>
+      一个API来解决并不困难，这就是：GetDriveType()，这个函数返回一个0～6之间的值，<br>
+      依次代表：0—未知盘、1—不存在、2—可移动磁盘、3—固定磁盘、4—网络磁盘、<br>
+      5—CD－ROM、6—内存虚拟盘。因此我们可以添加下面代码来寻找CD－ROM：<br>
+      　　// 获得CD－ROM信息<br> 
+      　　UINT type;<br> 
+      　　char name;<br> 
+      　　for (name=‘C’;name&lt;=‘Z’;name＋＋) //循环检测A～Z<br> 
+      　　{ type = GetDriveType((String(name)＋String(‘:’)).c_str()); //获得磁盘类型<br> 
+      　　if (type==5)<br> 
+      　　Memo1→Lines→Add(“您的光驱盘符为:”＋String(name));<br>
+      　　 }<br> 
+      　　得到光驱盘符之后我们可以进一步利用API函数GetVolumeInformation检测光驱中<br>
+      是否有光盘，这个函数如果成功调用，会得到磁盘的卷标序列号等信息；如果调用失败则<br>
+      可知光驱中无光盘，程序如下：//检测光盘(假设光驱为G:)<br>
+      　　char volname[255],filename[100];//buffer[512];<br> 
+      　　DWORD sno,maxl,fileflag ;<br> 
+      　　if (!(GetVolumeInformation(“G:”, volname,255,＆sno,＆maxl,＆fileflag,filename,100)))<br> 
+      　　 //如果返回值为假<br> 
+      　　Memo1→Lines→Add (“G驱中没有发现光盘”);<br> 
+      　　 else<br> 
+      　　 //如果返回值为真<br> 
+      　　{Memo1→Lines→Add (“G驱中光盘卷标为:”＋String(volname));<br> 
+      　　Memo1→Lines→Add (“G驱中光盘序号为:”＋String(sno));<br> 
+      　　 }<br> 
+      　　5. 检测声卡配置<br> 
+      　　在编制多媒体程序时，我们常常会用到声音文件，而当这些程序在没有配置声卡的机<br>
+      器上运行时，我们应该给出必要的警告。对于声卡的检测，可以分别通过waveOutGetNumDevs()<br>
+      和midiOutGetNumDevs()检测波形设备和MIDI设备，再利用waveOutGetDevCaps()和<br>
+      midiOutGetDevCaps()获得声音设备的细节资料。将下面一段代码加入上面的程序即可，<br>
+      但要注意将＃include 添至程序首部：<br> 
+      　　//检测声卡<br>
+      　　int wavedevice,mididevice;<br> 
+      　　WAVEOUTCAPS wavecap;<br> 
+      　　MIDIOUTCAPS midicap;<br> 
+      　　wavedevice=(int)waveOutGetNumDevs(); //波形设备信息<br> 
+      　　mididevice=(int)midiOutGetNumDevs(); // MIDI设备信息<br> 
+      　　if (wavedevice==0)<br> 
+      　　Memo1→Lines→Add (“没有发现波形设备”);<br> 
+      　　else<br>
+      　　{waveOutGetDevCaps(0,＆wavecap,sizeof(WAVEOUTCAPS));<br>
+      　　Memo1→Lines→Add (“当前波形设备:”＋String(wavecap.szPname));<br> 
+      　　 }<br> 
+      　　if (mididevice==0)<br> 
+      　　Memo1→Lines→Add (“没有发现MIDI设备”);<br> 
+      　　else<br>
+      　　{midiOutGetDevCaps(0,＆midicap,sizeof(MIDIOUTCAPS));<br>
+      　　Memo19→Lines→Add (“当前MIDI设备:”＋String(midicap.szPname));<br> 
+      　　 }<br> 
+      　　6. 检测显示器信息<br> 
+      　　编写和图形图像有关的程序时常常需要检测显示器的分辨率和色深，最后我们来看看<br>
+      这个问题的解决办法。分辨率的求法很简单，直接调用Screen对象的属性就行了。而要求<br>
+      色深则要利用API函数GetDeviceCaps获得每像素的比特数和色彩的页面数，然后计算2的<br>
+      “每像素的比特数”次幂即得色彩的梯度数，再计算“色彩的梯度数”的“色彩的页面数”<br>
+      次幂即得色深。由于该段程序用到了幂运算，所以要记得加上＃include ，程序如下：<br> 
+      　　//检测显示器<br>
+      　　int tcs;<br> 
+      　　long int bpp,cp,tc;<br> 
+      　　Memo1→Lines→Add (“当前分辨率为:”＋String(Screen→Width)＋“＊”＋<br> 
+      String(Screen→Height));<br> 
+      　　bpp=GetDeviceCaps(Form1→Canvas→Handle ,BITSPIXEL);<br> 
+      　　tcs=pow(2,bpp); //计算色彩的梯度数<br> 
+      　　cp= GetDeviceCaps(Form1→Canvas→Handle,PLANES);<br> 
+      　　tc= pow(tcs,cp); //计算色深<br> 
+      　　Memo1→Lines→Add(“当前色深为:”＋String(tc));<br>
+      　　好了，现在在让我们点击一下Test吧，硬件情况尽收眼底！其实本文所涉及<br>
+      的API函数的功能不止这些，大家下去可以查一查Win32 API手册，或者直接在C＋＋&nbsp;<br>
+      Builder 4中察看Help。相信自己开发一个硬件检测软件也不是难事哦！<br> 
+      　　以上程序均在Windows98中文版、C＋＋ Builder 4中调试通过，</p> 
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+ 
+</body> 
+ 
+</html> 

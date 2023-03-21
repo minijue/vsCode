@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb001.htm -->
+<HTML><HEAD><TITLE>如何在C++Builder中使用Delphi控件</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>P {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR></HEAD>
+<BODY bgColor=#efd19a>
+<DIV align=center>
+<CENTER>
+<TABLE border=0 cellPadding=0 cellSpacing=0 width=525>
+  <TBODY>
+  <TR>
+    <TD width=525>
+      <P align=center><STRONG>如何在C++Builder中使用Delphi控件 <BR><BR>上海铁道大学 
+      施江杰</STRONG></P>
+      <P>----Delphi的出现将一大批程序员带入了Windows下的可视化编程，为一些C&amp;C++<BR>的死党程序员所羡慕、感叹。直到C++Builder的出现这些Programer才用到了梦寐<BR>以求的编程工具，也将一些不得已"投敌"到Delphi下的程序员又拉回到C++的怀抱。<BR>她正真将Windows下的可视化编程和面向对象编程语言有机的融合在一起。但是由<BR>于C++Builder面市时间较短固而可用的控件不多，而且控件的使用也只针对某一版<BR>本，相互之间的可互用性不好，除非你有SourceCode；对于Delphi就更不用说了，<BR>C++Builder根本不能用，当然如果你有SourceCode那么你可以转写成C++Builder的<BR>控件，不过你还得经过n遍的Complie…m遍的Step&amp;Go…最后※☆▲＃＼↓。<BR>----Delphi拥有强大的控件群，如何使用这些控件一直苦恼着我们这些C++Builder<BR>的追随者，我通过一些项目的实践掌握了一些如何在C++Builder中使用Delphi控件<BR>的方法。<BR>----我的使C++Builder使用DelphiVCL类库的方法基于Windows中较通用的DLL方式。<BR>在实际应用中找到了将VCL控件转化为DLL库，在C++Builder动态调用DLL。此法适用<BR>于非可视VCL控件。<BR>----假令在Delphi中有一Sample控件，有属性Actived、Pro1、Pro2，欲将这个控件<BR>转到C++Builder中使用。<BR>一：Delphi中DLL的制作<BR>在Delphi中新建一DLL项目SampleDLL，时在此项目中Create一个新的类TTtempcomp基<BR>类为TComponent即也为一个控件，在其中加入一个constructorCreate1，但不作任何<BR>动作；<BR><BR>在DLL中加入要导出的属性的Function（Actived、Pro1、Pro2）&amp;Create、Destroy的<BR>框架，Exports中加入导出的Function、Procdure名称；<BR><BR>在DLL的主过程中对TTempcomp的实例temp1进行Create1，另外保存出口和设置ExitProc；<BR><BR>在OpenSample的函数中加入HwCtrl:=Sample1.Create(temp1)对Sample进行实例化，<BR>对CloseSample和其它属性加入相应的语句；<BR>二：C++Builder中DLL的使用<BR>将Delphi中生成的DLL用implib生成LIB文件加入C++Builder的工程文件；<BR><BR>在头文件中加入 
+      <BR>extern "C" __declspec(dllimport) bool _stdcall OpenSample(void); 
+      <BR>extern "C" __declspec(dllimport) void _stdcall CloseSample(void); 
+      <BR>extern "C" __declspec(dllimport) bool _stdcall Actived (void); 
+      <BR>extern "C" __declspec(dllimport) int _stdcall Pro1 (void); <BR>extern 
+      "C" __declspec(dllimport) int _stdcall Pro2 (void); 
+      <BR><BR>在OpenSample后你就可以使用Delphi中的属性Actived、Pro1、Pro2 <BR>三：参考DLL 
+      Source如下： <BR><BR>library SampleDLL；<BR><BR>uses<BR><BR>SysUtils， Classes， 
+      Sample； <BR><BR>TYPE <BR><BR>TTempcomp = 
+      class(TComponent)<BR><BR>private<BR><BR>public<BR><BR>constructor 
+      Create1；<BR><BR>published<BR><BR>end；<BR><BR>var <BR>Sample1 
+      :Sample；<BR><BR>SaveExit :Pointer；<BR><BR>temp1 :TTempcomp；<BR>constructor 
+      TTempcomp.Create1；<BR>begin<BR>// inherited 
+      Create(self)；<BR>end；<BR>/==============================================<BR>function 
+      OpenSample: Boolean； stdcall； export；<BR>begin<BR>HwCtrl:= 
+      Sample1.Create(temp1)；<BR>If Sample1.Actived then 
+      result:=true；<BR>end；<BR>procedure CloseSample； stdcall； 
+      export；<BR>begin<BR>Sample1.Destroy；<BR>end；<BR>function Actived: Boolean； 
+      stdcall； 
+      export；<BR><BR>begin<BR>result:=Sample1.Actived；<BR><BR>end；<BR><BR>function 
+      Pro1: Interger； stdcall； export；<BR><BR>begin<BR>result:= 
+      Sample1.Pro1;<BR>end；<BR>function Pro2: Interger； stdcall； 
+      export；<BR><BR>begin<BR>result:= 
+      Sample1.Pro2;<BR><BR>end；<BR><BR>/==============================================<BR><BR>procedure 
+      libexit； far<BR><BR>begin<BR><BR>if Sample1.Actived =true 
+      then<BR><BR>Sample1.Destroy；<BR><BR>ExitProc:=SaveExit；<BR>temp1.Destroy；<BR>end；<BR>exports<BR>OpenSample，CloseSample，Actived 
+      ，Pro1，Pro2；<BR>begin<BR><BR>temp1:=TTempcomp.Create1；<BR><BR>SaveExit:=ExitProc；<BR><BR>ExitProc:=@libexit；<BR><BR>end.<BR><BR>----解释：<BR>----因为VCL控件都继承于TComponent，TComponent的构造函数需要一个AOwner<BR>并且也是TComponent，VCL控件的Create、Destroy都由控件的拥有者来动作，也<BR>就是AOwner；所以我在此DLL中新设置了一个TTempcomp类继承于Tcomponent且性<BR>设置了一个constructor（构造函数）Create1，而实际构造时什么都不做，以次<BR>作为要Create的Aowner；<BR>----其他还有一种办法就是用Application作为Aowner但是它是基于Tform的作出<BR>来的DLL太大；<BR>----其实，Inprise（原Borland）尽可以象MicroSoft一样用一些象DCOM类似的组<BR>件形式使得产品在同一产品时代保持一定的互用性，来增加产品群的生命力.</P></TD></TR></TBODY></TABLE></CENTER></DIV></BODY></HTML>

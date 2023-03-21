@@ -1,0 +1,398 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="Author" CONTENT="Flyhorse">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>FLIC动画文件的播放程序设计</title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="form_idx.htm">文件格式</a> 
+    &gt;</b> </span>FLIC动画文件的播放程序设计</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>FLIC动画文件的播放程序设计</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<p>&nbsp;&nbsp;&nbsp; Autodesk公司的三维动画设计软件3DS在我国已广泛使用,其良好的性能为计算机专家和艺术家所肯定。其动画存储文件FLIC也给系统提供了存储和显示的方便。下面具体分析FLIC文件的格式及播放程序的设计。 
+    <br>
+    <strong>&nbsp;&nbsp;&nbsp; 一、FLIC文件格式的概述 </strong><br>
+    &nbsp;&nbsp;&nbsp; FLIC文件事实上是对一个静止画面序列的描述,连续显示这一序列便可在上产生动画效果。FLIC文件结构简洁,弹出速度快,虽然每种基色最多只有256级灰度,图像深度只有8位,使用起来很方便。 
+    <br>
+    &nbsp;&nbsp;&nbsp; FLIC文件有两种类型：FLI文件和FLC文件。FLC文是FLI文件的进一步发展,它采用更高效的压缩技术,且其分辨率也不仅限于320×200。我们在PC上经常使用的FLI文件,因为它和VGA的320×200×256显示相匹配。 
+    <br>
+    &nbsp;&nbsp;&nbsp; FLIC文件采取的压缩技术原理就是仅保存前一帧中改变的部分。这样占的空间小,弹出速度快。FLIC文件的结果可分为3个层次：文件层、帧层和块层。文件层给出了FLIC文件的基本特征。帧层定义了帧的缓冲和块中块的数目。块层包括块的大小、类型和实际数据。这样层次结构很容易实现,特别是可以增加块的类型以满足新的需要,同时无需涉及原定义。 
+    <br>
+    <strong>&nbsp;&nbsp;&nbsp; 二、各层头的结构 </strong><br>
+    &nbsp;&nbsp;&nbsp; 1.FLI文件格式的结构定义 <br>
+    &nbsp;&nbsp;&nbsp; ①文件头的结构定义 <br>
+    &nbsp;&nbsp;&nbsp; 文件头长度为80H字节,其C语言结构定义如下 <br>
+    &nbsp;&nbsp;&nbsp; /* fli file hedaer struct */ <br>
+    &nbsp;&nbsp;&nbsp; typedef struct { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; unsigned long fli-size;/* 00H:文件总长度 */ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; unsigned int magic; /* 04H:文件格式,FLC=AF12; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; FLI=AF11; */ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; unsigned int frames-number; /* 06H:FLIC的帧数 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int screen-width; /* 08H:屏幕宽度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int screen-height; /* 0AH:屏幕高度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int unuserd; /* 0CH:保留未用 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int flags; /* 0EH:标志=0003 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int speed; /* 10H:帧间播放速度单位 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned long next; /* 12H:置为0 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned long frit; /* 16H:置为0 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned char fli-expand[102]; /* 1AH:保留作扩展用=0 */ <br>
+    &nbsp;&nbsp;&nbsp; } FLIHEAD; <br>
+    &nbsp;&nbsp;&nbsp; ②帧头的结构定义 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 帧头长度为10H字节,其C语言结构定义如下： 
+    <br>
+    &nbsp;&nbsp;&nbsp; /* frames header struct */ <br>
+    &nbsp;&nbsp;&nbsp; typedef struct { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long size-frame; /* 00H:帧大小,包括本帧头 
+    */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int magic; /* 04H:帧标识字=0F1FAH */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int chunks; /* 06H:本帧块数 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned char expand[8]; /* 08H:保留未用=0 */ <br>
+    &nbsp;&nbsp;&nbsp; } FRAMESHEAD; <br>
+    &nbsp;&nbsp;&nbsp; ③块头的结构定义 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 块头长度为6H字节,其C语言结构定义如下： 
+    <br>
+    &nbsp;&nbsp;&nbsp; /* chunk header struct */ <br>
+    &nbsp;&nbsp;&nbsp; typedef struct { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long size-chunk; /* 00H:块大小 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned type-chunk; /* 04H:块类型 */ <br>
+    &nbsp;&nbsp;&nbsp; } CHUNKHEAD； <br>
+    &nbsp;&nbsp;&nbsp; 2.FLC文件格式的结构定义 <br>
+    &nbsp;&nbsp;&nbsp; 文件头长度为80H字节,其C语言结构定义如下： <br>
+    &nbsp;&nbsp;&nbsp; /* fli file header struct */ <br>
+    &nbsp;&nbsp;&nbsp; typedef struct { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long fli-size; /* 00H:文件总长度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int magic; /* 04H:文件格式,FLC=AF12; <br>
+    &nbsp;&nbsp;&nbsp; FLI=AF11; */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int frames-number; /* 06H:FLIC的帧数 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int screen-width; /* 08H:屏幕宽度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int screen-height; /* 0AH:屏幕高度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int depth; /* 0CH:图像深度 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int flags; /* 0EH:标志=0003 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int speed; /* 10H:帧间播放速度单位 <br>
+    &nbsp;&nbsp;&nbsp; FLC=1ms, FLI=1/70s */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned int reserved-1; /* 14H:保留未用 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned long createtime; <br>
+    &nbsp;&nbsp;&nbsp; unsigned long creator; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long updatetime; <br>
+    &nbsp;&nbsp;&nbsp; unsigned long updater; <br>
+    &nbsp;&nbsp;&nbsp; unsigned int aspectx; /* 创建文件时的显示屏幕像素 <br>
+    &nbsp;&nbsp;&nbsp; 大小的纵横比,VGA320×200 <br>
+    &nbsp;&nbsp;&nbsp; unsigned int aspecty; 为6∶5 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned char reserved-2[0x26]; /* 保留未用,=0 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned long offsetframel; /* 50H:第一帧画面相对于文件 <br>
+    &nbsp;&nbsp;&nbsp; 开始的偏移 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned long offsetframe2; /* 54H:第二帧画面相对于文件 <br>
+    &nbsp;&nbsp;&nbsp; 开始的偏移 */ <br>
+    &nbsp;&nbsp;&nbsp; unsigned char reserved-3[0x28]; /* 保留未用=0 */ <br>
+    &nbsp;&nbsp;&nbsp; } FLIHEAD; <br>
+    &nbsp;&nbsp;&nbsp; FLC的帧头和块头的结构定义和FLI文件格式的定义相同。 
+    <br>
+    每块的数据紧接在FLIC文件头的后面。对于不同的块类型有不同的数据含义,下面就不同的块类型分别介绍,这是设计播放FLIC动画文件程序的关键之所在。 
+    <br>
+    &nbsp;&nbsp;&nbsp; <strong>三、块类型的含义 </strong><br>
+    &nbsp; <br>
+    FLIC格式文件中的块类型有许多种,每一种类型都有不同的定义,因此我们必须对每一种类型作出准确的分析。由于动画格式FLIC图像文件的块类型具有极强的可扩展性,在此我们只介绍几种常见的块类型。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 1.类型04H <br>
+    &nbsp;&nbsp;&nbsp; 为每基色256级灰度的彩色调色板信息表FLIC-COLOR,其第一个字为需调色的调色子块数(一个字),紧接其后的是需调色的相应各块的数据定义： 
+    <br>
+    &nbsp;&nbsp;&nbsp; 字节&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 含义 <br>
+    &nbsp;&nbsp;&nbsp; 第一字节：跳色数,在本块中的需要跳过的颜色数(字节)。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 第二字节：调色数,本块中有多少种颜色需要改变,当调色数为0时指调256色。初始时当前色号为零。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 其后的字节：以三字节为一组,是需要改调色的相应的RGB值。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 通常FLIC图像文件的头一帧的第一块数据便是该类型(或0BH类块)。在程序设计中我们定义了一个256色的调色板数组： 
+    <br>
+    &nbsp;&nbsp;&nbsp; char palette[768]； <br>
+    &nbsp;&nbsp;&nbsp; 用于完成调色板的初始化工作。 <br>
+    &nbsp;&nbsp;&nbsp; 2.类型07H <br>
+    &nbsp;&nbsp;&nbsp; 该类型数据以字节为基础,只适用于.FLC文件,处理对第一帧图像的改变情况较为适用。它含有本帧图像对于上与帧图像的改变部分。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 这种块类型是一种最常用的、最复杂的块类型,一般除了第一帧外后面的各帧通常采用这种块类型进行行数据压缩存储。它的描述如下： 
+    <br>
+    &nbsp;&nbsp;&nbsp; 字节含义 <br>
+    &nbsp;&nbsp;&nbsp; (1)第一个字：需要改变的行的数量 <br>
+    &nbsp;&nbsp;&nbsp; (2)第二个字开始：是具体需要改变的数据本身。每一行是进行单独的压缩的,这种技术的采用大大压缩了.FLC文件长度。它的具体定义为：可选字、小块数及小块的值。①可当高位=11时,低位部分为跳行数。该字可以有多个,其跳行数相加。当高位=10时,低位部分内容为当前行的最后一个字节。(作为本行的结束标志)。②小块数：当高位=00时,此字表示小块数的值。③小块：第一个字节：跳列数。第二个字节：小块类型：当该值为正：表示要从块中搬到图像中的像素(字)个数N,其后就是N个连续的像素数据；当该值为负时：它的绝对值N表示要重复从块中搬到图像中的像素(字)的次数,其后就是那个像素的数据。第三个字节：块中的图像数据(字)。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 3.类型0BH <br>
+    &nbsp;&nbsp;&nbsp; 与类型04H类似,它与VGA的13H模式相匹配。 <br>
+    &nbsp;&nbsp;&nbsp; 4.类型0CH <br>
+    &nbsp;&nbsp;&nbsp; 与类型07H类似,但它以字节为基础,通常用于.FLI文件 <br>
+    &nbsp;&nbsp;&nbsp; 字节含义 <br>
+    &nbsp;&nbsp;&nbsp; (1)第一个字：从屏幕上方开始和上一帧相同的行数即本帧中第一行要改变的行号。例如：如果有一个改变(运动)仅仅只是在屏幕的底部,那么此时该字值为199(VGA320×200)。 
+    <br>
+    &nbsp;&nbsp;&nbsp; (2)第二个字：需要改变的行的数量。 <br>
+    &nbsp;&nbsp;&nbsp; (3)第三个字以后：是具体需要改变的数据本身。每一行是进行单独的压缩的,这种技术的采用大大压缩了.FIC文件长度。它的具体定义为：小块数及块的值。 
+    <br>
+    &nbsp;&nbsp;&nbsp; ①小块数：此字表示小块的个数值,它是本行中含有小块的个数。当小块数=0时,说明本行和上一行相同,不用进行重新处理。 
+    <br>
+    &nbsp; <br>
+    ②小块：第一个字节：跳列数。第二个字节：小块类型：当该值为正时：表示要从块中搬到图像中的像素(字节)个数N,其后就是N个连续的像素数据；当该值为负时：它的绝对值N表示要重复从块中搬到图像中的像素(字节)的次数,其后就是那个像素的数据。第三个字节： 
+    <br>
+    块中的图像数据。 <br>
+    &nbsp;&nbsp;&nbsp; 5.类型0DH <br>
+    &nbsp; <br>
+    该类型没有数据,该帧的所有像素值都为0。在实际应用中通常它只产生在当用户使用3DS创建一个新的FLIC文件中的第一帧。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 6.类型0FH <br>
+    &nbsp;&nbsp;&nbsp; 该类型用于压缩图像,通常只用于第一帧。它采用了Run-Length压缩方法。该方法与类型07H及0CH中的行数据压缩方法是相似的。只是在该方法中正负号的定义与类型07H和0CH恰好相反。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 字节含义 <br>
+    &nbsp;&nbsp;&nbsp; (1)第一字节&nbsp;&nbsp;&nbsp; 本行中小块数。 <br>
+    &nbsp;&nbsp;&nbsp; (2)第二字节&nbsp;&nbsp;&nbsp; 小块的具体内容。 <br>
+    &nbsp; <br>
+    ①第一字节：小块类型：当该值为负时：它的绝对值表示要搬到图像中的像素(字节)个数,其后就是数据；当该值为正时,表示要将下一个像素复制到图像中的次数,该像素(字节)紧随其后。 
+    <br>
+    &nbsp;&nbsp;&nbsp; ②第二个字节：块中的图像数据。 <br>
+    &nbsp;&nbsp;&nbsp; 7.类型10H <br>
+    &nbsp;&nbsp;&nbsp; 这种类型不进行压缩,块中的数据个数一定为图像的长宽相乘。这种类型在实际应用中一般不用。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 下面具体讨论播放程序的C语言程序设计方法,本文中的程序是针对.FLI格式的动画文件而进行的程序设计。读者如果要播放.FIC格式的动画文件,只需根据.FIC文件格式的具体定义,并参照下面的程序设计方法即可设计出相应的程序。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 四、程序设计 <br>
+    &nbsp;&nbsp;&nbsp; 1.第一帧图像的播放程序 <br>
+    &nbsp;&nbsp;&nbsp; void First-Frame (Video-Mem, fli-fp) <br>
+    &nbsp;&nbsp;&nbsp; char *Video-Mem; <br>
+    &nbsp;&nbsp;&nbsp; FILE *fli-fp; <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int Line-PacketNumber <br>
+    &nbsp;&nbsp;&nbsp; int Size-Count=0 <br>
+    &nbsp;&nbsp;&nbsp; int Screen-Char; <br>
+    &nbsp;&nbsp;&nbsp; long Sereen-Count=0L; <br>
+    &nbsp;&nbsp;&nbsp; memset(Video-Mem, 0,60000); <br>
+    &nbsp;&nbsp;&nbsp; do { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line-PacketNumber=fgetc(fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Line-PacketNumber--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Size-Count=fgetc(fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( (Size-COUNT &amp; 0X80)==0X80 <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Size-Count=(256-Size-Count); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Size-Count--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Screen-Count++; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sereen-Char=fgete(fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Video-Mem++=Screen-Char; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; else <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sereen-Char=fgete(fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Size-Count-- <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Screen-Count++; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Video-Mem++=Sereen-Char; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } while(Screen-Count&lt;64000); <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.FLI后续各帧图像的播放程序 <br>
+    &nbsp;&nbsp;&nbsp; void Other-Frame(Video-Mem,Fli-fp,Update-LineNumber) <br>
+    &nbsp;&nbsp;&nbsp; char *Video-Mem; <br>
+    &nbsp;&nbsp;&nbsp; FILE *Fli-fp; <br>
+    &nbsp;&nbsp;&nbsp; int Update-LineNumber; <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int Size-Count=0,Skip-Col=0; <br>
+    &nbsp;&nbsp;&nbsp; int Update-LineCount=0; <br>
+    &nbsp;&nbsp;&nbsp; int Screen-Char; <br>
+    &nbsp;&nbsp;&nbsp; int Number-Packet; <br>
+    &nbsp;&nbsp;&nbsp; char *Video-p; <br>
+    &nbsp;&nbsp;&nbsp; while(Update-LineCount&lt;Update-LineNumber) <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Video-p=Video-Mem; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number-Packet=fgetc(Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update-LineCount++; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Number-Packet--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Skip-Col=fgete(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Video-Mem=Video-Mem+Skip-Col; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Size-Count=fgetc(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( (Size-Count &amp; 0x80)==0x80) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Size-Count=256-Size-Count; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Screen-Char=fgetc(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Size-Count--) 
+    *Video-Mem++=Sereen-Char; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while(Size-Count--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    Screen-Char=fgetc(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *Video-Mem++=Screen-Char; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; Video-Mem=Video-p+320; <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; 3.播放程序的调用及其它几个子程序 <br>
+    &nbsp;&nbsp;&nbsp; void Transmit-Fli(Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FILE *Fli-fp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int NUmber-Chunk; <br>
+    &nbsp;&nbsp;&nbsp; if (fread((unsigned char *)&amp;header,1,sizeof(FLIHEAD),Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp; ==sizeof(FLIHEAD) ) <br>
+    &nbsp;&nbsp;&nbsp; if (header,magie|=0xAF11) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp; printf(&quot;Not an FLI file /n&quot;); <br>
+    &nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; if (fread((unsigned char *)*frame-head,1, <br>
+    &nbsp;&nbsp;&nbsp; sizeof(FRAMESHEAD),Fli-fp)==sizeof(FRAMESHEAD) ); <br>
+    &nbsp;&nbsp;&nbsp; if (frame-head,magic =0xF1FA) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;Reading an Erroe FLI file 
+    \n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; if (fread((unsigned char *)&amp;chunk-head,1, <br>
+    &nbsp;&nbsp;&nbsp; sizeof(CHUNKHEAD),Fli-fp)==sizeof(CHUNKHEAD) ); <br>
+    &nbsp;&nbsp;&nbsp; if&nbsp; ( fread(&amp;NUmber-Chunk,1,sizeof(int),Fli-fp)==sizeof(int)); 
+    <br>
+    &nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;Error reading Fli\n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; fgetc(Fli-fp);fgetc(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp; if (fread(&amp;palette,1,sizeof(palette),Fli-fp)==768); <br>
+    &nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;Error reading Fli\n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; if ( fread((unsigned char *)&amp;chunk-head,1, <br>
+    &nbsp;&nbsp;&nbsp; sizeof(CHUNKHEAD),Fli-fp)==sizeof(CHUNKHEAD) ); <br>
+    &nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;Error reading Fli\n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; ShowFli-Frame(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp; fclose(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; void ShowFli-Frame(Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp; FILE *Fli-fp; <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; long Frame-DataAddress; <br>
+    &nbsp;&nbsp;&nbsp; int First-UpdateLine, End-UpdateLine; <br>
+    &nbsp;&nbsp;&nbsp; int Frame-Number=2,Adjust-Char=0; <br>
+    &nbsp;&nbsp;&nbsp; init(); <br>
+    &nbsp;&nbsp;&nbsp; setvgapalette(palette); <br>
+    &nbsp;&nbsp;&nbsp; First-Frame(MK-FP(0x0a000,0x0),Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp; Frame-DataAddress=ftell(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp; while(Frame-Number&lt;=header,frames-number-1) <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Frame-DataAddress=ftell(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Adjust-Char=fgetc(Fli-fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (Adjust-Char |=0) fseek(Fli-fp,-1L,SEEK-CUR); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (fread((unsigned char *)&amp;frame-head,1, <br>
+    &nbsp;&nbsp;&nbsp; sizeof(FRAMESHEAD),Fli-fp)==sizeof(FRAMESHEAD)); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( frame-head,magic |=0xFIFA) exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( frame-head,chunks|=0) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( fread((unsigned char *)&amp;chunk-head,1, <br>
+    &nbsp;&nbsp;&nbsp; sizeof(CHUNKHEAD),Fli-fp)==sizeof(CHUNKHEAD)); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( 
+    fread(&amp;First-UpdateLine,1,sizeof(int),Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp; ==sizeof(int)); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    printf(&quot;Error reading Fli/n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; if ( fread(&amp;End-UpdateLine,1,sizeof(int), Fli-fp) <br>
+    &nbsp;&nbsp;&nbsp; ==sizeof(int)); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    prinft(&quot;Error reading Fli/n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Other-Frame 
+    (MK-FP(0x0a000,First-UpdateLine*320),Fli-fp, <br>
+    &nbsp;&nbsp;&nbsp; End-UpdateLine); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Frame-Number++; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; void video-init() <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; union REGS r; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r.x.ax=0x0013; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int86(0x10,&amp;r,&amp;r); <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; void video-text() <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; union REGS r; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r.x.ax=0x0003; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int86(0x10,&amp;r,&amp;r); <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; setvgapalette(p) <br>
+    &nbsp;&nbsp;&nbsp; char *p; <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; union REGS r; <br>
+    &nbsp;&nbsp;&nbsp; struct SREGS sr; <br>
+    &nbsp;&nbsp;&nbsp; int i; <br>
+    &nbsp;&nbsp;&nbsp; for(i=0;i&lt;768; ++i) *(p+i)=*(p+i)&gt;&gt;1; <br>
+    &nbsp;&nbsp;&nbsp; r.x.ax=0x1012; <br>
+    &nbsp;&nbsp;&nbsp; r.x.bx=0; <br>
+    &nbsp;&nbsp;&nbsp; r.x.cx=256; <br>
+    &nbsp;&nbsp;&nbsp; r.x.dx=FP-OFF(p); <br>
+    &nbsp;&nbsp;&nbsp; sr.es=FP-SEG(p); <br>
+    &nbsp;&nbsp;&nbsp; int86x(0x10,&amp;r,&amp;r,&amp;sr); <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp; <br>
+    本文主要论述了三维动画设计软件3DS中的动画存储文件FLIC的存储方式及针对FLI格式 
+    文件的播放程序的C语言设计方法。对于工作在高分辨率方式下的动画文件的播放程序的C程序设计,我们也可以通过同样的方法进行设计。总之本文只是提供给读者一种最基本的设计方法 
+    ,为以后的进一步扩充提供了可能。 <br>
+    &nbsp; </td>
+  </tr>
+</table>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</p>
+
+<p>&nbsp;&nbsp;&nbsp; &nbsp; <br>
+</p>
+</body>
+</html>

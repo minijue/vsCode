@@ -1,0 +1,129 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="pow_idx.htm">        
+    PowerBuilder</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在PB应用中实现声音与动画<br>
+      <br>
+                  珠海远都软件有限公司   卞国斌       
+      <p><br> 
+      ---- 在 设 计 应 用 程 序 过 程 中, 恰 当 地 应 用 电 脑 声 音 与 动画 技 术, 可 以 为 用 户 提 供 更 加 直 观、友 好、 引 人 注 目 的 
+      操 作 界 面。 下 面 笔 者 介 绍 一 下 在PowerBuild 应 用 中 实 现 声 
+      音 与 动 画 的 一 种 简 便 方 法:&nbsp;<br>
+      <br>
+      1.作 为 举 例, 创 建 一 个MDI 风 格 的 窗 口w_audani。 在 这 个 窗 
+      口 上 放 置 一 个 含 声 音、 动 画 两 个 带 图 标 的 菜 单 项 的 菜 
+      单m_audani, 一 个 图 象 框p_1。 整 个 窗 口 的 外 观 如 下:&nbsp;<br>
+      <br>
+      2.制 备 声 音 和 图 象 文 件。 本 例 中 选 用 了 一 个adu.wav 的 声 
+      音 文 件 和 四 个ani1.bmp、ani2.bmp 、ani3.bmp、ani4.bmp 用 于 动 画 
+      素 材 的 分 离 图 象 文 件。&nbsp;<br>
+      <br>
+      3.定 义 程 序 编 制 中 要 用 到 的 变 量: (1) 定 义 一 个 整 型 实 
+      例 变 量, 用 作 图 象 计 数 integer picturenub  (2) 定 义 一 个 外 
+      部 函 数, 使 在PowerBuild 编 程 中 可 以 调 用Windows  32-bit API 声 
+      音 播 放 函 数&nbsp;<br>
+      <br>
+      function boolean sndplaysounda<br> 
+      (string soundname, uint flags) &amp;<br> 
+      library "winmm.dll"<br> 
+      <br> 
+      4.为 窗 口w_audani 编 制 事 件 处 理 程 序。 程 序 行 中// 后 的 为 
+      说 明 文 字。&nbsp;<br>
+      (1) 在 窗 口 的 打 开(Open) 事 件 下 输 入 程 序:&nbsp;<br>
+      <br>
+      //声音菜单项置选中属性<br>
+      m_audani.m_1.m_aud.checked = true<br> 
+      //动画菜单项置选中属性<br> 
+      m_audani.m_1.m_ani.checked = true<br> 
+      //图象计数器置初值<br> 
+      picturenub = 1<br> 
+      //定义每隔半秒钟触发一次窗口的timer事件<br> 
+      timer(0.5,this)<br> 
+      <br> 
+      ---- (2) 在 窗 口 的 计 时 器(Timer) 事 件 下 输 入 程 序:&nbsp;<br>
+      <br>
+      ---- // 如 果 声 音 菜 单 项 被 选 中, 则 调 用Windows 32-bit API 声 
+      音 播 放 函 数 播 放 声 音 文 件。 函 数 第 一 个 参 数 指 出 要 播 
+      放 的 声 音 文 件 名, 第 二 个 指 出 函 数 播 放 属 性, 属 性3 为 异 
+      步、 不 缺 省&nbsp;<br>
+      <br>
+      IF m_audani.m_1.m_aud.checked = true THEN<br> 
+      sndplaysounda("aud.wav",3)<br> 
+      END IF<br> 
+      //如果动画菜单项被选中,则播放动画<br> 
+      IF m_audani.m_1.m_ani.checked = true THEN<br> 
+      CHOOSE CASE picturenub<br> 
+      //当图象计数为1时,播放第1张图象<br> 
+      CASE 1<br> 
+      p_1.picturename = "ani1.bmp"<br> 
+      //当图象计数为2时,播放第2张图象<br> 
+      CASE 2<br> 
+      p_1.picturename = "ani2.bmp"<br> 
+      //当图象计数为3时,播放第3张图象<br> 
+      CASE 3<br> 
+      p_1.picturename = "ani3.bmp"<br> 
+      //当图象计数为4时,播放第4张图象<br> 
+      CASE 4<br> 
+      p_1.picturename = "ani4.bmp"<br> 
+      //恢复图象计数<br> 
+      picturenub = 0<br> 
+      END CHOOSE<br> 
+      //图象计数增1<br> 
+      picturenub ++<br> 
+      END IF<br> 
+      <br> 
+      5.为 菜 单m_audani 编 制 事 件 处 理 程 序:&nbsp;<br>
+      (1) 在 菜 单 项 声 音(m_aud) 的 单 击(Clicked) 事 件 下 输 入 程 序: 
+      // 使 该 菜 单 项 的 选 中 属 性 反 转 起 到 开 关 的 作 用, 即 原 来为 选 中 的 变 为 不 选 中, 未 选 中 的 则 现 在 变 成 选 中 
+      this.checked = not this.checked&nbsp;<br>
+      (2) 在 菜 单 项 动 画(m_ani) 的 单 击(Clicked) 事 件 下 输 入 程 序:&nbsp;<br>
+      <br>
+      //同样,使该菜单项的选中属性反转<br>
+      this.checked = not this.checked<br> 
+      <br> 
+      6.执 行 该 程 序 的 大 致 情 况 是:&nbsp;<br>
+      (1) 启 动 程 序 后, 自 动 打 开 以 上 图 示 的 窗 口;&nbsp;<br>
+      (2) 窗 口 计 时 器 按 每 半 秒 钟 触 发 一 次 事 件 处 理 程 序, 播 
+      放 声 音 和 图 象 文 件, 周 而 复 始 以 产 生 动 画 效 果;&nbsp;<br>
+      (3) 单 击 声 音 或 动 画 菜 单 项( 工 具 图 标), 可 以 控 制 声 音 
+      或 动 画 是 否 播 放。 <br>
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

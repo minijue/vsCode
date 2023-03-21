@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb009.htm -->
+<!-- Copyright 1999 网页制作人：姚征   http://yaozheng.yeah.net  --><HTML><HEAD><TITLE>C++Builder中大尺寸图象的显示技巧</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>P {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+PRE {
+	FONT-FAMILY: Times New Roman; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width=&#4130;100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <P align=center><STRONG>C++Builder 中大尺寸图象的显示技巧 <BR><BR>罗 洁 才 </STRONG></P>
+      <P>---- 在C++Builder 中 利 用TImage 控 件 可 以 轻 松 地 读 入 并 显 示 图 象， 但TImage 控 件 本  
+      身 不 可 以 接 收 输 入 焦 点， 也 没 带 有 滚 动 条， 在 显 示 超 出 显 示 区 域 范 围 的 大 图 象 时， 需 要  
+      对TImage 控 件 进 行 加 强。 本 文 提 出 两 种 最 容 易 实 现 且 有 效 的 方 法， 满 足 不 同 应 用 的 需 求。  
+      </P> 
+      <P>---- 方 法 一： 增 加 滚 动 条。 </P> 
+      <P>---- 增 加 滚 动 条 可 以 通 过 将TImage 放 在TScrollBox 控 件 中 来 实 现。 步 骤 如 下： </P> 
+      <P>---- （1）、 在 窗 体 中 放 置 一 个TScrollBox 控 件， 调 整 好 其 尺 寸。 </P> 
+      <P>---- （2）、 设 置TScrollBox 控 件 的AutoScroll 属 性 为True。 </P> 
+      <P>---- （3）、 在TScrollBox 控 件 是 放 置 一 个TImage 控 件。 </P> 
+      <P>---- （4）、 设 置TImage 控 件 的 属 性：AutoSize 为True，Left 为0，Top 为0。 经 以 上 增 强  
+      之 后， 如 果TImage 的 图 象 比 显 示 窗 口 大， 滚 动 条 会 自 动 出 现， 如 果 图 象 小 于 显 示 窗 口， 滚  
+      动 条 自 动 消 失， 实 现 了 大 图 象 的 浏 览。 </P> 
+      <P>---- 方 法 二： 图 象 漫 游。 </P> 
+      <P>---- 图 象 漫 游 是 指 不 用 滚 动 条， 通 过 键 盘 或 者 鼠 标 控 制 图 象 的 移 动， 从 而 在 较 小 的  
+      显 示 区 域 内 可 以 浏 览 图 象 的 任 何 部 分。 下 面 以 鼠 标 控 制 为 例 说 明。 </P> 
+      <P>---- （1）、 在 窗 体 中 放 置 一 个TPanel 控 件， 调 整 好 其 尺 寸。 </P> 
+      <P>---- （2）、 在TPanel 控 件 是 放 置 一 个TImage 控 件。 </P> 
+      <P>---- （3）、 设 置TImage 控 件 的AutoSize 属 性 为True,Left 属 性 为0，Top 属 性 为0。  
+</P> 
+      <P>---- （4）、 在TForm1 的 类 定 义 中 加 两 个 私 有 变 量: int iX0,iY0; </P> 
+      <P>---- （5）、 响 应TImage 控 件 的OnMouseDown 和OnMouseMove 事 件。 </P><PRE>void __fastcall TForm1::Image1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+   iX0 = X;
+   iY0 = Y;
+}
+
+void __fastcall TForm1::Image1MouseMove
+(TObject *Sender, TShiftState Shift, int X, int Y)
+{
+   int iDeltaX, iDeltaY;
+   if(Shift.Contains(ssLeft))
+   {
+      iDeltaX = X - iX0;
+      iDeltaY = Y- iY0;
+      if(iDeltaY)
+	Image1-&gt;Left += iDeltaX;
+      if(iDeltaY)
+        Image1-&gt;Top += iDeltaY;
+   }
+}</PRE> 
+      <P>　</P>
+      <P>---- （6）、 运 行 时 按 住 鼠 标 左 键 拖 动， 图 象 将 跟 随 移 动。 </P> 
+      <P>---- （7）、 如 果 通 过 键 盘 控 制， 只 需 参 考 鼠 标 控 制 的 代 码， 加 入 键 盘 控 制 即 可。 </P> 
+      <P>---- （8）、 实 际 应 用 时， 根 据 需 要 加 入 边 界 限 制， 保 证 图 象 不 会 被 移 出 显 示 区 域 之  
+      外。 </P> 
+      <P>---- 以 上 两 种 方 法 在 本 人 开 发 的 软 件 当 中 多 次 应 用， 效 果 很 好，。  
+  </P>   
+      <p>　   
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+<p>　</p> 
+</BODY></HTML> 

@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧 
+      </a> --&gt; <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在DELPHI中实现图像镜像的显示两种方法<br>
+      <br>
+                   辽宁省铁岭市委办公室 金永涛</p> 
+      <p><br> 
+      ----WINDOWS环境下具有很强的图像处理功能,在DELPHI中同样提供了强大的图像处理功能,可以方便的实现图像的各种特技显示效果,下面是利用DELPHI实现图像的镜像显示的两种方法,其操作过程及显示效果各具特色。<br> 
+      <br> 
+      ----一、镜像显示的原理<br> 
+      <br> 
+      ----所谓的镜像显示，就是好象一幅图像放在镜子头面，形成两幅绝对对称的图像，具体操作时具有水平镜向和垂直镜像之分,这其中包括两幅图像的显示过程，即正面图像和反面图像，正面图像的显示方法非常简单，在DELPHI中有多种方法,关键之处是反面图像的显示过程,这其中涉及图像的变形操作;实现图像变形的一种简单方法是重新安排象素位置,比如左面和右面的象素条一一对换,即可得到水平方向的反面<br> 
+      图像,同样通过上下象素条的对换则可得到垂直方向的反面图像。为了得到更美观的镜像显示效果,具体操作时不能先显示一幅正常图像,然后再显示反面图像,而需要两个图像同时从交叉点向外显示,这样将形成特殊的屏幕效果。<br> 
+      <br> 
+      ----二、具体的操作过程<br> 
+      <br> 
+      ----在DELPHI中能够实现图像象素操作的有两种方法即两个命令,即Copyrect及BitBlt,具体使用方法如下:<br> 
+      <br> 
+      ----1.Copyrect(Dest:TRect;Canvas:Tcanvas;Source:TRect);其中:Dest:目标画布矩形Canvas:源画布Source:源矩形,这是一个DELPHI内部的命令,它主要用于某些控件的画布操作,即CANVAS属性下支持的一个图像复制命令,其功能是把图像从一个源RECT内,复制到目标RECT内,复制的图像具有自动伸缩性质,其功能类似于WINDOWSAPI函数的BITBLT,但操作相对简单;例如命令:<br> 
+      <br> 
+      form1.canvas.copyrect(rect2,bitmap.canvas,rect1);<br> 
+      <br> 
+      ----则实现把RECT1中图像复制到窗体的RECT2中;用此命令实现镜像操作的过程是,首先从源图像上的边缘定义宽度为1的矩形RECT,同时从屏幕的中央位置向两侧定义相同尺寸的两个矩形RECT,之后把源图像写到两个目标RECT之中,通过循环过程完成整个图像的重写过程,即在屏幕上出现完整的镜像显示效果。<br> 
+      <br> 
+      ----2.BitBlt(hDestDC,x,y,nWidth,nHeight,hSrcDC,xSrc,ySrc,dwRop)这是一个WINDOWSAPI函数,在DELPHI中由于不用做单独的API函数说明,可以和调用DELPHI内部函数一样使用,所以使用非常方便;其中hDestDC源设备句柄,xy目标矩形右上角坐标,nWidthnHeight为目标矩形的宽度和高度,hSrcDC目标矩形句柄,xSrcySrc源位图矩形左上角坐标,dwRop光栅操作码,比如SRCCOPY为正常拷贝;利用此命令操作起来更为方便,无需事先定义操作区域,全部工作由BitBlt的参数完成,其原理就是把源图像的像素逐条向屏幕的两个方向拷贝,即可完成镜像显示效果。<br> 
+      <br> 
+      ----无论是利用上述的哪个命令,具体操作过程中可通过目标区域的灵活控制,实现具有特殊效果的镜像显示,比如从中心向外显示,或者从两侧向中心显示等等。<br> 
+      <br> 
+      ----三、演示程序说明<br> 
+      <br> 
+      ----下面的程序分别用上述两条命令演示四种效果的镜像显示效果,程序需要四个Button和一个OpenDialog控件,程序运行之后首先需要选择一个位图文件,为了使显示效果明显可选用超出半个屏幕的图像,之后通过四个命令按钮即可分别演示四种屏幕效果,按钮1用CopyRect命令实现垂直方向的镜像显示,从中央向两侧显示;按钮2则用相同的命令实现水平方向的镜像显示,其显示过程中图像进行扭曲;按钮3用BitBlt命令实现<br> 
+      垂直方向的镜向显示,其显示过程是从屏幕的一侧逐渐向另一侧显示,就向两幅对称的图像面对面放在一起而逐渐揭开一样,具有特殊的屏幕效果;按钮4则实现相同效果的水平方向镜像显示。<br> 
+      <br> 
+      ----以上方法及程序在WINDOWS95系统、DELPHI环境下调试通过。附源程序清单：<br> 
+      <br> 
+      //定义全程变量<br> 
+      var<br> 
+      Form1: TForm1;<br> 
+      bitmap:tbitmap;<br> 
+      i,numm:integer;<br> 
+      rect1,rect2,rect3:trect;<br> 
+      //准备图像源<br> 
+      procedure TForm1.FormActivate(Sender: TObject);<br> 
+      begin<br> 
+      bitmap:=tbitmap.create;<br> 
+      OpenDialog1.filter:=`Bitmap file(*.bmp)|*.bmp`;<br> 
+      if OpenDialog1.Execute then<br> 
+      bitmap.loadfromfile(OpenDialog1.filename);<br> 
+      Form1.Canvas.Draw(0,0, Bitmap);<br> 
+      end;<br> 
+      //按钮1垂直镜像<br> 
+      procedure TForm1.Button1Click(Sender: TObject);<br> 
+      begin<br> 
+      form1.repaint;<br> 
+      for i:=0 to bitmap.height do<br> 
+      begin<br> 
+      with rect1 do<br> 
+      begin<br> 
+      left:=0;<br> 
+      top:=i;<br> 
+      right:=bitmap.width;<br> 
+      bottom:=i+1;<br> 
+      end;<br> 
+      with rect2 do<br> 
+      begin<br> 
+      left:=0;<br> 
+      top:=(form1.height div 2)-i-1;<br> 
+      right:=bitmap.width;<br> 
+      bottom:=(form1.height div 2)-i;<br> 
+      end;<br> 
+      with rect3 do<br> 
+      begin<br> 
+      left:=0;<br> 
+      top:=(form1.height div 2)+i-1;<br> 
+      right:=bitmap.width;<br> 
+      bottom:=(form1.height div 2)+i;<br> 
+      end;<br> 
+      canvas.copyrect(rect2,bitmap.canvas,rect1);<br> 
+      canvas.copyrect(rect3,bitmap.canvas,rect1);<br> 
+      end;<br> 
+      end;<br> 
+      //按钮2变形的水平镜像<br> 
+      procedure TForm1.Button2Click(Sender: TObject);<br> 
+      begin<br> 
+      form1.repaint;<br> 
+      for i:=0 to bitmap.width do<br> 
+      begin<br> 
+      with rect1 do<br> 
+      begin<br> 
+      left:=i;<br> 
+      top:=0;<br> 
+      right:=i+1;<br> 
+      bottom:=bitmap.height;<br> 
+      end;<br> 
+      with rect2 do<br> 
+      begin<br> 
+      left:=(form1.width div 2)-i-1;<br> 
+      top:=i;<br> 
+      right:=(form1.width div 2)-i;<br> 
+      bottom:=bitmap.height+i;<br> 
+      end;<br> 
+      with rect3 do<br> 
+      begin<br> 
+      left:=(form1.width div 2)+i-1;<br> 
+      top:=i;<br> 
+      right:=(form1.width div 2)+i;<br> 
+      bottom:=bitmap.height+i;<br> 
+      end;<br> 
+      canvas.copyrect(rect2,bitmap.canvas,rect1);<br> 
+      canvas.copyrect(rect3,bitmap.canvas,rect1);<br> 
+      end;<br> 
+      end;<br> 
+      //按钮3垂直镜像<br> 
+      procedure TForm1.Button3Click(Sender: TObject);<br> 
+      begin<br> 
+      form1.repaint;<br> 
+      if bitmap.height&lt; =form1.height div 2 then<br> 
+      numm:=bitmap.height else<br> 
+      numm:= form1.height div 2;<br> 
+      for i:=0 to numm do<br> 
+      begin<br> 
+      bitblt(form1.canvas.handle,0,i,bitmap.width,i,<br> 
+      bitmap.canvas.handle,0,bitmap.height-i,srccopy);<br> 
+      end;<br> 
+      end;<br> 
+      //按钮4水平镜像<br> 
+      procedure TForm1.Button4Click(Sender: TObject);<br> 
+      begin<br> 
+      form1.repaint;<br> 
+      if bitmap.width&lt; =form1.width div 2 then<br> 
+      numm:=bitmap.width else<br> 
+      numm:= form1.width div 2;<br> 
+      for i:=0 to numm do<br> 
+      begin<br> 
+      bitblt(form1.canvas.handle,i,0,i,bitmap.height,<br> 
+      bitmap.canvas.handle,bitmap.width-i,0,srccopy);<br> 
+      end;<br> 
+      end;<br> 
+      end.      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>一只著名的蝴蝶</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+</head>
+
+<body leftmargin="3">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vcidx098.htm">Visual 
+    C++/C++</a> &gt;</b> 一只著名的蝴蝶</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">一只著名的蝴蝶</span></strong></p>
+    <p align="center">(兰州 梁昌霖)</p>
+    <p align="left">我们都可能见过下面这幅图片，它像一只振翅的蝴蝶。如果说它是一只蝴蝶，那么它可能是世界最著名的一只蝴蝶了，因为正是受了这个图片中蝴蝶的启发，美国著名的科学家洛伦兹才把一种奇怪的物理现象称作“蝴蝶效应”（蝴蝶效应的意思是说：北京的一只蝴蝶扇动一下翅膀，会引起纽约的一场风暴），也开创了一门新的学科——混沌学。<br>
+    &nbsp;&nbsp;&nbsp; 
+    其实，这只蝴蝶演绎的图形在科学上被称作洛伦兹吸引子，是由下面的一个非线性方程组决定的：<br>
+    dx/dt=－10x＋10y<br>
+    dy/dt=－xz＋28x－y<br>
+    dz/dt=xy－8/3＊z<br>
+    &nbsp;&nbsp;&nbsp; 我们可以用数值方法求解这个方程组，然后画出z随x的变化曲线，就可以得到图中的那只蝴蝶了。由这只蝴蝶作为象征的混沌学被称为本世纪继相对论和量子力学后的第三大科学发现，这几年混沌的研究已进入高潮，也有越来越多的科学家发现一些普通的非线性方程组可以演绎更加动人的图画。<br>
+    &nbsp;&nbsp;&nbsp; 下面这个用TC2.0编写的小程序就是用迭代的方法求解另一种较为简单但一样魅力四射的混沌吸引子：米拉吸引子，并以图形的方式在屏幕上记录它们的位置：<br>
+    ＃include &lt;graphics.h&gt;<br>
+    main(){<br>
+    float x=－0.1,y=0.1,tmpx,tmpy; /＊x、y分别表示满足迭代方程的数值＊/<br>
+    int xCord,yCord,nTimes; /＊xCord与yCord分别表示x与y的＊/<br>
+    /＊值在屏幕上的位置坐标，nTimes表示迭代次数＊/<br>
+    int xMin=－8,xMax=12,yMin=－6,yMax=8; /＊x、y的取值范围＊/<br>
+    float xPixel,yPixel；/＊一个单位数值的像素数＊/<br>
+    float p=－ 0.432656；/＊p是一个介于(－0.01,0.99)之间的数＊/<br>
+    /＊不同的取值会得到不同的结果，这里取－0.432656＊/<br>
+    int GraphDriver=DETECT,GraphMode; /＊图形显示初始化＊/<br>
+    initgraph(＆GraphDriver,＆GraphMode,“ &quot;);<br>
+    xPixel=640/(xMax－xMin); <br>
+    yPixel=480/(yMax－yMin);<br>
+    for(nTimes=0;nTimes&lt;30000;nTimes＋＋){<br>
+    tmpx=y＋p＊x＋2＊x＊x/(1＋x＊x＋y＊y); /＊一次迭代后的x值＊/<br>
+    tmpy=－x＋p＊tmpx＋2＊tmpx＊tmpx＊(1－p)/(1＋tmpx＊tmpx);<br>
+    /＊一次迭代后的y值＊/<br>
+    x=tmpx;y=tmpy;<br>
+    xCord=(x－xMin)＊xPixel;/＊计算坐标位置＊/<br>
+    yCord=(y－yMin)＊yPixel; <br>
+    putpixel(xCord,yCord,WHITE);}<br>
+    getch();<br>
+    }<br>
+    &nbsp;&nbsp;&nbsp; 上面这段程序所使用的迭代方程组是：<br>
+    xn=yn－1＋p＊ xn－1 ＋2＊xn－12/(1＋ xn－12＋ yn－12)<br>
+    yn=－xn－1＋p＊xn＋2＊ xn2＊(1－p)/(1＋ xn2)<br>
+    &nbsp;&nbsp;&nbsp; 其中p值是一个设定在－0.01和0.99之间的任意常量，在程序中我们设定p= 
+    －0.432656，绘出的图形如下第一幅图所示，如果改变p的值会得到另外一些风格各异的图形。下面的另外两幅图分别是p= 
+    －0.763015与p= －0.691242时绘出的，看看这些图，是不是让最前卫的画家也望尘莫及？</td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

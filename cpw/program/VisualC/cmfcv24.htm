@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> <font color="#000000">MFC邮递表的中文翻译-二十四期</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%">　</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><h2 align="center"><font color="#000000"><span style="font-size: 9pt">MFC邮递表的中文翻译-二十四期</span></font></h2>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　</td>
+  </tr>
+  <tr>
+    <td width="100%">　<p><font COLOR="#FF0000">第二十四期目录</font> <font SIZE="-1">杨晓东 
+    1999.1.25</font><ol>
+      <li><a href="#vol24q1">为何不能Disable菜单项？</a> </li>
+      <li><a href="#vol24q2">属性页的问题</a> </li>
+      <li><a href="#vol24q3">关于在列表框中滚动条的问题</a> </li>
+      <li><a href="#vol24q4">使用CFile::Read</a> </li>
+      <li><a href="#vol24q5">双击树形控件</a> </li>
+      <li><a href="#vol24q6">关于对话框</a> </li>
+      <li><a href="#vol24q7">关于窗口滚动条</a> </li>
+    </ol>
+    <p><a name="vol24q1"></a></p>
+    <font color="Red"><h3>为何不能Disable菜单项?</h3>
+    </font><p>问：我有一个工具按钮在WM_COMMAND消息是这样做的:<br>
+    </p>
+    <pre>
+CMenu *pMenu = GetMenu();
+pMenu-&gt;EnableMenuItem(ID_MY_OPTION,MF_BYCOMMAND|MF_DISABLED);
+</pre>
+    <p>但菜单并没有被Disable<br>
+    答：缺省的习惯是当没有UpdateCmdUI句柄时程序是使能（Enable)菜单，这就是为什么菜单自动 
+    变成使能，只要关掉缺省值就可以了，把下面的代码加入你的程序 </p>
+    <pre>
+CMainFrm::CMainFrm
+{
+    // Other stuff
+    this-&gt;m_bAutoMenuEnable = false;
+}
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q2"></a> </p>
+    <font color="Red"><h3>属性页的问题</h3>
+    </font><p>问：我建立了一个非模态属性表，有三个页。当程序运行时初始化，我需要enable及disable 
+    些第二个属性页和第三个属性页上的一些控件，然而程序变得无法控制，因为第二个及第 
+    三个属性页的DoDateExchange()函数并没有被调用到。为什么会这样：<br>
+    答：当用户没有单击属性页或没有切换或程序中未切换则其他的属性页并不会被“loaded” 
+    这是一个效率的问题，MFC除非需要那些资源，否则并不会调用到内存里。如果你按照 
+    传统的方法建立一个属性表，里面包含10个属性页，每个属性页都包含20或者更多的 
+    控件，如果MFC马上将所有的控件全部调用到内存里，那么用户将不得不等待，而且，如 
+    果他们只是想改变其中一页的一个设置，时间将会白白地浪费在调用其他的页上。 
+    改变控件状态时先用OnSetActive()激活相应的页.<br>
+    </p>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q3"></a> </p>
+    <font color="Red"><h3>关于在列表框中滚动条的问题</h3>
+    </font><p>问：我有一个对话框上面建立了一个列表框，在列表框中加入了滚动条，为了确定是 
+    否已经真的加入还打开资源文件看过，正常。然后编译运行，我输入了一长串的字符串 
+    在列表框里，但滚动条却并没有出现，为什么？<br>
+    答：看一下关于CListBox::SetHorizontalExtent()的帮助，你必须在显示列表框之前调用它。 
+    问题在于只设置滚动条的类型并不能得到滚动条，你必须也要设置滚动条的滚动范围。 
+    初始化时它的值是0，用成员函数来改变它SetHorizontalExtent，唯一的参数是它的 
+    宽度（单位为像素）来决定列表框能滚动的范围，如果列表框小，则滚动条会自动滚 
+    动。如果比设置值大，则滚动条会被隐藏。加入下面代码试试:<br>
+    </p>
+    <pre>
+        pList=(CListBox *) GetDlgItem(IDC_SYNONYM_LIST);
+        pList-&gt;SetHorizontalExtent(100);
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q4"></a> </p>
+    <font color="Red"><h3>使用CFile::Read</h3>
+    </font><p>问：我写了一段代码用CFile::Read来读取一个文本文件。但在文件流的未尾的内容总是被 
+    一些无用的字符代替。<br>
+    答：你忘记了0作为文件结束符了，试一下 </p>
+    <pre>
+ m_myBuffer = new char[ fLength + 1 ];
+ ... (read)
+ m_myBuffer[ fLength ] = '\0';
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q5"></a> </p>
+    <font color="Red"><h3>双击树形控件</h3>
+    </font><p>问：我有一个树形控件，并捕获了鼠标的双击，问题是当一个用户双击树形控件的标题 
+    时，同样的双击事件发生了，怎样才能不会发生这个问题？<br>
+    答：当鼠标按下时使用GetMessagePos去得到当前的位置，然后使用CTreeCtrl::HitTest 
+    测定是否被按下 </p>
+    <pre>
+    UINT ClickLocation;
+    CPoint pt(::GetMessagePos());
+    ScreenToClient(&amp;pt);
+    HTREEITEM hItem = m_TreeCtrl.HitTest(pt, &amp;ClickLocation);
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q6"></a> </p>
+    <font color="Red"><h3>关于对话框</h3>
+    </font><p>问:程序是基于对话框的,我显示两个对话框,一个在另一个后面,下面是我的做法: 
+    </p>
+    <pre>
+ CMyApp::InitInstance ()
+ {
+     ...
+     CMyDialog1  dlg1;
+     m_hMainWnd = &amp;dlg1;
+     int result = dlg1.DoModal ();
+     CMyDialog2 dlg2;
+     result = dlg2.DoModal ();
+     ...
+ }
+</pre>
+    <p>在上面的代码中,首先一个对话框得到了适当地调用,但第二个对话框却没有,比如:调用 
+    dlg2.DoModal()返回-1,当我逐步跟踪时我发现WM_QUIT被加入到消息队列中,我不知道 
+    为什么会这样.<br>
+    答：1）因为MFC需要m_hMainWnd成员函数必须指向一个带有效窗口句柄的对象,如果没有,它将 
+    会自己给自己发送WM_QUIT消息来中断自己.<br>
+    2）我知道为什么会这样,当你设置m_pMainWnd指向dlg1时,MFC认为你的Dialog1是主窗口. 
+    当用户关闭对话框时,MFC认为用户想退出程序,因为m_pMainWnd指向的窗口被关闭了.<br>
+    你认为不工作是因为应用程序在两个DoModal()调用后会退出.InitInstance()会返回 
+    m_pMainWnd在向导中已经被使用,你不能去象你那样的使用.<br>
+    </p>
+    <a href="#PageBegin"><p align="right">返回页首</a> <a name="vol24q7"></a> </p>
+    <font color="Red"><h3>关于窗口滚动条</h3>
+    </font><p>问:我想在子窗口中使用滚动条,而不用MFC向导<br>
+    答:如果你不想使用CSrollView(而想所有工作都由自己完成!):<br>
+    1.在OnVScroll中用信息管理函数(UNIT,UINT,CScrollBar*)充当例如失效等等.(用 
+    开关语句处理7条信息)也可以用SetScrollPos()、ScrollWindow()(见在线帮助）<br>
+    2.在OnSize中,按上SCROLLINFO结构(见Winuser.h)并且使用SetScrollInfo()<br>
+    3.在OnPaint中设置窗口起始位置以便在出现任何图画前显示滚动条. 
+    或者你可以根据需要定义一个CSrollView类: </p>
+    <blockquote>
+      <p>(1).定义一个CScrollView类,在OnCreate对话框中显示它(调用create函数)<br>
+      (2).在OnSize中定义一个CScrollView类,可调用SetScrollSizes() <br>
+      (3).在CSrollView数据的初始化中,可用SetScrollSizes()函数来设置逻辑值 
+      如果需要,你可用开关语句来编程去调用OnVScroll等(如果在这里需要使用键盘!) 
+      <br>
+      </p>
+    </blockquote>
+    <a href="#PageBegin"><p align="right">返回页首</a> </p>
+    <hr>
+    <a href="cmfcv25.htm"><p align="center">前一期</a>||<a href="cmfcv23.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+
+<p><a name="PageBegin"></a></p>
+</body>
+</html>

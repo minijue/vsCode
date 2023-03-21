@@ -1,0 +1,223 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用Delphi实现NetBIOS广播收发<br>
+      <br>
+                            (成都　firefly)&nbsp;      
+      <p><br>
+      　　NetBIOS网络协议对于很多读者来说可能比较陌生，但其实它是由IBM开发的一个很古老的协议，当年在LAN上也风光一时。说它老，其实也不过10年光景，IT业的发展实在是太快。由于NetBIOS不具备路由功能，也就是说它的数据包无法跨网段传输，因此在广域网、城域网大行其道的今天，它已退居配角。如果你有心的话，能够发现在Window95/98的网络协议中仍然保留着NetBIOS，不过它已经改名叫NetBEUI<br>
+      (NetBIOS扩展用户接口)，是NetBIOS的Microsoft改进版。另外在TCP/IP以及IPX/SPX协议中，也依然保留了对NetBIOS的支持，只要查看网络<br>
+      协议属性中的高级，就能看到启用NetBIOS的选项。<br>
+      　　之所以这样是有原因的。NetBIOS协议短小精悍，非常适用于小型局域网，特别是一些对实时性要求较高的网络环境。NetBIOS的广播功能由于有开发使用方便、系统开销小的优点，所以在很多场合仍然被大量使用。笔者由于工作需要，在一个航天测控软件的编制中就使用了NetBIOS广播功能。<br>
+      　　我原以为这是件很简单的工作，因为WIN32API中提供了一个Netbios函数，里面封装了所有函数和数据结构，用起来很方便，在BC和VC下都如此。可是由于这次是使用流行的Delphi作编译器，却遇到了意想不到的麻烦:号称全面移植WIN32API的Dlphi中偏偏没有Netbios函数!这下顿时让我方寸大乱。怎么办?总不能从底层干起吧?而且时间也不允许。在冷静下来之后，我忽然想到，既然WIN95支持NetBIOS，那么系统就<br>
+      一定会提供DLL支持，编译器本身是没有底层支持的。于是我在机器中搜索，果然，在SYSTEM目录下有一个Netbios.dll，用快速查看将<br>
+      其打开，在导出表部分显示如下:<br>
+      　　导出表:<br>
+      　　序数 入口 名称<br> 
+      　　0000 00001a37 NetbiosAddthd<br> 
+      　　0001 000019eb NetbiosDelete<br> 
+      　　0002 00001a96 NetbiosDelthd<br> 
+      　　0003 000019b1 NetbiosInitialize<br> 
+      　　0004 0000186b PostRoutineCaller<br> 
+      　　0005 0000102e _Netbios<br> 
+      　　注意到那个0005号_Netbios导出函数了吗?那就是我需要的!经过紧张的试验调<br>
+      试，证明它和WIN32API手册上的Netbios完全一样。剩下的工作就比较简单了，定义<br>
+      一个NCB(Netbios控制块)记录，将NCB数据结构封装在里面;声明一个后处理例程以<br>
+      及消息处理过程，以完成广播数据的接收和发送。有关NCB数据结构的详细内容以及<br>
+      NetBIOS广播的原理，限于篇幅我就省略了。需要的朋友可以查看BC或VC的Help或相<br>
+      关书籍。下面是有关的Delphi源代码。<br>
+      　　/////////Netbios单元///////////<br>
+      　　unit netbios;<br> 
+      　　interface<br>
+      　　uses windows，messages，Forms，SysUtils;<br> 
+      　　type<br>
+      　　{＄X＋}{＄A＋}<br>
+      　　 //声明一个NCB记录指针。<br> 
+      　　 PNCB=&amp;NCB;<br> 
+      　　//声明一个后处理例程的过程类型。<br>
+      　　 POST=procedure(var ncbR:PNCB);<br> 
+      　　　//以下是NCB记录，教训1:将上面的编译选项置为{＄A＋}以取消数据对齐。<br>
+      如果在广播中有浮点数的话，数据对齐会让你大吃苦头!我已经有过惨痛教训!:(<br>
+      　　 NCB=record<br> 
+      　　 ncb_command:UCHAR;<br> 
+      　　 ncb_retcode:UCHAR;<br> 
+      　　 ncb_lsn:UCHAR;<br> 
+      　　 ncb_num:UCHAR;<br> 
+      　　 ncb_buffer:PCHAR;<br> 
+      　　 ncb_length:WORD;<br> 
+      　　 ncb_callname:array [1..16] of UCHAR;<br> 
+      　　 ncb_name:array [1..16] of UCHAR;<br> 
+      　　 ncb_rto:UCHAR;<br> 
+      　　 ncb_sto:UCHAR;<br> 
+      　　 ncb_post:POST;<br> 
+      　　 ncb_lana_num:UCHAR;<br> 
+      　　 ncb_cmd_cplt:UCHAR;<br> 
+      　　 ncb_reserve:array [1..10] of UCHAR;<br> 
+      　　 ncb_event:HANDLE;<br> 
+      　　 end;<br> 
+      　　//声明自己的Netbios函数。教训2:一定要使用pascal调用规范，否则，嘿嘿!!<br>
+      　　function NetbiosSR(ncbX:PNCB):UCHAR;pascal;<br> 
+      　　//初始化NCB。<br>
+      　　procedure InitNCB(var ncbY:PNCB);<br> 
+      　　//后处理例程，注意使用远指针。<br>
+      　　procedure postrout(var ncbR:PNCB);stdcall;far;<br> 
+      　　var<br>
+      　　 char_buffer:array[0..511]of UCHAR;<br> 
+      　　 int_buffer:array[1..512]of Byte;<br> 
+      　　implementation<br>
+      　　 //调用系统的Netbios。dll中的Netbios函数标号是6。Delphi搜索外部文件的<br> 
+      顺序是当前目录→系统目录→其他目录，别忘了保证存在Netbios.dll。<br> 
+      　　 function NetbiosSR(ncbX:PNCB):UCHAR;external ‘netbios` index 6;<br> 
+      　　 procedure InitNCB(var ncbY:PNCB);<br> 
+      　　 var<br> 
+      　　 x:integer;<br> 
+      　　 begin<br> 
+      　　 ncbY.ncb_command:=0;<br> 
+      　　 ncbY.ncb_retcode:=0;<br> 
+      　　 ncbY.ncb_lsn:=0;<br> 
+      　　 ncbY.ncb_num:=0;<br> 
+      　　 ncbY.ncb_length:=512; //数据缓冲长度，最大512B。<br> 
+      　　 for x:=1 to 16 do<br> 
+      　　 begin<br> 
+      　　 ncbY.ncb_callname[x]:=0;<br> 
+      　　 ncbY.ncb_name[x]:=0;<br> 
+      　　 end;<br> 
+      　　 ncbY.ncb_rto:=0;<br> 
+      　　 ncbY.ncb_sto:=0;<br> 
+      　　 ncbY.ncb_lana_num:=0;<br> 
+      　　 ncbY.ncb_cmd_cplt:=0;<br> 
+      　　 for x:=1 to 10 do<br> 
+      　　 ncbY.ncb_reserve[x]:=0;<br> 
+      　　 ncbY.ncb_event:=0;<br> 
+      　　 end;<br> 
+      　　//后处理例程的作用是当接收到广播消息时，立即向相应窗口发送消息。我在这里偷了点懒，以广播方式发送一个定时器消息。如果你愿意可以向指定窗口发送自定义消息，这样要复杂一些。首先，要把指定窗口的句柄传递给后处理例程。通常这是做不到的，但可以利用一些技巧做到。在NCB记录后面紧挨着声明一个句柄类型，然后把指定窗口的句柄赋值给它的实例变量;这样句柄变量的地址与NCB是连续的。在后处理中通过指针或汇编语句将ncbR的地址移到最后一个字节＋1，就是窗口句柄的起始地址。明白吗?至于自定义消息，需要重新编译连接库，限于篇幅我就不罗嗦了，有兴趣的可以自己尝试。<br>
+      　　 procedure postrout(var ncbR:PNCB);<br> 
+      　　begin&nbsp;<br>
+      　　sendMessage(wnd_BROADCAST，WM_TIMER，0，0);<br>
+      　　 end;<br> 
+      　　end.<br>
+      　　////////窗口单元//////////<br>
+      　　unit broadcast;<br> 
+      　　interface<br>
+      　　uses<br>
+      　　 Windows，Messages，SysUtils，Classes，Graphics，Controls，Forms，Dialogs，<br> 
+      　　 netbios;<br> 
+      　　type<br>
+      　　 Tmain=class(TForm)<br> 
+      　　 private<br> 
+      　　 {Private declarations}<br> 
+      　　 //消息处理过程，注意消息宏要与后处理中的一致。<br> 
+      　　 procedure post_main(var Message:TMessage);message WM_TIMER;<br> 
+      　　 public<br> 
+      　　 {Public declarations}<br> 
+      　　 end;<br> 
+      　　var<br>
+      　　 main: Tmain;<br> 
+      　　 ncbname:UCHAR;<br> 
+      　　 ncbRock:PNCB;<br> 
+      　　 post_add:POST;<br> 
+      　　implementation<br>
+      　　{＄R ＊.DFM}{＄A－}{＄I－}<br> 
+      　　/////////主窗口建立过程/////////<br>
+      　　procedure Tmain.FormCreate(Sender: TObject);<br> 
+      　　var<br>
+      　　 ret:UCHAR;<br> 
+      　　 i，x，y:integer;<br> 
+      　　 p:single;<br> 
+      　　begin<br>
+      　　 new(ncbRock);<br> 
+      　　 randomize();i:=0;<br> 
+      　　 FillChar(char_buffer，sizeof(char_<br> 
+      　　buffer)，0);<br>
+      　　 post_add:=@postrout;<br> 
+      　　 //取后处理例程的地址。<br> 
+      　　 ncbRock.ncb_buffer:=@char_buf<br> 
+      　　fer; //取数据缓冲区的地址。<br> 
+      　　 InitNCB(ncbRock);<br> 
+      　　 ret:=9;<br> 
+      　　 ncbname:=random(100);<br> 
+      　　 ncbRock.ncb_name[1]:=ncbna<br> 
+      　　me;<br>
+      　　 ncbRock.ncb_command:=＄30;<br> 
+      　　 //加名，ret为0加名成功。<br> 
+      　　 while ((i&lt;10)and(ret&lt;>0)) do<br> 
+      　　 begin<br> 
+      　　 ret:=netbiosSR(ncbRock);<br> 
+      　　 i:=i＋1;<br> 
+      　　 end;<br> 
+      　　 if ret&lt;>0 then<br> 
+      　　 begin<br> 
+      　　 for i:=1 to 20 do<br> 
+      　　 messagebeep(－1);<br> 
+      　　 MessageDlg(‘网络通信无法实现！您需要关闭程序重新运行.`，mtWarning，<br> 
+      　　 [mbOk]，0);<br> 
+      　　 end<br> 
+      　　 else if ret=0 then<br> 
+      　　 begin<br> 
+      　　 ncbRock.ncb_post:=post_add;<br> 
+      　　 ncbRock.ncb_command:=＄a3; //异步接收方式字。<br> 
+      　　 ncbRock.ncb_event:=0;<br> 
+      　　 ncbRock.ncb_length:=512;<br> 
+      　　 ret:=netbiosSR(ncbRock);<br> 
+      　　 end;<br> 
+      　　end;<br>
+      　　///////////广播消息处理过程/////<br>
+      　　procedure Tmain.post_main(var Message:TMessage);<br> 
+      　　var<br>
+      　　x:integer;<br>
+      　　ret:UCHAR;<br>
+      　　begin<br>
+      　　 //取出数据缓冲区的内容<br> 
+      　　 for x:=0 to 511 do<br> 
+      　　 int_buffer[x＋1]:=char_buffer[x];<br> 
+      　　 ////以下可以进行数据处理////<br> 
+      　　 //重新打开异步接受。<br> 
+      　　 ncbRock.ncb_post:=post_add;<br> 
+      　　 ncbRock.ncb_command:=＄a3;<br> 
+      　　 ncbRock.ncb_event:=0;<br> 
+      　　 ncbRock.ncb_length:=512;<br> 
+      　　 ret:=netbiosSR(ncbRock);<br> 
+      　　end;<br>
+      　　end.<br>
+      　　注:广播发送非常简单，不再详述。上述程序经过一年运行完全可靠。另外，经过改造可以将其改为LAN下的聊天程序。<br>
+      有什么问题可以Email到ywfirefly@ynmail.com与我联系。欢迎切磋。     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+<p>　</p>
+
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第十五期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>MFC邮递表的中文翻译-第十五期</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font COLOR="#FF0000">第十五期目录</font> <font SIZE="-1">杨晓东 
+    1998.11.27</font></h3>
+    <ol>
+      <li><a HREF="#vol15q1">关于工具条?</a> </li>
+      <li><a HREF="#vol15q2">关于线程消息?</a> </li>
+      <li><a HREF="#vol15q3">关于控件的焦点?</a> </li>
+      <li><a HREF="#vol15q4">如何捕获键盘按键??</a> </li>
+    </ol>
+    <p><a NAME="vol15q1"></a></p>
+    <p><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:关于工具条?</font></h3>
+    <p><br>
+    问:我需要在程序中做一个FLAT工具条,于是我加入一个变量m_wndToolBar. 
+    在程序主体窗口的OnCreate()函数中修改工具条状态(0,TBSTYLE_FLAT). 在NT中运行正常,为什么在95中工具条变得透明? 
+    </p>
+    <p>答:在COMCTL32.DLL中的旧版本中有些小bug,绘画时会带来一些问题, 
+    你可以使用一些定制代码,在www.codeguru.com站点上有下载,如果你 
+    使用的是6.0版本,你也可以使用下列代码(摘自我的mainfrm.cpp文件) </p>
+    <pre>
+m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP |
+CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
+</pre>
+    <p>用CreateEx替换ModifyStyle在同一尺寸的工具条中有些不同((CreateEx 
+    建立的略小些),试一下,如果你仍然有这个问题,检查一下COMCTL32.DLL的 
+    版本使用标准按钮替换FLAT. </p>
+    <p><a NAME="vol15q2"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:关于线程消息?</font></h3>
+    <p><br>
+    问:真奇怪,OnUserOpen()函数和OnUserOpen(WPARAM, LPARAM)函数竟然不是 
+    一个函数,编译器在查到OnUserOpen(WPARAM, LPARAM)时,不会调用OnUserOpen 
+    莫非有人在消息映象做了什么手脚? </p>
+    <p>答:其实,这是MFC严密的表现,处理时,通过函数指针来调用,而该指针是由 
+    发生的事件所决定的.如果句柄不正确定义的话,调用当然是非法的 </p>
+    <p><a NAME="vol15q3"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:关于控件的焦点?</font></h3>
+    <p><br>
+    问:有谁能给我一个有效的方法:当一个控件失去焦点时,怎样管理才能使对话框 
+    的焦点进入到正确的控件. </p>
+    <p>答:我有一个可运行的程序来实现,不一定很全面,但能工作. </p>
+    <pre>
+const int WM_VALIDATE_PARAMS WM_APP + 101;
+
+void CMyDlg::OnKillfocusName()
+{
+    PostMessage(WM_VALIDATE_PARAMS, ED_NAME, 0L);
+}
+
+void CMyDlg::OnKillfocusAddress()
+{
+    PostMessage(WM_VALIDATE_PARAMS, ED_ADDRESS, 0L);
+}
+
+bool CMyDlg::OnValidateParams(WPARAM rcId, LPARAM)
+{
+        switch( rcId )
+        {
+        case ED_NAME:
+        if( !validateName() )
+            m_edName.SetFocus();
+        break;
+
+        case ED_ADDRESS:
+        if( !validateAddress() )
+            m_edAddress.SetFocus();
+        break;
+
+    default:
+        break;
+    }
+
+    return true;
+}
+</pre>
+    <p>上面的代码可以在用户使用TAB键或鼠标操纵时,使用焦点跳至下一个控制.当你 
+    想DISABLE一个控件或重设焦点时,会有些问题,特别是在Killfocus事件中。 
+    </p>
+    <p><a NAME="vol15q4"></a><br>
+    </p>
+    <h3><font COLOR="#FF0000">问:如何捕获键盘按键?</font></h3>
+    <p><br>
+    问:在CTabCtrl的子对话框怎样才能捕获ALT+0组合键 </p>
+    <p>答:可以在PreTranslateMessage中截取键盘消息。</p>
+    <hr>
+    <a href="cmfcv16.htm"><p align="center">前一期</a>|<a href="cmfcv14.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+</body>
+</html>

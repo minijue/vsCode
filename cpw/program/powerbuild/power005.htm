@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>计算机世界|编程技巧</title>
+<meta name="FORMATTER" content="Microsoft FrontPage 2.0">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progmenu.htm">编程技巧</a> --&gt; 
+      <a href="pow_idx.htm"> 
+    PowerBuilder</a>&nbsp; --&gt;</b></span> PowerBuilder应用开发系列讲座(5)</td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" style="font-size: 9pt"><p align="center">
+<b>
+PowerBuilder 应 用 开 发 系 列 讲 座(5)</b> 
+</p><p align="center"> 
+DataWindow 的 打 印 输 出 
+</p> 
+<p align="center"> 
+ 华 天 新 技 术 开 发 公 司&nbsp;&nbsp;&nbsp;&nbsp;张 健 姿  
+<br> 北 京 友 谊 宾 馆 30538 室&nbsp;&nbsp;&nbsp;&nbsp;100873 
+<br>Email: sjhzyz@public.bta.net.cn 
+</p> 
+<p><font color="#ffffff">----</font> 在PowerBuilder 应 用 程 序 的 开 发 中, 各 种 报 表 的 打 印 功 能 是 必 不 可 少 的。Power-Builde 
+r4.0 提 供 了 大 量 与 打 印 机 进 行 通 信 的 内 部 函 数, 用 于 各 种 打 印 输 出。 运 用 这 些 函 数, 您 不 仅 可 
+ 以 打 印 常 见 的DataWindow 对 象, 还 可 以 打 印 字 符 串、 位 图、 图 形 对 象, 甚 至 是 全 屏。 
+<p><font color="#ffffff">----</font>DataWindow 的 两 种 打 印 方 法: 
+<p><font color="#ffffff">----</font> 在PowerBuilder 中 我 们 可 以 有 两 种 方 法 打 印DataW-indows。 一 种 最 简 单 的 方 法 就 是 直 接 
+ 地 将DataWindow 提 交 给 打 印 机, 另 一 种 方 法 是 将 大 量 的DataWindow( 或 混 合 其 他 的 对 象) 放 在 
+ 一 起 作 为 一 个 单 一 的 打 印 作 业 提 交 输 出。 
+<p><font color="#ffffff">----</font> 法 一: 不 指 定 打 印 作 业, 而 发 送 一 个 单 一 的DataW-indow。 将 报 表 传 给 打 印 机 输 出 的 最 简 
+ 单 的 方 式 是 使 用DataWindow 对 象 的Print() 函 数, 您 只 需 简 单 指 明 您 打 印 的DataWindow 控 件 的 
+ 名 字 就 可 以 得 到 该DataWindow 生 成 的 报 表 了。 例: 
+<p><font color="#ffffff">----</font>dw_data.print({cancel dialog}) 
+<p><font color="#ffffff">----</font>Print() 函 数 不 需 要 任 何 参 数, 但 是 它 有 一 个 可 选 参 数, 可 以 控 制PowerBuilder 是 否 显 示 
+Print Cancel 对 话 框 窗 口( 缺 省 为 自 动 出 现, 如 图1 所 示)。Cancel dialog 参 数 是 一 个 布 尔 型 
+ 变 量, 其 缺 省 值 为 真。 
+<p><font color="#ffffff">----</font> 一    Print:HP LaserJet HP on LPT1: 
+<p><font color="#ffffff">----</font>Preparing page 1 of 2 
+<p><font color="#ffffff">----</font>     Cancel 
+<p><font color="#ffffff">----</font> 图1: 除 非 特 别 指 定, 否 则 将 在 打 印 时 缺 省 出 现Print Cancel 对 话 框。Print() 函 数 还 有 一 
+ 些 格 式 可 控 制 打 印 正 文 字 符 串, 但 是 它 们 要 求 首 先 打 开 一 个 打 印 作 业。 这 些 格 式 将 在 后 面 解 
+ 释。 
+<p><font color="#ffffff">----</font> 法 二: 集 成 多 个DataWindow 作 为 一 个 打 印 作 业。 您 可 以 将 提 交 打 印 的 多 个DataWindow 作 
+ 为 一 个 单 一 的 打 印 指 令。 为 实 现 这 一 功 能 必 须 打 开 一 个 所 谓 打 印 作 业(Print job), 即 发 送 给 
+ 打 印 机 一 个 单 一 工 作 单 元, 其 中 可 以 包 含 多 个 子 任 务。 在PowerBuilder 中 一 个 打 印 作 业 由 它 
+ 的 作 业 代 号 唯 一 指 定。 我 们 使 用PrintOpen({job name}) 函 数 打 开 一 个 作 业, 并 得 到 打 印 作 业 
+ 号。PrintOpen() 函 数 有 一 个 可 选 参 数, 就 是 打 印 作 业 名 称, 这 个 作 业 名 字 将 作 为Windows 3. 
+x 的Print Manager 作 业 集 中 的 名 字。 当 您 使 用PrintOpen() 函 数 时, 系 统 将 另 起 一 页 开 始 打 印 
+。 当 然 在 打 印 作 业 中, 您 还 可 以 使 用 其 他 函 数 换 页, 比 如 将 在 后 面 讲 述 的PrintPage() 函 数。 
+<p><font color="#ffffff">----</font> 在 您 打 开 了 一 个 作 业 号 后, 就 可 以 在 这 个 作 业 内 使 用 下 列 函 数 继 续 其 他 各 种 各 样 的 打 印 
+ 项 目。 
+<p><font color="#ffffff">----</font>1) 在 打 印 作 业 中 加 入 字 符 串: 
+<p><font color="#ffffff">----</font> 我 们 也 可 以 使 用 另 外 一 个 与Print() 函 数 略 微 不 同 的 函 数 来 打 印 字 符 串: 
+<p><font color="#ffffff">----</font>PrintText(print_job_number,string,x,y{,font_number}) 
+<p><font color="#ffffff">----</font> 这 个 函 数 将 包 含 在string 参 数 中 的 正 文 字 符 串 当 作 一 个 对 象 进 行 打 印。 这 个 打 印 的 字 符 
+ 串 在 由X,Y 参 数( 以 千 分 之 一 寸 为 单 位) 指 定 的 坐 标 处 开 始。font_number 参 数 是 一 个 可 选 参 数 
+, 缺 省 使 用 当 前 字 型, 否 则font_number 的 值 可 以 从0 到8,0 是 打 印 机 缺 省 的 字 型,1-8 是 使 用 后 
+ 面 讲 述 的PrintDefineFont() 函 数 定 义 的 字 型。 这 个 函 数 不 像 其 他 指 定 坐 标 的 函 数, 它 将 改 变 
+ 打 印 光 标 的 位 置。 这 个 函 数 的 返 回 值 是 打 印 光 标 的 新X 坐 标, 但 它 不 改 变Y 坐 标。 
+<p><h4 align=center> 在 打 印 作 业 中 打 印 对 象 
+</h4> 
+<p><font color="#ffffff">----</font> 下 面 的 这 些 函 数 可 以 使 您 在 打 开 的 打 印 作 业 中 打 印 不 同 的 对 象。 这 些 函 数 中 的 任 一 个 指 
+ 定X、Y 坐 标 的 函 数 都 不 会 改 变 当 前 打 印 光 标 位 置。 
+<p><font color="#ffffff">----</font>objectname.Print(print_job_number,x,y {,width,height}) 
+<p><font color="#ffffff">----</font> 这 个 函 数 可 以 将 任 何 一 个object_name 指 定 的 对 象 放 在print_job_number 定 义 的 打 印 作 
+ 业 中 打 印, 这 个 对 象 可 以 是 一 个 窗 口 也 可 以 是 一 个DragObject 类 的 继 承 类( 包 括 了 所 有 的 窗 口 
+ 控 件)。X、Y 参 数 指 定 了 一 页 中 的 坐 标, 您 可 以 指 出 所 打 印 对 象 出 现 的 位 置( 以 千 分 之 一 寸 为 
+ 单 位)。Width 和Height 参 数 是 可 选 的 参 数, 用 来 指 明 你 所 需 的 打 印 对 象 的 宽 和 高( 仍 以 千 分 之 
+ 一 寸 为 单 位)。 如 果 缺 省,PowerBuilder 将 使 用 对 象 本 身 的 尺 寸 打 印。 
+<p><font color="#ffffff">----</font>PrintBitmap(print_job_number,bitmap,x,y,width,height) 
+<p><font color="#ffffff">----</font> 这 个 函 数 将 在 由X,Y 参 数( 千 分 之 一 寸 为 单 位) 指 定 的 打 印 区 域 上 打 印 一 个 位 图。bitmap 
+ 参 数 是 一 个 包 含 要 打 印 位 图 的 文 件 名 的 字 符 串( 例:BRUSH.BMP)。Width 和Height 参 数 指 定 位 
+ 图 显 示 的 宽 和 高, 这 个 参 数 并 不 是 可 选 的。 输 入0 值, 意 味 着 位 图 按 它 本 身 的 值 打 印。 
+<p><font color="#ffffff">----</font>PrintDataWindow(print_job_number,datawindowcontrol) 
+<p><font color="#ffffff">----</font> 这 个 函 数 将 一 个DataWindow 控 件 的 内 容 作 为 这 个 指 定 的 打 印 作 业 的 一 部 分 来 打 印。 由 于 
+Power-Builder 使 用 在DataWindow 对 象 中 定 义 的 字 型,Print-DefineFont() 和PrintSet-Font 
+() 函 数 不 对 其 产 生 影 响。Powersoft 建 议 如 用PrintDataWindow, 那 么 在 这 个 打 印 作 业 中 就 不 
+ 需 要 使 用 其 它 函 数。 因 为 这 个 函 数 将 使 用 整 张 纸, 每 一 次 调 用PrintDataWidnow, 您 打 印 的 下 
+ 一 项 都 将 另 起 一 页。 
+<p><font color="#ffffff">----</font>PrintLine(Print_job_number,X1,Y1,X2,Y2,thickness) 
+<p><font color="#ffffff">----</font> 这 个 函 数 将 打 印 一 指 定 宽 度 的 线。 这 条 线 将 在 由X1,Y1 参 数( 以 千 分 之 一 寸 为 单 位) 指 定 
+ 的 坐 标 处 开 始, 在 由X2,Y2 参 数( 也 以 千 分 之 一 寸 为 单 位) 指 定 的 坐 标 处 结 束。thickness 参 数 
+ 是 一 个 整 型 变 量, 它 指 定 了 这 条 线 的 宽 度, 以 千 分 之 一 寸 为 单 位。 
+<p><font color="#ffffff">----</font>PrintOval(print_job_number,x,y,width,height,thickness) 
+<p><font color="#ffffff">----</font> 这 个 函 数 打 印 一 个 椭 圆( 如 果 宽 度 和 高 度 相 同 则 形 成 一 个 圆) 它 的 轮 廓 线 的 宽 度 由thick 
+ness 指 定。 椭 圆 都 由 一 个 想 象 的 边 框 包 围,X,Y 参 数 指 定 了 这 个 界 框 的 左 上 角 的 位 置( 千 分 之 
+ 一 寸 为 单 位),width,heigh 为 这 个 边 框 的 高 和 宽。 
+<p><font color="#ffffff">----</font>PrintRect(print_job_number,x,y,width,height,thickness) 
+<p><font color="#ffffff">----</font> 除 了 它 是 打 印 一 个 矩 形 外, 这 个 函 数 与PrintOval() 函 数 完 全 一 样。 
+<p><font color="#ffffff">----</font>PrintRoundRect(print_job_number,x,y,width,height,thickness) 
+<p><font color="#ffffff">----</font> 除 了 它 是 打 印 一 个 圆 角 矩 形 外, 这 个 函 数 与PrintO-val() 函 数 完 全 一 样。 
+      <p>　</p> 
+    </td> 
+  </tr> 
+</table> 
+</center></div> 
+<p>　</p> 
+</body> 
+</html> 

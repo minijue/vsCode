@@ -1,0 +1,326 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用BASIC语言设计Windows风格的用户接口&nbsp;<br>
+      <br>
+                浙江电视台发射部 (310013) 成晖&nbsp;      
+      <p>&nbsp; BASIC语言历史悠久,近年来发展迅速。BASIC语言的结构化程度高,易于理解,很适合广大的编程人员使用。而第三代BASIC语言的功能更是日臻完善、强大,使用人员更多。&nbsp;<br>
+      <br>
+    本文意在向编程经验不十分丰富的读者介绍用BASIC语言设计Windows风格的图形用户接口,起一点抛砖引玉的作用,不妥之处望不吝赐教。程序<br>
+      在VGA(用Screen 12语句设置)方式下运行,可在Quick BASIC、MS 
+      BASIC或Visual BASIC for MS-DOS下编译。另外需要说明的是程序中设置颜色使用的都是调色板位置号,一个调色板位置号并不固定代表某种特定颜色,而是可以由编程者通过PALETTE语句或PALETTE USING语句自行指定的。当然,一般情况下我们使用系统缺省的调色板颜色。&nbsp;<br>
+      <br>
+      1.读点阵字模交叉显示汉字及ASCII字符。&nbsp;<br>
+      <br>
+      这里要用到UCDOS 3.1的HZK16和ASC16两个字模文件,该功能模块的代码如下:&nbsp;<br>
+      <br>
+      SUB DispHz (HzCol%, HzRow%, Color%, HzStr$)&nbsp;<br>
+      <br>
+      DIM i1, i2, i3, i, c1, c2, f, g, HzChar, AscChar AS INTEGER&nbsp;<br>
+      <br>
+      DIM HzBy AS STRING * 32&nbsp;<br>
+      <br>
+      DIM AscBy AS STRING * 16&nbsp;<br>
+      <br>
+      DIM l, HzRec AS LONG&nbsp;<br>
+      <br>
+      OPEN "HZK16" FOR BINARY AS #1 `打开汉字库文件&nbsp;<br>
+      <br>
+      OPEN "ASC16" FOR BINARY AS #2 `打开ASCII码字库文件&nbsp;<br>
+      <br>
+      HzLen% = LEN(HzStr$) `计算字符串长度&nbsp;<br>
+      <br>
+      HzPos% = 1 `置字符串的首字节为当前字节&nbsp;<br>
+      <br>
+      WHILE HzPos% ＜= HzLen% `字符串显示完前一直循环&nbsp;<br>
+      <br>
+      i = ASC(MID$(HzStr$, HzPos%, 1)) `获取当前字符的ASCII值&nbsp;<br>
+      <br>
+      IF i ＞ &amp;HA0 THEN `判断是否为汉字内码&nbsp;<br>
+      <br>
+      IF f = 0 THEN `f为零则该字节为汉字区码&nbsp;<br>
+      <br>
+      c1 = i - &amp;HA1 `计算区码&nbsp;<br>
+      <br>
+      f = -1 `置f为非零&nbsp;<br>
+      <br>
+      ELSE `f不为零则该字节为汉字位码&nbsp;<br>
+      <br>
+      c2 = i - &amp;HA1 `计算位码&nbsp;<br>
+      <br>
+      f = 0 `置f为零&nbsp;<br>
+      <br>
+      HzRec = c1 * 94 + c2 `计算汉字在字库中的记录号&nbsp;<br>
+      <br>
+      l = HzRec * 32 + 1 `计算汉字在字库中的起始字节位置&nbsp;<br>
+      <br>
+      GET #1, l, HzBy `从l开始读取32字节&nbsp;<br>
+      <br>
+      FOR i1 = 0 TO 15 `字模垂直方向16行点&nbsp;<br>
+      <br>
+      FOR i2 = 0 TO 1 `每行16个点对应的两个字节&nbsp;<br>
+      <br>
+      HzChar = ASC(MID$(HzBy, i1 * 2 + i2 + 1, 1)) `每个字节的ASCII值&nbsp;<br>
+      <br>
+      FOR i3 = 0 TO 7 `每个字节的8位&nbsp;<br>
+      <br>
+      IF (HzChar  (2 &amp; (7 - i3))) AND &amp;H1 THEN `若该位是1&nbsp;<br>
+      <br>
+      PSET (HzCol% + i2 * 8 + i3, HzRow% + i1), Color% `画点&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      NEXT i3&nbsp;<br>
+      <br>
+      NEXT i2&nbsp;<br>
+      <br>
+      NEXT i1&nbsp;<br>
+      <br>
+      HzCol% = HzCol% + 16 `将光标置于下一个字符的左上角&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      ELSE `不是汉字内码则为ASCII码&nbsp;<br>
+      <br>
+      l = i * 16 + 1 `计算ASCII字符在字库中的起始字节位置&nbsp;<br>
+      <br>
+      GET #2, l, AscBy `从l开始读取16字节&nbsp;<br>
+      <br>
+      FOR i1 = 0 TO 15&nbsp;<br>
+      <br>
+      `字模垂直方向16行点,每行对应1个字节&nbsp;<br>
+      <br>
+      AscChar = ASC(MID$(AscBy, i1 + 1, 1)) `每个字节的ASCII值&nbsp;<br>
+      <br>
+      FOR i3 = 0 TO 7 `每个字节的8位&nbsp;<br>
+      <br>
+      IF (AscChar  (2 &amp; (7 - i3))) AND &amp;H1 THEN `若该位是1&nbsp;<br>
+      <br>
+      PSET (HzCol% + i3, HzRow% + i1), Color% `画点&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      NEXT i3&nbsp;<br>
+      <br>
+      NEXT i1&nbsp;<br>
+      <br>
+      HzCul% = HzCul% + 8 `光标置于下一个字符的左上角&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      HzPos% = HzPos% + 1 `置字符串的下一个字节为当前字节&nbsp;<br>
+      <br>
+      WEND&nbsp;<br>
+      <br>
+      CLOSE&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      参数HzCol%、HzRow%是所要显示字符串的左上角坐标,Color%是字符串的颜色,HzStr$ 是要显示的字符串,其中可包含汉字、图形符号和ASCII字符。&nbsp;<br>
+      <br>
+      2.Windows风格图形界面。&nbsp;<br>
+      <br>
+      Windows界面简洁、美观、标准,用BASIC语言的图形函数可以很方便地生成一个Windo ws风格界面。&nbsp;<br>
+      <br>
+      先用VIEW (0, 0)-(639, 479), 3设置背景色,再调用下面的过程生成窗口,调用一次生成一个窗口。参数Le%、Top%、Ri%、Bo%指定窗口左上角和右下角的坐标,FrmCol%、TitCo l%是工作区和标题栏背景色,Title$、Menu$是标题和菜单的文字内容。例如,以下调用将生成一个主窗口和一个子窗口:&nbsp;<br>
+      <br>
+      MyForm 30, 30, 609, 440, 7, 4, "程序主窗口", "文件[F] 选项[O] 窗口[W] 帮助[H]"&nbsp;<br>
+      <br>
+      MyForm 70, 90, 569, 400, 15, 1, "程序子窗口", "文件[F] 编辑[E] 搜索[S] 运行[R] 帮助[H]"&nbsp;<br>
+      <br>
+      过程代码如下:&nbsp;<br>
+      <br>
+      SUB MyForm (Le%, Top%, Ri%, Bo%, FrmCol%, TitCol%, Title$, Menu$)&nbsp;<br>
+      <br>
+      x% = Ri% - Le%: y% = Bo% - Top%&nbsp;<br>
+      <br>
+      VIEW (Le%, Top%)-(Ri%, Bo%),&nbsp;<br>
+      <br>
+      LINE (0, 0)-(x%, y%), 0, B ` 画窗体&nbsp;<br>
+      <br>
+      LINE (3, 3)-(x% - 3, y% - 3), 0,&nbsp;<br>
+      <br>
+      LINE (0, 22)-(x%, 22),&nbsp;<br>
+      <br>
+      LINE (4, 41)-(x% - 4, 41),&nbsp;<br>
+      <br>
+      PAINT (30, 30), 15, 0 ` 填充颜色&nbsp;<br>
+      <br>
+      PAINT (30, 10), TitCol%,&nbsp;<br>
+      <br>
+      PAINT (10, 50), FrmCol%,&nbsp;<br>
+      <br>
+      VIEW (Le% + 3, Top% + 3)-(Le% + 22, Top% + 22),&nbsp;<br>
+      <br>
+      LINE (0, 0)-(19, 19), 0, B `画控制钮&nbsp;<br>
+      <br>
+      LINE (4, 9)-(16, 11), 8,&nbsp;<br>
+      <br>
+      LINE (3, 8)-(15, 10), 0,&nbsp;<br>
+      <br>
+      LINE (4, 9)-(14, 9), 15&nbsp;<br>
+      <br>
+      VIEW (Le%, Top%)-(Ri%, Bo%)&nbsp;<br>
+      <br>
+      DispHz (x% - LEN(Title$) * 8) / 2 - 9, 5, 15, Ti-tle$ `标题&nbsp;<br>
+      <br>
+      DispHz 12, 23, 0, Menu$ `主菜单&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      用类似方法还可以生成其它Windows风格部件,包括三维风格部件。&nbsp;<br>
+      <br>
+      3.下拉菜单&nbsp;<br>
+      <br>
+      <br>
+      下拉菜单是通过用GET语句保存菜单弹出前的屏幕内容,用PUT语句恢复先前保存的屏幕内容实现的,有关内容许多书上都有介绍,这里不再赘述。&nbsp;<br>
+      <br>
+      4.键盘和鼠标控制&nbsp;<br>
+      <br>
+      <br>
+      键盘和鼠标操作通过BIOS中断调用的循环检测来实现。&nbsp;<br>
+      <br>
+      INT 16H是键盘中断、INT 33H是 Microsoft 鼠标中断,通过这两个中断的功能调用就可以分别用键盘和鼠标控制程序。仅仅使用键盘操作的程序在需要键盘控制时可以用INT 16H的功能00H在键盘缓冲区中无键入码时等待键盘输入,一旦有键入码就读取并进行相应处理。倘若还要同时使用鼠标进行程序控制,就不能用这种终止程序运行等待用户操作的方法 ,这是因为程序要不断查询鼠标驱动程序以实时确定鼠标的状态。为此可以在每次循环内调用INT 16H的功能00H前,先调用功能01H弄清键盘缓冲区中是否有按键等待处理,若无则不执行对功能00H的调用,直接执行鼠标功能。限于篇幅这里只简单举例说明,读者可照此在自己的程序中加入响应特定键盘按键和鼠标输入的代码,实现对程序的"键盘-鼠标"双重控制。&nbsp;<br>
+      <br>
+      先定义键盘和鼠标的中断调用模块:&nbsp;<br>
+      <br>
+      STATIC SUB KeyStroke (k0%, k1%, k2%)&nbsp;<br>
+      <br>
+      DIM regs AS RegType&nbsp;<br>
+      <br>
+      regs.ax = k0%&nbsp;<br>
+      <br>
+      INTERRUPT &amp;H16, regs, regs&nbsp;<br>
+      <br>
+      k1% = regs.ax&nbsp;<br>
+      <br>
+      k2% = regs.flags AND &amp;H40 `得到标志寄存器的零标志位&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      STATIC SUB MouDrv (m0%, m1%, m2%, m3%)&nbsp;<br>
+      <br>
+      DIM regs AS RegType&nbsp;<br>
+      <br>
+      regs.ax = m0%&nbsp;<br>
+      <br>
+      regs.bx = m1%&nbsp;<br>
+      <br>
+      regs.cx = m2%&nbsp;<br>
+      <br>
+      regs.dx = m3%&nbsp;<br>
+      <br>
+      INTERRUPT &amp;H33, regs, regs&nbsp;<br>
+      <br>
+      m0% = regs.ax&nbsp;<br>
+      <br>
+      m1% = regs.bx&nbsp;<br>
+      <br>
+      m2% = regs.cx&nbsp;<br>
+      <br>
+      m3% = regs.dx&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      函数MouPoll用来查询鼠标光标的坐标和左右按键是否被按下:&nbsp;<br>
+      <br>
+      STATIC SUB MouPoll (row%, col%, lButton%, rButton%)&nbsp;<br>
+      <br>
+      MouDrv 3, button%, col%, row%&nbsp;<br>
+      <br>
+      IF Button% AND 1 THEN lButton% = -1 ELSE lButton% =&nbsp;<br>
+      <br>
+      IF Button% AND 2 THEN rButton% = -1 ELSE rButton% =&nbsp;<br>
+      <br>
+      END SUB&nbsp;<br>
+      <br>
+      下面是本例的主程序,其中的循环将实时检测且在屏幕上显示键盘击键的ASCII键值和扫描码、鼠标按键状况和光标坐标,程序将一直运行直到按了"Alt-X"为止。&nbsp;<br>
+      <br>
+      `$INCLUDE: `QBX.BI`&nbsp;<br>
+      <br>
+      MouDrv 0, 0, 0, 0 `初始化鼠标驱动程序&nbsp;<br>
+      <br>
+      MouDrv 1, 0, 0, 0 `显示鼠标光标&nbsp;<br>
+      <br>
+      LOCATE 16, 1: PRINT "Press `Alt-X` to end program."&nbsp;<br>
+      <br>
+      WHILE (NOT Alt_X%)&nbsp;<br>
+      <br>
+      KeyStroke &amp;H100, Code%, ZF% `检查是否有击键码&nbsp;<br>
+      <br>
+      IF ZF% = 0 THEN `零标志位是零表示有击键可用&nbsp;<br>
+      <br>
+      KeyStroke &amp;H0, Code%, ZF% `取得击键&nbsp;<br>
+      <br>
+      KeyCode% = Code% AND &amp;HFF `取出击键的ASCII键值&nbsp;<br>
+      <br>
+      ScanCode% = (Code% AND &amp;HFF00)  256 `取出击键的扫描码&nbsp;<br>
+      <br>
+      IF ScanCode% = 45 THEN Altlt_X% = -1 `按"Alt-X"键则退出循环&nbsp;<br>
+      <br>
+      LOCATE 18, 1: PRINT "KeyCode: "; KeyCode%&nbsp;<br>
+      <br>
+      LOCATE 19, 1: PRINT "ScanCode: "; ScanCode%&nbsp;<br>
+      <br>
+      ELSE `零标志位是1表示无击键可用,进入鼠标例程&nbsp;<br>
+      <br>
+      MouPoll row%, col%, lButton%, rButton% `取得鼠标状态&nbsp;<br>
+      <br>
+      IF lButton% THEN `左键按下&nbsp;<br>
+      <br>
+      Button$ = "Left&nbsp;<br>
+      <br>
+      ELSE IF rButton% THEN Button$ = "Right" `右键按下&nbsp;<br>
+      <br>
+      ELSE Button$ = "None " `左右键均未按下&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      LOCATE 21, 1: PRINT "Button: "; Button$&nbsp;<br>
+      <br>
+      LOCATE 22, 1: PRINT "Position: "; row%; ", "; col%&nbsp;<br>
+      <br>
+      END IF&nbsp;<br>
+      <br>
+      WEND&nbsp;<br>
+      <br>
+      MouDrv 2, 0, 0, 0 `隐藏鼠标光标      
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

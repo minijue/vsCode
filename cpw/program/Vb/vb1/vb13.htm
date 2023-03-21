@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在VB中用API实现多媒体<br>
+      <br>
+                            作者:秦嘉&nbsp;</p>
+      <p><br>
+      　　在VB中用API实现多媒体主要是调用Windows的mmsystem.dll库。以下为调用API的声明(这些代码放在程序的声明部分中)：<br>
+      <br>
+      1.′播放CD和AVI所需要的声明。&nbsp;<br>
+      　　Declare Function mciSendString Lib ″MMSYSTEM″(ByVal<br> 
+    lpstrCommand as String，ByVal lpstrReturnStr as Any,By<br> 
+    Val wRetumLen as Integer,ByVal hCallBack as Integer) as<br> 
+    Long&nbsp;<br>
+      <br>
+      　　′播放WAV所需要的声明&nbsp;<br>
+      　　Declare Function sndPlaySound Lib ″MMSYSTEM.DLL″(ByVal lpszSoundName as String,ByVal wF1ags as Integer) as Integer<br> 
+      <br> 
+      　　′检测声卡所需要的声明&nbsp;<br>
+      　　Declare Function auxGetNaumDevs Lib ″MMSYSTEM″()as Integer&nbsp;<br>
+      <br>
+      　　′所用到的全局变量声明&nbsp;<br>
+      　　Global Const SND_SYNC=＆H0000 　　′播放WAV用到的全局变量&nbsp;<br>
+      　　Global Const SND_ASYNC=＆－H0001 ′播放WAV用到的全局变量&nbsp;<br>
+      　　Global Const SND_NODEFAULT=＆H0002 ′播放WAV用到的全局变量&nbsp;<br>
+      　　Global Const SND_LOOP=＆H0008 ′播放WAV用到的全局变量&nbsp;<br>
+      　　Global Const SND_NOSTOP=＆－H0010 ′播放WAV用到的全局变量&nbsp;<br>
+      <br>
+      　　′接下来是调用这些声明&nbsp;<br>
+      　　Function auxTest()as Boolean&nbsp;<br>
+      　　Dim i As Integer&nbsp;<br>
+      　　i=auxGetNumDevs()&nbsp;<br>
+      　　If i>0 Then&nbsp;<br>
+      　　AuxTest=True ′如果有声卡则返回真&nbsp;<br>
+      　　Exit Function&nbsp;<br>
+      　　Else&nbsp;<br>
+      　　AuxTest=False ′如果未检测到声卡则返回假&nbsp;<br>
+      　　Exit Function&nbsp;<br>
+      　　Else&nbsp;<br>
+      　　AuxTest=False ′如果未检测到声卡则返回假&nbsp;<br>
+      　　Exit Function&nbsp;<br>
+      　　End If&nbsp;<br>
+      　　End Function&nbsp;<br>
+      <br>
+      2.播放CD的源代码&nbsp;<br>
+      　　Sub PlayCD(b As Integer)&nbsp;<br>
+      　　′ b为所播的音轨号&nbsp;<br>
+      　　Dim a As Long&nbsp;<br>
+      　　a=mciSendString(″open cdaudio alias cd wait″,0＆,0,0)`初始化驱动<br> 
+      　　a=mciSendString(″set cd time format tmsf″,0＆,0,0)&nbsp;<br>
+      　　a=mciSendString(″play cd from″＆ Str(b),0＆,00) ′播放音轨&nbsp;<br>
+      　　End Sub&nbsp;<br>
+      <br>
+      3.播放AVI的源代码&nbsp;<br>
+      　　Sub playAVI(AVIFile As String)&nbsp;<br>
+      　　Dim RVal as Long&nbsp;<br>
+      　　AVIFile=″play″＋AVIFile＋″fullscreen″ ′全屏幕播放AVI文件&nbsp;<br>
+      　　RVal=mciSendString(AVIFile,0＆,0,0＆)&nbsp;<br>
+      　　End Sub&nbsp;<br>
+      <br>
+      4.播放WAV的源代码&nbsp;<br>
+      　　Sub playWAV(WAVFile As String)&nbsp;<br>
+      　　Dim Flag as Integer&nbsp;<br>
+      　　Dim a as Integer&nbsp;<br>
+      　　wFlag=SND_ASYNC or SND_NODEFAULT&nbsp;<br>
+      　　a=sndPlaySound(WAVFile,Flag)&nbsp;<br>
+      　　End Sub&nbsp;<br>
+      <br>
+      　　以上程序是我在调用多媒体时所常用的模块，你只需将上面的模块在程序中直接调用即可。</p>
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

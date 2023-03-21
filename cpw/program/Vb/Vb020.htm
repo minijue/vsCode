@@ -1,0 +1,224 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>制作带有动画和声音的屏幕保护程序</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> 
+    制作带有动画和声音的屏幕保护程序</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8" style="font-size: 9pt">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" bgcolor="#4264B5"
+    height="30" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%"><p align="center"><font color="#FFFFFF">资料整理<span class="f">&middot;</span><a
+        href="http://fasoft.yeah.net" target="_blank" style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">制作带有动画和声音的屏幕保护程序</span></strong></td>
+  </tr>
+  <tr>
+    <td>利用VB5.0和WINDOWS95自身所带的“画笔”就可以制作出带有动画和声音的屏幕保护程序。画面是一只蝴蝶在音乐的伴奏下飞动，碰动屏幕的边缘就会向小球反弹一样换个方向飞。这里需要两个bmp文件，采用的是VB自带的文件（源文件的位置是c:\program 
+    files\devstduio\vb\samples\pguide\vcr\bfly1.bmp和bfly2.bmp）。因为蝴蝶要向各个方向飞，所以还要在这两个文件的基础上，再制作两个。打开WINDOWS附件中的“画笔”，打开bfly1.bmp，点取“画像”菜单中的“翻转/旋转”，选择“水平翻转”后，将生成的新文件另存存盘，起名“左飞”，同样的方法将bfly2.bmp另存为“左合”，将bfly1.bmp改名为“右飞”，bfly2.bmp改名为“右合”（左飞，左合是蝴蝶向左飞时的画面，右飞，右合是蝴蝶向右飞时的画面，最后在画笔中将4个图的底色都改为黑色，这是保证蝴蝶的底色和屏幕的背景相融合）。<br>
+    &nbsp;&nbsp; 动画的制作是利用image控件来实现的。改变image的picture属性可实现画面的变化，利用move命令可实现画面的移动。利用MCI控件来实现音乐播放。程序编译后将生成的exe可执行文件，改为以*.scr结尾的文件名，将其复制到windows\system子目录即可，然后就可以在“控制面板”的“显示器”中选择该屏幕保护程序即可使用（运行所带exe文件必须将mid复制到指定的位置。这里建议使用所带的setup进行自动安装，可以省去一切步骤，setup后的文件名为蝴蝶.scr，已自动安装到系统的文件夹，在“显示器”中的“屏幕保护程序”可以找到。重新编译程序所需的4个bmp文件和一个Mid文件也安装到指定的位置。详细路径请见源程序中的说明）。<br>
+    &nbsp;&nbsp; 具体做法如下：首先建立一个新窗体form1，各属性分别是backcolor选为黑色，borderstyle选为0（黑<br>
+    色不带边框）。在form1上加入7个image控件，在格式菜单中将各个image的大小都选为相同，image1-7的stretch属性都选为true（图像将随控件的大小而变化），image1-6的visible的属性选为false（不可见），<br>
+    image7的visible属性为true。<br>
+    Image1.picture=右飞 Image2.picture =右合<br>
+    Image3.picture=左飞 Image4.picture =左合<br>
+    &nbsp;&nbsp; 
+    在“工程”菜单中选择“部件”，并从“部件”对话框的“控件”列表中选择“Microsoft 
+    Multimedia Control5.0”加入MCI控件，并将其visible属性改为false。加入时钟控件timer1，其interval属性为200（interval的值与机器的配置有关，在其他机器上可作适当调整，我的配置是P133，内存为32M）。<br>
+    &nbsp;&nbsp; 原理如下：image1-4用来存图形，运行时不可见。Image5用来存蝴蝶翅膀张开时的图像，Image6用来<br>
+    存蝴蝶翅膀合上时的图像，运行时都不可见。Image7是唯一运行时可见，利用时钟控件来改变其图形，用<br>
+    Image5和Image6来回变换。<br>
+    If Image7.Picture = Image5.Picture Then<br>
+    &nbsp;&nbsp; Image7.Picture = Image6.Picture<br>
+    Else <br>
+    &nbsp;&nbsp; Image7.Picture = Image5.Picture<br>
+    End If<br>
+    蝴蝶的移动利用image7控件的move方法：<br>
+    image7.move xp,yp <br>
+    4个边界值<br>
+    上边：y=0<br>
+    下边：y=form1.scaleheight-image7.scaleheight<br>
+    左边：x=0<br>
+    右边：x= form1.scalewidth-image7.scalewidth<br>
+    xp，yp为水平和垂直的移动量。<br>
+    X，y为image7在窗体中的位置<br>
+    左右边界的判断：<br>
+    If x&gt;=form1.ScaleWidth-Image1.Width Then '右边界<br>
+    Image5.Picture = Image3.Picture<br>
+    '蝴蝶应向左飞，翅膀张开的图形应选为左飞<br>
+    Image6.Picture = Image4.Picture<br>
+    '翅膀合上的图形应选为左合<br>
+    x = Form1.ScaleHeight - Image1.Width<br>
+    '改变 x 的位置<br>
+    xp = (-1) * xp<br>
+    '改变水平的移动量符号，以便向相反方向飞。<br>
+    End If<br>
+    If x &lt;= 0 Then '左边界<br>
+    &nbsp;&nbsp; Image5.Picture = Image1.Picture '右飞<br>
+    &nbsp;&nbsp; Image6. Picture = Image2. Picture '右合<br>
+    &nbsp;&nbsp; x = 0<br>
+    &nbsp;&nbsp; xp = (-1) * xp<br>
+    End If<br>
+    If y &gt; = Form1.ScaleHeight - Image1. Height Then<br>
+    &nbsp; '下边界<br>
+    &nbsp; y = Form1. ScaleHeight - Image1. Height<br>
+    &nbsp; '改变y的位置<br>
+    &nbsp; yp = (-l) * yp<br>
+    &nbsp; '改变垂直的移动量符号，以便向相反方向飞<br>
+    End If<br>
+    If y &lt;= 0 Then '上边界<br>
+    &nbsp;&nbsp; y = 0<br>
+    &nbsp;&nbsp; yp = (-1) * yp<br>
+    End If<br>
+    声音的播出：这里为播放mid文件<br>
+    MMControl1. DeviceType =&quot;&quot;<br>
+    MMControl1. filename = &quot;c:\mid\eine.mid&quot; （eine.mid 为一 mid 文件）<br>
+    MMControl1. Command = &quot;open&quot;<br>
+    MMControl1. Command = &quot;play&quot;<br>
+    这还需利用API函数实现鼠标的隐藏与出现，这里就不一一介绍了。<br>
+    部分程序代码如下（详细代码及解释请见源文件）：<br>
+    Dim x As Integer<br>
+    Dim y As Integer<br>
+    Dim xp As Integer<br>
+    Dim yp As Integer<br>
+    Dim lastx, lasty<br>
+    private Sub Form1_KeyDown(KeyCode As integer, Shift As Integer)<br>
+    &nbsp; Endscrnsave '结束屏幕保护程序<br>
+    End Sub<br>
+    Private Sub Form1_Load()<br>
+    &nbsp; Move 0, 0,Screen. Width,Screen. Height '让form1全屏显示<br>
+    &nbsp; hidemouse '隐藏鼠标<br>
+    &nbsp; x = l000 '蝴蝶的开始位置<br>
+    &nbsp; y = l000<br>
+    &nbsp; xp = 80 '移动量<br>
+    &nbsp; yp = 80 <br>
+    &nbsp; Image5. picture = Imagel. Picture<br>
+    &nbsp; '确定翅膀张开的图形是“右飞”，蝴蝶向右飞<br>
+    &nbsp; Image6. Picture = Image2. Picture<br>
+    &nbsp; '确定翅膀合上的图形是“右合”<br>
+    &nbsp; Image7. Picture = Image1. Picture<br>
+    &nbsp; MMControl1. Command = &quot;close&quot; '确保MCI控件已关闭<br>
+    &nbsp; MMControl1. DeviceType =&quot;&quot;<br>
+    &nbsp; '启动程序就播放mid 声音文件<br>
+    &nbsp; MMControl1.filename = &quot;c:\mid\eine.mid&quot;<br>
+    &nbsp; MMControl1.Command = &quot;open&quot;<br>
+    &nbsp; MMControl1.Command = &quot;play&quot;<br>
+    End Sub<br>
+    Private Sub Form1_MouseMove(Button As integer, Shift As Integer, x As Single, y As Single 
+    )<br>
+    &nbsp; If IsEmpty (lastx) Or IsEmpty (lasty) Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; lastx = x<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; lasty = y<br>
+    &nbsp; End If<br>
+    &nbsp; If Abs(lastx - x) &gt; 2 Or Abs(lasty - y) &gt; 2 Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; endscrnsave<br>
+    &nbsp; End If<br>
+    &nbsp; lastx = x<br>
+    &nbsp; lasty = y<br>
+    End Sub<br>
+    Private Sub Form1_Unload (Cancel As integer)<br>
+    &nbsp; MMControl1. Command = &quot;close&quot;<br>
+    &nbsp; Unload Me<br>
+    End Sub<br>
+    Private Sub Timer1_Timer()<br>
+    &nbsp; '判断mid文件是否播放完，如果播放完，进行重播<br>
+    &nbsp; If MMControl1. Poesition = 895 Then<br>
+    &nbsp;&nbsp;&nbsp; '些mid文件的长度（mid文件的长度，可建立一Label控件，在时钟控件中令 
+    &nbsp; <br>
+    &nbsp;&nbsp;&nbsp; 'Lagel1.caption=mmcontrol1.position，就可动态显示播放mid<br>
+    &nbsp;&nbsp;&nbsp; '文件的位置，当mid播放完，就可求出此mid文件的长度。）<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; MMControl1. Command = &quot;prev&quot;<br>
+    &nbsp;&nbsp;&nbsp; '回到此mid文件的开始位置<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; MMControl1. Command = &quot;play&quot; '播放<br>
+    &nbsp; End If<br>
+    &nbsp; x = x + xp '增加移动量<br>
+    &nbsp; y = y + yp<br>
+    &nbsp; If x &gt; = Form1. ScaleWidth - Image1. Width Then<br>
+    &nbsp;&nbsp;&nbsp; '右边界判断<br>
+    &nbsp;&nbsp;&nbsp; Image5. Picture = Image3. Picture '换图像<br>
+    &nbsp;&nbsp;&nbsp; Image6. Picture = Image4. Picture<br>
+    &nbsp;&nbsp;&nbsp; x = Form1. ScaleHeight - Image1. Width<br>
+    &nbsp;&nbsp;&nbsp; xp = (-1) * xp '改变移动量<br>
+    &nbsp; End If<br>
+    &nbsp; If x &lt; =0 Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Image5.Picture = Image1. Picture<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Image6.Picture = Imege2. Picture<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; x = 0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; xp = (-1) * xp<br>
+    &nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp; If y &gt; = Form1.ScaleHeight - Image1. Height Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y = Form1. ScaleHeight - Image1. Height<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yp = (-1) * yp<br>
+    &nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp; If y &lt;= O Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y = O<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yp = (-1) * yp<br>
+    &nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp; If Image7.Picture = Image5. Picture Then<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '不断改变图象以实现翅膀的一张一合。<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Image7. Picture = Image6. Picture<br>
+    &nbsp;&nbsp; Else<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Image7. Picture = Image5. Picture<br>
+    &nbsp;&nbsp; End If<br>
+    &nbsp;&nbsp; Image7. Move x, y '最关键的一步蝴蝶的移动<br>
+    End Sub<br>
+    模块中的代码：<br>
+    Declare Function ShowCursor Lib &quot;user32&quot; (ByVal bSbow As Long) As Long<br>
+    &nbsp;&nbsp; sub endscrnsave() '结束此程序<br>
+    &nbsp;&nbsp; showmouse<br>
+    &nbsp;&nbsp; End<br>
+    End Sub<br>
+    Sub showmouse()<br>
+    &nbsp;&nbsp; While ShowCursor(True) &lt; 0<br>
+    &nbsp;&nbsp; Wend<br>
+    End Sub<br>
+    Sub Hidemouse() '隐藏鼠标<br>
+    &nbsp;&nbsp; While ShowCursor(False) &gt; = 0<br>
+    &nbsp;&nbsp; Wend<br>
+    End Sub<br>
+    sub Main()<br>
+    If App. PrevInstance = True Then<br>
+    &nbsp;&nbsp; Exit Sub<br>
+    End If<br>
+    Form1. Show<br>
+    End Sub</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

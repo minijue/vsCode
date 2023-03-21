@@ -1,0 +1,302 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VB的API编程精粹</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> VB的API编程精粹</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8" style="font-size: 9pt">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">VB的API编程精粹</span></strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt">Visual Basic以友好易学的可视化开发环境闻名于 
+    世，成为人们学习计算机编程的首选语言。目前，全世界 大概有300多万人使用着Visual 
+    Basic语言。如果您想在 这茫茫众生中出类拔萃，那么您就不得不学习API 
+    (Application Program lnterface，即Windows的应用程 序编程接口)编程。不懂API，那可成不了高手。 
+    <br>
+    <strong>第一节：API基础 <br>
+    </strong>API说到底就是一系列的底层函数，是系统提供给 
+    用户用于进入操作系统核心，进行高级编程的途径。通 过在Visual 
+    Basic应用程序中声明外部过程就能够 访问Windows API(以及其它的外部DLLs)。在声明 
+    了过程之后，调用它的方法与调用Visual Basic自 
+    己的过程相同。要声明一个DLL过程，需要在代码窗 口的&quot;声明&quot;部分增加一个Declare语句，如果该过 
+    程返回一个值，应将其声明为Function。例如： <br>
+    Declare Function publicname Lib &quot;libname&quot; [Alias &quot;alias&quot;] [([[ByVal] 
+    variable [As type] [,[ByVal] variable [As type]]...])] As Type <br>
+    如果过程没有返回值，可将其声明为Sub。 <br>
+    缺省情况下，在标准模块中声明的DLL过程，可 
+    以在应用程序的任何地方调用它。在其他类型的模块 中定义的DLL过程是模块私有的，必须在它们前面 
+    加上Private关键字，以示区分。特别提请注意的 是，在32位的Visual 
+    Basic中过程名是区分大小 写的。而在以前的16位版本中并不区分大小写，这 
+    是初学者容易出错的地方。 <br>
+    Declare语句中的Lib子句用来告诉Visual Basic如何找到包含该过程的dll文件。如果引用的过 
+    程属于Windows核心库(User32、Kernel32或 GDI32)，则可以不包含文件扩展名。例如： 
+    <br>
+    Declare Function GetTickCount Lib &quot;kernel32&quot; Alias &quot;GetTickCount&quot;() As 
+    Long。对于其它DLL， Lib子句须指定文件的路径及扩展名。 <br>
+    如果调用的Windows API过程要使用字符串，那 
+    么在声明语句中必须增加一个Alias子句，以指定 
+    正确的字符集。包含字符串的Windows API函数实 际有两种格武ANSI格式Unicode格式。因此，在 
+    Windows头文件中，每个包含字符串的函数都同时有 ANSI版本和Unicode版本。 
+    <br>
+    例如，下面是SetWindowText函数的两种C语言描 
+    述。可以看到，第一个描述将函数定义为SetWindowTextA, 尾部的&quot;A&quot;表明它是一个ANSI函数： 
+    <br>
+    SetWindowTextA(HWND hWnd,LPCSTR lpString); <br>
+    第二个描述将它定义为SetWindowTextW，尾部的 &quot;w&quot;表明它是一个Unicode函数： 
+    <br>
+    SetWindowTextW(HWND Hwnd,LPCWSTR lpString); <br>
+    因为两个函数实际的名称都不是&quot;SetWindow Text&quot;，要引用正确的函数就必须增加一个Alias子句： 
+    <br>
+    Private Declare Function SetwindowText Lib &quot;user32&quot; Alias 
+    &quot;SetWindowTextA&quot;(ByVal hwnd As Longg，ByVal lpString As String) As Long <br>
+    请注意， Alias子句后面的字符串必须是过程的 
+    真正名称，必须是区分大小写的。事实上，您只需要 记住，只有Windows 
+    NT才支持Unicode格式，而 Windows 95只支持ANSI格式就行了。至于两者的区 
+    别，作一般的应用程序开发是不需要了解的。 <br>
+    VB5专业版在VB目录的\Winapi子目录下，用几 个文件提供了关于API的信息。 
+    Win32api.txt文件中 包含了32位Windows API函数中用到的函数和类型的 
+    结构声明以及全局常量的值。用户可以用VB本身带的外 接程序&quot;API浏览器&quot;来方便地使用Win32api．txt，如下 
+    所示： <br>
+    点击菜单文件项的&quot;加载文本文件…&quot;从VB目 录下的WINAPI目录中选择&quot;WIN32API.TXT&quot;，就可以 
+    查看WINDOWS 95系统的API函数的声明、常数定义和 
+    数据类型了。例如，我们打算查看函数InverRect() 的声明。首先，点击&quot;搜索&quot;按钮，输入字符串 
+    &quot;InverRect&quot;。在&quot;可选项&quot;栏中，兰色的亮度条将移 动到&quot;InverRect&quot;项上。再点按&quot;添加&quot;按钮，在&quot;选 
+    定项&quot;中就出现&quot;InverRect&quot;在Visual Basic中的 
+    声明了。接下来自然是点按&quot;复制&quot;按钮，然后将窗 口切换到Visual 
+    Basic开发环境中，在需要声明API 函数的地方Ctrl＋V（粘贴）即可。 <br>
+    上面所讲的声明方法虽然简单，但只有使用WIN DOWS本身的API函数才能这样。对于第三方提供的动 
+    态链接库（DLL）您只有用键盘老老实实地敲了。 <br>
+    <strong>第二节：牛刀小试 <br>
+    </strong>现在读者一定很想自己亲自试一下，下面举两个 
+    实际应用的例子让大家体会一下API的妙用吧！ <br>
+    1．使一个窗体始终保持在屏幕的最上面 <br>
+    我们知道VB本身自带的函数是难以完成此功能 的，我们可以通过调用Windows的API函数： 
+    SetWindowPos达到我们的要求。操作步骤如下： <br>
+    （1）启动VB5建立一个新工程，在该工程中添加一 个模块（Moudel），在该模块中用上述的&quot;API例览器&quot; 
+    添加如下的该API函数的函数声明和常量声明部分： <br>
+    'API函数声明 <br>
+    Declare Function SetWindowPos Lib &quot;user32&quot; Alias &quot;SetWindowPos&quot; (ByVal 
+    hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As 
+    Long, ByVal cy As Long, ByVal wFlags As Long) As Long <br>
+    '常量声明 <br>
+    Global Const SWP_HIDEWINDOW = &amp;H80 <br>
+    Global Const SWP_NOACTIVATE = &amp;H10 <br>
+    Global Const SWP_NOCOPYBITS = &amp;H100 <br>
+    Global Const SWP_NOMOVE = &amp;H2 <br>
+    Global Const SWP_NOOWNERZORDER = &amp;H200 <br>
+    Global Const SWP_NOREDRAW = &amp;H8 <br>
+    Global Const SWP_NOREPOSITION = SWP_NOOWNERZORDER <br>
+    Global Const SWP_NOSIZE = &amp;H1 <br>
+    Global Const SWP_NOZORDER = &amp;H4 <br>
+    Global Const SWP_SHOWWINDOW = &amp;H40 <br>
+    Global Const HWND_BOTTOM = 1 <br>
+    Global Const HWND_BROADCAST = &amp;HFFFF&amp; <br>
+    Global Const HWND_DESKTOP = 0 <br>
+    Global Const HWND_NOTOPMOST = -2 <br>
+    Global Const HWND_TOPMOST = -1 <br>
+    Global Const HWND_TOP = 0 <br>
+    Global Const Flags=SWP_NOMOVE Or SWP_NOSIZE <br>
+    这里以&quot;SWP_&quot;开头的常量是表示窗体所具有的 
+    风格，这些常量可以通过VB中的&quot;OR&quot;操作符组合在 一起。而以&quot;HWND_&quot;开头的常量表示窗体在桌面上的 
+    位置。从这些常量的英文单词的意义上读者应该很容 
+    易理解他们所具有的风格了。所以笔者就不一一去说 
+    明了。至于为什么要添加这些常量而不是别的这就要 您去查看Windows 
+    SDK关于该函数的帮助文档了。当 
+    然这对于初学者来说有一定的难度，但不要畏惧，只 
+    要您仔细看帮助就会慢慢搞懂的。因为这些API函数 是为C和C＋＋的编程人员编写的，所以如果您懂一点 
+    C++的话会很容易理解的。 <br>
+    （2）现在只要在您想要此功能的地方调用该函数 
+    就可以了，调用的方法如： <br>
+    Dim Success as Long <br>
+    SuccesS＝SetwindowPos(me.HWnd. HWND_TOPMOST,0,0,0,0,FLAGS) <br>
+    若Success返回的值不等于零则表示调用成功。 <br>
+    比如在某个窗体的Load事件中加入上述的两行代 
+    码，就可以达到使该窗体始终位于屏幕最上面的目的。 <br>
+    细心的读者可能已经发现上面的例子中的模块声 
+    明中声明了好几个常量，可为什么只用到三个呢？现 
+    在您可以试着改变一下API函数&quot;SetWindowPos&quot;中 
+    的第二个参数或常量FLAGS中的项，看看您的窗体会 
+    出现什么样的效果？ <br>
+    2．VB5中如何屏蔽掉win95中的CTRL_ALT_DEL， CTRL_ESC, ALT_TAB三组热键通过调用API函数&quot;SystemParametersInfo&quot;来实 
+    现。 <br>
+    首先创建一新工程；在此工程中添加一个窗体和 
+    一个模块；在窗体上拖放两个按钮分别命名为 
+    &quot;cmdDisable&quot;,&quot;cmdEnable&quot;；Copy如下代码入模块中： <br>
+    Public Declare Function SystemParametersInfo Lib &quot;user32&quot; Ahias 
+    &quot;SystemParametersInfoA&quot; (ByVal uAction As Long,ByVal uParam As Long, lpvParam As 
+    Any，ByVal fuWinIni As Long)AS Long <br>
+    Public Const SPI_SCREENSAVERRUNNING=97 <br>
+    在窗体的代码编辑区Copy如下代码： <br>
+    '使三组热键失效 <br>
+    Private Sub cmdDisable_click() <br>
+    SystemParametersInfo <br>
+    SPI_SCREENSAVERRUNNING,True,byVal 1&amp;,0 <br>
+    End Sub <br>
+    <br>
+    Private Sub Form_Unload(Cancel As Integer) <br>
+    '程序退出前是热键有效 <br>
+    CndEnable_Click <br>
+    End Sub <br>
+    若将此功能和屏幕保护程序结合到一起，那您的屏幕 
+    保护程序一定增色许多。 <br>
+    API函数的简单调用例子就是这么容易，相信现在您 对API的调用已不再感到神秘了，接下来我们就看看一个 
+    比较复杂的应用。 <br>
+    <strong>第三节：高手进阶 <br>
+    </strong>上面的关于API的调用的例子只是为了带您去Win dows API世界中去探索一下。相信您已探索到了一点眉 
+    目并想去实现一些更&quot;好玩&quot;的东西了。好！下面就向您 
+    介绍一个很&quot;好玩&quot;同时又会使您的程序看起来更专业化 
+    的一个API调用。 <br>
+    相信您的机器上一定装有&quot;金山词霸&quot;，试着启动它 
+    您发现了什么？启动画面过后它&quot;不见了&quot;。把鼠标移到 
+    桌面的右下角，原来它以图标的形式&quot;藏在&quot; Windows 
+    的托盘中。用鼠标右击它还会弹出一个菜单功能项供您 
+    选择。现在您一定想把自己的程序也放到托盘，这样您的 
+    程序多具有专业水准！ <br>
+    下面是此功能的实现步骤： <br>
+    1．这里我们调用的API函数是： &quot;Shell_NotifyIcon&quot;，在您的模块中添加如下的函数声明 
+    和常量声明： <br>
+    '以下常量告诉系统在托盘中您的图标上发生了什么 操作 <br>
+    '常量声明 <br>
+    Public Const WM_MOUSEMOVE = &amp;H200 '在图标上移动鼠标 <br>
+    Public Const WM_LBUTTONDOWN = &amp;H201 '鼠标左键按下 <br>
+    Public Const WM_LBUTTONUP = &amp;H202 '鼠标左键释放 <br>
+    Public Const WM_LBUTTONDBLCLK = &amp;H203 '双击鼠标左键 <br>
+    Public Const WM_RBUTTONDOWN = &amp;H204 '鼠标右键按下 <br>
+    Public Const WM_RBUTTONUP = &amp;H205 '鼠标右键释放 <br>
+    Public Const WM_RBUTTONDBLCLK = &amp;H206 '双击鼠标右键 <br>
+    Public Const WM_SETHOTKEY = &amp;H32 '响应您定义的热键 <br>
+    'API函数声明 <br>
+    Public Declare Function Shell_NotifyIcon Lib &quot;shell32.dll&quot; Alias &quot; 
+    Shell_NotifyIconA&quot; (ByVal dwMessage As Long, lpData As NOTIFYICONDATA) As Long <br>
+    '自定义一个调用API Shell_NotifyIcon要用到的类 型&quot;NOTIFYICONDATA&quot; <br>
+    Public Type NOTIFYICONDATA <br>
+    cdSize As Long 'NOTIFYICONDATA类型的大小 <br>
+    hwnd As Long '你的应用程序窗体的名柄 <br>
+    uId As Long '应用程序图标资源的ID号 <br>
+    uFlags As Long '使那些参数有效它是以下枚举类型中的 <br>
+    'NIF_MESSAGE、NIF_ICON、NIF_TIP三组的组合 <br>
+    uCallbackMessage As Long '鼠标移动时把此消息发给该图标的窗体 <br>
+    hIcon As Long '图标名柄 <br>
+    szTip As String*64 '当鼠标在图标上时显示的Tip文本 <br>
+    End Type <br>
+    <br>
+    '这是一个枚举类型它告诉API Shell_NotifyIcon去做什么操作 <br>
+    Public Enum enm_NIM_Shell <br>
+    NIM_ADD=&amp;H40 '在“金碟”中加一图标 <br>
+    NIM_MODIFY=&amp;H1 '修改“金碟”中的图标 <br>
+    NIM_DELETE=&amp;H2 '删除“金碟”中的图标 <br>
+    NIF_MESSAGE=&amp;H1 '使类型&quot;NOTIFYICONDATA&quot;中的uCallbackMessage有效 <br>
+    NIF_ICON=&amp;H2 '使类型&quot;NOTIFYICONDATA&quot;中的hIcon有效 <br>
+    NIF_TIP=&amp;H4 '使类型&quot;NOTIFYICONDATA&quot;中的szTip有效 <br>
+    WM_MOUSEMOVE=&amp;H200 '使鼠标移动消息有效 <br>
+    End Enum <br>
+    '定义一个&quot;NOTIFYICONDATA&quot;类型的变量 <br>
+    Public nidProgramData As NOTIFYICONDATA <br>
+    以上是函数及常量声明和自定义的一个类型变量，下 面是此API函数的调用方法： 
+    <br>
+    2. 在窗体上用菜单编辑一个具有如下信息的菜单项： <br>
+    主菜单：无标题、名称(mainMenu) <br>
+    子菜单：标题(API编程)、名称(submnul); <br>
+    标题(退出)、名称(submnu2). <br>
+    这里只是举个例子，具体的功能你可以根据你的具体需要来编辑此菜单项 
+    <br>
+    3. 在窗体的Load事件中添加如下代码： <br>
+    Private Sub Form_Load() <br>
+    '隐藏窗体 <br>
+    With Me <br>
+    .Top =-10000 <br>
+    .Left = -10000 <br>
+    .WindowState = vbMinimized <br>
+    End With <br>
+    '设置类型NOTIFYICONDATA所具有的特征 <br>
+    With nidprogramData <br>
+    .cbSize = Len(nidProgramData) <br>
+    .hwnd = Me.hwnd .uld = vbNull <br>
+    .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE <br>
+    '触发鼠标移动消息 <br>
+    .uCallbackMessage = WM_MOUSEMOVE <br>
+    .hIcon = Me.Icon '“托盘”中放入窗体图标，你可以把窗体的图标换成你所喜欢的图标 
+    <br>
+    .szTip =&quot;VB 的 Win32 API 编程&quot; &amp; vbNullChar <br>
+    End With <br>
+    <br>
+    '调用该函数 <br>
+    Shell_NotifyIcon NIM_ADD,nidprogramData <br>
+    End Sub <br>
+    '根据不同的鼠标消息做不同的操作 <br>
+    Private Sub Form_MouseMove(Button As inte ger, Shift As lnteger, x As Single, Y As Single) 
+    <br>
+    On Error GoTo Form_MouseMove_err: <br>
+    Dim Result As Long <br>
+    Dim msg As Long <br>
+    'X的值依赖与显示模式的设置 <br>
+    If Me.ScaleMode = vbpixels Then <br>
+    msg = x <br>
+    Else <br>
+    msg = x/Screen.TwipsPerPixe1X <br>
+    End If <br>
+    Select Case msg <br>
+    Case WM_LBUTTONUP <br>
+    '在这里加入鼠标左键释放时你想做的操作 <br>
+    Case WM_LBUTTONDBLCLK <br>
+    '在这里加入双击鼠标左键时你想做的操作 <br>
+    Case WM_RBUTTONUP <br>
+    '通常这里弹出你的功能菜单 <br>
+    PopupMenu mainMenu <br>
+    Case WM_MOUSEISMOVING <br>
+    '在这里加入鼠标正在移动时你想做的操作 <br>
+    End Select <br>
+    Exit Sub <br>
+    <br>
+    Form_MouseMove_err: <br>
+    '在这里加入你的处理异常错误的代码 <br>
+    End Sub <br>
+    4.Run你的程序，您是不是看到了象“金山词霸”一样的功能？相信你此时的感觉一定特别“爽”！ 
+    <br>
+    API的世界j是丰富多彩的，只要你肯细心地去探索它你一定会获得许多意想不到的好东西。所以笔者觉得定值得每一个具有“好奇”精神的人去探索它。后续的期刊笔者会向读者详细介绍一些更好更“牛”的API调用。</span></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

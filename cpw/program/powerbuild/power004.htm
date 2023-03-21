@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<meta name="FORMATTER" content="Microsoft FrontPage 2.0">
+<title>PowerBuilder应用开发系列讲座(4)</title>
+</head>
+
+<body bgcolor="#8080C0" text="#000000">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progmenu.htm">编程技巧</a> 
+    --&gt; <a href="pow_idx.htm">PowerBuilder</a>&nbsp; --&gt;</b> <font color="#000000">PowerBuilder应用开发系列讲座(4)</font></span></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<font color="#0000ff"><h2 align="center"></font><font color="#000000"><span
+    style="font-size: 9pt">PowerBuilder应用开发系列讲座(4) </span></font></h2>
+    <h3 align="center"><font color="#000000"><span style="font-size: 9pt">并 发 控 制 </span></font></h3>
+    <h3 align="center"><span style="font-size: 9pt">华 天 新 技 术 开 发 公 司&nbsp;&nbsp;&nbsp;&nbsp;张 
+    健 姿 <br>
+    北 京 友 谊 宾 馆 30538 室&nbsp;&nbsp;&nbsp;&nbsp;100873 <br>
+    Email: sjhzyz@public.bta.net.cn </span></h3>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 并 发 能 力 是 指 
+    多 用 户 在 同 一 时 间 对 相 同 数 据 同 时 访 问 的 能 力。 一 般 
+    的 关 系 型 数 据 库 都 具 有 并 发 控 制 的 能 力, 但 是 这 种 并 
+    发 功 能 也 会 对 数 据 的 一 致 性 带 来 危 险。 试 想 若 有 两 个 
+    用 户 都 试 图 访 问 某 个 银 行 用 户 的 记 录 并 同 时 要 求 修 
+    改 该 用 户 的 存 款 余 额 时, 情 况 将 会 怎 样 呢? 我 们 可 以 对PowerBuilder 
+    中 的DataWindow 进 行 设 置 来 进 行 并 发 控 制。 所 谓 并 发 控 制 
+    就 是 指 在 用 户 数 据 修 改 的 过 程 中 保 证 该 数 据 不 被 覆 
+    盖 或 改 变 的 方 式, 在 下 面 的 例 子 中 我 们 将 看 到 如 何 设 
+    置Da taWindow 来 控 制 开 发 访 问。 为 了 说 明 问 题, 我 们 举 这 样 
+    一 个 简 单 的 银 行 系 统 中 的 例 子, 某 用 户 的 存 款 状 况 如 
+    右: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 我 们 假 设 事 情 
+    的 经 过 是 这 样 的: 公 司 的 某 员 工 在 银 行 前 台 取 款2,000 元, 
+    银 行 出 纳 查 询 用 户 的 存 款 信 息 显 示 银 行 存 款 余 额20,000 
+    元; 正 在 这 时, 另 一 银 行 帐 户 转 帐 支 票 支 付 该 帐 户5,0 00 
+    元, 机 器 查 询 也 得 到 当 前 用 户 存 款20,000 元, 这 时 银 行 的 
+    出 纳 员 看 到 用 户 存 款 超 过 了 取 款 额 , 就 支 付 了 客 户2,000 
+    元 并 将 用 户 存 款 改 为18,000 元, 然 后 银 行 的 另 一 名 操 作 员 
+    根 据 支 票, 将 汇 入 的5,000 元 加 上, 把 用 户 的 余 额 改 为25,000 
+    元, 那 么 数 据 库 管 理 系 统 是 否 可 以 接 受 这 些 修 改 呢? </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在DataWindows 的 设 
+    计 中, 我 们 选 择 菜 单Rows|Update …, 会 出 现Specify Update Charac 
+    teristics 的 设 置 窗 口, 在 这 个 窗 口 中 我 们 设 置Update 语 句 中Where 
+    子 句 的 生 成, 以 此 来 进 行 开 发 控 制。 在 这 里 有 三 个 选 
+    项, 我 们 分 别 看 一 看 在 本 例 中 这 三 个 选 项 的 结 果: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>(1)Key Columns: 生 成 
+    的Where 子 句 中 只 比 较 表 中 的 主 键 列 的 值 与 最 初 查 询 时 
+    是 否 相 同 来 确 定 要 修 改 的 记 录。 在 上 述 的 例 子 中, 转 
+    帐 支 票 的 操 作 将 覆 盖 出 纳 员 作 出 的 修 改, 这 样 银 行 损 
+    失 两 千 元。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>(2)Key and Updateable 
+    Columns: 生 成 的Where 子 句 比 较 表 中 主 键 列 和 可 修 改 列 的 值 
+    与 最 初 查 询 时 否 是 相 同。 在 上 例 中 两 次 查 询 出 的 结 果 
+    都 是 有 两 万 余 额, 当 第 一 个 人 修 改 余 额 时 , 余 额 仍 是 二 
+    万 元, 所 以 修 改 成 立, 而 支 票 转 帐 操 作 时 余 额 已 不 是 二 
+    万, 所 以 该 列 不 匹 配, 修 改 失 败。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>(3)Key and Modified 
+    Columns:Where 子 句 比 较 主 键 和 将 要 修 改 的 列, 在 本 例 中, 结 
+    果 与 Key and Updateable Columns 的 选 择 相 同, 因 为 余 额 已 改 变, 不 
+    再 与 最 初 的 查 询 相 同, 因 此 仍 然 不 能 修 改。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 让 我 们 作 另 外 
+    一 个 假 设, 我 们 把 银 行 后 台 作 支 票 转 帐 操 作 改 为 冻 结 
+    用 户 存 款, 即 把 状 态 字 段 的 值 改 为 冻 结, 而 且 事 件 发 生 
+    的 次 序 如 下 表, 那 么 表 中 的 次 序4 … 前 台 出 纳 的 修 改 能 
+    不 能 成 立 呢: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>1.Key Columns:Where 子 
+    句 只 比 较 主 键 值, 显 然 出 纳 员 的 修 改 是 允 许 的。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>2.Key and Updateable 
+    Columns: 生 成 的Where 子 句 包 括 比 较 所 有 可 修 改 的 列, 因 此 出 
+    纳 修 改 时Statue 字 段 为 冻 结 与 出 纳 查 询 时 的tive 不 符, 修 改 
+    失 败, 同 时 显 示 错 误 信 息。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>3.Key and Modified 
+    Columns:Where 子 句 的 比 较 包 括 主 键 和 要 修 改 的 列, 由 于 本 列 
+    中 修 改 列 仍 为20,000 元 没 有 变 化, 所 以 出 纳 的 修 改 可 以 成 
+    立。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在 本 例 中, 我 们 
+    可 以 看 到Key and Updateable Columns 的 选 项 最 严 格, 可 以 避 免 出 现 
+    状 态 列 发 生 改 变 时 余 额 作 修 改 的 错 误, 但 是 这 也 会 禁 
+    止 我 们 作 一 些 本 当 允 许 的 并 发 修 改, 如 出 纳 修 改 存 款 
+    余 额, 而 业 务 员 修 改 用 户 的 联 系 地 址 等。 因 此 我 们 应 
+    当 根 据 实 际 情 况, 选 择 适 当 的Upd ate 设 置。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 根 据 我 们 使 用 
+    数 据 库 的 不 同, 我 们 还 有 一 些 其 他 的 控 制 并 发 访 问 和 
+    修 改 的 选 择 方 案, 如 对 数 据 加 锁。 锁 是 一 个 用 户 避 免 
+    其 他 用 户 对 指 定 行 作 修 改 的 操 作。 在 结 束 一 个 事 务 如 
+    执 行com mit,rollback,disconnect 等 语 句 时 自 动 将 锁 释 放。 如 果 您 
+    使 用 的DBMS 支 持 锁 的 操 作, 在Pow er-Builder 的DataWindow 设 计 时,Select 
+    语 句 可 在from 子 句 中 加 上with holdlock: 即 在data Window 的SQL Window 中, 
+    在 表 窗 口 的 标 题 处 点 击 右 鼠 标, 弹 出 菜 单 的 最 后 一 个 
+    选 项 即 为Hold lock。 选 择 该 项, 生 成 的SQL 语 句 将 在re-trievel() 
+    函 数 执 行 后 将 所 查 询 的 数 据 加 锁, 以 避 免 其 他 用 户 的 
+    修 改 访 问, 直 至commit,rollback 等 事 件 发 生 后 解 锁。 这 种 方 式 
+    带 来 的 问 题 是, 当 用 户 查 询 完 数 据 后 可 能 离 开 计 算 机 
+    长 时 间 不 用, 这 段 时 间 内 其 他 用 户 均 无 法 修 改 数 据。 
+    此 外 有 些DBMS 如Sybase 等 不 支 持 行 级 锁, 也 就 是 说 当 你 对 某 
+    一 行 查 询 时 更 多 的 行 都 被 上 了 锁, 这 就 更 增 加 了 并 发 
+    处 理 的 局 限 性。 另 一 个 值 得 注 意 的 问 题 是 在 多 窗 口 应 
+    用 中 某 一 个 窗 口 的 事 务 提 交 将 会 导 致 使 用 一 事 务 中 
+    其 他 数 据 窗 口 的 查 询 行 解 锁, 这 时 修 改 将 可 能 发 生 错 
+    误。 某 些DBMS 系 统 支 持 一 个 称 作&quot; 时 间 戳(timestamp)&quot; 的 
+    数 据 项 来 控 制 并 发 性。 每 张 表 中 都 有 一 个 时 间 戳 的 数 
+    据 列, 当Insert 语 句 或Update 语 句 对 数 据 行 作 修 改 时 该 列 自 
+    动 被 修 改 为 当 前 时 间。 当 你 要 作 修 改 时,where 子 句 可 检 
+    查 时 间 戳 列 在 查 询 时 和 修 改 时 两 个 值 是 否 相 符, 以 此 
+    来 确 保 您 作 出 的 修 改 不 会 覆 盖 别 人 的 修 改, 因 此 这 种 
+    确 认 方 式 与key and Updateable Columns 选 项 相 同 。 即 使 两 个 用 户 
+    对 同 一 行 的 不 同 列 作 修 改, 后 一 个 修 改 者 也 将 失 败。 
+    在 常 用 的 关 系 型 数 据 库 中Sybase 和Microsoft 的SQL Server 支 持 时 
+    间 戳 的 使 用。 而 在PowerBuilder 中, 不 管 用 户 后 台 连 接 何 种 
+    数 据 库, 只 要 表 中 带 有timestamp 的 列 名 且 数 据 类 型 为datetime,PB 
+    将 自 动 忽 略Upda te characteristics 的 选 项, 而 在where 子 句 中 生 成 
+    主 键 和 时 间 戳 列 的 比 较。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 如 果 您 所 用 的 
+    数 据 库 不 支 持 时 间 戳 但 支 持 触 发 器, 您 也 可 以 在 表 中 
+    增 加 一 列 整 数 型 的 列 。 当 有 对 表 中 某 种 记 录 作 修 改 
+    时, 该 列 自 动 加1。 下 列 使 用 的 是Watcom 数 据 库, 对Shipper 表 增 
+    加Updcnt 字 段 并 作 两 个 触 发 器, 这 样 任 何 用 户 或 进 程 试 图 
+    修 改 某 行 记 录 时, 该 字 段 均 可 发 生 变 化。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 对INSERT 触 发 器 
+    的 编 写 如 下: </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>DROP TRIGGER INS —SHIPPER’ 
+    </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>CREATE TRIGGER SHIPPER 
+    BEFORE INSERT ON SHIPPER </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>REFERENCING NEW AS 
+    Newvalue </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font>FOR EACH ROW </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> BEGIN </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> SET 
+    newvalue.UpdCnt=newvalue.UpdCnt+1; </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> END' </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 同 理 可 编 写UPDATE 
+    触 发 器。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 在 您 的PowerBuilder 
+    应 用 之 中, 除 表 的 主 键 外, 必 须 再 加 上 这 一 列 作 为 检 测 
+    列 加 入Updat e 语 句 中 的Where 子 句 中, 这 样 再 作Update 操 作 时, 
+    后 台 数 据 库 会 比 较 修 改 时 与 用 户 作Retriev e 操 作 时 数 据 
+    是 否 相 等, 以 确 认 是 否 能 作 修 改。 在DataWindows 中 在Specify 
+    Update Charact eris-tics 的 对 话 框 的 右 下 角 的Unique key column(s) 中 加 
+    上Updcnt 一 项, 同 时 注 意where c lause 中 选 择Key columns, 这 样PowerBuilder 
+    在 构 造where 子 句 时 就 会 认 为Updcnt 亦 是 表 的 主 键, 而 成 为 
+    检 测 项。 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 当 数 据 窗 口 的Update 
+    函 数 被 调 用 后, 触 发 器 将 修 改 过 记 录 中 的Updcnt 列 表 为 新 
+    值, 为 保 证 下 一 次 修 改 能 够 有 效, 您 应 当 立 即 作Retrieve() 
+    以 使DataWindow 缓 冲 区 中Updcnt 的 值 与 数 据 库 相 同。 显 然 修 改 
+    后 立 即 查 询 的 代 价 要 比 其 他 任 何 一 种 并 </span></p>
+    <p><span style="font-size: 9pt"><font color="#ffffff">----</font> 发 控 制 的 代 价 
+    要 小 得 多。</span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

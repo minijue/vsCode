@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>软件完全手册</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progmenu.htm">编程技巧</a> --&gt; 
+      <a href="Vbidx099.htm">Visual Basic </a>--&gt; </b></span>文本框中光标位置的获得</td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">
+    <span style="FONT-FAMILY: 宋体; FONT-SIZE: 9pt; LETTER-SPACING: 1px; LINE-HEIGHT: 20px"><p
+    align="center" class="ourfont"></span><b>文本框中光标位置的获得</b></p>
+    <p align="left" class="ourfont"><span
+    style="FONT-FAMILY: 宋体; FONT-SIZE: 9pt; LETTER-SPACING: 1px; LINE-HEIGHT: 20px"><font
+    color="#000000">&nbsp;&nbsp;&nbsp;陈锐 </font></p>
+    <p>　　在很多的编辑软件中有这样一个功能，即当用户在编辑区中输入字符或者按动鼠标使得光标的位置改变时，在编辑软件下方的状态栏中就能显示出光标所在位置的行和列的值。下面就介绍如何用VB编程实现在文本框中的这一功能。 
+    </p>
+    <p>　　首先，在Form中添加一个文本框(TextBox)，将其MultiLine属性设置为True，以便输入多行文本；再在Form中添加两个标题栏(Label)，以便显示光标位置；然后，在Form的代码窗口中添加程序中的代码。 
+    </p>
+    <p>　　 Option Explici </p> 
+    <p>　　 Const EM_GETSEL = &amp;HB0 </p> 
+    <p>　　 Const EM_LINEFROMCHAR = &amp;HC9 </p> 
+    <p>　　 Const EM_LINEINDEX = &amp;HBB </p> 
+    <p>　　 Private Declare Function SendMessage Lib &quot;user32&quot; _ </p> 
+    <p>　　 Alias &quot;SendMessageA&quot; (ByVal hwnd As Long, _ </p> 
+    <p>　　 ByVal wMsg As Long, ByVal wParam As Long, _ </p> 
+    <p>　　 lParam As Any) As Long </p> 
+    <p>　　 Public Sub GetCaretPos(ByVal TextHwnd As Long, _ </p> 
+    <p>　　 LineNo As Long, ColNo As Long) </p> 
+    <p>　　 Dim i As Long, j As Long </p> 
+    <p>　　 Dim lParam As Long, wParam As Long </p> 
+    <p>　　 Dim k As Long </p> 
+    <p>　　 '首先向文本框传递EM_GETSEL消息以获取从起始位置到 </p> 
+    <p>　　 '光标所在位置的字符数 </p> 
+    <p>　　 i = SendMessage(TextHwnd, EM_GETSEL, wParam, lParam) </p> 
+    <p>　　 j = i / 2 ^ 16 </p> 
+    <p>　　 '再向文本框传递EM_LINEFROMCHAR消息根据获得的字符 </p> 
+    <p>　　 '数确定光标以获取所在行数 </p> 
+    <p>　　 LineNo = SendMessage(TextHwnd, EM_LINEFROMCHAR, j, 0) ' </p> 
+    <p>　　 LineNo = LineNo + 1 </p> 
+    <p>　　 '向文本框传递EM_LINEINDEX消息以获取所在列数 </p> 
+    <p>　　 k = SendMessage(TextHwnd, EM_LINEINDEX, -1, 0) </p> 
+    <p>　　 ColNo = j - k + 1 </p> 
+    <p>　　 End Sub </p> 
+    <p>　　 Private Sub Form_Load() </p> 
+    <p>　　 Dim LineNo As Long, ColNo As Long </p> 
+    <p>　　 Call GetCaretPos(Text1.hwnd, LineNo, ColNo) </p> 
+    <p>　　 Label1.Caption = LineNo </p> 
+    <p>　　 Label2.Caption = ColNo </p> 
+    <p>　　 End Sub </p> 
+    <p>　　 Private Sub Form_Resize() </p> 
+    <p>　　 Text1.Width = Me.ScaleWidth </p> 
+    <p>　　 End Sub </p> 
+    <p>　　 Private Sub Text1_KeyUp(KeyCode As Integer, Shift As Integer) </p> 
+    <p>　　 Dim LineNo As Long, ColNo As Long </p> 
+    <p>　　 Call GetCaretPos(Text1.hwnd, LineNo, ColNo) </p> 
+    <p>　　 Label1.Caption = LineNo </p> 
+    <p>　　 Label2.Caption = ColNo </p> 
+    <p>　　 End Sub </p> 
+    <p>　　 Private Sub Text1_MouseDown(Button As Integer, Shift _ </p> 
+    <p>　　 As Integer, X As Single, Y As Single) </p> 
+    <p>　　 Dim LineNo As Long, ColNo As Long </p> 
+    <p>　　 Call GetCaretPos(Text1.hwnd, LineNo, ColNo) </p> 
+    <p>　　 Label1.Caption = LineNo </p> 
+    <p>　　 Label2.Caption = ColNo </p> 
+    <p>　　End Sub </p> 
+    <p>　　(程序) </p>
+      <p>　　运行上面的程序，在TextBox中输入字符或者按控制键来移动光标时，你可以看到屏幕下面的Label中就能显示出的光标所在的位置。以上程序在Win  
+    95，VB 5.0下运行通过。 </p> 
+    </span>　</td> 
+  </tr> 
+</table> 
+</center></div> 
+ 
+<p align="center">　</p> 
+</body> 
+</html> 

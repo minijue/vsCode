@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">用DELPHI编写TAPI应用程序&nbsp;<br>
+      <br>
+                             (南京　方舟)    
+      <p><br>
+      <br>
+      　　TAPI（Telphony Application Programming Interface)可以称作电话编程接口，它是微软提供的计算机和电话网相联系的编程接口，使程序员可以利用这个接口通过电话线使用多种计算机复杂的通讯工作。TAPI能提供的功能主要有：自动拨号；以文件、传真、电子邮件的方式传送文件；访问Internet或其他形式信息服务、组织会议呼叫、使用主叫识别处理入呼叫、计算机间通过电话线的互相协作。这里提到的有的功能很早就已经广泛应用了，还有一些由于我国交换设备不提供此类功能很少问津。这里笔者不想对TAPI能实现什么功能多加讨论，只就编程谈一点体会。<br> 
+      　　促使笔者利用TAPI编写程序主要是由于工作中经常需要发传真，而每个传真都需要确认，如果电话是功能最少的那种，每次都要花大量的时间在上面。如果确认时再没人应答，之后再来一次，效率就更低了。因此，笔者想到利用TAPI编写一个程序能用MODEM自动拨号，通话结束后记录一下内容，省了每次辛苦地看着号码拨号。下面将程序与读者共享。<br>
+      　　笔者利用delphi作为开发工具，原因主要是delphi开发程序方便快捷，同时数据库的使用比较简单。使用过Visual C＋＋的朋友都知道它的帮助是十分详细的，笔者开发的许多程序都参考了其中的WIN32 SDK帮助，尤其是在编写TAPI程序时，仔细地研究了其中的TAPI部分。使用VC编写TAPI程序可以利用现成的“tapi.h”头文件，但使用delphi就需要将C＋＋版本的头文件翻译成Object 
+      Pascal的格式，再将“tapi32.dll”中的函数引用到头文件中来。幸好这项工作不用我们去做，从Inprise公司的站点可以获得delphi 关于TAPI编程的头文件，省了不少事，笔者的头文件tapi.pas是Davide Moretti编写的，如果需要的朋友可以通过报社和笔者联系。<br> 
+      　　首先介绍程序中用到的几个函数：lineInitialize、lineNegotiateAPIVersion、lineOpen、lineMakeCall、lineHandOff、lineShutDown、lineConfigDialog、lineCallBackProc、lineGetIcon。函数的使用过程依次是：lineInitialize初始化线路、lineNegotiateAPIVersion确定TAPI版本号、lineOpen 打开线路、lineConfigDialog显示线路设备属性、lineMakeCall自动拨出电话号码、<br> 
+      lineGetIcon获得线路设备图标的句柄、lineHandOff将MODEM控制线路权转到用户、lineShutDown关闭线路。这里所用的函数名和tapi32.dll中输出的函数名相同。<br> 
+      　　由于delphi和VC中类型定义的区别，笔者有必要举例说明函数定义在VC和delphi中的区别。以lineInitialize为例，在VC中定义为<br>
+      LONG lineInitialize(LPHLINEAPP lphLineApp，HINSTANCE hInstance，LINECALLBACK lpfnCallback，LPCSTR lpszAppName，LPDWORD lpdwNumDevs)。lphLineApp是线路TAPI应用的句柄指针，hInstance是实例指针，lpfnCallback指向呼叫返回处理函数，lpszAppName指向用户提供的应用程序名字符串，lpdwNumDevs指向可供使用的线路设备个数。在delphi文件tapi.pas中对此函数的定义如下：<br> 
+      　　function lineInitialize(var lphLineApp: THLineApp;hInstance: HInst;<br> 
+      lpfnCallback: TLineCallback;<br> 
+      　　lpszAppName: PChar;var lpdwNumDevs: Longint): Longint;<br> 
+      　　其中我们定义THLineApp、TLineCallback为指向Longint的指针（&amp;LongInt)。其他函数的定义类推，分别用delphi中的相应类型代替，如果是长指针如句柄指针可以用“&amp;LongInt”来定义。<br>
+      　　下面介绍程序的代码部分，在此笔者假定读者具备delphi数据库和一般编程基础。首先用Database Desktop建立两个Paradox7表，分别为“workphone.db”和“friendphone.db”。在主form上放置TTable、TDataSource、TDBGrid、TPopupMenu控件。程序定义sAppDir:string保存应用程序所在目录，设置sAppDir:=GetCurrentDir。在弹出式菜单中定义两个过程分别在TDBGrid中载入两个数据库表。<br> 
+      　　procedure TMainForm.friendphoneClick(Sender: TObject);<br> 
+      　　begin<br>
+      　　MainForm.Table1.Active:=False;<br>
+      　　MainForm.Table1.TableName:=sAppDir＋‘friendphone.db’;<br>
+      　　MainForm.Caption:=‘自动拨号——朋友电话’;<br>
+      　　MainForm.Table1.Active:=True;<br>
+      　　end;<br>
+      　　<br>
+      　　procedure TMainForm.selectclassmateClick(Sender: TObject);<br> 
+      　　begin<br>
+      　　MainForm.Table1.Active:=False;<br>
+      　　MainForm.Table1.TableName:=sAppDir＋‘workphone.db’;<br>
+      　　MainForm.Caption:=‘自动拨号——工作电话’;<br>
+      　　MainForm.Table1.Active:=True;<br>
+      　　end;<br>
+      　　将TDBGrid的Options属性中的dgEditing设为True，允许用户直接修改表中的内容。在弹出菜单中定义DialPhone和DeleteRecord分别用于拨打电话号码和删除当前记录。下面主要介绍拨打电话的TAPI应用部分。电话号码是通过 MainForm.Table1.Fields.Fields[0].AsString作为字符串来传递的。<br> 
+      　　实现的代码部分如下，其中为了文章不会太长笔者省去了不必要的错误提示和部分代码。<br>
+      　　变量定义<br>
+      　　 lineApp:THLineApp;//TAPI应用句柄<br> 
+      　　 line:THLine;//线路句柄<br> 
+      　　 call:THCall;//呼叫句柄<br> 
+      　　 CallParams:TLineCallParams;//呼叫参数<br> 
+      　　 nDevs，tapiVersion，errorcode:Longint;//线路设备数、TAPI版本号、错误代码<br> 
+      　　 extid:TLineExtensionID;//TAPI扩展版本号<br> 
+      　　 lineIcon:HICON;//线路设备图标<br> 
+      　　 过程定义<br> 
+      　　 procedure lineCallback(hDevice， dwMsg， dwCallbackInstance，<br> 
+      　　 dwParam1， dwParam2， dwParam3: LongInt);//异步呼叫返回处理函数<br> 
+      　　{＄IFDEF WIN32}<br> 
+      　　 stdcall;<br> 
+      　　{＄ELSE}<br>
+      　　 export;<br> 
+      　　{＄ENDIF}<br>
+      　　 var<br> 
+      　　 hCall: THCall;<br> 
+      　　 begin<br> 
+      　　 if dwMsg = LINE_REPLY then { LineMakeCall的响应结果}<br> 
+      　　 if dwParam2 &lt; 0 then {呼叫响应错误处理};<br> 
+      　　 else if dwMsg = LINE_CALLSTATE then { 呼叫状态信息 }<br> 
+      　　 begin<br> 
+      　　 hCall := THCall(hDevice); //类型转换 THCall为LongInt类型<br> 
+      　　 case dwParam1 of<br> 
+      　　 LINECALLSTATE_IDLE: {呼叫无效处理}<br> 
+      　　 if hcall &lt;> 0 then<br> 
+      　　 begin<br> 
+      　　 lineDeallocateCall(hCall);<br> 
+      　　 end;<br> 
+      　　LINECALLSTATE_PROCEEDING:{呼叫正常处理}&nbsp;<br>
+      　　LINECALLSTATE_DIALTONE:{检测到拨号音}<br>
+      　　 LINECALLSTATE_DIALING: {正在拨号}<br> 
+      　　LINECALLSTATE_DISCONNECTED:{连接已断开}<br>
+      　　 begin{断开原因}<br> 
+      　　if dwParam2=LINEDISCONNECTMODE_NORMAL then{正常断开}<br> 
+      　　else if dwParam2=LINEDISCONNECTMODE_BUSY then {线路忙}<br> 
+      　　 LINECALLSTATE_BUSY:{线路忙处理}<br> 
+      　　 end;<br> 
+      　　 end;<br> 
+      　　procedure TDialForm.(dialnumber:string);//dialnumber为电话号码字符串<br> 
+      　　begin<br>
+      　　with CallParams do {CallParams的类型参考VC中的定义，将DWORD改为LongInt}<br> 
+      　　 begin<br> 
+      　　 dwTotalSize := sizeof(CallParams);<br> 
+      　　dwBearerMode := LINEBEARERMODE_VOICE;//承载模式为语音<br> 
+      　　dwMediaMode：=LINEMEDIAMODE_INTERACTIV<br>
+      　　EVOICE;//媒体模式为交互式语音<br>
+      　　 end;<br> 
+      　　 if lineInitialize(lineApp，HInstance，lineCallBack，nil，nDevs)&lt;0&nbsp;<br>
+      　　 then //线路不能初始化处理<br> 
+      　　 else<br> 
+      　　 if nDevs=0 then //无TAPI线路设备<br> 
+      　　 begin<br> 
+      　　 lineShutDown(lineApp);<br> 
+      　　 lineApp:=0;<br> 
+      　　 end<br> 
+      　　 else<br> 
+      　　 if lineNegotiateAPIVersion(lineApp，0，＄00010004，＄00020000，<br> 
+      　　 tapiVersion，extid)&lt;0 //协商TAPI版本号 TAPI1.4～TAPI2.0<br> 
+      　　 then begin {TAPI版本不兼容}<br> 
+      　　 lineShutDown(lineApp);<br> 
+      　　 lineApp:=0;<br> 
+      　　 end<br> 
+      　　 else<br> 
+      　　 errorcode:=lineOpen(lineApp，LINEMAPPER，line，tapiVersion，0，0，<br> 
+      　　LINECALLPRIVILEGE_NONE，LINEMEDIAMODE_<br>
+      　　INTERACTIVEVOICE，@CallParams);//打开线路<br>
+      　　 if errorcode&lt;0 then {线路不能打开}<br> 
+      　　 else<br> 
+      　　 begin{线路打开成功}<br> 
+      　　 lineConfigDialog(0，Self.Handle，nil); //显示线路设备属性<br> 
+      　　 lineGetIcon(0，`tapi/line`，lineIcon);<br> 
+      　　 //lineIcon为线路设备图标句柄，可以赋值给TICON.Handle<br> 
+      　　 if lineMakeCall(line，call，PChar(dialnumber)，0，@CallParams)&lt;0 then{呼叫失败处理}<br> 
+      　　 else&nbsp;<br>
+      　　 lineHandOff(call，`电话拨号程序`，LINEMEDIAMODE_INTERACTIVEVOICE);<br> 
+      　　 //在程序中应当以按钮来触发lineHandOff，从TAPI控制转为人工控制电话<br> 
+      　　 end;<br> 
+      　　end;<br>
+      　　以上代码由于脱离了实际的程序显得有些凌乱，相信对delphi编程稍有了解的朋友很容易看懂。本程序运行后的效果是，首先出现一个数据库表格，用右键打开一个通讯录库文件，右键选择拨号弹出对话框显示线路处理的状态，在拨完号之后提示用户是否拿起听筒进行对话。整个过程类似系统自带的电话拨号程序，不过笔者介绍的TAPI方法可以让我们编写更多的功能和更友好的界面。今后笔者将针对TAPI编程进行深入的介绍，希望能对不太了解TAPI的朋友在开发程序时起到帮助。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+
+</body>
+
+</html>

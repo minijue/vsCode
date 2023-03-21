@@ -1,0 +1,114 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>基 于Delphi 的 图 像 漫 游 向 晖 在 开 发 多 媒 体 应 用 中</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>基 于Delphi 的 图 像 漫 游</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">文/向晖 录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.07</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>在 开 发 多 媒 体 应 用 中， 经 常 会 遇 到 需 要 在 有 限 区 域 
+内 显 示 大 图 像 的 情 况， 有 不 少 文 章 对 此 提 出 过 解 决 方 
+法， 如 通 过 调 用Windows 的API 函 数， 直 接 读 写 内 存 等。 这 些 
+方 法 有 一 定 优 点， 但 实 现 起 来 较 为 复 杂， 且 易 出 错。 
+笔 者 在 实 践 中 通 过 仔 细 摸 索， 利 用Delphi 的 强 大 的 面 向 
+对 象 可 视 化 开 发 环 境 开 发 了 一 种 交 互 式 图 像 漫 游 方 
+法。 <br>
+<br>
+Delphi 中， 鼠 标 的 消 息 响 应 是 通 过 元 件 的OnMouseDown,OnMouseUp 和OnMouseMove 
+事 件 实 现 的， 通 过 对 此 三 个 事 件 编 程， 可 控 制 图 像 在 
+有 限 区 域 内 移 动。 考 虑 到 所 移 动 的 图 像 的 边 界 应 总 在 
+该 区 域 外， 因 此 图 像 的 左 上 角 坐 标 应 小 于 该 区 域 对 应 
+坐 标， 图 像 右 下 角 坐 标 应 大 于 该 区 域 对 应 坐 标（ 除 非 
+图 像 大 小 比 该 区 域 小）。 <br>
+<br>
+具 体 方 法 为： <br>
+<br>
+1、 新 建 一 工 程Project1， 在Form1 中 依 次 放 入Panel1,Panel2 和Image1 
+元 件， 注 意Panel2 和Image1 分 别 在Panel1 和Panel2 上， 再 将 一Label1 
+元 件 加 入Panel2 中， 调 整Panel1 尺 寸 为 适 当 大 小， 并 修 改 各 
+元 件 属 性 为： <br>
+<br>
+元 件 属 性 名 属 性 值<br>
+Panel1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BevelInner:&nbsp;&nbsp;&nbsp; bvRaised<br>
+BevelOuter:&nbsp;&nbsp;&nbsp; bvNone<br>
+BorderStyle:&nbsp;&nbsp;&nbsp; bsSingle<br>
+Panel2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Align: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alClient<br>
+Image1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AutoSize:&nbsp;&nbsp;&nbsp; True<br>
+Picture:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Apple.bmp&quot;<br>
+Label1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Align: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alClient<br>
+Transparent:&nbsp;&nbsp;&nbsp; True<br>
+注 意： 此 处Label1 的 作 用 不 是 显 示 字 符， 而 是 利 用 它 响 
+应 鼠 标 消 息， 如 果 不 用Label1 而 直 接 利 用Image1 的 鼠 标 事 件 
+响 应， 则 会 由 于 其OnMouseDown 事 件 的 激 活 与Image1 的 自 身 坐 
+标 移 动 事 件 相 冲 突 而 使 图 象 发 生 闪 烁 甚 至 不 能 移 动。 
+<br>
+2、 在implementation 后 加 入 变 量 声 明： <br>
+<br>
+origin:Tpoint;<br>
+image_left:integer;<br>
+image_top:integer;<br>
+visa1:Tpoint; ( 鼠 标 当 前 位 置 相 对 图 象 右 下 角 的 坐 标)<br>
+visa2:Tpoint; ( 鼠 标 当 前 位 置 相 对 图 象 左 上 角 的 坐 标)<br>
+canmove:boolean;<br>
+<br>
+编 写Label1 鼠 标 响 应 事 件：<br>
+procedure TForm1.Label1MouseDown(Sender: TObject; Button: TMouseButton;<br>
+Shift: TShiftState; X, Y: Integer);<br>
+begin<br>
+if Button=mbLeft then<br>
+begin<br>
+origin.x:=X;<br>
+origin.y:=Y;<br>
+image_left:=image1.left;<br>
+image_top:=image1.top;<br>
+visa1.x:=X-(image1.width-panel2.width+image1.left);<br>
+visa1.y:=Y-(image1.height-panel2.height+image1.top);<br>
+visa2.x:=X-image1.left;<br>
+visa2.y:=Y-image1.top;<br>
+canmove:=true;<br>
+end;<br>
+end;<br>
+<br>
+procedure TForm1.Label1MouseMove(Sender: TObject; Shift: TShiftState; X,<br>
+Y: Integer);<br>
+begin<br>
+if canmove then<br>
+begin<br>
+if Xvisa2.x then X:=visa2.x;<br>
+if Yvisa2.y then Y:=visa2.y;<br>
+image1.left:=image_left+(X-origin.x);<br>
+image1.top:=image_top+(Y-origin.y);<br>
+end;<br>
+end;<br>
+<br>
+procedure TForm1.Label1MouseUp(Sender: TObject; Button: TMouseButton;<br>
+Shift: TShiftState; X, Y: Integer);<br>
+begin<br>
+canmove:=false;<br>
+end;<br>
+上 述 程 序 在Delphi 2.0 中 编 译 通 过， 经 过 扩 充 和 修 改 还 可 
+应 用 于 多 媒 体 数 据 库 的 图 像 显 示， 对 于 开 发 用 户 友 好 
+界 面 有 一 定 借 鉴 作 用。 <br>
+<br>
+</p>
+</body>
+</html>

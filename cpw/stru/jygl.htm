@@ -1,0 +1,39 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>甲乙赶路问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>甲乙赶路问题</strong></p>
+
+<p>//甲乙赶路问题<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;math.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+#define wc 0.00001<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; float s,b,a,c0,c1,c,tac,tdc,t1,t2;<br>
+cout&lt;&lt;&quot;Input s,b,a(b&gt;a&gt;0):&quot;;<br>
+cin&gt;&gt;s&gt;&gt;b&gt;&gt;a;<br>
+c0=0;c1=s;<br>
+do<br>
+{<br>
+&nbsp;&nbsp;&nbsp; c=(c0+c1)/2;<br>
+tac=c/b;<br>
+t1=tac+(s-c)/a;<br>
+tdc=(c-tac*a)/(a+b);<br>
+t2=tac+tdc+(s-(tac+tdc)*a)/b;<br>
+cout&lt;&lt;&quot;c=&quot;&lt;&lt;c&lt;&lt;&quot; 
+&quot;&lt;&lt;&quot;t1=&quot;&lt;&lt;t1&lt;&lt;&quot; 
+&quot;&lt;&lt;&quot;t2=&quot;&lt;&lt;t2&lt;&lt;endl;<br>
+if(t1&lt;t2) c1=c; else c0=c;<br>
+}while(fabs(t1-t2)&gt;wc);<br>
+getch();<br>
+}</p>
+</body>
+</html>

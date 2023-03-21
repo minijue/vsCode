@@ -1,0 +1,300 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title></title>
+</head>
+
+<body bgcolor="#8080C0">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="Vcidx098.htm">Visual 
+    C++/C++</a>--&gt;</b> </span><font color="#000000">MFC邮递表的中文翻译</font></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<h2 align="center"><font color="#000000">MFC邮递表的中文翻译</font></h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;我是一名mfc程序设计的爱好者,订阅了mfc的maillist,利用业余时间 
+    将它翻译出来,希望能对mfc编程的朋友有所帮助,请朋友们指正.<br>
+    </p>
+    <h3><font color="#FF0000">第三十一期目录</font> <fontsize="2">杨晓东 1999.3.7</h3>
+    <ol>
+      <li><a href="#volq1">模态对话框与WM_TIMER消息</a> </li>
+      <li><a href="#volq2">拥有ActiveX控件</a> </li>
+      <li><a href="#volq3">分隔窗口</a> </li>
+      <li><a href="#volq4">在运行时建立控件</a> </li>
+      <li><a href="#volq5">外部中止线程</a> </li>
+      <li><a href="#volq6">用MFC Dao查找</a> </li>
+      <li><a href="#volq7">关于DLL(动态连接库)</a> </li>
+      <li><a href="#volq8">设置窗口图标</a> </li>
+    </ol>
+    <p><a name="volq1"></a></p>
+    <p><br>
+    </p>
+    <font color="Red"><h3>模态对话框与WM_TIMER消息</h3>
+    </font><p>问:有个MFC MDI单线程程序,其中有些窗口能设置一个TIMER并接收WM_TIMER消息. 
+    以上一切都正常,奇怪地是在激活一个模态对话框时,WM_TIMER消息依然能收到! 
+    以我对模态对话框的理解,对话框与消息只有在程序消息循环指定分派才能相互联系.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;我的问题是:是不是MFC的消息分派机制或者是CWnd::RunModalLoop()?有某种 
+    类型的bug?是不是我对模态对话框的理解有误?</p>
+    <p>答:嘿嘿...我可不这么认为,看看这个方法,如果你激活了一个模态对话框,你的主窗口仍然 
+    在需要的时候接受重画消息(意思是指它能接收和处理WM_PAINT消息),当然如果是用户输 
+    入的信息还是会送到模态对话框里去的.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;从一方面讲,我认为你应该停止TIMER当模态对话框运行时,当TIMER启动时就会不断的向 
+    窗口的消息队列发送消息.甚至当你的程序已经停止对消息的处理时,而模态对话框正激 
+    活着,你就会发现退出模态对话框时,主窗口将会启动另外的模态对话框来回应消息队列 
+    中的WM_TIMER消息.(注意,如果有多个WM_TIMER消息时,会转化成一个消息,就象WM_PAINT 
+    消息一样)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;WM_TIMER messages are post, same as with WM_PAINT messages). 
+    我认为模态对话框就是指用户输入的消息将会送去处理的对话框,但windows依然会发送一 
+    些非用户输入消息至被对话框迭盖的窗口,当你的对话框空闲时那些消息依然会被那些窗口 
+    处理句柄所处理. <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq2"></a><br>
+    </p>
+    <font color="Red"><h3>拥有ActiveX控件</h3>
+    </font><p>问:我们用程序向导生成器建立了一个ActiveX控件,我们想在一已存在的ActiveX控件中 
+    嵌入新的控件.问题是我们都不清楚到底该怎么办.</p>
+    <p>答:你需要打开控件组合以便你的ActiveX控件能调用其它ActiveX控件,只要在父控件中的 
+    InitInstance()函数调用AfxEnableControlContainer()<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;同时,如果你使用组件库(Component Gallery)在你父ActiveX控件项目中插入子ActiveX 
+    控件,组件库将会在你的项目中插入一个子ActiveX控件的封装类,只要使用在封装类中的 
+    Create()方法就会建立子ActiveX控件.通常最好的时机是在父ActiveX控件中的OnCreate 
+    (WM_CREATE句柄) <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq3"></a><br>
+    </p>
+    <font color="Red"><h3>分隔窗口</h3>
+    </font><p>问:怎样才能分隔主窗口?</p>
+    <p>答:首先用MFC AppWizard建立一个MDI程序,如果你想显示格式化的文本那么视类就选择 
+    CEditView或CRichEditView.(不要选择Explorer类型,否则分隔后产生的左边的视为Tree 
+    而右边的则为ListView).好,现在你有了一个从CEditView/CRichEditView类继承的视.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;然后用对话框设计器建立一个对话框模板,给它起个名字(比如,IDD_FORM_DLG)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;接下来使用类向导(Class Wizard)建立一个新的类(为左边的视),继承CFormView类并 
+    与新的对话框ID建立关联.(在这个例子中为IDD_FORM_DLG)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;在.h文件中为CSplitterWnd类增加一个成员变量(为m_wndSplitter).现在使用类向导生成 
+    器为你的子窗口类重写虚拟函数OnCreateClient(从CMDIChildWnd继承),具体如下:<br>
+    </p>
+    <pre>BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+    // create splitter window
+    if (!m_wndSplitter.CreateStatic(this, 1, 2))
+        return FALSE;
+
+    if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CLeftView),
+CSize(100, 100), pContext) ||
+        !m_wndSplitter.CreateView(0, 1,
+RUNTIME_CLASS(CMyRichEditView), CSize(100, 100), pContext))
+    {
+        m_wndSplitter.DestroyWindow();
+        return FALSE;
+    }
+
+    return TRUE;
+
+    //return CMDIChildWnd::OnCreateClient(lpcs, pContext);
+}</pre>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;这里,CLeftView是你建立的一个新类,与对话框模板关联.CMyRichEditView是由程序向导 
+    生成器在开始时自动产生的. <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq4"></a><br>
+    </p>
+    <font color="Red"><h3>在运行时建立控件</h3>
+    </font><p>问:在SDI程序中,我需要在运行时于视类中(继承于CScrollView)构造及建立一个编辑框, 
+    一个组合框以及一个按钮,并显示及处理它们的消息.</p>
+    <p>答:这是通常使用的一个巧妙而简单方法 &nbsp;&nbsp;1)改写视中的OnCreate()，建立所有的控件以及相应的ID参数，然后在每个控件的Create() 
+    初始化各自的尺寸；<br>
+    &nbsp;&nbsp;2)改写视中的OnSize(),以你所想的任何方式处理在OnCreate()建立的控件尺寸,比如容下他们.<br>
+    &nbsp;&nbsp;3)从控件常用的消息映像中处理你想处理的消息.在消息映像定义处你必须以建立时同一个ID 
+    来处理该控件.这点你只能手工处理,因为类向导不能真正帮助你处理其类向导未知的控件的消 
+    息.不过你可以通过下面的方法来完成(很容易理解):在一个对话框模板中放入相同的控件以及 
+    相同的ID,用类向导建立消息处理句柄,将每个消息句柄拷贝至该控件的定义处,然后清除类向导 
+    加入的消息映像入口以及原型.<br>
+    &nbsp;&nbsp;(第二个回答)首先你不要在OnDraw(), OnPaint()重画任何控件(象编辑框,列表框等等),你只需要做的 
+    只是建立相应的控件,在你所说的例子中,你应在视中的OnInitialUpdate()建立控件.<br>
+    比如: </p>
+    <pre>m_pEdit = new CEdit; // m_pEdit is of type CEdit * - member of the viewclass
+m_pEdit-&gt;Create(WS_BORDER | WS_VISIBLE | ES_LEFT, CRect(0, 0, 20, 20),
+this /*pointer to parent window - important*/, 1001 /*id of control*/);</pre>
+    <p>&nbsp;&nbsp;接下来,控件自己会重画自己的(除非是定义为自画控件,这时你需要手工处理重画, 
+    另外这不是在OnDraw()中实现).然后写为这些控件编写处理函数.下面给出所要做的.<br>
+    &nbsp;&nbsp;1.为你所想处理的消息增加一个消息映像,比如如果你想处理编辑框的change消息,那么 
+    在BEGIN_MESSAGE_MAP() and END_MESSAGE_MAP()中加入ON_EN_CHANGE(1001 /* the controls 
+    id*/, CMyView::OnMyEditChange) in between CMyView::OnMyEditChange为你处理该消息的函数.CMyView是你的视类. 
+    <br>
+    &nbsp;&nbsp;2.然后在.h中入函数声明 </p>
+    <pre>afx_msg void  OnMyEditChange();</pre>
+    <p>&nbsp;&nbsp;3.在cpp文件中实现函数的功能. </p>
+    <pre>void CMyView::OnMyEditChange()
+{
+ // Your code here - to handle changes in the edit controls text.
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq5"></a><br>
+    </p>
+    <font color="Red"><h3>外部中止线程</h3>
+    </font><p>问:我有一个对话框,里面显示了一系列在一目录中可用的文件,我想当目录的内容有所 
+    变化时,对话框也能发生相应的变化,这需要从别的线程实现这个要求,但怎样才能使该 
+    线程能在对话框退出时同时关闭?</p>
+    <p>答:你可以做下面的一件事情就可以实现.<br>
+    -在对话框中调用TerminateThread(handle, exitcode). -使用信号量,当你想关闭线程时只需检查该标志罢了. 
+    -在线程中使用消息循环,然后从对话框调用PostThreadMessage 
+    &nbsp;&nbsp;&nbsp;&nbsp;2)谢谢大家的回复,在大家的帮助下我的问题已经解决了,现写出来给大家作参考. 
+    问题是有一个对话框,里面显示了一系列在一目录中可用的文件,我想当目录的内容有所 
+    变化时,对话框也能发生相应的变化.其实用一个新线程以及使用WaitForSingleObject() 
+    循环就可以了.但似乎不容易在退出对话框时中止线程,解决方法包括建立一个私有事件 
+    用WaitForMultipleObjects()等待.具体如下<br>
+    </p>
+    <pre>BOOL CLocalNotes::OnInitDialog()
+{
+    CDialog::OnInitDialog();
+
+CString eventname;          // Generate a unique event name
+    eventname.Format(&quot;Viewer %x&quot;, &amp;eventname);
+
+    m_FinishedHandle = CreateEvent(NULL, false, false, eventname);
+    m_WatcherThread = AfxBeginThread(FileWatcher, this,
+THREAD_PRIORITY_NORMAL,
+	0, CREATE_SUSPENDED, NULL);
+    m_NotifyHandle=::FindFirstChangeNotification(m_PatDir, false,
+	FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME);
+    m_WatcherThread-&gt;ResumeThread();
+
+    RefreshList();              // Generate the list of files
+    return TRUE;
+}
+....
+static UINT FileWatcher(LPVOID TheNote)
+{
+    CLocalNotes *OurNote = (CLocalNotes*)TheNote;
+
+    HANDLE handle[2];
+
+    handle[0]=OurNote-&gt;NotifyHandle();
+    handle[1]=OurNote-&gt;FinishedHandle();
+
+    for (;;) {
+	if (::WaitForMultipleObjects(2, handle, false, INFINITE) ==
+		WAIT_OBJECT_0+1)
+	    break;                      //
+Finished notification
+	OurNote-&gt;RefreshList();
+	FindNextChangeNotification(OurNote-&gt;NotifyHandle());
+    }
+
+    return 0;
+}
+....
+CLocalNotes::~CLocalNotes()
+{
+    ::SetEvent(m_FinishedHandle);
+    WaitForSingleObject(m_WatcherThread-&gt;m_hThread, INFINITE);
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq6"></a><br>
+    </p>
+    <font color="Red"><h3>用MFC Dao查找</h3>
+    </font><p>问:我正使用MFC Dao函数维护AccessDB文件,我有一个数据库文件包含下面几个表:一个表 
+    名为&quot;Customers&quot;有字段CustomerID(自动数字),CompanyName(文本)等等,另一个表名为 
+    &quot;Orders&quot;有字段OrderID(自动数字),CustomerID)等等.在这两张表中定义了关联,现在我 
+    的问题是当我使用MFC Dao成员函数时怎样得得两张表中的相关信息?</p>
+    <p>答:象下面这样做:<br>
+    </p>
+    <pre>CDaoRecordset set(pMyDatabase);
+
+set.Open(dbOpenSnapshot,_T(&quot;SELECT Orders.[Order ID] FROM Customers INNER
+JOIN Orders ON Customers.[Customer ID] = Orders.[Customer ID] WHERE
+Customers.[CompanyName] = '<whatever>' &quot;), dbForwardOnly | dbPassThrought |
+dbFailOnError );
+
+while (!set.IsEOF())
+{
+TRACE1(_T(&quot; Company <whatever> has [Order ID] = %ld&quot;), V_I4(
+&amp;set.GetFieldValue( 0 ) ) ); set.MoveNext();
+}</pre>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;这将会显示所有符合要求的公司,这些查询可以用Access建立并粘贴至你的代码. 
+    或者你可以用Access将符合要求的存入数据文件中,但这又是另外一种方法了. 
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq7"></a><br>
+    </p>
+    <font color="Red"><h3>关于DLL(动态连接库)</h3>
+    </font><p>问:我建立了一个DLL,该DLL仅会在我的程序中必要的时候调用,但我有个问题,我想输出(Export) 
+    函数,但不知道使用GetProcAddress()所需要的DLL的函数名?</p>
+    <p>答:我有个小小的解决方法,在你的代码中试试以下步骤:<br>
+    1)加一个MyDLL.def文件到你的项目中,在这个文件里输出函数应这样 </p>
+    <pre>EXPORTS DLL_Fun     @1</pre>
+    <p>2)象下面所讲的运行你的DLL_Fun(). </p>
+    <pre>void __declspec(dllexport) CALLBACK DLL_Fun(...)
+{
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());
+   // add your code
+   ...
+}
+
+在应用程序项目中
+// define the imported function type
+typedef void (CALLBACK *DLL_FUNCTION)(...)
+
+void CallDLLFun()
+{
+   HINSTANCE hDLL = ::LoadLibrary(&quot;MyDLL.DLL&quot;);
+   ASSERT(hDLL);
+   DLL_FUNCTION fun = (DLL_FUNCTION) GetProcAddress(hDLL, &quot;DLL_Fun&quot;);
+   ASSERT(fun);
+   fun(...);
+   ::FreeLibrary(hDLL);
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq8"></a><br>
+    </p>
+    <font color="Red"><h3>设置窗口图标</h3>
+    </font><p>问:如何将一个SDI程序中缺省的MFC图标改变一下?<br>
+    答:将ID为IDR_MAINFRAME的图标改一下就可以了,通常这个图标就是显示在SDI标题条, 
+    确信删除消该图标文件,否则依然存在,改变之后,重新编译一下就可以了.</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2)程序实现: </p>
+    <pre>        m_pMainWnd = new CMainFrame;
+        ((CFrameWnd*)m_pMainWnd)-&gt;LoadFrame(IDR_MAINFRAME);
+        m_pMainWnd-&gt;ShowWindow(m_nCmdShow);</pre>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;如果你采用以上代码,那么图标的ID必须是IDR_MAINFRAME; 
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <hr>
+    <a href="cmfcv32.htm"><p align="center">前一期</a>|<a href="cmfcv30.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+</center></div>
+
+<p><a name="PageBegin"></a></p>
+</body>
+</html>

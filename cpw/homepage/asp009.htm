@@ -1,0 +1,306 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（九）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （九）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计—— ASP 篇 （九）<font
+    size="-1"> </p>
+    <p align="right"></font><span style="font-family: 宋体; font-size: 9pt">作者 ： 天 
+    骄 创 作 室　书 生 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 上 一 篇 中 作 者 
+    给 大 家 详 细 介 绍 了 两 个 非 常 实 用 的 ASP 内 建 对 象 
+    Application 和 Session 的 使 用 方 法。由 于 这 两 者 的 OnStart、OnEnd 事 
+    件 的 脚 本 都 必 须 在 Global.asa 文 件 中 声 明 , 因 此，本 篇 将 给 
+    大 家 详 细 介 绍 Global.asa 文 件 的 使 用 方 法。为 使 大 家 熟 练 
+    掌 握 至 今 所 学 过 的 知 识，本 篇 还 将 举 出 一 个 ASP 的 Chat 程 
+    序，供 各 位 参 考。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 大 家 好，今 天 我 又 
+    要 和 大 家 一 起 来 学 习 ASP 了，最 近 很 多 朋 友 来 信 问 
+    我，为 什 么 前 两 期 的 范 例 程 序 运 行 时 有 这 样 那 样 的 
+    错。首 先，我 要 向 大 家 声 明，这 些 程 序 都 是 我 自 己 写 
+    的，在 出“厂”前 都 经 过 合 格 检 验，绝 无“假 冒 伪 劣 产 
+    品”。:) 由 于 程 序 中 使 用 了 cookie 记 录 客 户 信 息，所 以 如 
+    果 你 在 浏 览 器 中 没 有 设 置 接 受 cookie 则 程 序 将 不 能 正 常 
+    运 行。另 外，程 序 将 客 户 信 息 记 录 在 客 户 端 的 cookie 所 使 
+    用 的 方 法 是 Response.Cookie，此 语 句 必 须 写 在 ASP 文 件 中 的 第 
+    一 个 &lt; HTML&gt; 标 记 前，这 是 因 为 Cookie 是 作 为 HTTP 传 输 的 
+    头 信 息 的 一 部 分 发 送 给 客 户 的，如 果 当 HTTP 报 头 信 息 已 
+    经 传 输 给 客 户 后 再 使 用 Response.Cookie，将 出 现 以 下 错 误 :“HTTP 
+    标 题 已 经 写 入 到 客 户 浏 览 器。任 何 HTTP 标 题 的 修 改 必 须 
+    在 写 入 页 内 容 之 前。”，可 能 一 些 朋 友 在 剪 贴 程 序 的 
+    时 候 没 有 注 意，打 乱 了 程 序 的 前 后 次 序 , 或 者 是 错 误 
+    的 将 HTML 代 码 添 加 在 ASP 范 例 程 序 之 前，因 而 导 致 程 序 运 
+    行 出 错。因 此，我 建 议 大 家 一 方 面 在 首 次 运 行 例 程 的 
+    时 候 不 要 对 程 序 进 行 任 何 改 动，尽 量 在 看 懂 程 序 的 基 
+    础 上 逐 步 改 进，另 一 方 面 在 运 行 ASP 程 序 时 至 少 要 在 浏 
+    览 器 中 选 择 可 接 受 Cookie，否 则 一 旦 ASP 程 序 中 使 用 了 
+    Cookie 或 Session，它 们 都 将 无 法 正 常 运 行。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 我 来 向 大 家 
+    介 绍 Global.asa 文 件 的 使 用 方 法。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 什 么 是 Global.asa 文 
+    件？它 其 实 是 一 个 可 选 文 件，程 序 编 写 者 可 以 在 该 文 
+    件 中 指 定 事 件 脚 本，并 声 明 具 有 会 话 和 应 用 程 序 作 用 
+    域 的 对 象。该 文 件 的 内 容 不 是 用 来 给 用 户 显 示 的，而 
+    是 用 来 存 储 事 件 信 息 和 由 应 用 程 序 全 局 使 用 的 对 
+    象。该 文 件 的 名 称 必 须 是 Global.asa 且 必 须 存 放 在 应 用 程 
+    序 的 根 目 录 中。每 个 应 用 程 序 只 能 有 一 个 Global.asa 文 
+    件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 Global.asa 文 件 
+    中，如 果 包 含 的 脚 本 没 有 用 &lt; SCRIPT&gt; 标 记 封 装，或 定 
+    义 的 对 象 没 有 会 话 或 应 用 程 序 作 用 域，则 服 务 器 将 返 
+    回 错 误。我 们 可 以 用 任 何 支 持 脚 本 的 语 言 编 写 Global.asa 
+    文 件 中 包 含 的 脚 本。如 果 多 个 事 件 使 用 同 一 种 脚 本 语 
+    言，就 可 以 将 它 们 组 织 在 一 组 &lt; SCRIPT&gt; 标 记 中。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 Global.asa 文 件 中 声 
+    明 的 过 程 只 能 从 一 个 或 多 个 与 Application_OnStart、Application_OnEnd、Session_OnStart 
+    和 Session_OnEnd 事 件 相 关 的 脚 本 中 调 用。在 基 于 ASP 的 应 用 
+    程 序 的 ASP 页 中，它 们 是 不 可 用 的。如 果 要 在 应 用 程 序 
+    之 间 共 享 过 程，可 在 单 独 的 文 件 中 声 明 这 些 过 程，然 
+    后 使 用 服 务 器 端 包 容 (SSI) 语 句 将 该 文 件 包 含 在 调 用 该 
+    过 程 的 ASP 程 序 中。通 常，包 含 文 件 的 扩 展 名 应 为 .inc。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 是 一 个 很 标 
+    准 的 Global.asa 文 件 : <br>
+    &lt; SCRIPT LANGUAGE=&quot;VBScript&quot; RUNAT=&quot;Server&quot;&gt;<br>
+    'Session_OnStart 当 客 户 首 次 运 行 ASP 应 用 程 序 中 的 任 何 一 个 
+    页 面 时 运 行<br>
+    'Session_OnEnd 当 一 个 客 户 的 会 话 超 时 或 退 出 应 用 程 序 时 运 
+    行<br>
+    'Application_OnStart 当 任 何 客 户 首 次 访 问 该 应 用 程 序 的 首 页 
+    时 运 行<br>
+    'Application_OnEnd 当 该 站 点 的 WEB 服 务 器 关 闭 时 运 行<br>
+    &lt; /SCRIPT&gt;<br>
+    <br>
+    &lt; SCRIPT LANGUAGE=&quot;VBScript&quot; RUNAT=&quot;Server&quot;&gt;<br>
+    Sub Application_OnStart<br>
+    VisitorCountFilename = Server.MapPath (&quot;/ex2&quot;) + &quot;\VisitCount.txt&quot;<br>
+    Set FileObject = Server.CreateObject(&quot;Scripting.FileSystemObject&quot;)<br>
+    Set Out= FileObject.OpenTextFile (VisitorCountFilename, 1, FALSE, FALSE)<br>
+    Application(&quot;visitors&quot;) = Out.ReadLine<br>
+    Application(&quot;VisitorCountFilename&quot;) = VisitorCountFilename<br>
+    End Sub<br>
+    '=========================================================<br>
+    SUB Application_OnEnd<br>
+    Set FileOutObject = Server.CreateObject(&quot;Scripting.FileSystemObject&quot;)<br>
+    Set Out= FileOutObject.CreateTextFile (Application(&quot;VisitorCountFilename&quot;), 
+    TRUE,FALSE)<br>
+    Out.WriteLine(application(&quot;visitors&quot;))<br>
+    End Sub<br>
+    '=========================================================Sub Session_OnStart<br>
+    Session.Timeout = 5<br>
+    Application(&quot;visitors&quot;) = Application(&quot;visitors&quot;) + 1<br>
+    Session(&quot;ID&quot;)=Session.SessionID<br>
+    End Sub<br>
+    &lt; /SCRIPT&gt;<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 这 个 Global.asa 程 序 
+    中，涉 及 到 了 ASP 的 File Access 组 件，它 可 以 提 供 用 于 访 问 
+    文 件 系 统 的 方 法、属 性 和 集 合。这 将 在 以 后 ASP 的 组 件 
+    中 进 行 展 开 讨 论。在 这 里，它 起 到 了 在 服 务 器 上 创 建 
+    新 文 件 并 对 文 件 进 行 写 操 作 的 作 用。这 其 实 是 一 个 ASP 
+    页 面 访 问 记 数 器 应 用 程 序 的 Global 文 件，首 先 当 客 户 首 
+    次 访 问 该 应 用 程 序 的 首 页 时 , 过 程 Application_OnStart 定 义 了 
+    在 服 务 器 上 指 定 的 虚 拟 目 录 下 新 建 一 个 VisitCount.txt 的 文 
+    本 文 件，并 将 文 件 的 路 径 和 内 容 保 存 在 应 用 程 序 级 的 
+    变 量 中。而 当 任 何 一 个 客 户 访 问 ASP 应 用 程 序 中 的 任 何 
+    一 个 页 面 时，过 程 Session_OnStart 定 义 将 应 用 程 序 级 的 变 量 
+    visitors 的 值 自 动 加 一。这 样，每 当 有 客 户 访 问 页 面 时，变 
+    量 visitors 都 将 自 动 加 一，以 起 到 统 计 点 击 率 的 作 用。由 
+    于 变 量 visitors 的 值 是 存 储 在 系 统 内 存 之 中，所 以 如 果 服 
+    务 器 关 闭 或 重 新 启 动，存 储 在 变 量 中 的 数 据 将 自 动 丢 
+    失，所 以 通 过 定 义 过 程 Application_OnEnd，在 服 务 器 关 闭 或 重 
+    启 之 前 将 数 据 写 入 事 先 建 立 的 文 本 文 件 之 中，这 样 就 
+    能 确 保 当 服 务 器 再 次 启 动 时，Application_OnStart 过 程 可 以 从 
+    VisitCount.txt 文 件 中 读 取 以 前 的 统 计 数。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 经 过 这 段 时 间 的 
+    学 习，相 信 大 家 已 经 能 够 比 较 熟 练 的 运 用 我 们 所 学 过 
+    的 这 些 ASP 内 建 对 象 来 编 写 一 些 较 简 单 的 ASP 应 用 程 
+    序，可 别 小 看 你 现 在 所 掌 握 的 这 些 ASP 基 本 知 识 哦 ! 其 
+    实 你 已 经 能 够 开 发 一 些 简 单 但 实 用 的 ASP 应 用 程 序 
+    了。下 面 我 就 举 一 个 非 常 简 单 的 ASP WEB 聊 天 室 程 序，你 
+    会 发 觉 写 聊 天 室 原 来 是 一 件 这 么 容 易、轻 松 的 事。可 
+    能 朋 友 们 已 经 在 一 些 杂 志 上 看 到 过 ASP 聊 天 程 序 的 编 
+    写 方 法，但 作 者 在 这 里 自 己 写 了 一 个 更 简 单 的 程 
+    序，仅 仅 使 用 了 一 个 .asp 文 件。请 将 以 下 代 码 剪 贴 到 记 
+    事 簿 并 保 存 为 chat.asp。 <br>
+    &lt; %@ Language=VBScript %&gt;<br>
+    &lt; %<br>
+    Response.Buffer=true ' 设 置 输 出 缓 存，用 于 显 示 不 同 页 面。<br>
+    On error resume next ' 忽 略 程 序 出 错 部 分<br>
+    If Request.ServerVariables(&quot;Request_Method&quot;)=&quot;GET&quot; then<br>
+    ' 判 断 客 户 是 以 什 么 方 式 请 求 WEB 页 面<br>
+    '------------------------<br>
+    ' 客 户 登 陆 界 面 <br>
+    '------------------------<br>
+    %&gt;<br>
+    <br>
+    &lt; form method=&quot;POST&quot; action=&quot;chat.asp&quot;&gt;&lt; p&gt;<br>
+    &lt; input type=&quot;text&quot; name=&quot;nick&quot; size=&quot;20&quot; 
+    value=&quot;nick&quot; style=&quot;background-color: rgb(192,192,192)&quot;&gt;&lt; br&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt; input type=&quot;submit&quot; value=&quot; 进 入 聊 天 
+    室 &quot; name=&quot;B1&quot; style=&quot;color: rgb(255,255,0); font-size: 9pt; 
+    background-color: rgb(0,128,128)&quot;&gt;<br>
+    &lt; p&gt;&lt; input type=&quot;hidden&quot; name=&quot;log&quot; size=&quot;20&quot; 
+    value=&quot;1&quot;&gt;&lt; br&gt;&lt; /p&gt;<br>
+    &lt; /form&gt;<br>
+    <br>
+    &lt; %<br>
+    Response.End ' 结 束 程 序 的 处 理<br>
+    Else<br>
+    Response.clear ' 清 空 缓 存 中 的 内 容<br>
+    dim talk<br>
+    If Request.Form(&quot;nick&quot;)&lt;&gt;&quot;&quot; then<br>
+    ' 判 断 客 户 是 是 否 在 聊 天 界 面 中 <br>
+    Session(&quot;nick&quot;)=Request.Form(&quot;nick&quot;)<br>
+    End If<br>
+    '------------------------'<br>
+    客 户 聊 天 界 面 <br>
+    '------------------------<br>
+    %&gt;<br>
+    <br>
+    &lt; form method=&quot;POST&quot; action=&quot;chat.asp&quot; name=form1&gt; &lt; 
+    p&gt;&lt; %=Session(&quot;nick&quot;)%&gt; 说 话：&lt; input type=&quot;text&quot; 
+    name=&quot;talk&quot; size=&quot;50&quot;&gt;&lt; br&gt;<br>
+    &lt; input type=&quot;submit&quot; value=&quot; 提 交 &quot; name=&quot;B1&quot;&gt;<br>
+    &lt; input type=&quot;reset&quot; value=&quot; 取 消 &quot; name=&quot;B2&quot;&gt;&lt; 
+    /p&gt;<br>
+    &lt; /form&gt;<br>
+    &lt; A HREF=&quot;/asptest/shusheng/chat.asp&quot;&gt; 离 开 &lt; /a&gt;&lt; br&gt;&lt; 
+    br&gt;<br>
+    <br>
+    &lt; %<br>
+    If Request.Form(&quot;log&quot;)&lt;&gt;1 then<br>
+    If trim(Request.Form(&quot;talk&quot;))=&quot;&quot; then<br>
+    ' 判 断 用 户 是 否 没 有 输 入 任 何 内 容 <br>
+    talk=Session(&quot;nick&quot;)&amp;&quot; 沉 默 是 金。&quot;<br>
+    Else<br>
+    talk=trim(Request.Form(&quot;talk&quot;))<br>
+    ' 去 掉 字 符 后 的 空 格 <br>
+    End If<br>
+    <br>
+    Application.lock<br>
+    Application(&quot;show&quot;)=&quot;&lt; table border='0' cellpadding='0' cellspacing='0' 
+    width='85%' &gt;&lt; tr&gt;&lt; td width='100%' bgcolor='#C0C0C0'&gt;&lt; /td&gt;&lt; 
+    /tr&gt;&lt; tr&gt;&lt; td width='100%'&gt;&lt; font color='#0000FF'&gt; 来 自 
+    &quot;&amp;Request.ServerVariables(&quot;remote_addr&quot;)&amp;&quot; 的 
+    &quot;&amp;Session(&quot;nick&quot;)&amp;time&amp;&quot; 说：&lt; 
+    /font&gt;&quot;&amp;talk&amp;&quot;&lt; /td&gt;&lt; /tr&gt;&lt; tr&gt;&lt; td width='100%' 
+    bgcolor='#C0C0C0'&gt;&lt; /td&gt;&lt; /tr&gt;&lt; /table&gt;&lt; 
+    br&gt;&quot;&amp;Application(&quot;show&quot;)<br>
+    Application.UnLock<br>
+    <br>
+    Response.Write Application(&quot;show&quot;)<br>
+    End If<br>
+    End If<br>
+    %&gt;<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 第 一 次 运 行 chat.asp 
+    程 序，你 首 先 将 看 到 如 下 页 面 : <br>
+    <img border="0" src="images/asp9a.gif" WIDTH="166" HEIGHT="68"> </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 选 择 你 的 nick 进 入 
+    聊 天 室 后，将 看 到 如 下 页 面 : <br>
+    <img border="0" src="images/asp9b.gif" WIDTH="478" HEIGHT="92"> </span></p>
+    <p>　</p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 输 入 你 想 要 说 的 
+    话，对 话 将 出 现 在 输 入 框 的 下 方，如 下 图 : <br>
+    <img border="0" src="images/asp9c.gif" WIDTH="418" HEIGHT="218"> </span></p>
+    <p>　</p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 我 们 来 对 这 
+    个 聊 天 室 程 序 进 行 逐 步 的 分 析。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 首 先，由 于 聊 天 室 
+    的 所 有 客 户 都 要 能 够 共 享 信 息，所 以 不 可 避 免 的 要 用 
+    到 具 有 应 用 程 序 级 变 量 的 对 象 Application，这 是 建 立 Chat 程 
+    序 的 关 键 所 在，所 有 的 谈 话 数 据 都 存 放 在 一 个 应 用 程 
+    序 级 变 量 中，以 便 让 所 有 的 客 户 读 取。我 们 可 以 用 所 
+    学 过 的 request 对 象 获 取 客 户 所 输 入 的 谈 话，并 保 存 在 变 
+    量 talk 中 , 然 后 将 talk 的 值 存 入 应 用 程 序 级 变 量 show 中，如 
+    下 : <br>
+    　　&lt; % Application(&quot;show&quot;)=talk&amp;Application(&quot;show&quot;) %&gt;</span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 接 下 来 要 考 虑 的 
+    是 当 不 同 的 客 户 同 时 向 Chat 应 用 程 序 进 行 操 作 的 时 候 
+    如 何 处 理。这 个 问 题 其 实 与 在 数 据 库 中 的 两 个 用 户 同 
+    时 写 入 同 一 个 记 录 一 样，如 果 两 个 用 户 同 时 对 同 一 个 
+    应 用 程 序 级 变 量 进 行 写 操 作，则 一 个 用 户 所 作 的 修 改 
+    会 被 另 一 个 用 户 的 操 作 所 覆 盖，所 以，如 果 对 Application 
+    对 象 数 据 的 并 发 访 问 不 采 取 一 定 措 施，则 会 导 致 当 两 
+    个 用 户 试 图 同 时 对 Asp 聊 天 室 应 用 程 序 提 交 时，一 个 用 
+    户 的 提 交 内 容 会 被 另 一 个 用 户 的 提 交 内 容 所 覆 盖，在 
+    被 参 加 到 会 话 中 的 任 何 人 看 到 之 前 就 消 失 了。为 了 避 
+    免 这 类 问 题 的 出 现，我 们 需 要 使 用 Application 对 象 的 Lock 属 
+    性 来 约 束 只 允 许 当 前 的 用 户 编 辑 或 增 加 Application 对 象 
+    的 属 性，这 样 当 用 户 开 始 修 改 应 用 程 序 级 变 量 开 
+    始，到 Application 对 象 被 显 式 地 Unlocked 为 止，Application 对 象 的 
+    属 性 只 能 被 该 用 户 编 辑，如 果 此 时 有 其 他 用 户 请 求 编 
+    辑 Application 对 象，则 这 些 用 户 要 排 队 等 待，知 道 应 用 程 
+    序 被 Unlock 为 止。如 下 所 示 : <br>
+    Application.lock<br>
+    Application(&quot;show&quot;)=talk&amp;Application(&quot;show&quot;)<br>
+    Application.UnLock<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 现 在 整 个 程 序 的 
+    核 心 部 分 你 已 经 了 解 了，下 面 考 虑 如 何 保 存 客 户 信 
+    息，这 里 我 们 要 用 到 一 个 会 话 级 变 量，即 将 客 户 的 nick 
+    保 存 在 Session 中。如: <br>
+    Session(&quot;nick&quot;)=Request.Form(&quot;nick&quot;)</span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 最 后，我 们 要 考 虑 
+    的 是 如 何 仅 在 一 个 .asp 文 件 中 处 理 各 种 事 件 , 如 : 客 户 
+    登 陆 界 面、客 户 聊 天 界 面。由 于 客 户 第 一 次 请 求 .asp 文 
+    件 时，采 用 的 是 简 单 的 HTTP GET 方 式，但 是 当 客 户 向 页 面 
+    上 的 表 单 字 段 中 增 加 的 数 据 并 向 自 身 提 交 表 单 后，.asp 
+    文 件 会 再 次 被 请 求，不 过 这 次 数 据 是 经 过 HTTP POST 方 式 
+    进 行 传 递 的。文 件 被 请 求 的 方 式 可 以 用 两 种 方 法 来 确 
+    定。一 是 测 试 Request.Form 集 合 是 否 包 含 成 员，若 没 有，则 表 
+    明 没 有 发 送 给 表 单 处 理 的 数 据。二 是 使 用 
+    Request.ServerVariables(&quot;Request_Method&quot;) 变 量。如 果 表 单 是 通 过 
+    HTTP GET 方 式 被 请 求 的，则 这 个 变 量 会 返 回“GET”，如 果 表 
+    单 被 提 交 处 理 则 返 回“POST”。由 于 后 一 种 方 法 对 于 确 
+    定 文 件 的 请 求 方 式 更 直 接，所 以 我 们 使 用 如 下 代 码 进 
+    行 判 断 : <br>
+    　　if Request.ServerVariables(&quot;Request_Method&quot;)=&quot;GET&quot; then<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 由 于 我 们 设 置 了 
+    ASP 缓 存，所 以 当 程 序 判 断 页 面 请 求 方 式 为 GET 时，程 序 
+    运 行 Response.End，来 结 束 后 面 的 所 有 操 作，否 则 则 运 行 
+    Response.clear, 清 空 缓 存 中 已 有 的 内 容，并 继 续 程 序 的 运 
+    行。这 样 我 们 就 得 以 用 同 一 个 .asp 文 件 根 据 不 同 情 况 给 
+    客 户 显 示 不 同 的 界 面。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 好 了，我 已 经 将 这 
+    个 ASP Chat 程 序 的 核 心 部 分 告 诉 大 家 了，剩 下 的 一 些 细 节 
+    性 问 题 请 各 位 自 己 读 程 序 吧，其 实 这 个 程 序 还 存 在 很 
+    多 不 足 之 处，最 大 的 毛 病 是 我 没 有 写 自 动 刷 新 的 功 
+    能，因 此 如 果 你 在 Chat 中 不 说 话，那 也 就 看 不 到 其 他 客 
+    户 所 说 的 话 了。Chat 在 Internet 中 的 魅 力 大 家 是 知 道 的，其 
+    实 , 用 ASP 也 完 全 能 做 到 同 irc 类 似 的 强 大 功 能，当 然 这 
+    就 需 要 写 更 多 的 代 码，如 果 大 家 有 兴 趣 请 写 信 给 
+    我，我 将 在 今 后 的 文 章 中 逐 步 提 升 这 个 chat 程 序 的 等 
+    级，让 大 家 也 过 过“Oper”的 隐。注：有 了 这 个 chat 程 序，你 
+    就 可 以 用 来 在 自 己 的 PWS 上 建 一 个 chat 应 用 程 序，只 要 将 
+    你 的 IP 地 址 告 诉 朋 友，如 http://202.96.210.33/asp/chat.asp，你 们 就 
+    可 以 通 过 你 的 电 脑 在 网 上 聊 天 了，很 爽 的，不 信 你 试 
+    试 ! </span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

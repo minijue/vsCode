@@ -1,0 +1,346 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>应用MFC开发高级应用程序</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<p align="center"><strong><span style="font-size: 9pt"><font size="5">应用</font><font
+face="Arial" size="4">MFC</font><font size="4">开发高级应用程序</font></span></strong></p>
+
+<p align="center"><span style="font-size: 9pt">录入/江湖小子</span></p>
+
+<p><span style="font-size: 9pt">摘要：目前在Windows下开发应用程序的工具虽然很多，但是C/C++作为一种非常成熟和高效的开发语言在大型复杂项目的开发中仍然得到了广泛应用。为了减轻程序开发负担，提高开发效率，各种流行的C++都提供了类库，本文就是针对如何在Visual 
+C++环境中使用MFC类库来开发高级程序所需要解决的一些问题进行了的探讨，重点讨论了利用MFC开发单文档多视应用程序和DDE应用程序的方法。</span></p>
+
+<p><span style="font-size: 9pt">一、MFC编程综述<br>
+采用MFC开发Windows程序之所以能够大幅度提高开发速度和效率主要是因为MFC在类层次封装了大量Windows 
+SDK函数和典型Windows应用的缺省处理，这样，用户只需要较少的编程就可以实现自己的开发任务。如果在MFC基础上再配合Visual 
+C++提供的AppWizard、ClassWizard和AppStudio工具那么更可以大幅度加快开发进程。MFC提供大量的基类供程序员使用，常见的如CWinApp类、CFrameWnd类、CMDIFrameWnd 
+类、CMDIChildWnd类、CView类、CDC类和CDocument类等等。通过从这些基类中派生出用户自己的类，然后重载特殊的几个函数就可以生成一个独立的应用程序。可以说，采用MFC编写Windows应用程序是非常方便的，虽然其学习过程并不简单，但是其提供的灵活高效性足以使任何Windows程序开发人员为之付出努力。<br>
+采用MFC应用框架产生的应用程序使用了标准化的结构，因而使得采用MFC编写的程序的在不同平台上的移植变得非常容易，事实上，MFC的16位和32位版本之间差别很小。MFC提供的标准化结构是经过众多专家分析调研后总结编写出来的，一般情况下可以满足绝大多数用户的要求，但有时用户也可以通过重载一些函数来修改其缺省的风格从而实现自己特有的风格，如自定义应用图表和灰色背景等。在MFC提供的文档视结构中，文档、视和资源之间的联系是通过定义文档模板来实现的，如：<br>
+m_pSimuTemplate = new CMultiDocTemplate(<br>
+IDR_SIMUTYPE,<br>
+RUNTIME_CLASS(CSimuDoc),<br>
+RUNTIME_CLASS(CMyChild), // Derived MDI child frame<br>
+RUNTIME_CLASS(CSimuView));<br>
+上中第一项IDR_SIMUTYPE就包括了视口的菜单，加速键和图表等资源，如果用户使用AppWizard来产生的应用基本框架，那么其也同时产生了缺省的图标，如果用户不满意缺省图标（实际上用户很少满足于缺省图标），只需要将缺省图标删除，然后编辑或者直接引入一个新的图标，在存储这一图标时只需要使用与被删除图标同样的ID即可实现替代。 
+熟悉Windows程序开发的人都知道，在Windows上通过使用灰色背景可以增强应用程序的视觉效果，曾有人戏称，灰色是图形界面永恒的颜色。使用MFC产生的应用程序的背景缺省为白色，如果用户希望改变成灰色或者其它颜色，那就需要使用单独处理，解决的办法很多，如在每次视口的OnPaint()事件中采用灰色刷子人为填充背景，但是这不是最好的办法。笔者发现最好的办法就是采用AfxRegisterWndClass()函数注册一个使用灰色背景刷的新的窗口类，这需要重载PreCreateWindow()函数来<br>
+实现这一点，如下程序代码片段所示：<br>
+BOOL CSimuView::PreCreateWindow(CREATESTRUCT&amp; cs)<br>
+{<br>
+HBRUSH hbkbrush=CreateSolidBrush(RGB(192,192,192));//创建灰色背景刷<br>
+LPCSTR lpMyOwnClass=AfxRegisterWndClass(CS_HREDRAW<br>
+|CS_VREDRAW|CS_OWNDC,0,hbkbrush);//注册新类<br>
+cs.lpszClass=lpMyOwnClass;//修改缺省的类风格<br>
+return TRUE;<br>
+}<br>
+采用这种方法速度最快，也最省力。同时，还可以在PreCreateWindow()函数定义所希望的任何窗口风格，如窗口大小，光标式样等。</span></p>
+
+<p><span style="font-size: 9pt">二、使用单文档-多视结构<br>
+如果用户使用过MFC进行编程，那么就会发现借助于AppWizard基于MFC无论编写SDI(单文档界面)还是编写MDI(多文档界面)都是十分方便的。MDI应用程序目前使用越来越普遍，人们熟悉的Microsoft公司的Office系列产品以及Visual系列产品都是典型的多文档应用程序。这种多文档界面具有多窗口的特点，因而人们可以在一个程序中使用多个子窗口来实现不同数据的浏览查看。如果用户要实现在MDI各个窗口之间针对同一数据进行不同的可视化就是一件比较麻烦的事情。值得庆幸的是，MFC提供的文档-视结构大大简化了这一工作。文档-视结构通过将数据从用户对数据的观察中分离出来，从而方便实现多视，亦即多个视口针对同一数据，如果一个视口中数据发生改变，那么其它相关视口中的内容也会随之发生改变以反映数据的变化。SDI和MDI这两种Windows标准应用程序框架并不是总能满足用户的需要，就作者的工作而言，就特别需要一种被称为单文档多视的应用程序，英文可以缩写为SDMV。通过SDMV应用我们可以利用文档类来统一管理应用程序的所有数据，同时需要采用多窗口以多种方式来可视化这些的数据，如棒图，趋势图和参数列表，从而方便用户从不同角度来观察数据。MDI虽然具有多窗口的特点，但是其为多文档，即通常情况下，一个视口对应一个文档，视口+文档便构成一个子窗口。在各个子窗口之间数据相互独立，如果要保持数据同步更新就需要采用特殊的技术了，采用这种方式既费时又费力。通过笔者的实践发现，利用MFC本身提供的多视概念通过适当改造MDI窗口应用程序就可以实现上述SDMV结构。<br>
+所谓SDMV应用程序本质上仍然是一个MDI应用程序，只是在程序中我们人为控制使其只能生成一个文档类，这个文档在第一个视口创建时创建，注意，这里并不需要限制各个视口的创建先后顺序。此后与MDI窗口固有特性不同的是，所有新创建的子窗口都不再创建独立文档，而是把该新视口直接连接到已有的文档对象上，这样就使其成为单文档多视的结构，所有相关数据都存储在文档对象中，一旦文挡中数据发生改变，通过UpdateAllViews()函数通知所有相关视口，各个视口就可以在OnUpdate()中相应数据的变化。<br>
+由于MDI本质上并不是为这种单文档多视机制服务的，因而在实际应用时需要解决一些问题。<br>
+1、窗口标题问题<br>
+窗口标题本来不应该成为问题，缺省情况下MDI窗口通过在文档模板中提供的资源ID所提供的对应字符串来确定窗口标题。但是对于SDMV应用，由于各个视口实质上是 
+对应于同一个文挡，因此每个视口都具有相同标题，只不过增加了一个数据用于指示这是第几个视口。如果在各个视口中指明具体的窗口名字，那么由不同的视口启<br>
+动创建文档产生的窗口标题就不同，这个名字会影响到后继视口。为了作到不同类<br>
+型的视口如棒图视口和曲线视口具有不同的标题，这就需要一定的技术处理。根据<br>
+笔者的摸索发现可以采用如下步骤实现：<br>
+首先在从标准的MDI子窗口基类CMDIChildWnd派生一个自己的子窗口类，姑且命名为 
+CMyChild，然后在其成员变量中增加一个CString型变量用以存储当前窗口标题：<br>
+CString winTitle;<br>
+然后在不同的视口创建过程中通过获取父窗口指针按自己的意愿对上述变量进行赋值，程序片段如下：<br>
+pChild=(CMyChild*)GetParent();<br>
+pChild-&gt;winTitle=&quot;棒图显示窗口&quot;;<br>
+最后在CMyChild派生类中重载CMDIChildWnd基类中的OnUpdateFrameTitle()函数来强制实现窗口标题的个性化，这一函数在各种类库手册上和联机帮助中都没有，但的确有这样一个具有保护属性的函数用来实现窗口标题的更新操作，这可以从MFC类库的源代码中找到该函数的实现。重载后的源代码如下：<br>
+void CMyChild::OnUpdateFrameTitle(BOOL bAddToTitle)<br>
+{<br>
+// update our parent window first<br>
+GetMDIFrame()-&gt;OnUpdateFrameTitle(bAddToTitle);<br>
+<br>
+if ((GetStyle() &amp; FWS_ADDTOTITLE) == 0)<br>
+return; // leave child window alone!<br>
+<br>
+CDocument* pDocument = GetActiveDocument();<br>
+if (bAddToTitle &amp;&amp; pDocument != NULL)<br>
+{<br>
+char szOld[256];<br>
+GetWindowText(szOld, sizeof(szOld));<br>
+char szText[256];<br>
+<br>
+lstrcpy(szText,winTitle); //Modified by author!<br>
+if (m_nWindow &gt; 0)<br>
+wsprintf(szText + lstrlen(szText), &quot;:%d&quot;, m_nWindow);<br>
+<br>
+// set title if changed, but don't remove completely<br>
+if (lstrcmp(szText, szOld) != 0)<br>
+SetWindowText(szText);<br>
+}<br>
+}<br>
+2、如何创建SDMV应用<br>
+如何创建SDMV应用比较麻烦，下面通过举例来具体说明。该例子假设用户需要建棒图类型和曲线形式的两种视口，假设用户已经利用CView基类派生并且实现了这两个类，分别对应于CMyChart和CMyTraceView两个类。<br>
+1) 在应用类（从CWinApp派生出来的类）的头文件中加入下列变量和函数原型说明：<br>
+CMultiDocTemplate* m_pMyTraceTemplate;<br>
+CMultiDocTemplate* m_pMyChartTemplate;<br>
+int ExitInstance();<br>
+2) 在应用类的InitInstance成员函数中删除对AddDocTemplate函数的调用和<br>
+OpenFileNew()语句，并且加入如下代码：<br>
+m_pMyTraceTemplate = new CMultiDocTemplate(<br>
+IDR_MYTRACEVIEW,<br>
+RUNTIME_CLASS(CSimuDoc),<br>
+RUNTIME_CLASS(CMyChild), // Derived MDI child frame<br>
+RUNTIME_CLASS(CMyTraceView));<br>
+<br>
+m_pMyChartTemplate = new CMultiDocTemplate(<br>
+IDR_MYCHART,<br>
+RUNTIME_CLASS(CSimuDoc),<br>
+RUNTIME_CLASS(CMyChild), // Derived MDI child frame<br>
+RUNTIME_CLASS(CMyChart));<br>
+3) 实现ExitInstance()函数，在其中删除所用的两个辅助模板：<br>
+int CTestApp::ExitInstance()<br>
+{<br>
+if(m_pMyChartTemplate) delete m_pMyChartTemplate;<br>
+if(m_pMyTraceTemplate) delete m_pMyTraceTemplate;<br>
+return TRUE;<br>
+}<br>
+4) 在菜单资源中去掉File菜单中的New和Open项，加入New Chart View和New 
+Trace View两项，在对应的菜单命令中实现如下：<br>
+void CMainFrame::OnNewMychart()<br>
+{<br>
+// TODO: Add your command handler code here<br>
+OnNewView(((CSimuApp*)AfxGetApp())-&gt;m_pMyChartTemplate);<br>
+}<br>
+void CMainFrame::OnNewMyTrace()<br>
+{<br>
+// TODO: Add your command handler code here<br>
+OnNewView(((CSimuApp*)AfxGetApp())-&gt;m_pMyTraceTemplate);<br>
+}<br>
+上中OnNewView的实现如下：<br>
+BOOL CMainFrame::OnNewView(CMultiDocTemplate* pDocTemplate)<br>
+{<br>
+CMDIChildWnd* pActiveChild = MDIGetActive();<br>
+CDocument* pDocument;<br>
+if (pActiveChild == NULL ||<br>
+(pDocument = pActiveChild-&gt;GetActiveDocument()) == NULL)<br>
+{<br>
+TRACE0(&quot;Now New the specify view\n&quot;);<br>
+ASSERT(pDocTemplate != NULL);<br>
+ASSERT(pDocTemplate-&gt;IsKindOf(RUNTIME_CLASS(CDocTemplate)));<br>
+pDocTemplate-&gt;OpenDocumentFile(NULL);<br>
+return TRUE;<br>
+}<br>
+<br>
+// otherwise we have a new frame to the same document!<br>
+CMultiDocTemplate* pTemplate = pDocTemplate;<br>
+ASSERT_VALID(pTemplate);<br>
+CFrameWnd* pFrame = pTemplate-&gt;CreateNewFrame(pDocument, pActiveChild);<br>
+if (pFrame == NULL)<br>
+{<br>
+TRACE0(&quot;Warning: failed to create new frame\n&quot;);<br>
+return FALSE; // command failed<br>
+}<br>
+pTemplate-&gt;InitialUpdateFrame(pFrame, pDocument);<br>
+return TRUE;<br>
+}<br>
+OnNewView是整个SDMV应用的核心组成，它的任务是创建一个新的指定类型的视口，它首先判断是否有活动视口存在，文档是否已经创建，正常情况下活动视口存在则表明文档存在，如果不存在则利用所指定的文档模板创建一个新的活动视口，否则则只创建视口，同时将其连接到已存在的文档对象上。<br>
+通过以上步骤就可以实现SDMV应用，在其后的具体应用中利用文档对象的UpdateAllViews()函数和视口的OnUpdate()函数就可以很好的工作了。</span></p>
+
+<p><span style="font-size: 9pt">三、使用DDE服务<br>
+Windows 95是一个分时多任务操作环境，在此环境下，多个应用程序可以并发地执行。为了在并发执行的多个任务之间共享数据和资源，Windows 
+提供了几种机制，主要是通过剪贴板(Clipboard)和动态数据交换(Dynamic 
+Data Exchange)。前者对于用户需要直接参与的数据交换来说，是一个非常方便的工具，但是如果希望数据交换自动进行时就必须依靠DDE技术了。编写DDE应用的技术也发展了好几代，从最初的基于消息的DDE到基于DDEML(动态数据交换管理库)，再到现在流行的OLE技术。DDE技术的发展使得程序开发人员编写DDE应用更为简洁。从发展趋势来看，基于OLE的数据交换是最好的，它特别符合当今软件领域的客户-服务器机制(Client-Server)。为适应多平台和Internet的需要，在OLE基础上微软又开发了ActiveX技术。但是不容忽视的是，基于传统的DDE数据交换也自有它的应用空间，使用仍然广泛。目前在Windows 
+95下，基于OLE的远程数据交换还很不成熟，但是在WFW(Windows for 
+Workgroup)下基于网络动态数据交换的技术却很成熟，目前也应用非常普遍。<br>
+1、回调函数的处理<br>
+由于DDEML机制需要使用回调函数，因此使用DDEML的关键是解决在MFC编程体系中回调函数的使用。回调函数(Callback 
+function)大量用于Windows的系统服务，通过它，程序员可以安装设备驱动程序和消息过滤系统，以控制Windows的有效使用。许多程序员都发现，利用MFC或者其它的C++应用编写回调函数是非常麻烦的，其根本原因是回调函数是基于C编程的Windows 
+SDK的技术，不是针对C++的，程序员可以将一个C函数直接作为回调函数，但是如果试图直接使用C++的成员函数作为回调函数将发生错误，甚至编译就不能通过。通过查询资料发现，其错误是普通的C++成员函数都隐含了一个传递函数作为参数，亦即“this”指针，C++通过传递一个指向自身的指针给其成员函数从而实现程序函数可以访问C++的数据成员。这也可以理解为什么C++类的多个实例可以共享成员函数但是确有不同的数据成员。由于this指针的作用，使得将一个CALLBACK型的成员函数作为回调函数安装时就会因为隐含的this指针使得函数参数个数不匹配，从而导致回调函数安装失败。要解决这一问题的关键就是不让this指针起作用，通过采用以下两种典型技术可以解决在C++中使用回调函数所遇到的问题。这种方法具有通用性，适合于任何C++。<br>
+1. 不使用成员函数，直接使用普通C函数，为了实现在C函数中可以访问类的成员变量，可以使用友元操作符(friend)，在C++中将该C函数说明为类的友元即可。这种处理机制与普通的C编程中使用回调函数一样。<br>
+2. 使用静态成员函数，静态成员函数不使用this指针作为隐含参数，这样就可以作为回调函数了。静态成员函数具有两大特点：其一，可以在没有类实例的情况下使用；其二，只能访问静态成员变量和静态成员函数，不能访问非静态成员变量和非静态成员函数。由于在C++中使用类成员函数作为回调函数的目的就是为了访问所有的成员变量和成员函数，如果作不到这一点将不具有实际意义。解决的办法也很简单，就是使用一个静态类指针作为类成员，通过在类创建时初始化该静态指针，如pThis=this，然后在回调函数中通过该静态指针就可以访问所有成员变量和成员函数了。这种处理办法适用于只有一个类实例的情况，因为多个类实例将共享静态类成员和静态成员函数，这就导致静态指针指向最后创建的类实例。为了避免这种情况，可以使用回调函数的一个参数来传递this指针，从而实现数据成员共享。这种方法稍稍麻烦，这里就不再赘述。<br>
+2、在MFC中使用DDEML<br>
+对于典型的MFC应用程序，主框架窗口类(CMainFrame)只有一个实例，因此可以使用静态成员函数作为回调函数，从而实现DDE机制。具体的代码片段如下：<br>
+(1) 在CMainFrame类中声明如下静态成员：<br>
+static CMainFrame* pThis;<br>
+static DWORD idInst;<br>
+static HDDEDATA CALLBACK EXPORT DdeCallback(UINT,UINT,HCONV,HSZ,HSZ,<br>
+HDDEDATA,DWORD,DWORD);<br>
+(2) 在类的创建代码(OnCreate())中作如下说明：<br>
+pThis=this; <br>
+lpDdeCallback=MakeProcInstance((FARPROC)DdeCallback,hInstance);<br>
+if(DdeInitialize(&amp;idInst,(PFNCALLBACK)lpDdeCallback,CBF_FAIL_EXECUTES<br>
+|CBF_SKIP_REGISTRATIONS|CBF_SKIP_UNREGISTRATIONS,0L))<br>
+{<br>
+AfxMessageBox(&quot;不能初始化DDE服务&quot;,&quot;错误&quot;);<br>
+DestroyWindow();<br>
+}<br>
+(3) 回调函数实现如下：<br>
+HDDEDATA FAR PASCAL _export CMainFrame::DdeCallback(UINT iType,UINT iFmt,<br>
+HCONV hConv,HSZ hsz1,HSZ hsz2,HDDEDATA hData,DWORD dwData1,DWORD<br>
+dwData2)<br>
+{<br>
+char szBuffer[16];<br>
+int i;<br>
+<br>
+switch(iType)<br>
+{<br>
+case XTYP_CONNECT: //hsz1=topiv, hsz2=service<br>
+return (HDDEDATA)TRUE;//TRUE;<br>
+case XTYP_ADVSTART: //hsz1=topic, hsz2=item<br>
+case XTYP_REQUEST:<br>
+case XTYP_ADVREQ:<br>
+case XTYP_POKE: //hsz1=Topic, hsz2=item, hData=data<br>
+case XTYP_ADVSTOP:<br>
+return NULL;<br>
+}<br>
+}<br>
+3、避免变量类型冲突<br>
+如果在MFC应用直接使用DDEML服务，那么该MFC应用在编译时将会遇到变量类型HSZ重复定义错误。经过追踪发现，错误在于在DDEML.H对HSZ作了如下定义：<br>
+DECLARE_HANDLE32(HSZ);<br>
+而在AFXEXT.H(通过stdafx.h引入)中对HSZ又作了如下说明：<br>
+typedef BPSTR FAR* HSZ; // Long handle to a string<br>
+两个定义一个为32位整数，一个为BASIC字符串指针，当然会发生编译器不能作变量类型转换的错误。实际上，将HSZ声明为BASIC字符串指针主要用于在MFC应用中使用 
+VBX控制。要改正这一错误，就必须保证不要在同一个代码模块中使用DDEML和VBX支持，通过将使用DDEML和VBX的代码分开，并在使用DDEML代码的模块中最开头定义如下编译器宏就可以解决上述问题：<br>
+#define NO_VBX_SUPPORT</span></p>
+
+<p><span style="font-size: 9pt">四、使用3D控制<br>
+毫无疑问，3D控制的使用可以显著提高Windows应用程序的界面友好性，目前，许多流行的Windows应用程序都使用了3D控制，典型的如Microsoft公司的Office系列软件，而且，在Windows 
+95和Windows NT 4.0中，3D控制更是作为操作系统的一部分直接提供，这意味着在其上运行的软件不需要作任何特殊处理，就具有3D界面效果，但是，很遗憾的是，在Windows 
+3.x中，除了命令按钮控制使用3D控制以外，其余所有的控制，如编辑框，列表框，检查框等都只使用2D控制，要想使用3D控制，程序设计人员就必须在自己的程序中作一定的修改，考虑到目前3D效果的流行，这点努力是值得的。<br>
+为了支持3D效果，Microsoft公司提供了一个专门用于3D控制的动态连接库，即 
+CTL3D.DLL，但是在其Visual C++中却没有如何使用3D控制的讨论，并且，Visual 
+C++也不直接支持3D编码，因为它不包括使用3D控制所必须的头文件。但是，这并不意味着在Visual 
+C++中不能使用3D控制，只不过用户需要从其它地方获取技术支持罢了。由于使用的是动态连接库机制，因此，任何其它语言提供的3D头文件和CTL3D.DLL的输入库都是可用的。作者使用的就是Borland公司的Borland 
+C++中提供 的CTL3D.H和CTL3D.LIB。在C/C++中使用3D控制的方法也有很多种，在这里，为节约篇幅，只讨论与本文相关的主题，即使用MFC编程时如何使用3D控制。<br>
+在MFC的所有对话框中使用3D控制可以遵循如下步骤：<br>
+1. 在CWinApp::InitInstance函数中调用Ctl3dRegister和Ctl3dAutosubclass函数：<br>
+Ctl3dRegister(AfxGetInstanceHandle());<br>
+Ctl3dAutoSubclass(AfxGetInstanceHandle());<br>
+值得一提的是，在AppWizard产生的应用框架的CWinApp::InitInstance中有一个函数调用为SetDialogBkColor，此函数的作用是将所有对话框的背景颜色设置为灰色，这个功能与3D界面实现相同的功能，可以移去此语句。<br>
+由于CTL3D在初始化时读入所有的系统颜色并自己维持，为了使应用程序能够正确反映系统颜色的变化，MFC应用程序可以在WM_SYSCOLORCHANGE消息中调用 
+Ctl3dColorChange函数。<br>
+2. 在MFC应用程序的CWinApp类中的ExitInstance函数中调用Ctl3dUnregister函数，以方便Windows对CTL3D库的正确管理。<br>
+3. 在MFC应用程序的项目文件中加入CTL3D.LIB（可以用IMPORT.EXE产生）。<br>
+使用上述CTL3D的自动子类化的机制可以大大简化使用3D控制，如果这不满足你的要求，那么你就必须单独在需要使用3D控制的对话框的OnInitDialog()中自行子类化相关的控制类了，典型的如下代码片断所示：<br>
+BOOL CMyDialog::OnInitDialog()<br>
+{<br>
+Ctl3dSubclassDlgEx(m_hWnd,CTL3D_ALL);<br>
+return TRUE;<br>
+}<br>
+上面讲了在对话框中使用3D效果的办法，如果用户想在非对话框中使用3D控制，典型的在FormView导出类中使用，可以在导出类的OnInitialUpdate函数中进行适当修改，修改的大小取决于你是否使用了3D控制的自动子类化机制。如果使用前面提到的自动子类化方法，那么仅需要在相应的OnInitialUpdate函数中调用Ctl3dSubclassDlg函数了，如下代码片断所示：<br>
+void CMyView::OnInitialUpdate()<br>
+{<br>
+Ctl3dSubclassDlg(m_hWnd,CTL3D_ALL);<br>
+}<br>
+否则，则需要修改如下：<br>
+void CMyView::OnInitialUpdate()<br>
+{<br>
+Ctl3dSubclassDlgEx(m_hWnd,CTL3D_ALL);<br>
+}</span></p>
+
+<p><span style="font-size: 9pt">五、使用自定义消息<br>
+1、MFC的消息映射机制<br>
+Windows是一个典型的消息驱动的操作系统，程序的运行是靠对各种消息的响应来实现的，这些消息的来源非常广泛，既包括Windows系统本身，如WM_CLOSE、WM_PAINT、WM_CREATE和WM_TIMER等常用消息，又包括用户菜单选择、键盘加速键以及工具条和对话框按钮等等，如果应用程序要与其它程序协同工作，那么消息的来源还包括其它应用程序发送的消息，串行口和并行口等硬件发送的消息等等。总之，Windows程序的开发是围绕着对众多消息的合理响应和实现来实现程序的各种功能的。使用过C语言来开发Windows程序的人都知道，在Windows程序的窗口回调函数中需要安排Switch语句来响应大量的消息，同时由于消息的间断性使得不同的消息响应之间信息的传递是通过大量的全局变量或者静态数据来实现的。<br>
+人们常用的两种类库OWL和MFC都提供了消息映射机制用以加速开发速度，使用者只需要按规定定义好对应消息的处理函数自身即可，至于实际调用由类库本身所提供的机制进行，或采用虚函数，或采用消息映射宏。为了有效节约内存，MFC并不大量采用虚函数机制，而是采用宏来将特定的消息映射到派生类中的响应成员函数。这种机制不但适用于Windows自身的140条消息，而且适用于菜单命令消息和按钮控制消息。MFC提供的消息映射机制是非常强大的，它允许在类的各个层次上对消息进行控制，而不简单的局限于消息产生者本身。在应用程序接收到窗口命令时，MFC将按如下次序寻找相应的消息控制函数：<br>
+SDI应用<br>
+MDI应用<br>
+视口<br>
+视口<br>
+文档<br>
+文档<br>
+SDI主框架<br>
+MDI子框架<br>
+应用<br>
+MDI主框架<br>
+应用<br>
+大多数应用对每一个命令通常都只有一个特定的命令控制函数，而这个命令控制函数也只属于某一特定的类，但是如果在应用中对同一消息有多个命令控制函数，那么只有优先级较高的命令控制函数才会被调用。为了简化对常用命令的处理，MFC在基类中提供并实现了许多消息映射的入口，如打印命令，打印预览命令，退出命令以及联机帮助命令等，这样在派生类中就继承了所有的基类中的消息映射函数，从而可以大大简化编程。如果我们要在自己派生类中实现对消息的控制，那么必须在派生类中加上相应的控制函数和映射入口。<br>
+2、使用自己的消息<br>
+在程序设计的更深层次，人们常常会发现只依赖于菜单和命令按钮产生的消息是不够的，常常因为程序运行的逻辑结构和不同视口之间数据的同步而需要使用一些自定义的消息，这样通过在相应层次上安排消息响应函数就可以实现自己的特殊需要。比如如果我们要在特定的时间间隔内通知所有数据输出视口重新取得新数据，要依靠菜单命令和按钮命令实现不够理想，比较理想的解决办法是采用定时器事件进行特定的计算操作，操作完成后再采用SendMessage发送自己的特定消息，只有当这一消息得到处理后才会返回主控程序进行下一时间计算。通过在文档层次上安排对消息的响应取得最新计算数据，而后通过UpdateAllViews()成员函数来通知所有相关视口更新数据的显示。视口通过重载OnUpdate()成员函数就可以实现特定数据的更新显示。<br>
+如果用户能够熟练使用SendMessage()函数和PostMessage()函数，那么要发送自定义消息并不难，通常有两种选择，其一是发送WM_COMMAND消息，通过消息的WORD 
+wParam参数传递用户的命令ID，举例如下：<br>
+SendMessage(WM_COMMAND,IDC_GETDATA,0); //MFC主框架发送<br>
+然后在文档层次上安排消息映射入口：<br>
+ON_COMMAND(IDC_GETDATA, OnGetData)<br>
+同时在文档类中实现OnGetData()函数：<br>
+void CSimuDoc::OnGetData()<br>
+{<br>
+TRACE(&quot;Now in SimuDoc,From OnGetData\n&quot;);<br>
+UpdateAllViews(NULL);<br>
+}<br>
+注意在上中的消息映射入口需要用户手工加入，Visual C++提供的ClassWizard并不能替用户完成这一工作。上中例子没有使用PostMessage函数而使用SendMessage函数的原因是利用了SendMessage函数的特点，即它只有发送消息得到适当处理后方才返回，这样有助于程序控制。<br>
+另一种发送自定义消息的办法是直接发送命令ID，在控制层次上采用ON_MESSAGE来实现消息映射入口，注意这时的命令控制函数的原型根据Windows本身消息处理的规定必须如下：<br>
+afx_msg LONG OnCaculationOnce(WPARAM wParam,LPARAM lParam);<br>
+相对来讲，这种机制不如上述机制简单，也就不再赘述。</span></p>
+
+<p><span style="font-size: 9pt">六、使用不带文挡-视结构的MFC应用<br>
+文档-视结构的功能是非常强大的，可以适合于大多数应用程序，但是有时我们只需要非常简单的程序，为了减少最终可执行文件尺寸和提高运行速度，我们没有必要使用文挡-视结构，典型的有简单SDI应用和基于对话框的应用。<br>
+1、简单SDI应用<br>
+此时只需要使用CWinApp和CFrameWnd两个类就完全可以了。由于CWinApp类封装了WinMain函数和消息处理循环，因此任何使用MFC进行编程的程序都不能脱离开该类。实际上使用CWinApp类非常简单，主要是派生一个用户自己的应用类，如CMyApp，然后只需重载CWinApp类的InitInstance()函数：<br>
+<br>
+BOOL CMyApp::InitInstance()<br>
+{<br>
+m_pMainWnd=new CMainFrame();<br>
+ASSERT(m_pMainWnd!=NULL); //error checking only<br>
+m_pMainWnd-&gt;ShowWindow(m_nCmdShow);<br>
+m_pMainWnd-&gt;UpdateWindow();<br>
+return TRUE;<br>
+}<br>
+至于所需要的主框架类，则可以直接使用ClassWizard实用程序生成，该类的头文件与实现代码可以与CMyApp类的头文件和实现代码放在一起。注意，这里由一个技巧，由于ClassWizard的使用需要有相应的CLW文件存在，而收工建代码时没有对应的CLW文件，因此不能直接使用，解决办法是进入App 
+Studio实用工具后使用ClassWizard，此时系统会发觉不存在相应的CLW文件，系统将提示你重建CLW文件并弹出相应对话框，这时候你不需要选择任何文件就直接选择OK按钮，这样系统将为你产生一个空的CLW文件，这样就可以使用ClassWizard实用工具了。为了将CWinApp和CFrameWnd的派生类有机地结合在一起，只需在CFrameWnd派生类的构造函数中进行窗口创建即可。典型代码如下：<br>
+CMainFrame::CMainFrame()<br>
+{<br>
+Create(NULL,&quot;DDE Client Application&quot;,WS_OVERLAPPEDWINDOW,rectDefault,<br>
+NULL,MAKEINTRESOURCE(IDR_MAINFRAME));<br>
+}<br>
+采用ClassWizard实用程序生成相关类代码后，所有的类的其它实现和维护就同普通由AppWizard实用程序产生的代码一样了。<br>
+2、基于对话框的程序<br>
+有些主要用于数据的输入和输出等的应用在使用时没有必要改变窗口大小，典型的 
+如各种联机注册程序，这些使用对话框作为应用的主界面就足够了，而且开发此类应用具有方便快捷的特点，代码也比较短小，如果直接采用各种控制类生成所需要的控制就特别麻烦。在Visual 
+C++ 4.x版本中使用AppWizard就可以直接生成基于对话框的应用。在Visual 
+1.x中没有此功能，因此这类应用需要程序员自己实现。<br>
+实际上使用MFC实现基于对话框的应用非常简单，同样只使用两个MFC类作为基类，这两个类为CWinApp类和CDialog类。所使用的对话框主界面同样可以先用App 
+Studio编辑对话框界面，再使用ClassWizard产生相应代码框架，然后修改CMyApp类的声明，增加一个该对话框类的成员变量m_Mydlg，最后修改CMyApp类的InitInstance()函数如下：<br>
+BOOL CMyApp::InitInstance()<br>
+{<br>
+m_Mydlg.DoModal();<br>
+return TRUE;<br>
+}</span></p>
+
+<p><span style="font-size: 9pt">七、MFC应用的人工优化<br>
+使用C/C++编写Windows程序的优点就是灵活高效，运行速度快，Visual C++编译器本身的优化工作相当出色，但这并不等于不需要进行适当的人工优化，为了提高程序的运行速度，程序员可以从以下几方面努力：<br>
+1) 减少不必要的重复显示<br>
+相对来讲，Windows的GDI操作是比较慢的，因此在程序中我们应该尽可能地控制整视口的显示和更新，如果前后两此数据不发生变化，那么就不要重新进行视口的GDI图形操作，尤其对于背景图显示时非万不得已时不要重绘，同时不要经常五必要的刷新整个窗口。<br>
+2) 在视口极小化时不要进行更新屏幕操作<br>
+在窗口处于极小化时没有必要继续进行视口更新工作，这样可以显著提高速度。为此需要在子窗口一级捕获上述信息（视口不能捕获该类信息），再在视口中进行相应操作。如下代码片段所示：<br>
+首先在子窗口类中添加如下程序段：<br>
+void CMyChild::OnSysCommand(UINT nID,LPARAM lparam)<br>
+{<br>
+CMDIChildWnd::OnSysCommand(nID,lparam);<br>
+if(nID==SC_MINIMIZE){<br>
+RedrawFlag=0;<br>
+}<br>
+else<br>
+RedrawFlag=1;<br>
+}<br>
+再在视口更新时中修改如下：<br>
+void CMyChart::OnUpdate( CView* pSender, LPARAM lHint, CObject* pHint )<br>
+{<br>
+if(pChild-&gt;RedrawFlag)<br>
+{<br>
+InvalidateRect(&amp;r,FALSE);<br>
+TRACE(&quot;Now In CMyChart::OnUpdate\n&quot;);<br>
+}<br>
+}<br>
+至于上中pChild指针可以在视口创建的例程中获取：<br>
+pChild=(CMyChild*)GetParent();<br>
+3) 使用永久性的资源<br>
+在频繁进行GDI输出的视口中，如在监控软件中常常使用的趋势图显示和棒图显示等等，应该考虑在类层次上建立频繁使用的每种画笔和刷子，这可以避免频繁的在堆中创建和删除GDI对象，从而提高速度。<br>
+4) 使用自有设备描述句柄<br>
+亦即在创建视口时通过指定WM_OWNDC风格来拥有自己的显示设备句柄，这虽然会多消耗一些内存，一个DC大约占800字节的内存，但是这避免了每次进行GDI操作前创建并合理初始化显示设备句柄这些重复操作。特别是要自定义坐标系统和使用特殊字体的视口这一点尤其重要。在16M机器日益普遍的今天为了节约一点点内存而降低速度的做法并不可取。<br>
+5) 优化编译时指定/G3选项和/FPix87选项<br>
+/G3选项将强迫编译器使用386处理器的处理代码，使用嵌入式协处理器指令对那些频繁进行浮点运算的程序很有帮助。采用这两种编译开关虽然提高了对用户机型的要求，但在386逐渐被淘汰，486市场大幅度萎缩，586市场日益普及的今天上述问题已经不再成为问题了。</span></p>
+</body>
+</html>

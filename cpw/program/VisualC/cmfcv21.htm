@@ -1,0 +1,208 @@
+<html>
+
+<head>
+<title>Untitled</title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第二十一期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>MFC邮递表的中文翻译-第二十一期</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font color="Red">第二十一期目录</font> <font size="-1">杨晓东 
+    1999.1.5</font></h3>
+    <ol>
+      <li><a href="#vol21q1">DDX和建立控件</a> </li>
+      <li><a href="#vol21q2">VC6.0编译问题</a> </li>
+      <li><a href="#vol21q3">捕获组合键ALT+TAB</a> </li>
+      <li><a href="#vol21q4">初始化多重视</a> </li>
+      <li><a href="#vol21q5">类CRecordset的open()出错</a> </li>
+    </ol>
+    <p><a name="vol21q1"></a></p>
+    <h3><font color="Red">DDX和建立控件</font></h3>
+    <p>问:我想在一个子窗口中建立一个OnCreate()映象(比如滚动条,按钮等),我发现快速的方法 
+    是从相应的类中继承一个新的类,继承OnCreate()</p>
+    <p>函数.但当我建立一个数字数据交换(DDX) 控件时(因为我不想为这个控件调用Create函数)却不能调用OnCreate()函数,那么我该怎么 
+    做呢?<br>
+    </p>
+    <p>答:1)看一下MFC的源代码就知道了:DDX_Control(IDC_FOO, m_wndFoo)返回值类似于 
+    m_wndFoo.SubclassWindow(GetDlgItem(IDC_FOO)).所以</p>
+    <p>在你开始使用消息映象时, Win系统已经调用过::CreateWindow(...)了(事实上你也不能在这使用子类)<br>
+    &nbsp;&nbsp;看看虚函数PreSubclassWindow()是否符合你的要求,如果该函数也不能满足你需要的话, 
+    定义一个自定义窗口类(是WNDCLASS,而不是CWnd),</p>
+    <p>放置一个自定义控件在这个对话框资源类中,这样就 
+    应该能实现你所要求的了<br>
+    </p>
+    <p>&nbsp;&nbsp;2)当一个控件放置在对话框中时,WIN将在对话框模板中建立,窗口建立完毕之后,相应的 
+    MFC控件已经完成,这就是为什么Create永远不能被</p>
+    <p>调用.<br>
+    &nbsp;&nbsp;在窗口显示在屏幕之前要得到一个消息,你必须在MFC类中继承一个类,改写 
+    PreSubclassWindow,它将在主窗口显示之前,必须的工作过完成</p>
+    <p>之前调用. </p>
+    <pre>void CMyButton::PreSubclassWindow()
+{
+     // TODO ........
+
+     CButton::PreSubclassWindow();
+}</pre>
+    <p><br>
+    <a href="#v21home"></p>
+    <p align="right">返回本期目录</a></p>
+    <p><a name="vol21q2"></a> <font color="Red"></p>
+    <h3>VC6.0编译问题</h3>
+    </font><p>问：我用自己设计的类编了一个程序。当我在编译项中设置为debug编译时，程序运行一切 
+    正常，当为release时程序却出了问题.怎么会这样?<br>
+    </p>
+    <p>答:1)为什么你既建立线程又将一个类成员作为线程处理?这样的话谁来调用你的析构函数?你不能试图 
+    将文档视窗类中的成员作为线程,象</p>
+    <p>这样: </p>
+    <pre>Ccapi::SomeFunction()
+{
+AfxBeginThread(static_cast<whatever string of casts to make this link>(ThreadProc(this)));
+}
+
+Ccapi::ThreadProc(LPVOID ptr)
+{
+// ptr and this are equal...
+   Ccapi* ptrApi = (Ccapi*)ptr;
+};</pre>
+    <p>如果你是这样做的话可能需要做些改动<br>
+    &nbsp;&nbsp;2)显然,m_pOwner或者m_pOwner-&gt;m_hWnd是不正确的,试试下面的: </p>
+    <pre>if (NULL == capi)
+   ::MessageBox(NULL, &quot;bad capi&quot;, &quot;CapiThread&quot;, MB_OK);
+else if (NULL == capi-&gt;m_pOwner)
+   ::MessageBox(NULL, &quot;bad Owner&quot;, &quot;CapiThread&quot;, MB_OK);
+else if (!::IsWindow(capi-&gt;m_pOwner-&gt;m_hWnd))
+   ::MessageBox(NULL, &quot;bad hwnd&quot;, &quot;CapiThread&quot;, MB_OK);</pre>
+    <p><br>
+    <a href="#v21home"></p>
+    <p align="right">返回本期目录</a></p>
+    <p><a name="vol21q3"></a> <font color="Red"></p>
+    <h3>捕获组合键ALT+TAB</h3>
+    </font><p>问:在我的程序里面需要捕获ALT+TAB组合键,该怎样做?<br>
+    </p>
+    <p>答:1)通常情况下当ALT+TAB组合键按下时,系统将会按照一定的顺序从当前程序切换到另一个程序 
+    所以,你应该捕获OnActivateApp/OnActiva</p>
+    <p>te消息.另外改写PreTranslateMessage将会给出一 条消息,检查一下WM_ACTIVATEAPP 
+    或 WM_ACTIVATE消息和返回的相关的值.相信它们对你</p>
+    <p>有所帮助.<br>
+    &nbsp;&nbsp;2)试一下 </p>
+    <pre>SystemParametersInfo(SPI_SCREENSAVERRUNNING, 1, NULL, 0); // Turn off Alt-Tab
+SystemParametersInfo(SPI_SCREENSAVERRUNNING, 0, NULL, 0); // Turn on Alt-Tab</pre>
+    <p>注意,这会影响到其他的一些功能键如CTRL-ALT-DEL.<br>
+    <a href="#v21home"></p>
+    <p align="right">返回本期目录</a></p>
+    <p><a name="vol21q4"></a> <font color="Red"></p>
+    <h3>初始化多重视</h3>
+    </font><p>问：我有一个单文档程序，希望能够在不同的视之间切换。但一直有两个问题困绕着我: 
+    1是我有两个视,所以当程序开始时,将会弹出一个对</p>
+    <p>话框,要求在此选择使用哪一个视,怎样才能使 
+    对话框不弹出来时就能选择视?2是怎样在同一个窗口中切换视?<br>
+    </p>
+    <p>答:我给你该问题的一个解决方法.<br>
+    1.在初始化中,你会看到下列代码,把它们注解或删除那么对话框就不会出现了 
+    </p>
+    <pre>    // Parse command line for standard shell commands, DDE, file open
+    /*CCommandLineInfo cmdInfo;
+    ParseCommandLine(cmdInfo);
+
+    // Dispatch commands specified on the command line
+    if (!ProcessShellCommand(cmdInfo))
+        return FALSE;
+    */</pre>
+    <p>&nbsp;&nbsp;2.在你的程序中写入下面这个函数SelectForm(UINT),在此之前,你必须在初始化时登记你 
+    的视并在加入列表时保持定义.如: </p>
+    <pre>    CMultiDocTemplate* pDocTemplate;
+    pDocTemplate = new CMultiDocTemplate(
+        IDR_MDITESTYPE,
+        RUNTIME_CLASS(CMditestDoc),
+        RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+        RUNTIME_CLASS(CMditestView));
+    AddDocTemplate(pDocTemplate);
+</pre>
+    <p>&nbsp;&nbsp;在CMditestView加入#define MSEL_TESTVIEW 1之类的就可以为所有的视服务.这里采用1. 
+    然后调用在菜单项或其它你想让其出现的地方调</p>
+    <p>用SelectForm(UINT),比如下面是在菜单 里调用的一个示例程序. </p>
+    <pre>void CDemoApp::Ontest()
+{
+    SelectForm(MSE_TESTVIEW);
+}
+
+void CDemoApp::SelectForm(UINT iSel)
+{
+    unsigned int iCount = 1;
+    POSITION pos = GetFirstDocTemplatePosition();
+    while(iCount <= iSel) { pTemplate="GetNextDocTemplate(pos);" iCount++; } ASSERT(pTemplate !="NULL);" ASSERT(pTemplate->IsKindOf(RUNTIME_CLASS(CDocTemplate)));</pre>
+    <pre>
+    switch(iSel)
+    {
+        case    MSEL_TESTVIEW:
+            pTemplate-&gt;OpenDocumentFile(NULL);
+            break;
+        case    MSEL_DEMOVIEW:
+            pTemplate-&gt;OpenDocumentFile(NULL);
+            break;
+    }
+// Reference to above code is at DOCMGR.cpp file line no.435 Initidialog of
+// CNewTypeDlg
+
+}</pre>
+    <p>使用上述函数你就能在不同的视之间切换了.<br>
+    <a href="#v21home"></p>
+    <p align="right">返回本期目录</a></p>
+    <p><a name="vol21q5"></a> <font color="Red"></p>
+    <h3>类CRecordset的open()出错</h3>
+    </font><p>问：我在使用 myRecordset.open(CRecordset::snapshot, query)碰上了问题,用 
+    &quot;select * from TABLE where ID = myID&quot;查询时没有问题<a href="#v21home"></p>
+    <p>。但如果我是这样查询的话 &quot;select name from TABLE where userID = 
+    1000&quot;，就有一个错误消息： &quot;invalid desciptor index&quot;为什么会这样？<br>
+    答:1)微软推荐大家使用SQL语句，SELECT语句放置在Open()命令中,而WHERE关键字却是放置在 
+    CRecordset::m_strFilter.我本人使用m_strFilter时也碰上过类似问题,在Open行中放置 
+    所有的命令会导致一些错误产生.<br>
+    &nbsp;&nbsp;2)你能确定在数据库中有一个记录其userID=1000，问题应该在USERID字段上<br>
+    </p>
+    <p align="right">返回本期目录</a></p>
+    <hr>
+    <a href="cmfcv22.htm"><p align="center">前一期</a>|<a href="cmfcv20.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+
+<p><a name="V21HOME"></a></p>
+</body>
+</html>

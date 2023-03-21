@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">DELPHI</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">在Delphi中利用Tbatch组件完成数据批处理<br>
+      <br>
+                军械工程学院五系研究生队   王俊       
+      <p>----在数据库应用系统中，常常要对数据进行成批的如追加、删除、更改等操作，这种批量操作在专门的数据库开发工具如VFP中用APPEND、COPY命令带上相应的命令子句就能轻易完成。但在其它开发工具中并没有类似的命令，而是提供能完成类似功能的控件或对象，如在PowerBuilder中就是利用Pipe Line（数据管道）来完成两个或同构或不同构的表之间的数据批处理。本文要介绍的是Delphi中用来完成数据批处理任务的组件TBatchMove。<br> 
+      <br> 
+      TBatchMove组件能够：<br> 
+      <br> 
+      将一个数据集中的数据追加到一个表中。<br> 
+      从一个表中删除满足条件的记录。<br> 
+      按旧表结构生成一个新表，若欲生成的新表已存在，则覆盖。<br> 
+      <br> 
+      ----具体的操作要通过设置TBatchMove的Mode属性后再调用Execute方法来完成。为举例说明问题，我们在别名<br> 
+      数据库DBDEMOS中先创建两个dBase格式的表Test1.dbf和Test2.dbf。二者的结构如下表：<br> 
+      <br> 
+      Test1.dbf Test2.dbf<br> 
+      Name C 10 Name C 10<br> 
+      Code C 3 Code C 3<br> 
+      <br> 
+      ----其中表Test2.dbf在字段code上建立有唯一索引。同时假设表单中已有两个TABLE控件Tsource和Tdest和一个TbatchMove组件batchmove1。Tsource和Tdest的DatabaseName属性均设为DBDEMOS。batchmove1的source属性设为Tsource，destination属性设为Tdest。<br> 
+      <br> 
+      ----在使用TbatchMove组件时，必须牢记：所有的操作都是以源表为标准针对目的表进行的，下面就分别举例说明TbatchMove的各种操作模式：<br> 
+      <br> 
+      batAppend 追加模式将源表中的数据追加到目的表中，目的表必须事先存在。<br> 
+      这是缺省模式。<br> 
+      batchmove1.source=Tsource;<br> 
+      batchmove1.destination=Tdest2;<br> 
+      batchmove1.Mode:=batCopy;<br> 
+      batchmove1.Execute;<br> 
+      batUpdate 更新模式用源表中匹配目的表的记录替换目的表中的相应记录。目的表必须事先存在且有一已定义的索引用来匹配源表中的记录。<br> 
+      Tdest.IndexFieldNames:=`code`;&nbsp;<br>
+      batchmove1.source=Tsource;&nbsp;<br>
+      batchmove1.destination=Tdest ;&nbsp;<br>
+      batchmove1.Mode:=batUpdate;&nbsp;<br>
+      batchmove1.Execute;&nbsp;<br>
+      batAppendUpdate 追加更新模式如果源表中有与目的表匹配的记录，则替换目的表记录，否则，直接追加到目的表中。目的表必须事先存在且有一已定义的索引用来匹配源表中的记录。<br> 
+      Tdest.IndexFieldNames:=`code`;&nbsp;<br>
+      batchmove1.source=Tsource;&nbsp;<br>
+      batchmove1.destination=Tdest ;&nbsp;<br>
+      batchmove1.Mode:=batAppendUpdate;&nbsp;<br>
+      batchmove1.Execute;&nbsp;<br>
+      batCopy 拷贝模式按源表结构生成新表，源表中的数据同时拷贝到目的新表中。如果要生成的新表已存在，则覆盖。<br> 
+      //按Test1.dbf生成新表xxx.dbf<br> 
+      //如果不指定扩展名dbf，生成的新表将是Paradox格式的xxx.db。&nbsp;<br>
+      Tdest.TableName:=`xxx.dbf`;&nbsp;<br>
+      batchmove1.source=Tsource;&nbsp;<br>
+      batchmove1.destination=Tdest ;&nbsp;<br>
+      batchmove1.Mode:=batCopy;&nbsp;<br>
+      batchmove1.Execute;&nbsp;<br>
+      batDelete 删除模式删除目的表中与源表匹配的记录。目的表必须事先存在且有一已定义的索引用来匹配源表中的记录。<br> 
+      Tdest.IndexFieldNames:=`code`;&nbsp;<br>
+      batchmove1.source=Tsource;&nbsp;<br>
+      batchmove1.destination=Tdest ;&nbsp;<br>
+      batchmove1.Mode:=batDelete;&nbsp;<br>
+      batchmove1.Execute;&nbsp;<br>
+      <br>
+      ----TBatchMove还有一个重要属性ChangedTableName，在实际运用中，通过指定ChangedTableName属性可以创建一个Paradox表，该表用来保存目的表中被更改数据的原始备份，有了这个备份表就可以确保恢复目的表中的数据。<br>
+      <br>
+      ----顺便提一句，如果要删除某一个表中的全部记录，可以采用Table组件的EmptyTable方法，例如Tdest.EmptyTable将清空Tdest所指定的表test2.dbf。<br>
+      <br>
+      ----本文中是以同构的dbf表进行的示例，在实际运用中，源表和目的表可能同购，也可能异构，异构时，Delphi的BDE会自动进行类型和长度上的转换，具体类型间的关系可以有关BDE的帮助。本文中各种操作模式的实际结果均可以从Delphi的Database Desktop中查看到。      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p><br> 
+</p> 
+ 
+</body> 
+ 
+</html> 

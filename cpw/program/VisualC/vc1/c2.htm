@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://person.zj.cninfo.net/~yao/document/bcb/bcb011.htm -->
+<!-- Copyright 1999 网页制作人：姚征   http://yaozheng.yeah.net  --><HTML><HEAD><TITLE>C++Builder4.0实现在线接收电子邮件</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<STYLE>TD {
+	FONT-FAMILY: 宋体; FONT-SIZE: 10.5pt
+}
+PRE {
+	FONT-FAMILY: Times New Roman; FONT-SIZE: 10.5pt
+}
+</STYLE>
+
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width=&#4130;100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <P align=center><STRONG>C++Builder4.0实现在线接收电子邮件<BR><BR>河南濮阳中原油田计算中心 
+      李东</STRONG></P>
+      <P>&nbsp;&nbsp;&nbsp; 我们在使用163、长通飞华等免费电子邮件的时候，会发现这些电子信箱具有在线收发的功能，即可以通过浏览器发送和接收邮件电子邮件。这些功能一般是通过CGI实现的，而CGI技术正在逐渐被ISAPI/NSAPI技术所取代，下面的例子使用C++Builder4.0中的ISAPI/NSAPI实现了电子邮件的在线接收。使用C++Builder4开发Web  
+      Server程序是非常简单的，C++Builder 4的VCL提供了大量的元件和对象，支持Web  
+      Server程序的开发。<BR>&nbsp;&nbsp;&nbsp; 本程序由两个文件构成，分别为index.htm：接收电子邮件的浏览器界面，放到WEB服务器的缺省目录下（如：C：\Inetpub\wwwroot）；ReadMail.dll：在浏览器内显示邮件列表以及指定邮件内容的Web  
+      Server  
+      Application。这个动态链结库文件放<BR>可执行文件路径下（如C:\Inetpub\scripts）。用户在浏览器内通过Web  
+      Server浏览index.htm，输入主机名、端口（一般<BR>是110）、用户名、口令后，首先会看到用户的邮件列表，单击相应的邮件序号即可查看邮件内容。<BR><BR>首先建立index.htm，其内容如下：<BR>&lt;html&gt;<BR>&lt;head&gt;<BR>&lt;meta  
+      http-equiv="Content-Type"<BR>content="text/html;  
+      charset=gb_2312-80"&gt;<BR>&lt;meta name="GENERATOR" content="Microsoft  
+      FrontPage Express  
+      2.0"&gt;<BR>&lt;title&gt;邮件查看&lt;/title&gt;<BR>&lt;/head&gt;<BR>&lt;body  
+      bgcolor="#FFFFFF"&gt;<BR>&lt;form action="  
+      /scripts/MailList.dll/MailList"<BR>method="POST"&gt;<BR>&lt;p&gt;主机：&lt;input  
+      type="text" size="20" name="Host"&gt;&lt;/p&gt;<BR>&lt;p&gt;端口：&lt;input  
+      type="text" size="20" name="Port"&gt;&lt;/p&gt;<BR>&lt;p&gt;用户名：&lt;input  
+      type="text" size="20" name="Name"&gt;&lt;/p&gt;<BR>&lt;p&gt;口令：&lt;input  
+      type="password" size="20" name="Code"&gt;&lt;/p&gt;<BR>&lt;p&gt;&lt;input  
+      type="submit" name="B1" value="提交"&gt;&lt;input<BR>type="reset" name="B2"  
+      value="复原"&gt;&lt;/p&gt;<BR>&lt;/form&gt;<BR>&lt;/body&gt;<BR>&lt;/html&gt;<BR>下面编写ReadMail.dll<BR>在C++Builder中新建一个基于ISAPI的Web  
+      Server  
+      Application，手动增加<BR>NMPOP31,PageProducer1。在Unit1.h头文件中定义几个变量：<BR>AnsiString  
+      HostName,HostPort,UserName,UserCode;<BR>TStrings  
+      *URLData;&nbsp;&nbsp;&nbsp; // 接受HTTP请求传递的参数<BR>bool ConnectFlag;<BR>int  
+      EmailOrder;<BR>增加一个路径为/MailList的动作项，其代码如下：<BR>void __fastcall  
+      TWebModule1::WebModule1WebActionItem1Action(<BR>TObject *Sender,  
+      TWebRequest *Request, TWebResponse *Response,<BR>bool  
+      &amp;Handled)<BR>{<BR>//接受HTTP请求传递的参数，从中获取用主机、端口、户名和口令<BR>URLData =  
+      NULL;<BR>switch(Request-&gt;MethodType)<BR>{case mtPost:<BR>URLData =  
+      Request-&gt;ContentFields;<BR>break;<BR>case mtGet:<BR>URLData =  
+      Request-&gt;QueryFields;<BR>break;<BR>}<BR>HostName =  
+      URLData-&gt;Values["Host"];<BR>HostPort =  
+      URLData-&gt;Values["Port"];<BR>UserName =  
+      URLData-&gt;Values["Name"];<BR>UserCode =  
+      URLData-&gt;Values["Code"];<BR><BR>//下面开始连接邮件服务器<BR>NMPOP31-&gt;AttachFilePath=".";//存储邮件路径为当前路径<BR>NMPOP31-&gt;DeleteOnRead=false;//不删除服务器上的副本<BR>NMPOP31-&gt;ReportLevel=Status_Basic;//Status的详细程度<BR>NMPOP31-&gt;TimeOut=20000;//设定超时<BR>NMPOP31-&gt;Host=HostName;<BR>NMPOP31-&gt;Port=StrToInt(HostPort);<BR>NMPOP31-&gt;UserID=UserName;<BR>NMPOP31-&gt;Password=UserCode;<BR>ConnectFlag=true;<BR>NMPOP31-&gt;Connect();<BR><BR>//如果连接成功，则制作邮件列表的HTML语句<BR>if(ConnectFlag)<BR>{PageProducer1-&gt;HTMLDoc-&gt;Clear();<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;html&gt;&lt;body&gt;");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("邮件个数"+IntToStr(NMPOP31-&gt;MailCount));<BR>if(NMPOP31-&gt;MailCount)<BR>for(int  
+      i=1;i&lt;=NMPOP31-&gt;MailCount;i++)<BR>{PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;a  
+      href='");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("ReadMail?Mx=");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add(IntToStr(i));<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("'&gt;");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add(IntToStr(i));<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;/a&gt;");}<BR>}<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;/body&gt;&lt;/html&gt;");<BR>NMPOP31-&gt;Disconnect();}<BR>else<BR>{PageProducer1-&gt;HTMLDoc-&gt;Clear();<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;html&gt;&lt;body&gt;");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("连接服务器失败！");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;/body&gt;&lt;/html&gt;");}<BR>//将邮件列表的HTML语句发送给浏览器<BR>Response-&gt;Content  
+      = PageProducer1-&gt;Content(  
+      );<BR>}<BR>//--------------------------------------------------------------<BR>以上部分程序完成了显示邮件服务器邮件列表的功能。接下来，再增加一<BR>个路径为/MailList的动作项，它的功能是显示指定的邮件内容。<BR>void  
+      __fastcall TWebModule1::WebModule1WebActionItem2Action(<BR>TObject  
+      *Sender, TWebRequest *Request, TWebResponse *Response,<BR>bool  
+      &amp;Handled)<BR>{<BR>//接受HTTP请求传递的参数，从中获取用户名和口令、欲查看的邮件序号<BR>URLData =  
+      NULL;<BR>switch(Request-&gt;MethodType)<BR>{case mtPost:<BR>URLData =  
+      Request-&gt;ContentFields;<BR>break;<BR>case mtGet:<BR>URLData =  
+      Request-&gt;QueryFields;<BR>break;}<BR>EmailOrder =  
+      StrToInt(URLData-&gt;Values["Mx"]);<BR><BR>//下面开始连接邮件服务器<BR>NMPOP31-&gt;AttachFilePath=".";//存储邮件路径为当前路径<BR>NMPOP31-&gt;DeleteOnRead=false;//不删除服务器上的副本<BR>NMPOP31-&gt;ReportLevel=Status_Basic;//Status的详细程度<BR>NMPOP31-&gt;TimeOut=20000;  
+      //设定超时<BR>NMPOP31-&gt;Host=HostName;<BR>NMPOP31-&gt;Port=StrToInt(HostPort);<BR>NMPOP31-&gt;UserID=UserName;<BR>NMPOP31-&gt;Password=UserCode;<BR>ConnectFlag=true;<BR>NMPOP31-&gt;Connect();<BR><BR>//如果连接成功，打开指定的邮件<BR>if(ConnectFlag)<BR>{PageProducer1-&gt;HTMLDoc-&gt;Clear();<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;html&gt;&lt;body&gt;");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("第"+  
+      IntToStr(EmailOrder)+  
+      "个邮件内容：");<BR>NMPOP31-&gt;GetMailMessage(EmailOrder);<BR>PageProducer1-&gt;HTMLDoc-&gt;AddStrings(NMPOP31-&gt;MailMessage-&gt;Head);<BR>PageProducer1-&gt;HTMLDoc-&gt;AddStrings(NMPOP31-&gt;MailMessage-&gt;Body);<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;/body&gt;&lt;/html&gt;");<BR>NMPOP31-&gt;Disconnect();  
+      }<BR>else<BR>{PageProducer1-&gt;HTMLDoc-&gt;Clear();<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;html&gt;&lt;body&gt;");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("连接服务器失败！");<BR>PageProducer1-&gt;HTMLDoc-&gt;Add("&lt;/body&gt;&lt;/html&gt;");}<BR>//将显示指定邮件内容的HTML语句发送给浏览器<BR>Response-&gt;Content  
+      = PageProducer1-&gt;Content(  
+      );<BR>}<BR>//------------------------------------------------------------<BR>最后在NMPOP31的ConnectionFailed事件中加入：<BR>void  
+      __fastcall TWebModule1::NMPOP31ConnectionFailed(TObject  
+      *Sender)<BR>{<BR>ConnectFlag=false;  
+      <BR>}<BR>//------------------------------------------------------------<BR>编译完成后，将生成的DLL文件更名为和HTML文件相对应的名称<BR>（如：ReadMail.dll），放在C:\Inetpub\scripts即可。以上程序在Pwin98+PWS4上通过。此外，本程序还有不足之处，比如只能查看内容为纯文本格式的邮件，没有处理异常的能力。读者感兴趣的话，不妨改进。</P>   
+      <p>　   
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+<p>　</p> 
+</BODY></HTML> 

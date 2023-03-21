@@ -1,0 +1,342 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="Author" CONTENT="Flyhorse">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>16_256</title>
+</head>
+
+<body style="font-size: 9pt">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> | <a href="../../game/gameprg.htm">游戏制作</a>&gt;</b> </span>在16色模式下显示256色及全彩色</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>在16色模式下显示256色及全彩色</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">&nbsp;&nbsp;&nbsp; 摘 要 该文描述了在VGA16色图形模式下显示256色及全彩色图像的抖动算法,并给出了 
+    显示BitMap图像的C语言程序。 <br>
+    &nbsp;&nbsp;&nbsp; 关键词 抖动算法 亮度矩阵 显示 <br>
+    &nbsp;&nbsp;&nbsp; 在编写有关图像显示的软件时,有时为了软件的兼容性和通用性,不得不采用VGA标准的图形模式,这就涉及到如何在16色图形模式下显示256色及全彩色图像的问题。解决这一问题有两种方法。一种是采用色彩近似的方法,即根据需要显示的全部颜色,经过寻优来选择16种最具代表性的颜色,每一种颜色都用这16种颜色中最接近的一种来代替。《计算机世界月刊》1994年第1期的《用集群方法进行颜色选择》一文详细描述了该方法。但事实上,该方法仅对于某些理想的情况适用,而对于更普遍的情况,该方法无论从运算速度还是从处理效果来讲,都不可能令人感到满意,因而不宜在实际中运用。另一种方法是被众多商品化软件所广泛采用的抖动技术,其原理是利用多种可见颜色的组合来模拟一种不可见的颜色。目前,关于彩色图像抖动算法的资料不多。笔者通过对灰度图像处理算法及Windows环境下一些图像处理软件的剖析,得出了抖动算法的一般原理和实现方法.<br>
+    &nbsp;&nbsp;&nbsp; 一、抖动算法原理 <br>
+    &nbsp;&nbsp;&nbsp; 我们知道,在256色及全彩色图像中,每一种颜色均由R、G、B三个颜色分量组成,而每一个分量又一般由一个字节表示。这样,每一个颜色分量可有256级亮度变化。&nbsp;&nbsp;&nbsp; 
+    本算法的关键在于引入亮度矩阵的概念,即采用一个16×16的矩阵来表示每一个颜色分量的亮度值,不同亮度值对应着矩阵的不同排列。矩阵全为0时对应亮度0,全为255时对应亮度255。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 当亮度值为L时,亮度矩阵中将有[L255×256]个255及[(1-L255)×256]个0,此时,矩阵的平均亮度值为 
+    <br>
+    &nbsp;&nbsp;&nbsp; L'={[L/255×256]×255+[(1-L/255)×256]×0}/256=L <br>
+    &nbsp;&nbsp;&nbsp; 这就是说,矩阵的平均亮度正好为颜色分量的实际亮度。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 假设某一颜色C的R、G、B三个颜色分量的亮度矩阵分别为: 
+    @@01A04600.GIF;公式一@@ <br>
+    &nbsp;&nbsp;&nbsp; 其中rmn、gmn、bmn(0≤m, n≤15)取值为0或15。 <br>
+    &nbsp;&nbsp;&nbsp; 将上述三个矩阵作叠加运算,得@@01A04601.GIF;公式二@@ <br>
+    &nbsp;&nbsp;&nbsp; 其中的Cmn为表1中由rmn、gmn、bmn所确定的颜色值。表1为VGA16色图形模式下的标准调色板(并非设置模式后的缺省调色板)。显然,Cmn只可能为0及9～15之中的一个。由此方法得到的矩阵Mc即可视为颜色C的模拟矩阵。由于颜色C的R、G、B三个颜色分量与亮度矩阵MR、MG、MB有着相等的亮度值,所以矩阵MC从视觉效果上来讲能很好地模拟颜色C。但在显示时,不可能用整个这样的矩阵来替代一个像素点,那将导致整幅图像长宽均变成原图的16倍。实际的做法是:若该像素点距离图像原点的座标为(X,Y),则令: 
+    <br>
+    &nbsp;&nbsp;&nbsp; m=Y mod 16 <br>
+    &nbsp;&nbsp;&nbsp; n=X mod 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1) <br>
+    &nbsp;&nbsp;&nbsp; 此时,可用MC中的颜色Cmn来显示该像素。 @@01A04602.GIF;表1 
+    16色图形模式标准调色板@@ <br>
+    &nbsp;&nbsp;&nbsp; 二、算法实现 <br>
+    &nbsp;&nbsp;&nbsp; 1.亮度矩阵的表示 <br>
+    &nbsp;&nbsp;&nbsp; 算法中要用到257个16×16的亮度矩阵,如果对每一个都分别表示的话,将占用很大的内存空间(大于64K)。由于亮度矩阵的排列及增长均有一定的规律性,我们只需要采用一个16×16的矩阵即可。该矩阵中256个元素的取值分别为0～255,按一定规律排列。令其为: 
+    <br>
+    @@01A04603.GIF;公式三@@ <br>
+    &nbsp;&nbsp;&nbsp; 亮度为L时的矩阵可由H变化而来,其中@@01A04604.GIF;公式四@@ 
+    <br>
+    &nbsp;&nbsp;&nbsp; 2.颜色查找表算法中只用到了颜色0及9～15,我们可以忽略其他项并将有用部分表示为一个三维数组形式的颜色查找表,如表2所示。此时,r, 
+    g, b值作为数组下标,取值为0或1。与之相应,我们将(2)式变为@@01A04605.GIF;公式三@@ 
+    <br>
+    &nbsp;&nbsp;&nbsp; 3.每一像素的显示步骤 <br>
+    &nbsp;&nbsp;&nbsp; ①对256色图像,由颜色索引值查颜色映射表获取R、G、B值;对全彩色图像,直接读取R、G、B值; 
+    <br>
+    &nbsp;&nbsp;&nbsp; ②根据像素座标(X,Y),由(1)式求得m, n; <br>
+    &nbsp;&nbsp;&nbsp; ③根据R、G、B值,由(3)式求得rmn、gmn、bmn; <br>
+    &nbsp;&nbsp;&nbsp; ④由rmn、gmn、bmn查表2得颜色值C; <br>
+    &nbsp;&nbsp;&nbsp; ⑤将像素以颜色C显示于(X,Y)处。 <br>
+    &nbsp;&nbsp;&nbsp; 本文所附程序用于在16色图形模式下显示256色及全彩色BitMap图像。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 关于BitMap图像的格式及读取方法,许多资料均有介绍,这里不再赘述。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 该程序由Turbo C 2.0及Borland C 3.1编译,在386兼容机上运行通过。运行方法为: 
+    &nbsp; show文件名.BMP <br>
+    @@01A04606.GIF;公式三表2 颜色查找表@@ <br>
+    &nbsp;&nbsp;&nbsp; 事实证明,采用本文所描述的算法,可以得到与许多商品化软件相似的处理速度和处理效果。 
+    <br>
+    &nbsp;&nbsp;&nbsp; 源程序: <br>
+    &nbsp;&nbsp;&nbsp; #include&lt;stdio.h&gt; <br>
+    &nbsp;&nbsp;&nbsp; #include&lt;dos.h&gt; <br>
+    &nbsp;&nbsp;&nbsp; #include&lt;stdio.h&gt; <br>
+    &nbsp;&nbsp;&nbsp; #include&lt;conio.h&gt; <br>
+    &nbsp;&nbsp;&nbsp; #define NoError 0 <br>
+    &nbsp;&nbsp;&nbsp; #define ErrorFileOpen1 <br>
+    &nbsp;&nbsp;&nbsp; #define ErrorFileType 2 <br>
+    &nbsp;&nbsp;&nbsp; #define ErrorImageColor 3 <br>
+    &nbsp;&nbsp;&nbsp; typedef struct tagBITMAPFILEHEADER { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned int&nbsp;&nbsp; bfType; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned longbfSize; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned intbfReserved1;&nbsp; unsigned 
+    intbfReserved2; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned longbfoffBits; <br>
+    &nbsp;&nbsp;&nbsp; } BITMAPFILEHEADER; <br>
+    &nbsp;&nbsp;&nbsp; typedef struct tagBITMAPINFOHEADER { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned longbiSize; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long&nbsp; biWidth; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned longbiHeight; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned intbiPlanes; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned intbiBitCount; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biCompression; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biSizeImage; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biXPelsPerMeter; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biYPelsPerMeter; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biClrUsed; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long biClrImportant; <br>
+    &nbsp;&nbsp;&nbsp; } BITMAPINFOHEADER; <br>
+    &nbsp;&nbsp;&nbsp; typedef struct tagRGBQUAD { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned char rgbBlue; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned char rgbGreen; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned charrgbRed; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned char rgbReserved; <br>
+    &nbsp;&nbsp;&nbsp; } RGBQUAD; <br>
+    &nbsp;&nbsp;&nbsp; void main(int argc,char *argv[]); <br>
+    &nbsp;&nbsp;&nbsp; int ShowBmp(char *FileName); <br>
+    &nbsp;&nbsp;&nbsp; int GetColor(unsigned char R,unsigned char G, unsigned char B,int X,int 
+    Y) <br>
+    ; <br>
+    &nbsp;&nbsp;&nbsp; void SetVideoMode(unsigned char Mode); <br>
+    &nbsp;&nbsp;&nbsp; void SetPalReg(unsigned char *palReg); <br>
+    &nbsp;&nbsp;&nbsp; void SetDacReg(unsigned char *DacReg, int Color, int Count); <br>
+    &nbsp;&nbsp;&nbsp; void PutPixel(int X, int Y,unsigned char Color); <br>
+    &nbsp;&nbsp;&nbsp; unsigned char PalReg[17]= {&nbsp; 
+    0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0}; <br>
+    &nbsp;&nbsp;&nbsp; unsigned char StandardPal[48]= { <br>
+    &nbsp;&nbsp;&nbsp; 0, 0, 0, 32, 0, 0, 0,32, 0, 32,32, 0,&nbsp;&nbsp; 0, 0,32, 32, 0,32, 
+    0,32,32, 32,32, <br>
+    32,&nbsp; 48,48,48, 63, 0, 0, 0,63, 0, 63,63, 0,&nbsp;&nbsp; 0, 0,63, 63, 0,63, 0,63,63, 
+    63,6 <br>
+    3,63,}; <br>
+    &nbsp;&nbsp;&nbsp; unsigned char LightnessMatrix [16][16]= { <br>
+    &nbsp;&nbsp;&nbsp; { 0,235,59,219,15,231,55,215,2,232,56,217,12,229,52,213}, <br>
+    &nbsp;&nbsp;&nbsp; {128,64,187,123,143,79,183,119,130,66,184,120,140,76,180,116}, <br>
+    &nbsp;&nbsp;&nbsp; {33,192,16,251,47,207,31,247,34,194,18,248,44,204,28,244}, <br>
+    &nbsp;&nbsp;&nbsp; {161,97,144,80,175,111,159,95,162,98,146,82,172,108,156,92}, <br>
+    &nbsp;&nbsp;&nbsp; {8,225,48,208,5,239,63,223,10,226,50,210,6,236,60,220}, <br>
+    &nbsp;&nbsp;&nbsp; {136,72,176,112,133,69,191,127,138,74,178,114,134,70,188,124}, <br>
+    &nbsp;&nbsp;&nbsp; {41,200,24,240,36,197,20,255,42,202,26,242,38,198,22,252}, <br>
+    &nbsp;&nbsp;&nbsp; {169,105,152,88,164,100,148,84,170,106,154,90,166,102,150,86}, <br>
+    &nbsp;&nbsp;&nbsp; {3,233,57,216,13,228,53,212,1,234,58,218,14,230,54,214}, <br>
+    &nbsp;&nbsp;&nbsp; {131,67,185,121,141,77,181,117,129,65,186,122,142,78,182,118}, <br>
+    &nbsp;&nbsp;&nbsp; {35,195,19,249,45,205,29,245,32,193,17,250,46,206,30,246}, <br>
+    &nbsp;&nbsp;&nbsp; {163,99,147,83,173,109,157,93,160,96,145,81,174,110,158,94}, <br>
+    &nbsp;&nbsp;&nbsp; {11,227,51,211,7,237,61,221,9,224,49,209,4,238,62,222}, <br>
+    &nbsp;&nbsp;&nbsp; {139,75,179,115,135,71,189,125,137,73,177,113,132,68,190,126}, <br>
+    &nbsp;&nbsp;&nbsp; {43,203,27,243,39,199,23,253,40,201,25,241,37,196,21,254}, <br>
+    &nbsp;&nbsp;&nbsp; {171,107,155,91,167,103,151,87,168,104,153,89,165,101,149,85}, <br>
+    &nbsp;&nbsp;&nbsp; }; <br>
+    &nbsp;&nbsp;&nbsp; unsigned char ColorTable[2][2][2]= { <br>
+    &nbsp;&nbsp;&nbsp; {{0,12},{10,14}},{{9,13},{11,15}}}; <br>
+    &nbsp;&nbsp;&nbsp; unsigned char ColorMap[256][3]; <br>
+    &nbsp;&nbsp;&nbsp; void main (int argc, char *argv[]) <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(argc!=2) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    printf(&quot;Usage:\n\tSHOW Filename.BMP\n&quot;); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    exit(1); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ShowBmp(argv[1]); <br>
+    &nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; int ShowBmp(char *FileName) <br>
+    &nbsp;&nbsp;&nbsp; { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FILE *Fp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BITMAPFILEHEADER FileHead; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BITMAPINFOHEADER InfoHead; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RGBQUAD RGB; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int N, W,Y,X,C,Color; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned char Buffer[4096]; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!(Fp=fopen(FileName,&quot;rb&quot;))) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    return(ErrorFileOpen); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(&amp;FileHead,siazeof(BITMAPFILEHEADER),1,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(FileHead.bfType!='BM') <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    return(ErrorFileType); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(&amp;InfoHead,sizeof(BITMAPFILEHEADER),1,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(InfoHead.biBitcount!=8 &amp;&amp; 
+    InfoHead.biBitCount!=24) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fclose(Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    return(ErrorImageColor); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetVideoMode(0x12); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetPalReg(PalReg); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetDacReg(StandardPa1,0,16); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(InfoHead.biBitcount==8) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for (N=0;N&lt;256;N++) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(&amp;RGB, sizeof(RGBQUAD),1,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    ColorMap[N][0]=RGB.rgbRed; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    ColorMap[N][1]=RGB.rgbGreen; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    ColorMap[N][2]=RGB.rgbBlue; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    W=(InfoHead.biwidth+3)/4*4; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for(Y=InfoHead.biHeight-1;Y&gt;=480;Y--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(Buffer,sizeof(unsigned char),W,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for(;Y&gt;0;Y--) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(Buffer, sizeof(unsigned char),w,FP); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for (X=0;X&lt;InfoHead.biWidth &amp;&amp; X&lt;640;X++) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    C=Buffer[X]; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    Color=GetColor(ColorMap[C][0],ColorMap[C][1],C <br>
+    olorMap[C][2],X,Y); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    PutPixel (X,Y,color); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    W=(infoHead.biWidth*3+3)/4*4; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for(Y=InfoHead.biHeight-1;Y&gt;639;Y--) <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(Buffer,sizeof(unsigned char),W,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for(;Y&gt;=0;Y--) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    fread(Buffer,sizeof(unsigned char),W,Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    for (X=0;X&lt;InfoHead.biWidth &amp;&amp; X&lt;640;X++) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    C=X*3; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    Color=GetColor(Buffer[C+2],Buffer[C+1],Buffer[ <br>
+    C],X,Y); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    PutPixel(X,Y,color); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getch(); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(Fp); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetVideoMode(0x03); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return(NoError); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int GetColor(unsigned char R, unsigned char 
+    G,unsigned char B, int X, <br>
+    int Y){ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned int L=LightnessMatrix[Y &amp; 0x0F][X 
+    &amp; 0x0F]; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return(colorTable[( <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    unsigned int)R*256/255&gt;L][( <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    unsigned int)G*256/255&gt;L][( <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    unsigned int)B*256/255&gt;L]);} <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void SetVideoMode(unsigned char Mode){ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -H=0x00; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -AL=Mode; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    geninterrupt(0x10); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; voidSetPalReg(unsigned char *PalReg){ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -ES=FP-SEG((unsigned char far*)PalReg); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -DX=FP-OFF((unsigned char far*)PalReg; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -AX=0x1002; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    geninterrupt(0x10); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void SetDacReg(unsigned char *DacReg,int 
+    Color,int Count){ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -ES=FP-SEG((unsigned char far*)DacReg); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -DX=FP-OFF((unsigned char far*)DacReg); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -AX=0x1012; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -BX=Color; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -CX=Count; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    geninterrupt(0x10); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void PutPixel(int X, int Y, unsigned 
+    charColor){ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -AH=0x0C; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -AL=Color; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -CX=X; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    -DX=Y; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    geninterrupt(0x10); <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+    &nbsp;&nbsp;&nbsp; } <p>&nbsp;&nbsp;&nbsp; 参考文献 </p>
+    <p>&nbsp;&nbsp;&nbsp; 马建波.C语言图像处理程序集.北京:海洋出版社,1992. <br>
+    </td>
+  </tr>
+</table>
+
+<p>&nbsp; </p>
+</body>
+</html>

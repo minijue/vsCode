@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">利用VC＋＋编写 Win95的CPL组件&nbsp;<br>
+      <br>
+                            (广西 朱荷媛)       
+      <p><br> 
+      　　控制面板是Windows 95的控制中心，通过它可以完成添加新硬件设备、改变桌面设置、配置网络协议等多项工作。在Windows 95中，控制面板通常有20多个组件，我们只要用鼠标双击任一组件的图标，就会弹出一个对话框，对话框包含有设置一些系统参数的选项，这些参数的绝大多数都存放在Windows 95的注册表中。<br> 
+      　　控制面板的主程序是CONTROL.EXE，它在启动时自动到WindowsSystem目录下查找并调入文件扩展名为CPL的控制面板组件。控制面板组件是可以扩充的，一些软件在安装过程中会自动加入新的控制面板组件。按照Windows用户界面设计原则的规定，凡是影响到系统的整体行为和界面风格的各项参数都应该通过控制面板来设置，因此掌握控制面板组件的编程方法是很有必要的。<br>
+      　　控制面板组件的工作原理<br>
+      　　控制面板的各个组件都是一些特殊的动态链接库，只不过它们的扩展名不是DLL，而是CPL，即Control Panel的缩写。CONTROL.EXE启动后会依次调入在系统目录下查找到的CPL库。一般来说，一个CPL库只负责管理某一方面的设置，对应着控制面板中的一个组件（即一个图标），但也有少数CPL库支持多个组件。<br> 
+      　　每个CPL库必须输出一个叫CPlApplet()的函数供CONTROL.EXE调用，CPlApplet()<br>
+      具有以下原型:typedef LONG(APIENTRY ＊APPLET_PROC)(HWND hwndCpl, UINT msg,LONG lParam1,LONG lParam2)；<br> 
+      　　可以看出，CPlApplet()与普通窗口处理函数的形式很相似，事实上，控制面板正是以发送消息的方式与CPL库进行通信。参数hwndCpl为控制面板的窗口句柄，msg为消息标识，lParam1和lParam2为附加的两个参数，具体的意义视msg的值而定。<br>
+      　　控制面板用LoadLibrary()函数把CPL库调入内存以后，立刻向CPlApplet()发送一条CPL_INIT消息，指示CPL库作初始化工作。因为这是唯一允许返回失败信息的消息，所以CPL库此时应该分配运行过程中需要的所有内存和资源，如果因为内存不够或者其它原因不能继续，就返回零值，控制面板将不再处理这个CPL库，并自动卸下它。<br>
+      　　所有CPL库初始化完毕后，控制面板再向每个CPL库的CPlApplet()函数发送一条CPL_ GETCOUNT消息，此时CPL库返回它所支持的组件数。接下来，控制面板再针对每一个组件向CPlApplet()函数发送多条CPL_NEWINQUIRE消息，目的是取得每个组件对应的图标、名称和提示信息，CPL库可以在处理这条消息时依次初始化各个组件的对话框。&nbsp;<br>
+      　　进行到这一步后，控制面板显示出所有组件的图标，并开始接受用户的选择。当用户双击某个组件的图标时，控制面板向该组件所在的CPL库发送一条CPL_DBLCLK消息，并指明用户选择的是该CPL库中的第几个组件，CPL库在接到这条消息后从.INI文件或Windows 95的注册表中读出要处理的系统参数的原始值，并启动相应的对话框，允许用户改变设置。当用户在修改过程中按下应用(Apply)按钮后，CPL库保存新的参数并返回到控制面板中； 如果用户取消了所作修改，CPL库只需返回即可。<br> 
+      　　控制面板在被关闭时会对每个组件发送一条CPL_STOP消息，接着对每个CPL库发送一条CPL_EXIT消息，此时CPL库释放在CPL_INIT消息中分配的内存和资源。最后控制面板依次卸下各个CPL库并退出。<br>
+      　　上面叙述的就是控制面板组件的工作原理，其中各条消息的具体参数定义请参考WIN 32SDK。<br> 
+      　　利用VC＋＋编写控制面板组件<br>
+      　　编写控制面板组件实际上是编写DLL，利用Visual C＋＋这个强大的可视化编程工具可以很方便地完成这项工作。MFC基本类库为我们封装了DLL的基本框架，我们只需编写处理消息的CPlApplet()函数和各个组件的对话框即可。遗憾的是，MFC类库中没有现成的关于控制面板组件的类，为了充分利用C＋＋语言可继承性的优点，本文后面的程序给出了一个控制面板组件的基类CcontrolPanel，它的成员函数提供了处理各种CPL消息的缺省代码，我们只要从这个基类派生出新的子类，并为需要处理的消息重载相应的代码，就可以迅速建立一个控制面板组件。<br> 
+      　　利用Visual C＋＋编写控制面板组件的步骤如下:<br> 
+      　　1、 调用AppWizard建立一个新的项目，将应用程序类型设为使用MFC的DLL，并把MFC类库作为静态库链接，按下Finish按钮，让AppWizard自动生成框架文件。<br> 
+      　　2、 把本文后面的CtrlPan.CPP加入到项目中，把CPlApplet添加到DEF文件的输出名表中，然后选择Build菜单的Settings，修改输出文件的扩展名为CPL。<br> 
+      　　3、 从CControlPanel中派生出新的子类，并重载部分消息代码。多数情况下只需要重载处理CPL_NEWINQUIRE和CPL_DBLCLK消息的函数就行了，如下所示:<br> 
+      　　 ＃include “ctrlpan.h”<br> 
+      　　 class CNewCPL : public CControlPanel<br> 
+      　　 {<br> 
+      　　 public:<br> 
+      　　 virtual LONG OnInquire(UINT uAppNum, NEWCPLINFO＊ pInfo);<br> 
+      　　 virtual LONG OnDblClk(HWND hwndCPl, UINT uAppNum, LONG lData);<br> 
+      　　 };<br> 
+      　　如果要在一个CPL库中支持多个组件，那么至少还要重载OnGetCount()函数。<br>
+      　　4、 编写消息处理代码。OnInquire()函数负责返回组件的各种信息，可参考基类中该函数的实现代码，OnDblClk()函数负责读取和保存各个参数，并调用对话框让用户选择。<br> 
+      　　5、 设计对话框。用ClassWizard生成对话框的处理代码，并修改这些代码使之符合要求。<br> 
+      　　6、 源代码编写完毕后，编译连接，把生成的CPL文件拷则到SYSTEM目录下，运行控制面板进行调试。<br> 
+      　　7、 调试正确后，重新建立CPL库的Release版。<br> 
+      　　 // CtrlPan.h:类CControlPanel的声明<br> 
+      　　 ＃ifndef _CTRLPAN_H_<br> 
+      　　 ＃define _CTRLPAN_H_<br> 
+      　　 ＃include //VC提供的头文件<br> 
+      　　 class CControlPanel<br> 
+      　　 {<br> 
+      　　 public:<br> 
+      　　 CControlPanel();<br> 
+      　　 virtual ～CControlPanel();<br> 
+      　　 // 可重载的消息处理函数<br> 
+      　　 virtual LONG OnDblClk(HND hwndCPl, UINT uAppNum, LONG lData);<br> 
+      　　 virtual LONG OnExit();virtual LONG OnGetCount();<br> 
+      　　 virtual LONG OnInit();virtual LONG OnInquire(UINT uAppNum, NEWCPLINFO＊ p Info);<br> 
+      　　 virtual LONG OnSelect(UINT uAppNum, LONG lData);<br> 
+      　　 virtual LONG OnStop(UINT uAppNum, LONG lData);<br> 
+      　　 virtual LONG OnExit();<br> 
+      　　 // CPL库的输出函数<br> 
+      　　 static LONG APIENTRY CPlApplet(HWND hwndCPl, UINTuMsg,LONG lParam1, LONG lParam2);<br> 
+      　　 static CControlPanel＊ m_pThis;<br> 
+      　　 };<br> 
+      　　 ＃endif // _CTRLPAN_H_<br> 
+      　　 // CtrlPan.cpp:定义类CControlPanel的缺省处理函数<br> 
+      　　 ＃include “stdafx.h”<br> 
+      　　 ＃include “ctrlpan.h”<br> 
+      　　 CControlPanel＊ CControlPanel::m_pThis = NULL;<br> 
+      　　 CControlPanel::CControlPanel()<br> 
+      　　 { m_pThis = this;}<br> 
+      　　 CControlPanel::～CControlPanel()<br> 
+      　　 { }<br> 
+      　　 // CPL库的输出函数<br> 
+      　　 LONG APIENTRY CControlPanel::CPlApplet(HWND hwndCPl, UINTuMsg,<br> 
+      　　 LONG lParam1, LONG lParam2)<br> 
+      　　 {<br> 
+      　　 CControlPanel＊ pCtrl = m_pThis;<br> 
+      　　 ASSERT(pCtrl);//检查pCtrl的有效性<br> 
+      　　 switch (uMsg) {<br> 
+      　　 case CPL_DBLCLK:<br> 
+      　　 return pCtrl－>OnDblClk(hwndCPl, lParam1, lParam2);<br> 
+      　　 case CPL_EXIT:<br> 
+      　　 return pCtrl－>OnExit();<br> 
+      　　 case CPL_GETCOUNT:<br> 
+      　　 return pCtrl－>OnGetCount();<br> 
+      　　 case CPL_INIT:<br> 
+      　　 return pCtrl－>OnInit();<br> 
+      　　 case CPL_NEWINQUIRE:<br> 
+      　　 return pCtrl－>OnInquire(lParam1, (NEWCPLINFO＊)lParam2);<br> 
+      　　 case CPL_INQUIRE:<br> 
+      　　 return 0; //基于WIN32的CPL库不处理这条消息<br> 
+      　　 case CPL_SELECT:<br> 
+      　　 return pCtrl－>OnSelect(lParam1, lParam2);<br> 
+      　　 case CPL_STOP:<br> 
+      　　 return pCtrl－>OnStop(lParam1, lParam2);<br> 
+      　　 case CPL_EXIT:<br> 
+      　　 retrun pCtrl－>OnExit();<br> 
+      　　 default:break;<br> 
+      　　 }<br> 
+      　　 return 1;<br> 
+      　　 }<br> 
+      　　 // 缺省的消息处理函数<br> 
+      　　 LONG CControlPanel::OnDblClk(HWND hwndCPl, UINT uAppNum, LONG lData)<br> 
+      　　 { return 0; }<br> 
+      　　 LONG CControlPanel::OnExit()<br> 
+      　　 { return 0; }<br> 
+      　　 LONG CControlPanel::OnGetCount()<br> 
+      　　 { return 1; } //缺省为一个组件<br> 
+      　　 LONG CControlPanel::OnInit()<br> 
+      　　 { return 1;}<br> 
+      　　 LONG CControlPanel::OnInquire(UINT uAppNum, NEWCPLINFO＊ pInfo)<br> 
+      　　 {<br> 
+      　　 // 填充NEWCPLINFO结构,结构的定义请参考VC的联机帮助<br> 
+      　　 pInfo－>dwSize = sizeof(NEWCPLINFO);<br> 
+      　　 pInfo－>dwFlags = 0;<br> 
+      　　 pInfo－>dwHelpContext = 0;<br> 
+      　　 pInfo－>lData = 0;<br> 
+      　　 pInfo－>hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(1));<br> 
+      　　 strcpy(pInfo－>szName, “Applet”);<br> 
+      　　 strcpy(pInfo－>szInfo, “Default Control Panel Applet”);<br> 
+      　　 strcpy(pInfo－>szHelpFile, “”);<br> 
+      　　 return 0;<br> 
+      　　 }<br> 
+      　　 LONG CControlPanel::OnSelect(UINT uAppNum, LONG lData)<br> 
+      　　 { return 1;}<br> 
+      　　 LONG CControlPanel::OnStop(UINT uAppNum, LONG lData)<br> 
+      　　 { return 1;}<br> 
+      　　 LONG CControlPanel::OnExit()<br> 
+      　　 { return 1;}      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+ 
+</body> 
+ 
+</html> 

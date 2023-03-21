@@ -1,0 +1,212 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body VLINK="#0000FF">
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" height="30" cellspacing="0" cellpadding="2"
+    bgcolor="#E8E8E8" style="font-size: 9pt">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><font COLOR="#FF0000"><h2 align="center"></font><font color="#000000"><span
+    style="font-size: 9pt">MFC邮递表的中文翻译</span></font></h2>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font color="#000000">第十三期目录</font> <font SIZE="-1">杨晓东 
+    1998.11.21</font></h3>
+    <ol>
+      <li><a HREF="#vol13q1">如何使一个按钮Disable?</a> </li>
+      <li><a HREF="#vol13q2">怎样从MFC扩展动态链结库(DLL)中显示一个对话框？</a> 
+      </li>
+      <li><a HREF="#vol13q3">想隐藏用户界面怎么办？</a> </li>
+      <li><a HREF="#vol13q4">如何实现SDI与MDI的转换？</a> </li>
+    </ol>
+    <p><a NAME="vol13q1"></a></p>
+    <p><br>
+    </p>
+    <h3><font color="#000000">问:如何使一个按钮Disable?</font></h3>
+    <p><br>
+    我使用下面代码来Disable一个为ID_BUTTON的按钮,为什么会没有变化.<br>
+    GetDlgItem(IDC_BUTTON)-&gt;EnableWindow(FALSE);<br>
+    </p>
+    <p>答:CWnd类中的EnableWindow函数用来Enable或Disable一个窗口类的<br>
+    对象,因为CButton类继承于类CWnd,所以你可以使用来操作一个按钮.<br>
+    Enable一个基于窗口类的对象可以用以下代码:<br>
+    </p>
+    <pre>
+      pWnd-&gt;EnableWindow(TRUE);
+</pre>
+    <p>Disable一个对象可用<br>
+    </p>
+    <pre>
+      pWnd-&gt;EnableWindow(FALSE);
+
+</pre>
+    <p>其中pWnd为一个指向窗口对象的指针<br>
+    VC++中消息WM_ENABLE告诉窗口它正在Disable或Enable,但它并不能<br>
+    使一个窗口Enable或Disable.<br>
+    </p>
+    <p><a NAME="vol13q2"></a><br>
+    </p>
+    <h3><font color="#000000">问:怎样从MFC扩展动态链结库(DLL)中显示一个对话框？</font></h3>
+    <p><br>
+    问:我在过去的几天中试着在DLL中定义的函数中显示一个对话框,可是已<br>
+    经在DLL中定义好的对话框资源,在常规DLL调用时,我可以正常的显示出来,<br>
+    为什么在扩展DLL中同样的资源我却不能显示.<br>
+    </p>
+    <p>答:当你在DLL中使用资源时,有些小细节需要注意,首先,在DLL运行时,<br>
+    必须保存DLL的实例,可以通过AfxInitExtensionModule<br>
+    </p>
+    <pre>
+static AFX_EXTENSION_MODULE extensionDLL;
+
+extern &quot;C&quot; int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
+{
+   if (dwReason == DLL_PROCESS_ATTACH)
+      {
+      // Extension DLL one-time initialization
+      if (!AfxInitExtensionModule(extensionDLL, hInstance))
+         return false;
+      }
+
+   return(true);
+}
+</pre>
+    <p>然后,每次使用DLL资源时,你必须改变资源的句柄,使其指向DLL,并保<br>
+    存exe的资源，以便以后正确恢复<br>
+    </p>
+    <pre>
+void get_DLL_resource(void)
+{
+   /* this function changes the resource handle to that of the DLL */
+   //这个函数改变资源句柄使其指向DLL
+   if (resource_counter == 0)
+      {
+      save_hInstance = AfxGetResourceHandle();
+      AfxSetResourceHandle(extensionDLL.hModule);
+      }
+
+   resource_counter++;
+}
+</pre>
+    <p>接着你需要其它函数来恢复资源句柄<br>
+    </p>
+    <pre>
+void reset_DLL_resource(void)
+{
+   /* this function restores the resource handle set by
+'get_DLL_resource()' */
+
+   if (resource_counter &gt; 0)
+      resource_counter--;
+
+   if (resource_counter == 0)
+      AfxSetResourceHandle(save_hInstance);
+}
+</pre>
+    <p>接下来一点非常重要，只要有可能就必须恢复资源句柄,否则,你将会遇到许<br>
+    多问题.原因是可执行文件必须重画工具条等等,比如说,如果用户移动DLL的<br>
+    对话框,如果资源句柄仍然为DLL的资源,程序就崩溃了,我发现最好恢复句柄<br>
+    的时机在对话框的OnInitDialog()中,这时对话框的模板等已经读出了.<br>
+    </p>
+    <p><a NAME="vol13q3"></a><br>
+    </p>
+    <h3><font color="#000000">问:想隐藏用户界面怎么办？</font></h3>
+    <p><br>
+    问：我编了一个小巧而有趣的工具，当用户使用时我不想让它显示出任何用户<br>
+    界面。听听各位有办法可将视关闭。<br>
+    </p>
+    <p>答：你可以注册一个新的窗口类型，它拥有除了WS_VISBLE属性外的任何属性，<br>
+    类似CFrameWnd，在PreCreateWindow方法中实现。<br>
+    另外，你能在OnCreate方法中通过设置m_nCmdShow为SW_HIDE来实现，<br>
+    具体方法如下： </p>
+    <pre>
+int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+    if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+        return -1;
+
+    // hide our app
+    AfxGetApp()-&gt;m_nCmdShow = SW_HIDE;
+
+    return 0;
+}
+</pre>
+    <p><a NAME="vol13q4"></a><br>
+    </p>
+    <h3><font color="#000000">问:如何实现SDI与MDI的转换？</font></h3>
+    <p><br>
+    问：我想将一个编好的SDI应用程序转换为MDI，很明显要有多处的改变。<br>
+    </p>
+    <p>答：你可以这样做：建立一个继承于CMDIChidWnd的类，不防设为CChldFrm.<br>
+    在CWinApp中作如下变化。<br>
+    </p>
+    <pre>
+InitInstance()
+{
+......
+    //instead of adding CSingleDocTemplate
+    // Add CMultiDocTemplate.
+    pDocTemplate = new CMultiDocTemplate(
+           IDR_MAINFRAME,
+           RUNTIME_CLASS(CSDIDoc),
+           RUNTIME_CLASS(CChldFrm),
+   // For  Main MDI Frame change this frame window from
+   // CFrameWnd derivative ( i.e. CMainFrame )
+   // to your CMDIChildWnd derived CChldFrm.
+           RUNTIME_CLASS(CSDIView));
+   // After this it is required to create the main frame window
+   // which will contain all the child windows. Now this window is
+   // what was initially frame window for SDI.
+    CMainFrame* pMainFrame = new CMainFrame;
+    if (!pMainFrame-&gt;LoadFrame(IDR_MAINFRAME))
+            return FALSE;
+     m_pMainWnd = pMainFrame;
+.....
+}
+</pre>
+    <p>在从CMDIFrameWnd中继承的类CMainFrame代替CFramWnd后，所有的类都将从 
+    CMDIFrame继承，而不是CFrameWnd,编译运行后你就会发现程序已经从SDI变 
+    换到MDI。<br>
+    注意：在CMainFram中必须将构造函数从private改为public.否则会出错。 </td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="cmfcv14.htm">前一期</a>|<a href="cmfcv12.htm">后一期</a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+<a href="cmfcv14.htm">
+
+<p align="center"></a>　</p>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>     
+  </tr>     
+</table>     
+</center></div><div align="center"><center>     
+     
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"     
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">     
+  <tr>     
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"     
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"     
+    bordercolordark="#FFFFFF">     
+      <tr>     
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font     
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"     
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>     
+      </tr>     
+    </table>     
+      <p align="center">如何在VC5下实现自己的定制控件&nbsp;<br>
+      <br>
+                           (辽宁　宋立波)&nbsp;    
+      <p><br>
+      <br>
+      　　首先利用应用程序向导AppWizard 生成应用程序框架，如本文的应用程序项目名称为ctrltest，应用程序根据需要选择其基类，可以是基于对话或文档的，本文是选择基于文档的，并具有默认的下拉菜单和工具条等功能；然后编辑菜单资源，设置响应定制功能菜单项名称、ID标识；利用类向导ClassWizard 为菜单项映射命令和更新消息函数；为定制功能增加所使用的图形资源和对话框等资源；最后为定制功能增加所需的成员变量和成员函数定义。<br> 
+      　　一、如何实现按钮的定制功能<br>
+      　　在定制按钮功能时，定制前必须设计好按钮所在的标准对话及定制按钮在对话框中所对应的标准按钮，因为定制按钮实际上是标准按钮的一种特殊情况，只是按钮上显示的信息由用户来定制，而其余的消息映射响应和更新方法均相同，所以定制按钮实际上也是定制按钮上各种显示信息的过程。<br>
+      　　（一）利用LoadBitmaps函数定制方法<br>
+      　　1、在资源对话窗口中增加按钮所需的按下、抬起和选中状态对应的位图及其ID标识；<br>
+      　　2、在资源对话窗口中增加按钮所在的对话框和标准按钮及其所对应的各种ID标识；<br>
+      　　3、利用类向导ClassWizard增加新类CBMTest1Dlg，其基类选择基于对话框CDialog的类型，并设置其头文件为Bbutton.cpp，但不设置其实现文件名；<br>
+      　　4、在实现文件Bbutton.cpp中进行如下代码完善：<br>
+      　　 ......//其它代码<br> 
+      　　 class CBMTest1Dlg : public CDialog<br> 
+      　　 {//完善类控制代码<br> 
+      　　 protected:<br> 
+      　　 CBitmapButton button1,button2;//定义按钮<br> 
+      　　 public:<br> 
+      　　 //{{AFX_DATA(CBMTest1Dlg)<br> 
+      　　enum {IDD=IDM_TEST_BITMAP_BUTTON1};//对话框标识<br> 
+      　　 //}}AFX_DATA<br> 
+      　　 CBMTest1Dlg(); //类实现文件<br> 
+      　　 BOOL OnInitDialog();//对话框初始化<br> 
+      　　 //{{AFX_MSG(CBMTest1Dlg)<br> 
+      　　 //}}AFX_MSG<br> 
+      　　 DECLARE_MESSAGE_MAP()<br> 
+      　　 };<br> 
+      　　 ......//其它代码<br> 
+      　　 CBMTest1Dlg::CBMTest1Dlg()<br> 
+      　　 : CDialog(CBMTest1Dlg::IDD)<br> 
+      　　 { //调入按钮位图资源函数<br> 
+      　　if(!button1.LoadBitmaps(_T(“Image1Up"),//按钮一所需位图<br>
+      　　_T(“Image1Down"),_T(“Image1Focus"))||//按下、抬起和选中<br>
+      　　!button2.LoadBitmaps(_T(“Image2Up"), //按钮二所需位图<br> 
+      　　 _T(“Image2Down"), _T(“Image2Focus")))<br> 
+      　　 { TRACE0(“按钮所需位图调入失败!<br> 
+      ");<br> 
+      　　 AfxThrowResourceException();<br> 
+      　　 }<br> 
+      　　 }<br> 
+      　　 BOOL CBMTest1Dlg::OnInitDialog()<br> 
+      　　 { //将对话框中按钮标识与位图连接<br> 
+      　　VERIFY(button1.SubclassDlgItem(IDOK, this));<br> 
+      　　 button1.SizeToContent();//使按钮大小适应位图<br> 
+      　　 VERIFY(button2.SubclassDlgItem(IDCANCEL, this));<br> 
+      　　 button2.SizeToContent();<br> 
+      　　 return TRUE;<br> 
+      　　 }<br> 
+      　　（二）利用AutoLoad函数定制方法<br>
+      　　1、在资源对话窗口中增加按钮所需的按下、抬起和选中等状态所对应的位图及其ID标识，注意位图的ID标识必须与对话框中按钮的ID标识相对应，即如果按钮的ID标识为IDOK，那么位图的ID标识必须为OKN、OKU、OKF和OKX，这是该方法实现的关键；<br>
+      　　2、在资源对话窗口中增加按钮所在的对话框和标准按钮及其所对应的各种ID标识，注意按钮的ID标识必须与位图对应，如果相应位图的标识为OKN等，则按钮ID标识必须为IDOK或ID_OK；<br>
+      　　3、利用类向导ClassWizard增加新类CBMTest1Dlg，其基类选择基于对话框CDialog的类型，并设置其头文件为Bbutton.cpp，但不设置其实现文件名；<br>
+      　　4、在实现文件Bbutton.cpp中进行如下代码完善：<br>
+      　　 class CBMTest2Dlg : public CDialog<br> 
+      　　 {//完善按钮类控制代码<br> 
+      　　 protected:<br> 
+      　　CBitmapButton buttonOk,buttonCan;//定义按钮<br> 
+      　　 public:<br> 
+      　　 //{{AFX_DATA(CBMTest2Dlg)<br> 
+      　　 enum {IDD=IDM_TEST_BITMAP_BUTTON2};//按钮对话框标识<br> 
+      　　 //}}AFX_DATA<br> 
+      　　 CBMTest2Dlg():CDialog(CBMTest2Dlg::IDD){}//映射类<br> 
+      　　 BOOL OnInitDialog();//初始化对话框<br> 
+      　　 //{{AFX_MSG(CBMTest2Dlg)<br> 
+      　　 //}}AFX_MSG<br> 
+      　　 DECLARE_MESSAGE_MAP()<br> 
+      　　 };<br> 
+      　　 ......//其它代码<br> 
+      　　 BOOL CBMTest2Dlg::OnInitDialog()<br> 
+      　　 { //完善初始化函数<br> 
+      　　 VERIFY(buttons[i].AutoLoad(IDOK,this));//调入位图<br> 
+      　　 VERIFY(buttons[i].AutoLoad(IDCANCEL,this));<br> 
+      　　 return TRUE;<br> 
+      　　 }<br> 
+      　　（三）两种定制方法的主要区别<br>
+      　　上述两种定制方法的主要区别是，第一种方法位图资源和按钮的ID标识可以随意确定，而其代码相对来说比较复杂；第二种方法位图资源和按钮的ID标识必须统一，而其代码简单有效。但两种方法定制后的对话框调用与正常对话框的调用完全相同：<br>
+      　　CBMTest1Dlg dlg;//定义对话框一<br> 
+      　　dlg.DoModal(); //调用对话框一<br> 
+      　　二、如何实现菜单的定制功能<br>
+      　　定制菜单功能实际上是程序增加菜单项的绘制过程，这里以色彩菜单项为例进行介绍。其实现步骤如下：<br>
+      　　1、利用类向导ClassWizard生成定制菜单新类CColorMenu ，其基类选择为CMenu ，实现头文件为主程序头文件，实现文件为CUSTMENU，头文件中的类其代码如下：<br> 
+      　　 class CColorMenu : public CMenu<br> 
+      　　 {//定制菜单类代码<br> 
+      　　 public://增加菜单项等功能函数定义<br> 
+      　　 void AppendColorMenuItem(UINT nID,COLORREF color);<br> 
+      　　　virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMIS);<br> 
+      　　 virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);<br> 
+      　　 CColorMenu();//构造函数<br> 
+      　　 virtual ～CColorMenu();//析构函数<br> 
+      　　 };<br> 
+      　　 并在头文件中的主程序类中增加成员变量和成员函数定义：<br> 
+      　　 class CTestWindow : public CFrameWnd<br> 
+      　　 {//主程序类中定义成员变量或函数<br> 
+      　　 public:<br> 
+      　　 void SetupMenus();//初始化菜单项<br> 
+      　　 protected:<br> 
+      　　 void AttachCustomMenu();//连接定制菜单<br> 
+      　　 CColorMenu m_colorMenu;//菜单控制成员变量和命令函数<br> 
+      　　 virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);<br> 
+      　　 ......//其它代码<br> 
+      　　 }<br> 
+      　　2、在主程序实现文件中增加如下代码：<br>
+      　　 //在菜单设置函数中增加连接定制菜单函数<br> 
+      　　 void CTestWindow::SetupMenus()<br> 
+      　　 { //菜单设置函数<br> 
+      　　 ......//其它代码<br> 
+      　　 AttachCustomMenu(); //连接定制菜单<br> 
+      　　 }<br> 
+      　　 //在主程序初始化函数中增加控制代码<br> 
+      　　 BOOL CTestApp::InitInstance()<br> 
+      　　 { ......//其它代码<br> 
+      　　 pMainWnd－>m_bAutoMenuEnable=FALSE;<br> 
+      　　 pMainWnd－>SetupMenus();//设置菜单控制<br> 
+      　　 ......//其它代码<br> 
+      　　 }<br> 
+      　　3、在菜单定制实现文件CUSTMENU.CPP中增加实现代码：<br>
+      　　 CColorMenu::CColorMenu()<br> 
+      　　 { //构造函数中建立菜单<br> 
+      　　 VERIFY(CreateMenu());<br> 
+      　　 }<br> 
+      　　 CColorMenu::～CColorMenu()<br> 
+      　　 { //在析构函数中撤消<br> 
+      　　 Detach();<br> 
+      　　 ASSERT(m_hMenu==NULL);<br> 
+      　　 }<br> 
+      　　 void CColorMenu::AppendColorMenuItem(UINT nID,COLORREF color)<br> 
+      　　 { //增加菜单项函数<br> 
+      　　VERIFY(AppendMenu(MF_ENABLED|MF_OWNERDRAW,<br>
+      　　 nID,(LPCTSTR)color));<br> 
+      　　 }<br> 
+      　　 ＃define COLOR_BOX_WIDTH 20 //菜单项宽度<br> 
+      　　 ＃define COLOR_BOX_HEIGHT 20 //菜单项高度<br> 
+      　　void CColorMenu::MeasureItem(LPMEASUREITEMSTRUCT lpMIS)<br> 
+      　　 { //设置菜单项宽度和高度<br> 
+      　　 lpMIS－>itemWidth = COLOR_BOX_WIDTH;<br> 
+      　　 lpMIS－>itemHeight = COLOR_BOX_HEIGHT;<br> 
+      　　 }<br> 
+      　　 void CColorMenu::DrawItem(LPDRAWITEMSTRUCT lpDIS)<br> 
+      　　 { //绘制菜单项函数<br> 
+      　　 CDC＊ pDC=CDC::FromHandle(lpDIS－>hDC);<br> 
+      　　 COLORREF cr=(COLORREF)lpDIS－>itemData;<br> 
+      　　 if (lpDIS－>itemAction＆ODA_DRAWENTIRE)<br> 
+      　　 { CBrush br(cr);//绘制正常状态彩色条<br> 
+      　　 pDC－>FillRect(＆lpDIS－>rcItem,＆br);<br> 
+      　　 }<br> 
+      　　 if((lpDIS－>itemState＆ODS_SELECTED)＆＆<br> 
+      　　　　(lpDIS－>itemAction＆(ODA_SELECT|ODA_DRAWENTIRE)))<br>
+      　　 { //绘制选中菜单项色彩条<br> 
+      　　 COLORREF crHilite = RGB(255－GetRValue(cr),<br> 
+      　　 255－GetGValue(cr),255－GetBValue(cr));<br> 
+      　　 CBrush br(crHilite);<br> 
+      　　 pDC－>FrameRect(＆lpDIS－>rcItem,＆br);<br> 
+      　　 }<br> 
+      　　 if (!(lpDIS－>itemState＆ODS_SELECTED) ＆＆<br> 
+      　　 (lpDIS－>itemAction＆ODA_SELECT))<br> 
+      　　 { CBrush br(cr);//清除前次选中项的框<br> 
+      　　 pDC－>FrameRect(＆lpDIS－>rcItem,＆br);<br> 
+      　　 }<br> 
+      　　 }<br> 
+      　　 static COLORREF colors[]={//色彩条菜单项定义<br> 
+      　　 0x00000000, // 黑<br> 
+      　　 0x00FF0000, // 蓝<br> 
+      　　 0x0000FF00, // 绿<br> 
+      　　 0x00FFFF00, // 青<br> 
+      　　 0x000000FF, // 红<br> 
+      　　 0x00FF00FF, // 棕<br> 
+      　　 0x0000FFFF, // 黄<br> 
+      　　 0x00FFFFFF // 白<br> 
+      　　 };<br> 
+      　　 const int nColors=sizeof(colors)/sizeof(colors[0]);<br> 
+      　　 void CTestWindow::AttachCustomMenu()<br> 
+      　　 { //连接用户定制菜单<br> 
+      　　 for (int iColor=0;iColor 　　m_colorMenu.AppendColorMenuItem(IDS_COLOR_NAME_FIRST<br>
+      　　 ＋iColor,colors[iColor]);<br> 
+      　　 CMenu＊ pMenuBar=GetMenu();//取得菜单控制<br> 
+      　　 ASSERT(pMenuBar!=NULL); //插入菜单项<br> 
+      　　 TCHAR szString[256];<br> 
+      　　　pMenuBar－>GetMenuString(IDM_TEST_CUSTOM_MENU,//取得菜单串<br>
+      　　 szString,sizeof(szString),MF_BYCOMMAND);<br> 
+      　　 　　 VERIFY(GetMenu()－>ModifyMenu(IDM_TEST_CUSTOM_MENU,//连接菜单<br> 
+      　　 MF_BYCOMMAND|MF_POPUP,(UINT)m_colorMenu.m_hMenu,szString));<br> 
+      　　 }<br> 
+      　　 BOOL CTestWindow::OnCommand(WPARAM wParam,LPARAM lParam)<br> 
+      　　 { //定制菜单项响应函数<br> 
+      　　 if (wParam=<br> 
+      　　 IDS_COLOR_NAME_FIRST＋nColors)//判断选中菜单<br> 
+      　　 return CFrameWnd::OnCommand(wParam,lParam);<br> 
+      　　 CString strYouPicked;//判断选中颜色<br> 
+      　　 strYouPicked.LoadString(IDS_YOU_PICKED_COLOR);<br> 
+      　　 CString strColor;<br> 
+      　　 strColor.LoadString(wParam);<br> 
+      　　 CString strMsg;<br> 
+      　　 strMsg.Format(strYouPicked, (LPCTSTR)strColor);<br> 
+      　　 CString strMenuTest;<br> 
+      　　 strMenuTest.LoadString(IDS_MENU_TEST);<br> 
+      　　 MessageBox(strMsg,strMenuTest);<br> 
+      　　 return TRUE;<br> 
+      　　 }<br> 
+      　　三、如何实现列表的定制功能<br>
+      　　列表功能是最常用的控制功能之一，所以实现它的定制技巧也具有很大的现实意义。其实现步骤如下：<br>
+      　　1、首先利用资源编辑器建立一个包含列表控件的对话框，并利用类向导ClassWizard为对话框生成新类CColorListBox，其头文件为custlist.cpp，实现文件不设置；<br>
+      　　2、在实现文件custlist.cpp中完善其类代码：<br>
+      　　 class CColorListBox:public CListBox<br> 
+      　　 {//完善列表控制类代码<br> 
+      　　 public://类成员函数<br> 
+      　　void AddColorItem(COLORREF color);<br> 
+      　　virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMIS);<br> 
+      　　virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);<br> 
+      　　 };<br> 
+      　　3、在实现文件custlist.cpp中完善各成员函数；<br>
+      　　 void CColorListBox::AddColorItem(COLORREF color)<br> 
+      　　 { //增加表项，其为一个颜色值<br> 
+      　　 AddString((LPCTSTR) color);<br> 
+      　　 }<br> 
+      　　 ＃define COLOR_ITEM_HEIGHT 20 //列表的高度<br> 
+      　　 void CColorListBox::MeasureItem(LPMEASUREITEMSTRUCT lpMIS)<br> 
+      　　 { //设置自绘表项的高度<br> 
+      　　 lpMIS－>itemHeight = COLOR_ITEM_HEIGHT;<br> 
+      　　 }<br> 
+      　　 void CColorListBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)<br> 
+      　　 { //绘制列表的表项函数<br> 
+      　　 CDC＊ pDC=CDC::FromHandle(lpDIS－>hDC);<br> 
+      　　 COLORREF cr=(COLORREF)lpDIS－>itemData;<br> 
+      　　 if (lpDIS－>itemAction＆ODA_DRAWENTIRE){<br> 
+      　　 CBrush br(cr);//绘制正常色彩条<br> 
+      　　 pDC－>FillRect(＆lpDIS－>rcItem,＆br);<br> 
+      　　 }<br> 
+      　　 if ((lpDIS－>itemState＆ODS_SELECTED) ＆＆<br> 
+      　　　　　　(lpDIS－>itemAction＆(ODA_SELECT|ODA_DRAWENTIRE)))<br>
+      　　 { //绘制选中项色彩条<br> 
+      　　 COLORREF crHilite=RGB(255－GetRValue(cr),<br> 
+      　　 255－GetGValue(cr),255－GetBValue(cr));<br> 
+      　　 CBrush br(crHilite);<br> 
+      　　 pDC－>FrameRect(＆lpDIS－>rcItem,＆br);<br> 
+      　　 }<br> 
+      　　 if (!(lpDIS－>itemState＆ODS_SELECTED)＆＆<br> 
+      　　 (lpDIS－>itemAction＆ODA_SELECT))<br> 
+      　　 { //清除前次选中项的框<br> 
+      　　 CBrush br(cr);<br> 
+      　　 pDC－>FrameRect(＆lpDIS－>rcItem, ＆br);<br> 
+      　　 }<br> 
+      　　 }<br> 
+      　　4、在实现文件custlist.cpp中可以像使用其它类一样使用新生成的定制列表类，其方法是首先设置类的控制成员变量m_colors，并设置相应的消息映射，最后完善其初始化函数：<br>
+      　　 BOOL CCustListDlg::OnInitDialog()<br> 
+      　　 { //完善初始化函数，与子类控制连接<br> 
+      　　 VERIFY(m_colors.SubclassDlgItem(IDC_LISTBOX1,this));<br> 
+      　　 for(int red=0;red&lt;=255;red＋=255)//增加彩色条8项<br> 
+      　　 for(int green=0;green&lt;=255;green＋=255)<br> 
+      　　 for(int blue=0;blue&lt;=255;blue＋=255)<br> 
+      　　 m_colors.AddColorItem(RGB(red,green,blue));<br> 
+      　　 return TRUE;<br> 
+      　　 }<br> 
+      　　只要掌握上述定制功能的实现技巧，就不难实现各种定制功能的其它类似用户界面，还可以实现其它常用控件的定制功能，为自己的应用程序增加各种独特风格，有效增强其专业特性。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0057)http://www.computerworld.com.cn/99/week/9941/9941b15a.asp -->
+<HTML><HEAD><TITLE>计算机世界:C＋＋Builder调用Matlab</TITLE><LINK 
+href="cb1.files/style.css" rel=stylesheet type=text/css>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type><!--***********-->
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center"><b>C ＋ ＋Builder 调 用Matlab</b> 
+      <P><FONT color=#ffffff></FONT>Borland C ＋ ＋Builder 是 一 种 新 颖 的 可 视 化 编  
+      程 语 言。 在 工 程 应 用 中， 我 们 一 般 用C ＋ ＋Builder 语 言 编 写 应 用 程 序， 实 现 交 互 界 面、 数  
+      据 采 集 和 端 口 操 作 等， 但C ＋ ＋Builder 在 数 值 处 理 分 析 和 算 法 工 具 等 方 面， 其 效 率 远 远  
+      低 于Matlab 语 言。 在 准 确 方 便 地 绘 制 数 据 图 形 方 面，Matlab 语 言 更 具 有 无 可 比 拟 的 优 势。  
+      此 外，Matlab 还 提 供 功 能 强 大 的 工 具 箱。 但Matlab 的 缺 点 是 不 能 实 现 端 口 操 作 和 实 时 控  
+      制。 因 此， 若 能 将 两 者 结 合 运 用， 实 现 优 势 互 补， 将 获 得 极 大 的 效 益。  
+      <P><FONT color=#ffffff>----</FONT>本 文 结 合 实 际 介 绍 了 应 用Borland C ＋ ＋  
+      Builder3.0 开 发 的Windos 应 用 程 序 中， 对Matlab 的 调 用 方 法。  
+      <H3>一、C ＋ ＋Builder 调 用Matlab 的 实 现 方 案 </H3><FONT  
+      color=#ffffff>----</FONT><B>1. 实 现 思 路</B>  
+      <P><FONT color=#ffffff>----</FONT>在 高 版 本 的Matlab 中（ 如Matlab V4.2） 提 供 了  
+      DDE 接 口， 用 户 可 以 通 过Windows 的DDE 通 信 基 制 实 现 外 部 调 用。 这 种 实 现 方 式 比 较 简 单，  
+      但 将 增 大 主 程 序 代 码， 影 响 运 行 速 度。  
+      <P><FONT color=#ffffff>----</FONT>在Windows 系 统 中，DLL 是 一 种 很 特 别 的 可 执 行 文  
+      件， 可 以 被 多 个Windows 应 用 程 序 同 时 访 问， 具 有 固 定 的 共 享 数 据 段。 该 数 据 段 的 数 据  
+      在DLL 被Windows 下 载 前 会 一 直 保 留 在 内 存 中， 因 此 可 以 通 过DLL 实 现 用 户 程 序 与Matlab  
+      之 间 的 数 据 传 输 和 函 数 调 用。  
+      <P><FONT color=#ffffff>----</FONT>具 体 地 说， 就 是 利 用Matlab 的32 位 动 态 连 接  
+      库（DLL）， 生 成 相 应 的 可 以 被C ＋ ＋Builder 调 用 的DLL， 用 来 提 供 二 者 之 间 的 基 本 支 撑 环  
+      境。 只 需 在 用 户 程 序 中 加 载 该DLL， 即 可 实 现 其 数 据 段 的 共 享。 然 后 在 用 户 程 序 中 操 作DLL  
+      数 据 段 的 数 据， 并 通 过 某 种 方 式 在 用 户 程 序 中 使Matlab 执 行 该DLL， 就 可 实 现 用 户 程 序  
+      对Matlab 的 调 用。 其 形 式 可 以 是 混 合 编 程 或 函 数 调 用， 非 常 方 便 而 高 效。  
+      <P><FONT color=#ffffff>----</FONT><B>2. 实 现 方 式</B>  
+      <P><FONT color=#ffffff>----</FONT>Matlab 提 供 了 可 外 部 连 接 的DLL 文 件， 通 过 将 其  
+      转 换 为 相 应 的Lib 文 件， 并 加 以 必 要 的 设 置， 就 可 以 在C ＋ ＋Builder 中 直 接 进 行Matlab 函  
+      数 调 用， 实 现C ＋ ＋ Builder 语 言 与Matlab 语 言 的 混 合 编 程。  
+      <P><FONT color=#ffffff>----</FONT>(1) 运 行 环 境 要 求  
+      <P><FONT color=#ffffff>----</FONT>由 于Matlab 提 供 的 是32 位 的DLL。 其 运 行 环 境 要  
+      求 是Matlab V4.2 或 更 高 版 本。C ＋ ＋Builder 可 以 进 行32 位 编 程， 这 里 我 们 采 用 的 是V3.0  
+      版 本。  
+      <P><FONT color=#ffffff>----</FONT>(2) C ＋ ＋Builder 下LIB 文 件 的 生 成  
+      <P><FONT color=#ffffff>----</FONT>Matlab 提 供 的Def 文 件 允 许 用 户 通 过Implib 命  
+      令 生 成 相 应 的Lib 文 件。 其 命 令 格 式 为： <PRE>    Implib  ???.lib  ???.def
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT>在&lt; matlab &gt;\extern\include 目 录 下，  
+      提 供 了 如 下 三 个.Def 文 件： <PRE>    _libeng.def，_libmat.def，_libmx.def
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT>通 过 上 述 命 令 可 以 生 成 相 应 的 三 个Lib 文 件。 这  
+      些Lib 文 件 中 包 含 了 可 外 部 调 用 的Matlab 函 数 的 必 要 信 息。  
+      <H3>二、 实 现 计 算 和 绘 图 </H3><FONT color=#ffffff>----</FONT>为 清 楚 起 见， 通 过 一  
+      个 简 单 的CBuilder 例 程 进 行 说 明。 该 实 例 通 过 调 用Matlab 实 现 矩 阵 运 算 并 绘 制 图 形， 来  
+      演 示C ＋ ＋Builder 对Matlab 的 调 用。  
+      <P><FONT color=#ffffff>----</FONT>在C ＋ ＋Builder 编 辑 环 境 中， 建 立 一 个 新 的 窗  
+      体MyForm， 并 放 置 一 个 按 钮Demo。 将 工 程 文 件 命 名 为Try.prj， 其 主 函 数 为try.cpp。 在 主  
+      函 数 中， 我 们 将 使 用 一 个 实 现Matlab 调 用 的 子 函 数DemoMatlab， 作 为 按 钮Demo 的 响 应 事  
+      件。 其 源 代 码 如 下： <PRE> ＃include &lt; vcl.h &gt;
+ ＃pragma hdrstop
+
+ ＃include “Unit1.h&quot;
+ ＃pragma package(smart_init)
+ ＃pragma resource “ ＊.dfm&quot;
+TMyForm ＊MyForm;
+
+__fastcall TMyForm::TMyForm(TComponent ＊ Owner)
+    : TForm(Owner)
+{
+}
+
+void __fastcall TMyForm::DemoClick(TObject ＊Sender)
+{
+    DemoMatlab();    // 演 示Matlab 语 言 调 用
+}
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT>为 了 调 用Matlab 中 的 函 数， 必 须 进 行 必 要 的 设  
+      置， 将 包 含 这 些 函 数 的 文 件 加 入 工 程 文 件Try.prj。 以 下 是 操 作 过 程：  
+      <OL> 
+        <LI>在 头 文 件 中 加 入Engine.h。 其 包 含 了 启 动Matlab 调 用 和 关 闭 的 函 数 声 明。  
+        <LI>打 开Project|Option... 对 话 框， 点 击Directories/Conditionals。  
+        <UL> 
+          <LI>在Include Path 中， 加 入 目 录 路 径&lt; matlab &gt;\extern\include， 该 路 径  
+          包 含 了engine.h 和matlab.h 等 有 用 的 头 文 件。  
+          <LI>在Library Path 中， 加 入&lt; matlab &gt;\bin 和&lt; matlab  
+          &gt;\extern\include。 这 两 个 目 录 路 径 包 含 了 可 外 部 调 用 的DLL 和LIB 文  
+        件。</LI></UL> 
+        <LI>点 选Project|Add to Project... 对 话 框， 加 入 如 下 库 文 件：</LI></OL><PRE>    _libeng.lib，_libmat.lib 和_libmx.lib。
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT>在 进 行 了 这 些 必 要 的 设 置 之 后， 我 们 就 可 以 选 用  
+      适 当 的 函 数 来 实 现 目 标。 以 下 是 子 函 数DemoMatlab 的 程 序 代 码。 <PRE>       void DemoMatlab
+  {
+      Engine ＊eng;    // 定 义Matlab 引 擎
+      char buffer[200];  // 定 义 数 据 缓 冲 区
+      int array[6]={1,2,3,4,5,6};
+      mxArray ＊S = NULL, ＊T = NULL;
+      engOpen(NULL);  // 打 开MATLAB 引 擎 － － －1
+
+ 　 　 　S= mxCreateDoubleMatrix(1,6, mxREAL);
+ // 产 生 矩 阵 变 量
+      mxSetName(S, “S&quot;);
+      memcpy((char ＊) mxGetPr(S),(char ＊) array, 
+      6 ＊sizeof(int));
+      engPutArray(eng, S);  
+      // 将 变 量X 置 入Matlab 的 工 作 空 间
+      engEvalString(eng, “T = S/S.^2;&quot;);  // 计 算
+      engEvalString(eng, “plot(S, T);&quot;);    // 绘 制 图 形
+       … …  … …
+      engOutputBuffer(eng, buffer, 200); // 获 取Matlab 输 出
+         T = engGetArray(eng, “T&quot;);      
+      // 获 得 计 算 结 果 － － － －2
+
+         engClose(eng);        
+        // 关 闭Matlab 引 擎， 结 束 调 用
+         mxDestroyArray(S);           // 释 放 变 量
+         mxDestroyArray(T);
+        }
+</PRE> 
+      <P><FONT color=#ffffff>----</FONT>若 还 需 要 执 行 其 他 功 能 和 任 务， 那 么 按 照 上 面 介  
+      绍 的 方 法， 进 行 变 量 声 明 后， 在1、2 处 加 写 需 要 的 语 句 即 可。  
+      <P><FONT color=#ffffff>----</FONT>当 然， 使 用 这 种 方 法 调 用Matlab 不 能 脱 离  
+      Matlab 环 境 的 支 撑。 但 当 我 们 不 需 要 看 到Matlab 的 命 令 窗 口 时， 可 将 其 赋 予Swhide 属 性  
+      而 加 以 隐 藏。     
+      <p>　    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+</BODY></HTML>

@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第二十二期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><font COLOR="#FF0000"><h2 align="center"></font><font color="#000000">MFC邮递表的中文翻译-第二十二期</font><font
+    COLOR="#FF0000"></h2>
+    </font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font COLOR="#FF0000">第二十二期目录</font> <font SIZE="-1">杨晓东 
+    1999.1.11</font></h3>
+    <ol>
+      <li><a href="#vol22q1">改变对话框标题</a> </li>
+      <li><a href="#vol22q2">怎样在列表框中的列表项加入检查框？</a> </li>
+      <li><a href="#vol22q3">出错消息</a> </li>
+      <li><a href="#vol22q4">显示一个DIB图片</a> </li>
+      <li><a href="#vol22q5">调用16位DLL</a> </li>
+      <li><a href="#vol22q6">怎样建立一个使用位图画刷的笔</a> </li>
+      <li><a href="#vol22q7">在对话框中设置菜单检查标志</a> </li>
+      <li><a href="#vol22q8">列表控件中怎样在一行中加一个图标</a> </li>
+    </ol>
+    <p><a name="vol22q1"></a></p>
+    <h3><font color="Red">改变对话框标题</font></h3>
+    <p>问：在对话框显示之前怎样改变其标题，应该是可以的。<br>
+    </p>
+    <p>答：在对话框中加一个公共成员变量'CString m_strCaption'，然后改写CDialog::OnInitDialog() 
+    </p>
+    <pre>
+BOOL CMyDialog::OnInitDialog()
+{
+    CDialog::OnInitDialog();
+    if ( m_strCaption.GetLength() )
+        SetWindowText( m_strCaption );
+    return TRUE;
+}
+</pre>
+    <p>&nbsp;&nbsp;接下来在你调用DoModal之前显示对话框之后赋值给该变量，那么该变量的值就会变成 
+    话框的标题 <a href="#PageBegin"></p>
+    <p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q2"></a> <font color="Red"></p>
+    <h3>怎样在列表框中的列表项加入检查框？</h3>
+    </font><p>问：我想在列表框中加入一个检查框，我是使用ExtendedSetListViewStyle( 
+    )函数并 带参数LVS_EX_CHECKBOXES.问题在于检查框是在列表框中的第一行，不是我所想要的 
+    ，我在另外的行上显示检查框，其次我想显示的检查框为只读，比如不能编辑等<br>
+    </p>
+    <p>答：用最简单的办法来解决你的问题LVS_EX_SUBITEMIMAGES，这种类型也允许在行中显示一个 
+    图标，知道这一点后，加两个图像在图像列表中，一个表示未选中，一个表示选中，然后 
+    在相应的行中显示即可． <a href="#PageBegin"></p>
+    <p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q3"></a> <font color="Red"></p>
+    <h3>出错消息</h3>
+    </font><p>问：有谁知道下面的警告消息说明什么&quot;Warning: skipping 
+    non-radio button in group&quot; 又该怎么处理？<br>
+    </p>
+    <p>答：这个警告消息是因为没有将单选按钮和其他的按钮全设为WS_GROUP。解决方法是将你所想 
+    加入的控件加入WS_GROUP类型。下面为出错的原因： </p>
+    <pre>void AFXAPI DDX_Radio(CDataExchange* pDX, int nIDC, int&amp; value)
+    // must be first in a group of auto radio buttons
+{
+
+    // walk all children in GROUP  to check the states
+    int iButton = 0;
+    do
+    {
+
+//检查单选框是否在同一组中，如不是将给出一个警告
+        //Check whether the button in the group box is radio button
+if not it gives the warning
+        if (::SendMessage(hWndCtrl, WM_GETDLGCODE, 0, 0L) &amp;
+DLGC_RADIOBUTTON)
+        {
+            // control in group is a radio button
+            ........................
+            Check the state of the radio button
+        }
+        else
+        {
+            TRACE0(&quot;Warning: skipping non-radio button in group.\n&quot;);
+        }
+        hWndCtrl = ::GetWindow(hWndCtrl, GW_HWNDNEXT);
+
+    } while (hWndCtrl != NULL &amp;&amp;
+        !(GetWindowLong(hWndCtrl, GWL_STYLE) &amp; WS_GROUP));
+}
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q4"></a> <font color="Red"></p>
+    <h3>显示一个DIB图片</h3>
+    </font><p>问：我不知道怎样使程序在VideoView中显示一张图片。<br>
+    </p>
+    <p>答：你可以在你的视类中的OnDraw中调用SetDibBitsToDevice函数，这样你就可以显示/打印 
+    图象了，比如： </p>
+    <pre>CVideoView::OnDraw(CDC* pDC)
+{
+        if (pDC-&gt;IsPrinting())
+{
+        // handle here print-time drawing (header/footer , etc.)
+        ...
+}
+
+        HDC hdc = pDC-&gt;GetSafeHdc(); // this is how you get hDC
+
+SelectPalette(hdc, hGrayscalePal, FALSE);
+RealizePalette(hdc);
+SetDIBitsToDevice(...
+
+}</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q5"></a> <font color="Red"></p>
+    <h3>调用16位DLL</h3>
+    </font><p>问：在环境VC6 OS=NT4，98，怎样才能调用以前开发的16位DLL？<br>
+    </p>
+    <p>答：你不可以直接在32位操作系统中使用16位DLL，但还是有法子想的，不管怎样都需要做些工作。可以有以下几种方法：<br>
+    1。写一个层转换程序<br>
+    2。写一个16位OLE代理<br>
+    3。转换DLL<br>
+    &nbsp;&nbsp;在工作期间我们选择了第二种方法，因为它是最容易实现的，也不会影响已经存在的DLL，也 
+    不会使用线程的调用。<br>
+    &nbsp;&nbsp;建立一个转换层关键在于为你所有的DLL的函数定义一个转换接口，然后通过转换建立32位的DLL；<br>
+    &nbsp;&nbsp;建立16位OLD代理也是相类似的概念，但执行有点不同；<br>
+    &nbsp;&nbsp;第三种方法只能说是没有办法的办法，转化一个DLL考虑的东西实在是太多了。 
+    <a href="#PageBegin"></p>
+    <p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q6"></a> <font color="Red"></p>
+    <h3>怎样建立一个使用位图画刷的笔</h3>
+    </font><p>问：怎样建立一个使用位图画刷的笔<br>
+    </p>
+    <p>答：请看下面代码，我想它应该是正确的 </p>
+    <pre>CView::OnWrite()
+{
+    CDC* pDC = GetDC();
+    CBitmap bmp;
+    bmp.LoadBitmap(IDB_MJV);
+    HBITMAP hBmp;
+    hBmp = HBITMAP(bmp);
+
+    LOGBRUSH LogBrush;
+    LogBrush.lbStyle = BS_PATTERN;
+    LogBrush.lbHatch = (LONG)hBmp;
+
+    CPen pen;
+    pen.CreatePen(PS_GEOMETRIC, 50, &amp;LogBrush);
+
+    pDC-&gt;SelectObject(pen);
+    pDC-&gt;Rectangle(100,100,200,400);
+    pDC-&gt;ReleaseDC(pDC);
+}</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q7"></a> <font color="Red"></p>
+    <h3>在对话框中设置菜单检查标志</h3>
+    </font><p>问：我在对话框中加了个菜单，又使用向导生成器为生成响应消息。程序运行正确但我但又想 
+    去掉最后菜单选择的检查标记，于是我又用类生成器为UPDATE_COMMAND_UI消息做了映射。当我 
+    想使用CCmdUI::SetCheck来设置菜单的检查标志，没有任何错误提示，但程序事实上什么也没有 
+    发生，我也试过使能菜单，但同样什么事情也没有发生。<br>
+    </p>
+    <p>答：在对话框中你应该使用WM_KICKIDLE来改变各控件 </p>
+    <pre>BEGIN_MESSAGE_MAP(CTabDialog, CDialog)
+   ON_MESSAGE(WM_KICKIDLE,       OnKickIdle)
+END_MESSAGE_MAP()
+
+LRESULT CTabDialog::OnKickIdle(WPARAM wp, LPARAM lCount)
+{
+   UpdateDialogControls(this, TRUE);
+   return 0;
+}
+</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <br>
+    </p>
+    <p><a name="vol22q8"></a> <font color="Red"></p>
+    <h3>列表控件中怎样在一行中加一个图标</h3>
+    </font><p>问：我有一个列表框控件其中有3行，我想用两个图标来表示两个不同的状态，具体是在第3行上 
+    ，事实上我也能够实现，问题是为什么在第一行中总是显示出第一个图标？<br>
+    </p>
+    <p>答：把下面代码 </p>
+    <pre>m_MyListCtrl.InsertItem ( nListIndex,  str ,0);</pre>
+    <p>改为 </p>
+    <pre>m_MyListCtrl.InsertItem ( nListIndex,  str);</pre>
+    <a href="#PageBegin"><p align="right">返回页首</a> <br>
+    </p>
+    <hr>
+    <a href="cmfcv23.htm"><p align="center">前一期</a>|<a href="cmfcv21.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+</body>
+</html>

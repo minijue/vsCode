@@ -1,0 +1,160 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">Win95通用对话框函数编制原理&nbsp;<br>
+      <p>　　本文通过分析GetOpenFileName函数入口参数和目标代码，介绍Windows95通用对话框函数的实现原理，详细讨论Windows95通用对话框函数的编制原理，以求对程序编制人员有所帮助。<br>
+      　　编制原理<br>
+      　　编制一个通用对话框函数包括四个方面的内容：定义通用对话框模板、定义函数入口参数结构、编制通用对话框处理过程和通用对话框函数。<br>
+      　　定义通用对话框模板<br>
+      　　定义通用对话框模板时，将功能相近的对话处理进行提炼，只将共用频度高的控制件设计到对话框中，这样可以使调用函数编制起来简单一些。一般情况下，对话框中除一些“数据输入”控制件外，还应包括IDOK、IDCANCEL按钮，有时还有IDC—HELP帮助按钮。<br>
+      　　定义入口参数结构<br>
+      　　在Windows95通用对话框函数中，入口参数都是一个结构变量指针，这些指针所指结构变量有许多相同含义的成员，如结构自身的长度(lStructSize)、对话框父窗句柄(hWndOwn er)、拥有替代对话框的程序实例句柄(hInstance)、控制标志(Flags)、用户数据指针( lCustData)、钩子函数指针(lpfnHook)，以及替代对话框模块名指针(lpTemplateName)等。因此结构定义具有如下形式：<br> 
+      　　 typedef struct tagCmDlgData{<br> 
+      　　 DWORD lStructSize;<br> 
+      　　 HWND hWndOwner;<br> 
+      　　 HINSTANCE hInstance;<br> 
+      　　 DWORD Flags;<br> 
+      　　 LPARAM lCustData;<br> 
+      　　 UINT(CALLBACK＊lpfnHook)(HWND,UINT,WPARAM,LPARAM);<br> 
+      　　 LPCSTR lpTemplateName;<br> 
+      　　 /＊此处可定义其它成员＊/<br> 
+      　　 }CmDlgData;<br> 
+      　　其结构成员Flags一般包括标志常量F—ENABLETEMPLATE、F—ENABLETEMPLATEHANDLE、F—ENABLEHOOK、F—SHOWHELP等，对于特定的对话框，还需增加其它标志。这些标志常量是32位值，它们不在相同的位上是1，这些标志常量通过|(或)操作赋于成员Flags。设置F—ENABLETEMPLATE标志，lpTemplateName指定替代对话框名指针，hInstance指定拥有替代对话框的程序实例句柄，它可以是WinMain入口参数的实例句柄，或是WinExec、Load Module、LoadLibrary的返回值。设置F—ENABLETEMPLATEHANDLE标志，使用替代对话框，但不使用lpTemplateName成员，只使用hInstance成员，这时hInstance是指对话框模板资源的全局内存句柄，它可以是LoadResource的返回值。设置F—ENABLEHOOK标志，使成员lpfnHook指定的钩子函数有效。设置F—SHOWHELP标志，产生的通用对话框中显示“帮助”按钮，由于对话框过程将发送消息到父窗，因此成员hWndOwner不能是NULL。这里标志F—EN ABLETEMPLATE、F—ENABLETEMPLATEHANDLE和F—ENABLEHOOK就是为处理相近对话框中的不同或扩展对话框的功能而定义。<br> 
+      　　编制通用对话框处理过程<br>
+      　　在对话框处理过程中，一般都定义OKMSGSTRING和HELPMSGSTRING消息串，OKMSGSTRIN G对应的消息是在对话框过程处理完IDOK按钮消息后，被发送到钩子函数。HELPMSGSTRIN G对应的消息是在按“帮助”按钮后，由对话框过程发送到对话框的父窗口。<br> 
+      　　对话框处理过程在处理消息WM—INITDIALOG时，从Param参数中获得DialogBoxParam()或DialogBoxIndirectParam()的最后一个参数值，即结构变量指针，将该值放入静态变量pCDD中，接着登录自定义消息OKMSGSTRING、HELPMSGSTRING，它们的消息标识值分别放入静态变量中。<br>
+      　　处理WM—INITDIALOG消息后，在“if(pCDD){…}”语句块中，调用钩子函数。这里判别pCDD是否非零，是由于对话框处理过程获得消息WM—SETFONT在先，消息WM—INITDIALOG在后，注意该条件实际上过滤了传向钩子函数的WM—SETFONT消息(为了不过滤WM—SETFONT 消息，可定义pCDD为全局变量，在通用对话框函数中赋值)。<br> 
+      　　接下来，处理钩子函数未作处理的消息，一般是通用对话框中包含的控制件消息。在处理IDC—HELP按钮消息时，我们可以使用PostMessage()函数传递ELPMSGSTRING对应的消息到父窗口，不用等待消息返回，这种方法是应用程序中“帮助”按钮的常用处理方法。<br>
+      　　注意在处理IDOK后调了钩子函数，相当于通过SendMessage()函数发送OKMSGSTRING标识的消息到钩子函数，不同点是前者能够获得钩子函数的返回值，这是对话框处理过程需要的，以便确定是否退出对话框。按一次IDOK按钮，给钩子函数两个不同消息，第一个是W M—COMMAND消息(wParam参数是IDOK)，第二个是OKMSGSTRING所标识的消息(lParam参数是pCDD)。但是，在应用程序定义的钩子函数中，一般不处理第一次获得的消息，而只处理第二次获得的消息。<br> 
+      　　下面列出对话框处理过程源程序:<br>
+      　　 BOOL CALLBACK —export<br> 
+      　　 CommDlgProc(HWND hDl,UINT<br> 
+      　　 iMessage,WPARAM wParam,L<br> 
+      　　 PARAM lParam)<br> 
+      　　 {static CommDlgData ＊pCDD=NULL;<br> 
+      　　 static UINT OkMsg,HelpMsg;<br> 
+      　　 UINT retHook;<br> 
+      　　 if(iMessage==WM－INITDIALOG)<br> 
+      　　 {pCDD=(CommDlgData＊)lParam;<br> 
+      　　 OkMsg=RegisterWindowMessage(OKMSGSTRING);<br> 
+      　　 HelpMsg=RegisterWindowMessage(HELPMSGSTRING);<br> 
+      　　 if(pCDD－>Flags ＆ F－SHOWHELP)<br> 
+      　　 ShowWindow(GetDlgItem(hDlg,IDC—HELP),SW—SHOW);<br> 
+      　　 else<br> 
+      　　 ShowWindow(GetDlgItem(hDlg,IDC—HELP),SW—HIDE);<br> 
+      　　 /＊此处加入对通用对话框及其控制件作其它初始化处理程序段＊/<br> 
+      　　 (pCDD－>lpfnHook)(hDlg,iMessage,wParam,lParam);<br> 
+      　　 return(TRUE);<br> 
+      　　 }<br> 
+      　　 if(pCDD)<br> 
+      　　 {if(pCDD－>Flage ＆ F—ENABLEHOOK)<br> 
+      　　 retHook=(pCDD－>lpfnHook)(hDlg,iMessage,<br> 
+      　　 wParam,lParam);<br> 
+      　　 else<br> 
+      　　 retHook=0;<br> 
+      　　 if(retHook)<br> 
+      　　 return retHook;<br> 
+      　　 }<br> 
+      　　 switch(iMessage)<br> 
+      　　 {<br> 
+      　　 case WM—CLOSE:<br> 
+      　　 EndDialog(hDlg,FALSE);<br> 
+      　　 pCDD=NULL;<br> 
+      　　 return TRUE;<br> 
+      　　 case WM—COMMAND:<br> 
+      　　 switch(wParam)<br> 
+      　　 {case IDOK:<br> 
+      　　 //此处加入IDOK按钮功能程序段<br> 
+      　　 //如:检查对话框控制件数据的合法性<br> 
+      　　 //给结构成员赋结果值<br> 
+      　　 retHook=(pCDD－>lpfnHook)(hDlg,OkMsg,0,<br> 
+      　　 (LPARAM)pCDD);<br> 
+      　　 if(retHook==0)<br> 
+      　　 {EndDialog(hDlg,TRUE);<br> 
+      　　 pCDD=NULL;<br> 
+      　　 }<br> 
+      　　 return TRUE;<br> 
+      　　 case IDCANCEL:<br> 
+      　　 EndDialog(hDlg,FALSE);<br> 
+      　　 pCDD=NULL;<br> 
+      　　 return TRUE;<br> 
+      　　 case IDC—HELP:<br> 
+      　　 PostMessage(pCDD－>hWndOwner,HelpMsg,0,01);<br> 
+      　　 return TRUE;<br> 
+      　　 //此处加入其它控制件消息处理<br> 
+      　　 //程序段<br> 
+      　　 default:<br> 
+      　　 return FALSE;<br> 
+      　　 }<br> 
+      　　 default:<br> 
+      　　 return(FALSE);<br> 
+      　　 }<br> 
+      　　 }<br> 
+      　　编制通用对话框函数<br>
+      　　编制通用对话框函数时，考虑通用对话框模板可能来自不同的程序，因此在该函数体中调用了外部函数GetCommDlgHinst，它的功能是获得包含通用对话框模板的程序实例句柄，它的返回值可以是WinMain入口参数的实例句柄，或是WinExec、LoadModule、LoadLi brary的返回值。通用对话框函数的功能主要是产生指定对话框。如果成员Flags设置了F—ENABLETEMPLATE或F—ENABLETEMPLATEHANDLE标志，则产生替代对话框，否则，产生通用对话框，由于需要将该函数的入口参数(结构变量指针)传递给对话框处理过程，因此在函数中使用Windows API的<br> 
+      DialogBoxParam()和DialogBoxIndirectParam()函数产生对话框，这两个函数参数hWndOwner是否为NULL，只有退出对话框后，它们才返回到调用函数，因此，lCustData这样的指针成员可以指向局部变量。下面列出通用对话框函数源程序:<br> 
+      　　 int GetDataFromCommDlg(CommDlgData ＊pCDD)<br> 
+      　　 {extern HINSTANCE GetCommDlgHinst(void);<br> 
+      　　 DLGPROC lpfnDlgProc;int st;<br> 
+      　　 HINSTANCE hInstCommDlg;<br> 
+      　　 hInstCommDlg=GetCommDlgHinst();<br> 
+      　　 lpfnDlgProc=(DLGPROC)MakeProcInstance<br> 
+      　　 ((FARPROC)CommDlgProc,hInstCommDlg);<br> 
+      　　 if(pCDD－>Flags ＆ F—ENABLETEMPLATE)<br> 
+      　　 st=DialogBoxParam(pCDD－>hInstance,pCDD－><br> 
+      　　 lpTemplateName,<br> 
+      　　 pCDD－>hWndOwner,lpfnDlgProc,(LPARAM)<br> 
+      　　 pCDD);<br> 
+      　　 else if(pCDD－>Flags ＆<br> 
+      　　 F—ENABLETEMPLATEHANDLE)<br> 
+      　　 st=DialogBoxIndirectParam(hInstCommDlg,pCDD－>hInstance,p<br> 
+      　　CDD－>hWndOwner,l pfnDlgProc,(LPARAMpCDD);<br> 
+      　　 else<br> 
+      　　 st=DialogBoxParam(hInstCommDlg,"CommDlg",<br> 
+      　　 pCDD－>hWndOwner,lpfnDlgProc,(LPARAM)pCDD);<br> 
+      　　 FreeProcInstance((FARPROC)lpfnDlgProc);<br> 
+      　　 return st;<br> 
+      　　 }<br> 
+      　　应用说明<br>
+      　　Windows95通用对话框函数使用起来方便灵活，它们具有很强的通用性。系统提供通用对话框模板及对话框处理过程，实现通用功能，允许应用程序定义自己的替代对话框模板和钩子函数，以满足应用程序的特殊要求，例如，在编制一个图形归档程序中，对一个图形文件进行登记时，不仅需要提供存放图形的文件名字，同时还需要提供图形的工程名称、图名、设计人员等信息。我们可以调用GetOpenFileName函数来实现这个过程。实现的方法是，首先在应用程序中，定义“打开”替代对话框，然后定义钩子函数。定义“打开”替代对话框时；首先通过编译系统从system\commdlg.dll中获得标识符为1536的“打开”通用对话框模板的拷贝，而且不变更拷贝中控制件的标识符，然后在拷贝上增<br>
+      加一些控制件。钩子函数的编制与普通对话框处理过程编制基本一样，有关增加的控制件消息在钩子函数中处理，并且通过结构成员lCustData实现与调用程序的数据传递，拷贝控制件的消息由通用对话框处理过程处理，由于“获得一个正确的文件名”这一复杂的程序段已经由对话框处理过程实现，因此钩子函数的编制变得很容易。<br>
+      　　采用Windows95通用对话框函数，编程人员不必了解具体的通用对话框处理过程，从而极大地减少了软件开发的工作量，缩短了开发周期，提高了效率和软件的可靠性。<br>
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

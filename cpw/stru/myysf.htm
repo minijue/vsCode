@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>我的用数组来实现的约瑟夫环问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>数组实现的约瑟夫问题</strong><br>
+</p>
+
+<p>//我的用数组来实现的约瑟夫环问题<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;fstream.h&gt;<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int n,cs,s=0,i,j;//n:人数;cs:密码;s第几个人出列;i,j:循环用变量<br>
+&nbsp;&nbsp;&nbsp; ifstream input(&quot;myindata.txt&quot;);<br>
+input&gt;&gt;n&gt;&gt;cs&gt;&gt;s;<br>
+cout&lt;&lt;&quot;人数:&quot;&lt;&lt;n&lt;&lt;&quot; 出始密码&quot;&lt;&lt;cs&lt;&lt;&quot; 
+初始是第几个人:&quot;&lt;&lt;s&lt;&lt;endl;<br>
+int* sz=new int[n+1];<br>
+int* sz1=new int[n+1];<br>
+for(i=1;i&lt;=n;i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; input&gt;&gt;sz[i];<br>
+sz1[i]=i;<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;sz[i]&lt;&lt;&quot; &quot;;<br>
+}<br>
+cout&lt;&lt;endl;<br>
+for(i=n;i&gt;=1;i--)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; s=(s+cs-1)%i;<br>
+if(s==0) s=i;<br>
+cs=sz[s];<br>
+cout&lt;&lt;&quot;第&quot;&lt;&lt;sz1[s]&lt;&lt;&quot;个人出列&quot;&lt;&lt;&quot;密码是:&quot;&lt;&lt;cs&lt;&lt;endl;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=s;j&lt;i;j++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sz[j]=sz[j+1];<br>
+sz1[j]=sz1[j+1];<br>
+}<br>
+}<br>
+&nbsp;&nbsp;&nbsp; delete sz;<br>
+cin&gt;&gt;i;<br>
+}</p>
+</body>
+</html>

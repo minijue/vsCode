@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>hanoi塔问题</title>
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>hanoi塔问题</strong></p>
+
+<p>//hanoi塔问题<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+void hanoi(int,char,char,char);<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int n;<br>
+char a='A';<br>
+char b='B';<br>
+char c='C';<br>
+cout&lt;&lt;&quot;Input n:&quot;;<br>
+cin&gt;&gt;n;<br>
+hanoi(n,a,b,c);<br>
+getch();<br>
+}<br>
+void hanoi(int n,char a,char b,char c)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; if(n==1) 
+cout&lt;&lt;a&lt;&lt;&quot;-&quot;&lt;&lt;n&lt;&lt;&quot;-&gt;&quot;&lt;&lt;c&lt;&lt;endl;<br>
+else<br>
+{<br>
+&nbsp;&nbsp;&nbsp; hanoi(n-1,a,c,b);<br>
+cout&lt;&lt;a&lt;&lt;&quot;-&quot;&lt;&lt;n&lt;&lt;&quot;-&gt;&quot;&lt;&lt;c&lt;&lt;endl;<br>
+hanoi(n-1,b,a,c);<br>
+}<br>
+}</p>
+</body>
+</html>

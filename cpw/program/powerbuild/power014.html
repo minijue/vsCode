@@ -1,0 +1,186 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧 
+      </a> --&gt; <a href="pow_idx.htm">        
+    PowerBuilder</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">PB中一个类Word打印对话框的实现<br>
+      <br>
+                    许昌市电力设计研究所  高灵超       
+      <p>----Powerbuilder数据窗口可用于生成各种复杂的报表，但如何让用户在使用时控制打印份数、打印范围等信息呢？<br> 
+      <br> 
+      ----我们在开发我局MIS系统时，经过对我局报表打印需求的分析，提出了如下的功能要求：<br> 
+      <br> 
+      ----1.必须能够控制象打印份数、打印（页码）范围等信息，这是基本的要求。<br> 
+      <br> 
+      ----2.我们系统中装有多台打印机，必须能让用户根据自己需要选择使用哪台打印机，必要时能对所选打印机进行配置。<br> 
+      <br> 
+      ----3.在设计时，对每一个报表需要什么样的纸张，要多大的边距合适，都已确定，所以使用时不需要页面的设置。但由于不同的报表使用不同的纸张，必须在使用时给出提示，以便用有机会换上合适的纸张（或换用合适的打印机）。<br> 
+      <br> 
+      ----根据以上要求，我们设计了如下图所示的对话框。下面把设计过程以及用到的技术介绍一下。<br> 
+      <br> 
+      ----首先使用窗口画板画出窗口,名字为w_printdlg，窗口类型为respons。“打印机”组框中的“名称”文本控制的名字为st_printname，“设置”按钮的名字为cb_printsetup。“页面范围”组框中的无线按钮组名字分别为rb_pagearrangeall、rb_pagearrangecurrent、rb_pagearrange，单行编辑框名字为sle_pagearrange,其enable属性为false。“副本”组框中的编辑域名字为em_copies。“打印”旁<br> 
+      边的下拉列表框名字为ddlb_printwhat，列表有三项，分别为所选页面、偶数页、奇数页。“纸张”组框中的下拉列表框名字为ddlb_paper，列表内容为Poerbuiler定义的43种纸张类型，分别用0-42的数字来表示。“纵向”无线按钮的名字为rb_portrait，“横向”无线按钮的名字为rb_landscape。表示纵向和横向的图片框分别为p_portrait和p_landscape。命令按钮“确定”和“取消”的名字分别为<br> 
+      cb_ok和cb_cancel。<br> 
+      <br> 
+      ----以上工作完成之后，就要着手编写程序。<br> 
+      <br> 
+      ----首先为窗口定义实例变量idw_toprint，类型为datawindow，用于保存要打印<br> 
+      的数据窗口。再定义一个窗口事件ue_initcontrols（也可以定义为窗口函数），<br> 
+      其程序内容如下：<br> 
+      <br> 
+      // event ue_initcontrols( )<br> 
+      //设置窗口中各控件的初始值<br> 
+      st_printername.text = idw_toprint.object.<br> 
+      datawindow.printer //当前打印机名字<br> 
+      em_copies.text = "1" //默认打印份数为1<br> 
+      rb_pagearrangeall.checked = true //默认范围为全部页<br> 
+      sle_pagearrange.enabled = false //页面范围编辑框无效<br> 
+      ddlb_printwhat.SelectItem( 1 ) //默认为“所选页面”<br> 
+      //打印方向<br> 
+      integer li_temp&nbsp;<br>
+      li_temp = integer( idw_toprint.object.<br> 
+      datawindow.print.orientation ) //取出设计时的方向<br> 
+      if li_temp = 1 then //横向<br> 
+      rb_landscape.checked = true //选中<br> 
+      p_landscape.visible = true //图片显示<br> 
+      p_portrait.visible = false<br> 
+      elseif li_temp = 2 then //纵向<br> 
+      rb_portrait.checked = true&nbsp;<br>
+      p_portrait.visible = true<br> 
+      p_landscape.visible = false<br> 
+      end if<br> 
+      <br> 
+      //纸张类型<br> 
+      li_temp = integer( idw_toprint.object.<br> 
+      datawindow.print.Paper.Size ) //设计时的纸张类型<br> 
+      ddlb_paper.SelectItem( li_temp + 1 ) //列表框中选中<br> 
+      <br> 
+      然后，在窗口的open事件中编写如下脚本：<br> 
+      // open event<br> 
+      //要使用OpenWithParm( )打开，参数中包含要打印的数据窗口。<br> 
+      <br> 
+      idw_toprint = message.powerobjectparm<br> 
+      //从参数中取出要打印的数据窗口<br> 
+      <br> 
+      this.event ue_initcontrols( ) //初始化窗口各控件<br> 
+      <br> 
+      在无线按钮rb_pagearrangall的clicked事件中编写脚本如下：<br> 
+      sle_pagearrange.enabled = false<br> 
+      在无线按钮rb_pagearrangcurrent的clicked事件中编写脚本如下：<br> 
+      sle_pagearrange.enabled = false<br> 
+      在无线按钮rb_pagearrang的clicked事件中编写脚本如下：<br> 
+      sle_pagearrange.enabled = true //当此无线按钮选中时才可用<br> 
+      <br> 
+      在命令按钮cb_printersetup中编写如下脚本：<br> 
+      // cb_printersetup&nbsp;<br>
+      PrintSetup( ) //设置打印机<br> 
+      parent.event ue_initcontrols( )<br> 
+      <br> 
+      在无线按钮rb_portrait的clicked事件中编写如下脚本：<br> 
+      //纵向<br> 
+      p_landscape.visible = false<br> 
+      p_portrait.visible = true //显示纵向图片框<br> 
+      在无线按钮rb_landscape的clicked事件中编写如下脚本：<br> 
+      //横向<br> 
+      p_portrait.visible = false<br> 
+      p_landscape.visible = true<br> 
+      <br> 
+      在命令按钮cb_cancel的clicked事件中编写如下脚本<br> 
+      // cb_cancel执行程序<br> 
+      CloseWithReturn( parent, 2 ) //如果选择取消，返回2<br> 
+      在命令按钮cb_ok的clicked事件中编写如下脚本<br> 
+      // cb_ok执行程序<br> 
+      string str_temp<br> 
+      integer li_temp<br> 
+      long ll_row&nbsp;<br>
+      <br>
+      //打印什么<br>
+      li_temp = ddlb_printwhat.FindItem<br> 
+      ( ddlb_printwhat.text, 0 ) - 1<br> 
+      idw_toprint.object.datawindow.<br> 
+      print.page.rangeinclude = li_temp<br> 
+      <br> 
+      //打印范围<br> 
+      if rb_pagearrangeall.checked then //全部页<br> 
+      str_temp = ""<br> 
+      elseif rb_pagearrangecurrent.checked then //当前页<br> 
+      ll_row = idw_toprint.GetRow( )<br> 
+      idw_toprint.object.datawindow.print.preview = "Yes"&nbsp;<br>
+      //设成预览模式<br>
+      str_temp = idw_toprint.Describe( "evaluate<br> 
+      ( `Page( )`, " + String( ll_row ) +" ) " ) //计算页码<br> 
+      idw_toprint.object.datawindow.print.preview = "No"<br> 
+      elseif rb_pagearrange.checked then //输入范围<br> 
+      str_temp = sle_pagearrange.text<br> 
+      end if<br> 
+      idw_toprint.object.datawindow.print.page.range = str_temp&nbsp;<br>
+      <br>
+      //副本份数<br>
+      if len( em_copies.text ) > 0 then&nbsp;<br>
+      idw_toprint.object.datawindow.print.copies&nbsp;<br>
+      = Integer( em_copies.text )<br> 
+      end if<br> 
+      <br> 
+      //纸的方向<br> 
+      li_temp = 0<br> 
+      if rb_landscape.checked then<br> 
+      li_temp = 1<br> 
+      elseif rb_portrait.checked then<br> 
+      li_temp = 2<br> 
+      end if<br> 
+      idw_toprint.object.datawindow.print.orientation = li_temp<br> 
+      <br> 
+      //纸的尺寸<br> 
+      li_temp = ddlb_paper.FindItem( ddlb_paper.Text, 0 )<br> 
+      //第li_temp项<br> 
+      idw_toprint.object.datawindow.print.paper.size = li_temp<br> 
+      <br> 
+      closewithreturn( parent,1 )<br> 
+      <br> 
+      ----几点说明：<br> 
+      <br> 
+      ----1.原点访问语法：程序中多次用到了象<br> 
+      datawindowcontrol.object.datawindow.print.attribute语法，用语控制数据窗口的打印属性。原点访问语法用语代替原来的Discribe和Modify函数，更符合面向对象的语言习惯。关于print属性的详细信息，请参见Powerbuilder帮助。<br> 
+      <br> 
+      ----2.当前打印页的计算：先用GetRow得到当前行数，再用Describe和Evaluate函数来计算数据窗口表达式，得出当前页号。注意在计算只前，先把要打印的数据窗口置成预览模式，否则计算出来的是显示页号，和打印页号不一致。<br> 
+      <br> 
+      ----3.窗口内外信息的传递：虽然你可以用全局变量传递信息，但那决不是一个好的注意。使用OpenWithParm函数打开窗口可以向窗口传递一个参数，使用CloseWithReturn函数关闭窗口可以返回一个参数，根据参数的类型，其结果被放在系统全局变量message的相应成员中。如果要传递多个参数，可以把要他们定义为一个结构来传递。      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

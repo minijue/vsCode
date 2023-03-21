@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style>
+<!--
+        A:link {text-decoration: none; font-size:9pt;color: "#008080"}
+        A:visited {text-decoration: none;font-size:9pt; color: "#008080"}
+        A:active {text-decoration: none;font-size:9pt;color: "#00ffff"}
+        A:hover {text-decoration: underline;font-size:9pt; color: "#ff0000"}
+-->
+</style>
+<title></title>
+</head>
+
+<body leftmargin="3"
+style="color: rgb(0,128,128); font-family: 宋体; font-size: 9pt; line-height: 17px">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt"><font color="#000000">现在的位置是： </font><b><font
+    color="#0000FF"><a href="Del_idx.htm">Delphi</a></font> &gt;</b> <font color="#000000">用Delphi“玩”编程（2）</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><font color="#000000"><strong><span
+    style="font-size: 9pt"><big>用Delphi“玩”编程</big>（2）</span></strong><br>
+    <strong>设计界面</strong><br>
+    作者：江伟芸</font></p>
+    <p><font color="#000000">&nbsp;&nbsp;&nbsp; Delphi把开发应用程序作为一项工程。在这一期开始，我们动手编一个简单的应用程序，感受一下Delphi简单易学、功能强大的特点。这一期先实现播放VCD、CD、动画、WAV等等各种多媒体文件的功能和文字编辑功能。请打开!<br>
+    &nbsp;&nbsp;&nbsp; 1. 在“桌面编辑器&quot;上放置一个按钮；这时“特征编辑器&quot;的标题写有“Button1：Tbutton&quot;。这说明按钮的“标识符&quot;（名称）是“Button1&quot;，是一个“Tbutton&quot;对象。关于“对象&quot;将在下一期谈到。<br>
+    &nbsp;&nbsp;&nbsp; 2. 把“特征编辑器&quot;中的“Caption&quot;项（Caption特性定义按钮上的标题），从“Button1&quot;改为“文字&quot;。现在按钮上显示“文字&quot;二字。当然你可以用同样方法在按钮上写任何标题。<br>
+    &nbsp;&nbsp;&nbsp; 3. 
+    同样方法放置第二、第三个按钮，并分别写上“清除&quot;、“关闭&quot;；<br>
+    &nbsp;&nbsp;&nbsp; 4. 放置一个Memo对象（Memo对象，用于文字编辑，类似Windows的记事本的功能）；<br>
+    &nbsp;&nbsp;&nbsp; 5. 菜单栏System页选择（MediaPlayer对象，用于播放多媒体）并放置此对象；经过这简单的六个步骤，就完成了界面的设计。界面如图所示。<br>
+    &nbsp;&nbsp;&nbsp; 6. 确定“特征编辑器&quot;的标题为“MediaPlayer1：TMediaPlayer1&quot;，把“Autoopen&quot;的属性设置为“Ture&quot;， 
+    把“Display&quot;的属性设置为“Memo1&quot;；<br>
+    &nbsp;&nbsp;&nbsp; 7. 双击“Filename&quot;旁的空格，“打开文件&quot;框弹出，选择一个多媒体文件，比如你手头一只VCD上的影音文件或者Windows/Media中的＊.wav文件。还支持其它多种格式，你可以自己尝试。<br>
+    &nbsp;&nbsp;&nbsp; 好了，现在运行，快点看看你的程序，Delphi使你经过简单的七个步骤就编出一个有多媒体功能又有文字功能的程序。单击播放选定的多媒体文件。如果是影像文件，在“Memo&quot;框中可以看到影像。在“Memo&quot;框中单击鼠标，可以开始键入字符。此时的程序有了基本功能，但很不完善。下面关闭程序，为按钮添加功能。<br>
+    &nbsp;&nbsp;&nbsp; 8. 双击“文字&quot;按钮，代码编辑器自动弹出。在光标处键入下列代码：<br>
+    MediaPlayer1.Close；<br>
+    Memo1.Lines.Text:='This is my project.'；<br>
+    &nbsp;&nbsp;&nbsp; 9. 双击“清除&quot;按钮键入下列代码：<br>
+    MediaPlayer1.open;<br>
+    Memo1.Lines.Text:=' ';<br>
+    &nbsp;&nbsp;&nbsp; 10. 双击“关闭&quot;按钮键入下列代码：Close；<br>
+    &nbsp;&nbsp;&nbsp; 再来运行程序，看看有什么事情发生。此时按“文字&quot;按钮，Memo框正在播放的影音文件被关闭，可以在“白纸&quot;上写字了。按“多媒体&quot;按钮，刚才变灰的播放按钮被激活，又可以继续播放多媒体文件了。单击“关闭&quot;按钮，可关闭窗体。<br>
+    &nbsp;&nbsp;&nbsp; 怎么样，Delphi很简单易用吧？现在是不是发觉开发程序其实是件有趣而愉快的事。如果你在编程过程中多用第一期提到的Delphi提供的在线帮助，一定会学到更多的东西。你也许在兴奋之余发现了一大堆疑问，那么千万别错过后面的介绍。在第三期、第四、五期将分别讲解Delphi中的对象和语法，并不断为这个程序添砖加瓦，使之实现更多有趣功能。在离开Delphi前别忘记保存你的杰作：在File菜单中选Save 
+    all保存源文件＊.pas和工程文件＊.dpr。</font></p>
+    <p>　</td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

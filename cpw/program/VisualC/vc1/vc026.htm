@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">解决VC中增加类文件的问题<br>
+      <br>
+                        (湖北　刘军发)      
+      <p><br>
+      　　一、通过“Add To Project”向当前工作区A增加DibDoc类头文件及应用文件，在A的类A1中使用DibDoc类后编译，出现如下错误：<br> 
+      　　error C2501:′CDibdoc′:missing dec1－specifiers<br> 
+      　　于是作了以下处理，解决了出现的问题：<br>
+      　　1检查发现在类A1中，头文件包含＃include ″dibdoc.h″放在了＃include ″stdafx.h″之前；<br> 
+      　　2纠正上述错误，编译出现如下错误：<br>
+      　　error C2065:′WM_DOREALIZE′:undeclared identifier<br> 
+      　　经分析发现，不能识别消息，不能识别命令(ID号)等类似错误均因“dibdoc.h”摆放位置不正确所致，建议：在各类的应用文件中，该类<br>
+      的头文件包含最好放在所有包含命令的最后。<br>
+      　　二、编译通过后，连接、执行时，出现如下错误：<br>
+      　　Linking<br>
+      　　dibdocobj:error LNK2001:unresolved external symbol ″struct&nbsp;<br>
+      HDIB_＊_stdcall ReadDIBFile(class CFile＆)″(?ReadDIBFile@@YGPAUHDIB_@@AAVCFile@@@Z)<br> 
+      　　dibdocobj:error LNK2001:unresolved external symbol ″int_stdcall&nbsp;<br>
+      SaveDIB(struct HDIB_＊,class CFile＆)″(?SaveDIB@@YGHPAUHDIB_@@AAVCFile@@@Z)<br> 
+      　　Debug/diblook.exe:fatal error LNK1120:2 unresolved externals<br> 
+      　　Error executing link.exe<br> 
+      　　反复检查才发现DibDoc类的一个相关文件myfile.cpp没有同时拷贝、加入工程中来。以后又发现此类连接性错误，都是因为有关文件不在当前工程目录下所致。<br>
+      　　三、解决了上述问题，程序正确执行，但在启动ClassWizard向DibDoc类加入消息入口时，在ClassName列表框中，却见不到DibDoc类，原来ClassWizard不能自动管理通过“Add To Project”增加的文件。<br> 
+      　　解决办法：启动资源管理器，删除该工程目录下.clw文件，再启动ClassWizard，重建.clw文件即可。也可通过编辑原.clw文件，按规定格式加入DibDoc类说明来达到同样的效果。<br>
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

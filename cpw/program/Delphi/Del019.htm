@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Del_idx.htm">Delphi</a></b></span></td>   
+  </tr>   
+</table>   
+</center></div><div align="center"><center>   
+   
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"   
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">   
+  <tr>   
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"   
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"   
+    bordercolordark="#FFFFFF">   
+      <tr>   
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font   
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"   
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>   
+      </tr>   
+    </table>   
+      <p align="center">“磁性”窗口&nbsp;</p>
+      <p>　　Winamp的用户都知道，Winamp的播放列表或均衡器在被移动的时候，仿佛会受到一股磁力，每当靠近主窗口时就一下子被“吸附”过去，自动沿边对齐。我想让我的Winamp插件也具备这种奇妙特性，于是琢磨出了一种“磁化”窗口的方法。该法适用于Delphi的各个版本。为了演示这种技术，请随我来制作一个会被Winamp“吸引”的样板程序。<br>
+      　　先新建一应用程序项目，把主窗口Form1适当改小些，并将BorderStyle设为bsNone。放一个按钮元件，双击它并在OnClick事件中写“Close;”。待会儿就按它来结束程序。现在切换到代码编辑区，定义几个全局变量。<br>
+      　　var<br>
+      　　 Form1: TForm1; //“磁性”窗口<br> 
+      　　 LastX, LastY: Integer; //记录前一次的坐标<br> 
+      　　 WinampRect:TRect; //保存Winamp窗口的矩形区域<br> 
+      　　 hwnd_Winamp:HWND; //Winamp窗口的控制句柄<br> 
+      　　接着编写Form1的OnMouseDown和OnMouseMove事件。<br>
+      　　procedure TForm1.FormMouseDown(Sender: TObject; Button: TMouseButton;<br> 
+      　　 Shift: TShiftState; X, Y: Integer);<br> 
+      　　const<br>
+      　　 ClassName=‘Winamp v1.x’; //Winamp主窗口的类名<br> 
+      　　 //如果改成ClassName=‘TAppBuilder’，你就会发现连Delphi也有引力啦！<br> 
+      　　begin<br>
+      　　//记录当前坐标<br>
+      　　LastX := X;<br> 
+      　　LastY := Y;<br> 
+      　　//查找Winamp<br>
+      　　hwnd_Winamp := FindWindow(ClassName,nil);<br> 
+      　　if hwnd_Winamp>0 then //找到的话，记录其窗口区域<br> 
+      　　GetWindowRect(hwnd_Winamp, WinampRect);<br> 
+      　　end;<br>
+      　　procedure TForm1.FormMouseMove(Sender: TObject; Shift: TShiftState; X,<br> 
+      　　 Y: Integer);<br> 
+      　　var<br>
+      　　 nLeft,nTop:integer; //记录新位置的临时变量<br> 
+      　　begin<br>
+      　　//检查鼠标左键是否按下<br>
+      　　 if HiWord(GetAsyncKeyState(VK_LBUTTON)) > 0 then<br> 
+      　　 begin<br> 
+      　　 //计算新坐标<br> 
+      　　 nleft := Left ＋ X － LastX;<br> 
+      　　 nTop := Top ＋ Y － LastY;<br> 
+      　　 //如果找到Winamp，就修正以上坐标，产生“磁化”效果<br> 
+      　　 if hwnd_Winamp>0 then<br> 
+      　　 Magnetize(nleft,ntop);<br> 
+      　　 //重设窗口位置<br> 
+      　　 SetBounds(nLeft,nTop,width,height);<br> 
+      　　 end;<br> 
+      　　end;<br>
+      　　别急着，看Magnetize()过程，先来了解一下修正坐标的原理。根据对Winamp实现效果的观察，我斗胆给所谓“磁化”下一个简单的定义，就是“在原窗口与目标窗口接近到某种预定程度，通过修正原窗口的坐标，使两窗口处于同一平面且具有公共边的过程”。依此定义，我设计了以下的“磁化”步骤。第一步，判断目标窗口(即Winamp)和我们的Form1在水平及垂直方向上的投影线是否重叠。“某方向投影线有重叠”是“需要进行坐标修正”的必要非充分条件。判断依据是两投影线段最右与最左边界的差减去它们宽度和的值的正负。第二步，判断两窗口对应边界是否靠得足够近了。肯定的话就让它们合拢。<br>
+      　　好了，下面便是“神秘”的Magnetize过程了……<br>
+      　　procedure TForm1.Magnetize(var nl,nt:integer);<br> 
+      　　 //内嵌两个比大小的函数<br> 
+      　　 function Min(a,b:integer):integer;<br> 
+      　　 begin<br> 
+      　　 if a>b then result:=b else result:=a;<br> 
+      　　 end;<br> 
+      　　 function Max(a,b:integer):integer;<br> 
+      　　 begin<br> 
+      　　 if a 　　 end;<br> 
+      　　var<br>
+      　　 H_Overlapped,V_Overlapped:boolean; //记录投影线是否重叠<br> 
+      　　 tw,ww,wh:integer; //临时变量<br> 
+      　　const<br>
+      　　 MagneticForce:integer=50; //“磁力”的大小。<br> 
+      　　 //准确的说，就是控制窗口边缘至多相距多少像素时需要修正坐标<br> 
+      　　 //为了演示，这里用一个比较夸张的数字——50。<br> 
+      　　 //一般可以用20左右，那样比较接近Winamp的效果<br> 
+      　　begin<br>
+      　　//判断水平方向是否有重叠投影<br>
+      　　ww := WinampRect.Right－WinampRect.Left;<br> 
+      　　tw := Max(WinampRect.Right,nl＋Width)－Min(WinampRect.Left,nl);<br> 
+      　　H_Overlapped := tw&lt;=(Width＋ww);<br> 
+      　　//再判断垂直方向<br>
+      　　wh := WinampRect.Bottom－WinampRect.Top;<br> 
+      　　tw := Max(WinampRect.Bottom,nt＋Height)－Min(WinampRect.Top,nt);<br> 
+      　　V_Overlapped := tw&lt;=(Height＋wh);<br> 
+      　　//足够接近的话就调整坐标<br>
+      　　if H_Overlapped then<br> 
+      　　 begin<br> 
+      　　 if Abs(WinampRect.Bottom－nt) 　　&nbsp;<br>
+      else if Abs(nt＋Height－WinampRect.Top) 　　&nbsp;<br>
+    end;<br>
+      　　if V_Overlapped then<br> 
+      　　 begin<br> 
+      　　 if Abs(WinampRect.Right－nl) 　　&nbsp;<br>
+      else if Abs(nl＋Width－WinampRect.Left) 　　&nbsp;<br>
+    end;<br>
+      　　end;<br>
+      　　怎么样？运行后效果不错吧！<br>
+      　　我设计的一个卡拉OK插件就应用了这种技术，你可以到http://www.lotof.com/lyrics去下载它作为参考。</p>
+      <p>　   
+    </td>   
+  </tr>   
+</table>   
+</center></div>   
+
+</body>
+
+</html>

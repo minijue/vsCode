@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://www.computerworld.com.cn/99/week/9939/9939b12.asp -->
+<HTML><HEAD><TITLE>计算机世界:DBGrid在VC 5.0中的使用</TITLE><LINK 
+href="VC002.files/style.css" rel=stylesheet type=text/css>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type><!--***********-->
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff>
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">Visual C++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">DBGrid 在VC 5.0中 的 使 用 
+      <P>在VC5.0 中 使 用DBGrid 控 件， 首 先 要 运 行 ODBC 数  
+      据 源 管 理 程 序 安 装 数 据 源（ 我 们 以 数 据 源 是STUDENT 为 例）。 其 方 法 为： 在 控 制 面 板 中 双  
+      击ODBC 图 标， 运 行ODBC 数 据 源 管 理 程 序。 单 击Add 按 钮, 在Add Data Source 对 话 框 中 选  
+      择Microsoft Access Driver， 出 现ODBC Microsoft Access 97 Setup 对 话 框， 输 入 数 据  
+      源 名Student 以 及 选 择 好 数 据 库student.mdb， 然 后 单 击OK， 再 确 定 完 成 设 置。  
+      <P><FONT color=#ffffff>----</FONT>与 在VB 中 使 用DBGrid 控 件 相 类 似， 在VC 中 使  
+      用DBGrid 控 件 也 需 要 一 个 类 似 于Data 的 控 件， 不 过 它 叫RemoteData 控 件。  
+      <P><FONT color=#ffffff>----</FONT>下 面 我 们 举 两 个 示 例 程 序 来 演 示DBGrid 控 件 的  
+      使 用 方 法， 这 两 个 示 例 的 项 目 名 都 为DBGrid。 
+      <H3>一 示 例 程 序</H3><BR><FONT color=#ffffff>----</FONT>按 如 下 步 骤 创  
+      建：  
+      <OL> 
+        <LI>运 行AppWizard 生 成 项 目DBGrid。 除 选 择Single Document 和 CDBGridView 的 基 类  
+        改 为FormView 以 外， 其 他 均 按 默 认 设 置 处 理。  
+        <LI>在 项 目DBGrid 中 添 加DBGrid 控 件 和Microsoft RemoteData 控 件。 从 Developer  
+        Studio 的Project 菜 单 中 选 择Add To Project， 再 从 子 菜 单 中 选 择 Componets And  
+        Controls。 选 择Registered ActiveX Controls， 然 后 选 择DBGrid Control  
+        和Microsoft RemoteData Control。Developer Studio 将 产 生 控 件 类CMSDgridCtrl 和  
+        CRdc， 并 把 相 应 的 文 件 添 加 到 项 目 中。  
+        <LI>在IDD_DBGRID_FORM 模 板 中 加 入 控 件。 利 用 控 件 工 具 箱 加 入 RemoteData 和DBGrid  
+        控 件。 <BR><FONT color=#ffffff>----</FONT>对 控 件RemoteData 编 辑。 选 中 该 控 件，  
+        单 击 鼠 标 右 键， 选 择Propertis， 出 现Microsoft RemoteData Control 2.0  
+        Properties 对 话 框。 选 择General 标 签， 修 改 资 源ID 为IDC_RDCSTUDENT，Caption  
+        为Student。 单 击Control 标 签，Datasource 选 择Student（ 即 前 面ODBC 数 据 源 管 理 程 序  
+        安 装 的 数 据 源），SQL 中 输 入 语 句Select ＊ from student。 <BR><FONT  
+        color=#ffffff>----</FONT>对 控 件DBGrid 编 辑。 选 择 该 控 件， 单 击 鼠 标 右 键， 选  
+        择Propertis， 出 现DBGrid Control Properties 对 话 框。 选 择General 标 签， 修 改 资  
+        源ID 为IDC_DBGSTUDENT，Caption 为Student 或 不 设 置。 单 击 All 标 签，DataMode 选 择0  
+        －Bound，DataSource 选 择IDC_RDCSTUDENT。  
+        <LI>编 译 并 测 试 程 序。DBGrid 在 程 序 中 正 确 地 工 作 了。</LI></OL> 
+      <P><FONT color=#ffffff>----</FONT>示 例 程 序1 可 能 过 于 简 单 了， 不 过 它 的 目 的 只 是  
+      演 示DBGrid 控 件 在VC5.0 中 使 用 的 方 法。 下 面 我 们 对 它 略 作 改 进。  
+      <OL> 
+        <LI>修 改 设 计 时DBGrid 控 件 的 列 数。DBGrid 控 件 在 设 计 时 的 列 数 默 认 为 两 列。 选  
+        择DBGrid 控 件， 单 击 鼠 标 右 键， 选 择DBGrid Control Object， 再 选 择Edit。 看 上 去 没 有  
+        什 么 变 化， 其 实 不 然， 再 选 择DBGrid 控 件， 单 击 鼠 标 右 键， 可 以 发 现 此 时 的 菜 单 不 同 了，  
+        选 择Insert， 此 时DBGrid 控 件 的 列 由 原 来 默 认 的 两 列 变 成 了 三 列。 重 复 操 作， 直  
+        到DBGrid 控 件 的 列 数 满 足 你 的 要 求 为 止。  
+        <LI>修 改DBGrid 控 件 的 列 标 题。DBGrid 控 件 的 列 标 题 默 认 为 数 据 集 的 字 段 名， 可 以 改  
+        为 我 们 想 要 的 列 标 题。 步 骤 如 下：  
+        <OL type=A> 
+          <LI>修 改DBGrid 控 件 的 列 标 题。 选 择 该 控 件， 单 击 鼠 标 右 键， 选 择Propertis， 出  
+          现DBGrid Control Properties 对 话 框。 选 择Columns 标 签， 在Column 选  
+          择Column0，Caption 中 输 入“ 编 号”，DataField 中 选 择StudentID， 在 其 他 项 中 选 择 或  
+          输 入 你 认 为 需 要 的 信 息。 重 复 本 步 骤， 直 至 完 成 修 改 所 有 的 列 标 题 为 止。  
+          <LI>关 闭DBGrid Control Properties 对 话 框， 可 以 看 到 修 改 的 列 标 题 已 经  
+          在DBGrid 控 件 上 出 现 了。</LI></OL> 
+        <LI>在 程 序 运 行 时 改 变DBGrid 控 件 的 尺 寸。 在 视 图 尺 寸 大 小 改 变 时，DBGrid 控 件 的 尺  
+        寸 却 没 有 改 变， 需 要 添 加 消 息 处 理 函 数OnSize （）。  
+        <OL type=A> 
+          <LI>使 用ClassWizard 为 类CDBGridView 加 入 成 员 变 量。 在 ClassWizard 中 单  
+          击Member Variables 标 签， 选 择IDC_DBGSTUDENT， 添 加 变 量 m_dbgstudent， 类 型  
+          为Control。  
+          <LI>使 用ClassWizard 映 射 视 图 类 的WM_SIZE 函 数。 编 辑 函 数 如 下：</LI></OL><PRE>void CDBGridView::OnSize(UINT nType, int cx, int cy) 
+{
+      CFormView::OnSize(nType, cx, cy);
+      
+      CRect rect;
+      GetClientRect(rect);
+     ::SetWindowPos(m_dbgstudent,HWND_TOP,0,0,rect.right 
+   －rect.left,rect.bottom －rect.top,SWP_SHOWWINDOW);
+}
+</PRE></LI></OL> 
+      <P><FONT color=#ffffff>----</FONT>示 例 程 序1 演 示 了DBGrid 控 件 在 类 CFormView 的  
+      派 生 类 中 的 使 用 方 法， 在 对 话 框 中 使 用DBGrid 控 件 的 方 法 与 此 完 全 相 同。  
+      <P><FONT color=#ffffff>----</FONT>以 上 示 例 是DBGrid 控 件 最 简 单 地 使 用， 因 为 它 们  
+      都 是 把 控 件 添 加 到 控 件 容 器 内， 然 后 再 设 定 其 属 性， 所 以RemoteData 和DBGrid 控 件 可 以  
+      像Button、Edit 控 制 一 样， 用 鼠 标 点 几 下 就 可 以 了。 下 面 再 介 绍DBGrid 控 件 在 类Cview 或  
+      其 派 生 类 等 非 控 件 容 器 中 的 使 用 方 法。 这 时 就 不 能 用 上 面 的 方 法 向 视 图 类 中 添 加 控 件  
+      了， 也 就 不 能 在 设 计 时 设 定 它 们 的 属 性， 必 须 在 运 行 时 使 用DBGrid 和RemoteData 控 件  
+      的Create() 函 数 创 建 对 象， 然 后 再 设 置 属 性。 请 看 示 例 程 序2。 
+      <H3>二 示 例 程 序</H3><BR><FONT color=#ffffff>----</FONT>按 如 下 步 骤 创  
+      建：  
+      <OL> 
+        <LI>运 行AppWizard 生 成 项 目DBGrid。 选 择Multiple Document，CDBGridView 的 基 类 为  
+        CView 不 变， 其 他 仍 然 按 默 认 设 置 处 理。  
+        <LI>在 项 目DBGrid 中 添 加DBGrid 控 件 和Microsoft RemoteData 控 件。 与 示 例 程 序1 相  
+        同。  
+        <LI>在CDBGridView 类 中 加 入 两 个 数 据 成 员。 一 个 是 类CRdc 变 量 m_rdcstudent， 另 一  
+        个 是 类CMsDgridCtrl 变 量m_dbgstudent。  
+        <LI>加 入 这 两 个 控 件 的 子 窗 口ID 常 数。 从Developer Studio 的View 菜 单 中 选  
+        择Resource Sysbols 命 令， 然 后 加 入ID 符 号ID_RDCSTUDENT 和 ID_DBGSTUDENT。  
+        <LI>用ClassWizard 映 射 视 图 的WM_CREATE 和WM_SIZE 函 数。 编 辑 DBGidView.cpp 中 的  
+        消 息 处 理 函 数 如 下： <PRE>int CDbgridView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+{
+ 　if (CView::OnCreate(lpCreateStruct) == －1)
+            return －1;
+      
+      RECT r={0,0,100,30};
+      
+      //    create the RDC 
+      m_rdcstudent.Create(_T(“Student&quot;),
+      WS_CHILD,r,this,IDC_RDCSTUDENT);
+ 　   m_rdcstudent.SetDataSourceName(_T(“Student&quot;));
+      m_rdcstudent.SetSql
+      (_T(“Select ＊ from student,section&quot;));
+      m_rdcstudent.SetUserName(_T(“admin&quot;));
+      m_rdcstudent.SetPassword(_T(“&quot;));
+      m_rdcstudent.SetCursorDriver(2);
+
+      // create the DBGrid control 
+     ＆ connect it to IDC_RDCSTUDENT
+m_dbgstudent.Create(_T(“&quot;),WS_VISIBLE|WS_CHILD,r,
+this,IDC_DBGSTUDENT);
+LPUNKNOWN pCursor=m_rdcstudent.GetDSCCursor();
+ASSERT(pCursor!=NULL);
+m_dbgstudent.SetDataSource(pCursor); //bind the grid
+m_dbgstudent.BindProperty(0x9, ＆m_rdcstudent);
+
+return 0;
+}
+
+void CDbgridView::OnSize(UINT nType, int cx, int cy) 
+{
+      CView::OnSize(nType, cx, cy);
+      
+      // TODO: Add your message handler code here
+      CRect rect;
+      GetClientRect(rect);
+    ::SetWindowPos(m_dbgstudent,HWND_TOP,0,0,rect.right 
+－rect.left,rect.bottom －rect.top,SWP_SHOWWINDOW);
+}
+</PRE> 
+        <LI>编 译 并 测 试 程 序。 屏 幕 的 显 示 结 果 与 下 图 类 似。</LI></OL> 
+      <P> 
+      <IMG src="1749300.jpg" width="340" height="255"> 
+      <P><FONT color=#ffffff>----</FONT>以 上 所 述 只 是 谈 及DBGrid 控 件 在 绑 定 方 式 下 使  
+      用 方 法， 那 么 如 何 在 在 非 绑 定 方 式 下 使 用 呢 ？ 还 请 朋 友 们 多 指 教。 
+      <p>　    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+</BODY></HTML>

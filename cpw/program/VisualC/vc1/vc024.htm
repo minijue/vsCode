@@ -1,0 +1,212 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>form</title>
+<style type="text/css" media="screen">
+BODY {   font-size: 9pt ; line-height:13pt; }
+.font {   font-size: 9pt ; line-height:13pt; }
+.bfont {   font-size: 9pt ; line-height:13pt; }
+A:link          {font-size: 9pt ; color:#0000ff; font-style: normal; text-decoration: none; cursor: hand}
+A:visited       {font-size: 9pt ; color:#0000a0; font-style: normal; text-decoration: none}
+A:active        {font-size: 9pt ; color:  rgb(255,0,0); font-style: normal; text-decoration: none}
+A:hover         {font-size: 9pt ; color:#408080; font-style:bold; text-decoration: underline}     
+.p12 {  color: #ff0000; font-size: 12pt}
+.p16 {  color: #ff0000; font-size: 15pt}
+.p14 {  color: #ff0000; font-size: 14pt; font-weight: none}
+.p13 {  color: #ff8080; font-size: 12pt; font-weight: none}
+</style>
+</head>
+
+<body style="font-size: 9pt">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VISUALC++</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">用VC＋＋5.0编写文件分割工具&nbsp;<br>
+      <br>
+                      (天津　房超)    
+      <p><br>
+      　　在实际工作中，经常会遇到一些比较大而自己又非常需要的文件，并且必须通过软盘来进行转移。这时候就必须对该文件进行分割，然后分盘拷贝，最后再恢复。如果手头没有相应的分割软件，那就麻烦了。不过，如果您机器里装有VC＋＋5.0，并具备一定VC＋＋5.0编程的知识，就完全可以编写出自己的分割工具，还可以根据个人的喜好，设计出具有自己风格的用户界面。<br>
+      　　前不久，笔者就用VC＋＋5.0编写了一个自己的分割软件。通过多次分割试验，效果还可以，完全可以实现对文件的分割处理。以下就是整个软件的编写过程。<br>
+      　　一． 文件分割的基本原理<br> 
+      　　文件之所以能够被分割，是与文件在计算机里的存储方式密切相关的，大家都知道，所有文件都是以二进制的形式存储于介质（包括硬盘、软盘等外部存储器）之中。计算机在读取文件时，总是把数据转化成二进制的形式，然后再根据文件系统的相应规定来分别进行处理。具体的说明可参见相关资料。基于这个道理，所有文件都可以以二进制的格式进行读写、分割，然后再以二进制的格式把分割后的文件重新组合起来。这样就实现了对文件的分割和恢复。这里要用到一个DOS的内部命令——COPY，具体用法如下：<br>
+      　　copy filename1/b＋filename2/b＋<br> 
+      　　…＋filenameN/b filename<br> 
+      　　这里，开关选项b是指以二进制的形式对文件进行拷贝；filenameN是被分割成的N个文件；filename是组合后的文件名，一般同原文件名。<br>
+      　　二． 程序编写过程及禅解<br> 
+      　　1．先创建一个名为Splite的工程文件，利用AppWizard生成一个基于对话框的程序框架。对话框具有如图所示的各类控件。其中，编辑框1要求输入要被分割的文件名，可以通过浏览按钮选择；列表框2能够显示分割后的文件列表；编辑框3显示分割成的文件数，也就是需要的软盘数；要分割的文件被选择之后，按下分割按钮，即可进行分割操作。<br>
+      　　2．程序编写<br>
+      　　（1）.使用Class Wizard的Member Variables 制表页给编辑框1（ID号为：IDC_EDIT_FILENAME）添加变量m_fName。<br> 
+      　　（2）.在SpliteDlg.h里加上下面程序段阴影部分的代码。<br>
+      　　class CSpliteDlg : public CDialog<br> 
+      　　{<br>
+      　　// Construction<br> 
+      　　public:<br>
+      　　 CSpliteDlg(CWnd＊ pParent = NULL); // standard constructor<br> 
+      　　 CString SplitFileName[20],FileTitle;<br> 
+      　　 DWORD FileLength,SingleDisk;<br> 
+      　　 BOOL FileState;<br> 
+      　　 int DiskNum;<br> 
+      　　// Dialog Data<br> 
+      　　 //{{AFX_DATA(CSpliteDlg)<br> 
+      　　 enum { IDD = IDD_SPLITE_DIALOG };<br> 
+      　　 CString m_fName;<br> 
+      　　 //}}AFX_DATA<br> 
+      　　 int SplitDiskNum(CFile ＆files);<br> 
+      　　 BOOL SpliteFiletoNum(CFile ＆file);<br> 
+      　　SplitFileName[20]是分割后的文件名数组，这里定义为20个；FileTitle是除去后缀的文件名；FileLength是要分割的文件长度；布尔量FileState是判断分割是否成功的标志，成功则在列表框2中显示分割后的文件列表；整型数DiskNum是指分割后的文件数。<br>
+      　　函数SplitDiskNum(CFile ＆files)对要分割的文件进行判断，并返回分割后的文件数（也就是需要的软盘数）；函数SpliteFiletoNum(CFile ＆file)将完成文件的分割过程，成功则返回TURE，否则返回FALSE。<br> 
+      　　（3）.打开SpliteDlg.cpp，在SpliteDlg.cpp里添加上述函数和其它功能的实现代码。如下：<br>
+      　　a．在构造函数中添加以下阴影处代码<br>
+      　　 SingleDisk=2048＊705; //一张软盘的容量<br> 
+      　　 FileState=FALSE;<br> 
+      　　 DiskNum=1;<br> 
+      　　b．在OnPaint（CDC ＊pDC）函数末尾添加以下代码：<br> 
+      　　UpdateData(FALSE); //初始化编辑框1的变量<br> 
+      　　 GotoDlgCtrl(GetDlgItem(IDC_EDIT_FILENAME)); //将光标指定到编辑框1中<br> 
+      　　 CListBox ＊pList =(CListBox ＊) GetDlgItem(IDC_LIST_RESULT);&nbsp;<br>
+      　　//设置列表框2的ClistBox对象指针<br>
+      　　 pList－>ResetContent(); //重新设置列表框内容<br> 
+      　　 if(FileState==TRUE) //文件分割成功<br> 
+      　　 {<br> 
+      　　 for(i=0;i&lt;=disknum;i＋＋)<br> 
+      　　 pList－>AddString(SplitFileName[i]); //向列表框中添加分割后的文件名<br> 
+      　　 }<br> 
+      　　c．利用Class Wizard添加“浏览”按钮的响应函数，代码如下：<br> 
+      　　void CSpliteDlg::OnButtonBrowse()&nbsp;<br>
+      　　{<br>
+      　　char Filter[]=“所有文件(＊.＊)|＊.＊||";<br> 
+      　　CFileDialog dlgOpen(TRUE,0,0,OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,<br> 
+      　　(LPCTSTR)Filter,NULL);<br>
+      　　if(dlgOpen.DoModal()==IDOK)<br>
+      　　{<br>
+      　　 m_fName=dlgOpen.GetPathName();<br> 
+      　　 FileTitle=dlgOpen.GetFileName(); //取得要分割的文件名（不包含路径、扩展名）<br> 
+      　　}<br>
+      　　else return ;<br> 
+      　　SetDlgItemText(IDC_EDIT_FILENAME, (LPCTSTR)m_fName); //在编辑框1中显示文件名<br> 
+      　　SetDlgItemText(IDC_EDIT_DISKNUM, _T(“")); //在编辑框3中覆盖前次操作的文件数<br> 
+      　　Invalidate(TRUE); //对对话框窗口进行重画<br> 
+      　　}<br>
+      　　d．利用Class Wizard添加“分割”按钮的响应函数，代码如下：<br> 
+      　　void CSpliteDlg::OnButtonSplite()&nbsp;<br>
+      　　{<br>
+      　　 CFile files;<br> 
+      　　 CFileException fe;<br> 
+      　　 if (!files.Open(m_fName, CFile::modeRead | CFile::shareDenyWrite, ＆fe))<br> 
+      　　 {<br> 
+      　　 CString sMsg;<br> 
+      　　 sMsg.Format(“读取％s文件时发生错误!",m_fName);<br> 
+      　　 AfxMessageBox(sMsg,MB_OK,0);<br> 
+      　　 return ;<br> 
+      　　 }<br> 
+      　　 int i;<br> 
+      　　 DiskNum=SplitDiskNum(files);<br> 
+      　　 CString sMsg;<br> 
+      　　 if(DiskNum>=2)<br> 
+      　　 {<br> 
+      　　 sMsg.Format(“％d",DiskNum);<br> 
+      　　 SetDlgItemText(IDC_EDIT_DISKNUM, (LPCTSTR)sMsg); //在编辑框3中显示文件数<br> 
+      　　进 if(SpliteFiletoNum(files)==0) //调用分割函数行分割操作<br> 
+      　　 {<br> 
+      　　 AfxMessageBox(“分割文件失败!",MB_OK,0);<br> 
+      　　 }<br> 
+      　　 else&nbsp;<br>
+      　　 {<br> 
+      　　 AfxMessageBox(“分割文件成功!",MB_OK,0);<br> 
+      　　 FileState=TRUE; //分割成功，设置成功标志<br> 
+      　　 Invalidate(TRUE);<br> 
+      　　 }<br> 
+      　　 }<br> 
+      　　 else return;<br> 
+      　　 files.Close(); //关闭打开的被分割文件<br> 
+      　　}<br>
+      　　添加函数SplitDiskNum(CFile ＆files)代码如下：<br> 
+      　　int CSpliteDlg::SplitDiskNum(CFile ＆files)<br> 
+      　　{<br>
+      　　 int DiskNum;<br> 
+      　　 FileLength=files.GetLength(); //取得要分割文件的长度<br> 
+      　　 if(FileLength&lt;=singledisk)<br> 
+      　　 {<br> 
+      　　 AfxMessageBox(“该文件能被一张盘复制,不必分割!",MB_OK,0);<br> 
+      　　 DiskNum=0;<br> 
+      　　}<br>
+      　　 else DiskNum=FileLength/SingleDisk＋1; //计算分割后的文件数<br> 
+      　　return DiskNum;<br> 
+      　　}<br>
+      　　添加函数SpliteFiletoNum(CFile ＆file)代码如下：<br> 
+      　　BOOL CSpliteDlg::SpliteFiletoNum(CFile ＆file)<br> 
+      　　{<br>
+      　　 BOOL Success=FALSE;<br> 
+      　　 int i;<br> 
+      　　 DWORD dwBitsSize=SingleDisk; // dwBitsSize是指写入文件的字节数<br> 
+      　　 CFile filed;<br> 
+      　　 CString FileNum;<br> 
+      　　//开辟数据缓冲区，大小为一张软盘的容量<br>
+      　　 HANDLE filedate;<br> 
+      　　 filedate = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,SingleDisk);<br> 
+      　　 unsigned char ＊ imgtemp;<br> 
+      　　 imgtemp=(unsigned char ＊)::GlobalLock((HGLOBAL)filedate);<br> 
+      　　//对文件进行分割，并写入分割后的文件中<br>
+      　　 for(i=1;i&lt;=disknum;i＋＋)<br> 
+      　　 {<br> 
+      　　 FileNum.Format(“％d.％d",i,i);<br> 
+      　　 SplitFileName[i－1]=FileTitle＋FileNum;<br> 
+      　　 if(i==DiskNum) dwBitsSize =FileLength－(DiskNum－1)＊SingleDisk;<br> 
+      　　 file.Seek(SingleDisk＊(i－1),CFile::begin);<br> 
+      　　 if(file.ReadHuge(imgtemp, dwBitsSize)!= dwBitsSize)<br> 
+      　　 return FALSE;<br> 
+      　　 filed.Open(SplitFileName[i－1],CFile::modeCreate|CFile::modeWrite,0);<br> 
+      　　 filed.WriteHuge(imgtemp, dwBitsSize);<br> 
+      　　 filed.Close();<br> 
+      　　 }<br> 
+      　　 if(i==(DiskNum＋1)) Success=TRUE; //判断分割是否成功<br> 
+      　　//创建合并文件的批处理文件<br>
+      　　 FileNum=_T(“.bat");<br> 
+      　　 SplitFileName[DiskNum]=FileTitle＋FileNum;<br> 
+      　　 filed.Open(SplitFileName[DiskNum],CFile::modeCreate|CFile::modeWrite,0);<br> 
+      　　 CString BatContent=_T(“copy ");<br> 
+      　　 CString BatFile[20];<br> 
+      　　 for(i=0;i 　　 {<br> 
+      　　 BatFile[i]=SplitFileName[i]＋_T(“/b");<br> 
+      　　 BatContent＋=BatFile[i];<br> 
+      　　 if(i!=DiskNum－1) BatContent＋=_T(“＋");<br> 
+      　　 else BatContent＋=_T(“ ");<br> 
+      　　 }<br> 
+      　　 BatContent＋=m_fName;<br> 
+      　　//按照“copy filename1/b＋filename2/b＋…＋filenameN/b filename”的顺序写入批处理<br> 
+      　　 for(i=0;i 　　 {<br> 
+      　　 unsigned char ch=BatContent[i];<br> 
+      　　 filed.Write(＆ch,1);<br> 
+      　　 }<br> 
+      　　 return Success;<br> 
+      　　filed.Close();<br>
+      　　}<br>
+      　　以上是该程序的主要代码，在VC＋＋5.0下通过编译后，将生成可执行文件Split.exe。该程序只是实现了对文件的分割处理，读者也可以根据个人需要，设计出自己喜好的界面风格，还可以加入其它相关的功能。本文旨在起到抛砖引玉的作用，给广大读者以启发，希望大家都能编写出功能强大并且属于自己的分割软件。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+</body>    
+</html>    

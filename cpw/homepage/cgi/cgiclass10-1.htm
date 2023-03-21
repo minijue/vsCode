@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Cgi教程第十章</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><p align="left"><small><font face="宋体"><strong>最后的例子</strong>：<br>
+    <br>
+    最后，我准备以一个例子</font><font face="黑体">来结束这个教程</font><font
+    face="宋体">。<br>
+    <br>
+    环境：<br>
+    这是一个非常简单的WEB应用程序。如果你要运行这个程序，也许你得化些时间来配置自己的系统。在这个例子里，CGI程序由Perl5来编写，后台数据库使用sy</font>base 
+    system 10,Sybperl用于建立脚本<font face="宋体">和数据库之间的通信，用其他的CGI后台数据库接口程序也可以。</font></small></p>
+    <p align="left"><font face="楷体_GB2312"><strong>CGI程序：</strong></font></p>
+    <p align="left"><small><font face="8514fix">&lt;head&gt;<br>
+    &lt;title&gt;会议登记程序&lt;/title&gt;<br>
+    &lt;/head&gt;<br>
+    &lt;body&gt;<br>
+    &lt;h2&gt;会议登记系统&lt;/h2&gt;<br>
+    please fill out the following form. A registration packet will be sent to you immediatel 
+    you.Note that all &lt;b&gt;bolad-faced&lt;/b&gt;fields muse be complected.<br>
+    &lt;hr&gt;<br>
+    &lt;form method=&quot;post&quot; action=&quot;cgi-bin/resgister.pl&quot;&gt;<br>
+    &lt;b&gt;first name:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_fname&quot; 
+    size=30&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;Last name:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_lname&quot; 
+    size=30&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;address 1:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_add1&quot; 
+    size=30&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;address 2:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_add2&quot; 
+    size=30&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;city:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_city&quot; 
+    size=30&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;State:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_state&quot; 
+    size=2&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;Zip:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_zip&quot; size=15&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;phone:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_phone&quot; 
+    size=15&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;Fax:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_fax&quot; size=15&gt;<br>
+    &lt;p&gt;<br>
+    &lt;b&gt;Email:&lt;/b&gt;&lt;input type=&quot;text&quot; name=&quot;c_email&quot; 
+    size=15&gt;<br>
+    &lt;p&gt;<br>
+    Packge:<br>
+    &lt;ul&gt;<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_packge&quot; 
+    valuge=&quot;a&quot;&gt;Package A<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_packge&quot; 
+    valuge=&quot;b&quot;&gt;Package B<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_packge&quot; 
+    valuge=&quot;c&quot;&gt;Package C<br>
+    &lt;/ul&gt;<br>
+    How did you hear about the conference:<br>
+    &lt;ul&gt;<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_ad&quot; 
+    value=&quot;a&quot;&gt;Direct Mail<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_ad&quot; 
+    value=&quot;b&quot;&gt;Associate<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_ad&quot; 
+    value=&quot;c&quot;&gt;Journal<br>
+    &lt;li&gt;&lt;input type=&quot;radio&quot; name=&quot;c_ad&quot; 
+    value=&quot;d&quot;&gt;Other<br>
+    &lt;/ul&gt;<br>
+    &lt;p&gt;<br>
+    &lt;input type=&quot;reset&quot; value=&quot;clear&quot;&gt;&lt;input 
+    type=&quot;submit&quot; value=&quot;Register&quot;&gt;&lt;p&gt;<br>
+    &lt;/form&gt;</font></small></p>
+    <p align="left"><small><font face="8514fix">&lt;hr&gt;<br>
+    &lt;/body&gt;<br>
+    <br>
+    </font></small><strong><font face="楷体_GB2312">Perl脚本</font><small><font
+    face="8514fix">：</strong><br>
+    #!/usr/local/bin/perl<br>
+    require&quot;cgi-lib.pl&quot;;<br>
+    &amp;ReadParse(* input);<br>
+    $mc_fname=$input{'c_fname'};<br>
+    $mc_lname=$input{'c_lname'};<br>
+    $mc_add1=$input{'c_add1'};<br>
+    $mc_add2=$input{'c_add2'};<br>
+    $mc_city=$input{'c_city'};<br>
+    $mc_state=$input{'c_state'};<br>
+    $mc_zip=$input{'c_zip'};<br>
+    $mc_phone=$input{'c_phone'};<br>
+    $mc_fax=$input{'c_fax'};<br>
+    $mc_email=$input{'c_email'};<br>
+    $mc_package=$input{'c_package'};<br>
+    $mc_ad=$input{'c_ad'};<br>
+    <br>
+    print &amp;PrintHeader;</font></small></p>
+    <p align="left"><small><font face="8514fix">if (($mc_fname eq&quot;&quot;)||(mc_lname eq 
+    &quot;&quot;)||(mc_add1&nbsp; eq &quot;&quot;)||($mc_add2&nbsp; eq &quot;&quot;)||(<br>
+    mc_city eq &quot;&quot;)||(mc_state eq &quot;&quot;)||(mc_zip&nbsp; eq &quot;&quot;)){<br>
+    printf (&quot;&lt;br&gt;&quot;);<br>
+    printf(&quot;,strong&gt;Your registration cannot be processed as is.Pleae make sure all 
+    the requied fields are filled properly.&lt;/strong&gt;&quot;);<br>
+    print&quot;&lt;p&gt;&quot;;<br>
+    print&quot;Pleae use the &lt;i&gt;Back&lt;/i&gt;button to complete the form.\n&quot;;<br>
+    }<br>
+    else{# data is OK<br>
+    <br>
+    use Sybase::DBlib;</font></small></p>
+    <p align="left"><small><font face="8514fix">$dbh=Sybase::DBlib-&gt;dblogin('conf_user','123','DB-SERVER','REG');<br>
+    $dbh-&gt;dbuse('conference');</font></small></p>
+    <p align="left"><small><font face="8514fix">$sqlcmd=&quot;insert into 
+    reg(c_fname,c_lanme,c_add1,c_add2,c_city,c_state,c_zip, 
+    c_phone,c_fax,c_email,c_package,c_ad)&quot;;</font></small></p>
+    <p align="left"><small><font face="8514fix">$sqlcmd=$sqlcmd.&quot;values(&quot;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_fname.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_flame.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_add1.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_add2.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_city.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_state.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_zip.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_phone.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_fax.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_email.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_package.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_ad.&quot;\&quot;,&quot;;<br>
+    $sqlcmd=$sqlcmd.'\&quot;&quot;.$mc_fax.&quot;\&quot;,&quot;;<br>
+    $dbh-&gt;dbcmd($sqlcmd.&quot;\n&quot;);<br>
+    $dbh-&gt;dbsqlexec;<br>
+    <br>
+    print&quot;&lt;strong&gt;Thank you.&lt;/strong&gt;Your registration has been submitted.You 
+    should receive you packet shourtly in the mail.&quot;;</font></small></p>
+    <p align="left"><small><font face="8514fix">}</font></small></p>
+    <p align="left">　</td>
+  </tr>
+</table>
+
+<p><a href="default.html" tppabs="http://202.96.217.5/~xiaoyi/default.html">返回CGI教程目录</a></p>
+</body>
+</html>

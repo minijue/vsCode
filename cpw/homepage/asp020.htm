@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="home_idx1.htm">主页制作</a></b></span></td>  
+  </tr>  
+</table>  
+</center></div><div align="center"><center>  
+  
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"  
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">  
+  <tr>  
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"  
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"  
+    bordercolordark="#FFFFFF">  
+      <tr>  
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font  
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"  
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>  
+      </tr>  
+    </table>  
+      <p align="center"><font class="a"><b>二、初始化以及用户输入合法性检查</b>
+      <p align="right">作 者 : <a href="mailto:microsoftwindows@126.com">仙人掌工作室</a>
+      <p>　　 当一个ASP应用启动的时候，IIS就会寻找一个global.asa文件。如果该文件存在，就开始执行Application_onStart。在这里可以初始化应用级的变量和常量。下面的代码在Application_OnStart中初始化一个数组来跟踪任意时刻登录系统的所有用户：<br>
+      <br>
+      Sub Application_OnStart<br>
+      Application(&quot;Users&quot;) = Array()<br>
+      End Sub
+      <p>　　 在执行Application_OnStart之后，ASP引擎创建一个Session对象并初始化SessionID，然后触发Session_OnStart事件。在这里可以初始化会话级（和特定用户相关的）变量和常量：<br>
+      <br>
+      sub Session_OnStart<br>
+      Session.Timeout=1<br>
+      ' 数据库DSN<br>
+      Session(&quot;ConnectionString&quot;) = &quot;ASPSecurity&quot;<br>
+      Session(&quot;ConnectionTimeout&quot;) = 15<br>
+      ' 读/写方式<br>
+      Session(&quot;Mode&quot;) = 3<br>
+      end sub
+      <p>　　 考虑到用户的浏览器可能不支持Cookies或关闭了Cookies功能，因此必须在第一个ASP页面中检查Cookies的支持情况并把结果保存在一个Session变量中。此外，当用户在登录页面中单击“登录”按钮，还应该检查用户输入的合法性，如下面的代码所示，其中ASPSecurity.inc提供一些公用函数（如signUserOn用于验证用户身份）：<br>
+      <br>
+      &lt; %@ Language=VBScript %&gt;<br>
+      &lt; % option explicit %&gt;<br>
+      &lt; % Response.buffer = true %&gt;<br>
+      &lt; !-- #INCLUDE FILE=&quot;ASPSecurity.inc&quot; --&gt;<br>
+      &lt; %<br>
+      dim aSignon<br>
+      dim aPassword<br>
+      dim dataValidated<br>
+      dataValidated = false<br>
+      ' 检查浏览器是否支持Cookies<br>
+      Session(&quot;SupportsCookies&quot;) = (instr(1, 
+      Request.ServerVariables(&quot;HTTP_COOKIE&quot;), 
+      &quot;ASPSESSIONID&quot;, vbTextCompare) &gt; 0)<br>
+      if Request(&quot;Action&quot;) = &quot;登录&quot; then<br>
+      aSignon = lcase(trim(Request.Form(&quot;Signon&quot;)))<br>
+      aPassword = lcase(trim(Request.Form(&quot;Password&quot;)))<br>
+      if len(aSignon) = 0 then<br>
+      Session(&quot;msg&quot;) = &quot;请输入用户名字.&quot;<br>
+      end if<br>
+      if len(aPassword) = 0 then<br>
+      Session(&quot;msg&quot;) = &quot;请输入密码.&quot;<br>
+      else<br>
+      dataValidated=true<br>
+      end if<br>
+      if dataValidated then<br>
+      if signUserOn(aSignon, aPassword) then<br>
+      ' 用户身份被证实,允许进入受保护页面<br>
+      Response.Redirect &quot;signedOn.asp?ID=&quot; &amp; 
+      Session(&quot;ID&quot;)<br>
+      end if<br>
+      end if<br>
+      elseif Request(&quot;Action&quot;) = &quot;注册&quot; then<br>
+      Response.Redirect &quot;register.asp&quot;<br>
+      end if<br>
+      %&gt;<br>
+      <p>　　 
+      对于注册页面，除了要检查用户是否完整地输入所有内容之外，还应该检查两次输入密码是否相同、用户名字是否与数据库中已有记录冲突等。实现代码请参见本文所附的ZIP文件。
+      <p>　　 由于用户每次启动浏览器连接到服务器时SessionID都是不同的，所以不能直接用它来关联用户与存储在数据库中的相关信息，但SessionID可以用来临时地标识从数据库或文件提取的用户信息。对于那些不支持Cookies的浏览器，可以用另外的方法来创建唯一ID，如下面的getID使用的是随机函数：<br>
+      <br>
+      function getID() dim numbers<br>
+      dim letters<br>
+      dim i<br>
+      dim ID<br>
+      Randomize<br>
+      numbers=&quot;0123456789&quot;<br>
+      letters = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;<br>
+      for i = 1 to 10<br>
+      if i mod 2 &lt;&gt; 0 then<br>
+      ID = ID &amp; mid(letters, Int((26 * Rnd) + 1),1)<br>
+      else<br>
+      ID = ID &amp; mid(numbers, Int((10 * Rnd) + 1),1)<br>
+      end if<br>
+      next<br>
+      getID = ID<br>
+      end function</font>
+      <p align="right">
+      <p><font class="a">　 <a href="asp019.htm">第1页</a>　 第2页　 <a href="asp021.htm">第3页</a>　 
+      <a href="asp022.htm">第4页</a>　 <a href="asp023.htm">第5页</a>　 </font>  
+      <p>　  
+    </td>  
+  </tr>  
+</table>  
+</center></div>  
+
+</body>
+
+</html>

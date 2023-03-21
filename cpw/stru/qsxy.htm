@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>骑士巡游问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>骑士巡游问题</strong></p>
+
+<p>//骑士巡游问题<br>
+#include &lt;stdio.h&gt;<br>
+<br>
+int f[11][11] ;<br>
+int adjm[121][121];<br>
+long fgf;<br>
+void creatadjm(void);<br>
+void e(int,int,int,int);<br>
+void travel(int,int);<br>
+<br>
+int n,m;<br>
+<br>
+int main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,j,k,l;<br>
+&nbsp;&nbsp;&nbsp; printf(&quot;Input n:&quot;);scanf(&quot;%d&quot;,&amp;n);<br>
+&nbsp;&nbsp;&nbsp; m=n*n;<br>
+&nbsp;&nbsp;&nbsp; creatadjm();<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=m;i++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=m;j++) 
+printf(&quot;%2d&quot;,adjm[i][j]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;\n&quot;);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; getchar();<br>
+&nbsp;&nbsp;&nbsp; printf(&quot;Input i,j:&quot;);<br>
+&nbsp;&nbsp;&nbsp; scanf(&quot;%d %d&quot;,&amp;i,&amp;j);<br>
+&nbsp;&nbsp;&nbsp; l=(i-1)*n+j;<br>
+&nbsp;&nbsp;&nbsp; while ((i&gt;0)||(j&gt;0))<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=n;i++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f[i][j]=0;<br>
+&nbsp;&nbsp;&nbsp; k=0;<br>
+<br>
+&nbsp;&nbsp;&nbsp; travel(l,k);<br>
+printf(&quot;%d\n&quot;,fgf);fgf=0;<br>
+<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=n;i++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++) 
+printf(&quot;%4d&quot;,f[i][j]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&quot;\n&quot;);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; getchar();<br>
+&nbsp;&nbsp;&nbsp; printf(&quot;Input i,j:&quot;);scanf(&quot;%d %d&quot;,&amp;i,&amp;j);<br>
+&nbsp;&nbsp;&nbsp; l=(i-1)*n+j;<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; return 0;<br>
+}<br>
+<br>
+void creatadjm()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,j;<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=n;i++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f[i][j]=0;<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=m;i++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=m;j++) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; adjm[i][j]=0;<br>
+<br>
+for(i=1;i&lt;=n;i++)<br>
+for(j=1;j&lt;=n;j++)<br>
+if(f[i][j]==0)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f[i][j]=1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((i+2&lt;=n)&amp;&amp;(j+1&lt;=n)) e(i,j,i+2,j+1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((i+2&lt;=n)&amp;&amp;(j-1&gt;=1)) e(i,j,i+2,j-1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((i-2&gt;=1)&amp;&amp;(j+1&lt;=n)) e(i,j,i-2,j+1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((i-2&gt;=1)&amp;&amp;(j-1&gt;=1)) e(i,j,i-2,j-1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((j+2&lt;=n)&amp;&amp;(i+1&lt;=n)) e(i,j,i+1,j+2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((j+2&lt;=n)&amp;&amp;(i-1&gt;=1)) e(i,j,i-1,j+2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((j-2&gt;=1)&amp;&amp;(i+1&lt;=n)) e(i,j,i+1,j-2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+if((j-2&gt;=1)&amp;&amp;(i-1&gt;=1)) e(i,j,i-1,j-2);<br>
+}<br>
+&nbsp;&nbsp;&nbsp; return;<br>
+}<br>
+<br>
+void travel(int p,int r)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,j,q;<br>
+<br>
+&nbsp;&nbsp;&nbsp; for(i=1;i&lt;=n;i++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(f[i][j]&gt;r) 
+f[i][j]=0;<br>
+&nbsp;&nbsp;&nbsp; r=r+1;<br>
+&nbsp;&nbsp;&nbsp; i=((p-1)/n)+1;<br>
+&nbsp;&nbsp;&nbsp; j=((p-1)%n)+1;<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp; f[i][j]=r;<br>
+<br>
+&nbsp;&nbsp;&nbsp; fgf++;<br>
+//if(r==25)printf(&quot;%d\n&quot;,p);<br>
+/*<br>
+printf(&quot;i=%d,j=%d,r=%d\n&quot;,i,j,r); getchar();<br>
+*/<br>
+<br>
+&nbsp;&nbsp;&nbsp; for(q=1;q&lt;=m;q++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i=((q-1)/n)+1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j=((q-1)%n)+1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if((adjm[p][q]==1)&amp;&amp;(f[i][j]==0)) 
+travel(q,r);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; return;<br>
+}<br>
+<br>
+void e(int i1,int j1,int i2,int j2)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; adjm[(i1-1)*n+j1][(i2-1)*n+j2]=1;<br>
+&nbsp;&nbsp;&nbsp; adjm[(i2-1)*n+j2][(i1-1)*n+j1]=1;<br>
+&nbsp;&nbsp;&nbsp; return;<br>
+}</p>
+</body>
+</html>

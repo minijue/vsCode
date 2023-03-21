@@ -1,0 +1,446 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<meta NAME="doccomm" CONTENT="sss">
+<meta NAME="Template" CONTENT="C:\MSOffice\Template\Sl_BOOK.dot">
+<meta NAME="Author" CONTENT="Cheng Jinxing">
+<title>Visual C++编程小技巧之九</title>
+</head>
+
+<body TEXT="#000000" LINK="#0000EE" VLINK="#551A8B" ALINK="#FF0000"
+background="../../res/back.JPG" style="font-size: 9pt">
+
+<p align="center"><strong><font face="Arial" size="4">Visual C++</font><font size="4">编程技巧之九 
+</font></strong></p>
+
+<p align="center">转载于&quot;<a href="http://kahn.xj.cninfo.net/wwchina/"
+target="_blank">程序员集中营</a>&quot;</p>
+
+<p><font SIZE="+0"><a HREF="#tip68"><font FACE="Times New Roman">68. VC1.5</font>下如何跳到第一事例<font
+FACE="Times New Roman">?</font></a></font> </p>
+
+<p><font SIZE="+0"><a HREF="#tip69"><font FACE="Times New Roman">69. </font>为什么<font
+FACE="Times New Roman">VC++2.0</font>中使用文件对话框会死机<font
+FACE="Times New Roman">?</font></a></font> </p>
+
+<p><font SIZE="+0"><a HREF="#tip70"><font FACE="Times New Roman">70. </font>在<font
+FACE="Times New Roman">VC++1.5</font>中如何<font FACE="Times New Roman">new</font>一个大数组<font
+FACE="Times New Roman">?</font></a></font> </p>
+
+<p><font SIZE="+0"><a HREF="#tip71"><font FACE="Times New Roman">71. </font>在<font
+FACE="Times New Roman">VC1.5</font>中，如何得到子窗口在主窗口中的相对坐标？</a></font> 
+</p>
+
+<p><font SIZE="+0"><a HREF="#tip72"><font FACE="Times New Roman">72. VC1.5 </font>如何调用进程<font
+FACE="Times New Roman">?</font></a></font> </p>
+
+<p><font SIZE="+0"><a HREF="#tip73"><font FACE="Times New Roman">73. VC++1.5</font>编<font
+FACE="Times New Roman">Win3.1</font>程序能否实现全局跳转<font
+FACE="Times New Roman">?</font></a></font> </p>
+
+<p><font SIZE="+0"><a HREF="#tip74"><font FACE="Times New Roman">74. </font>如何在<font
+FACE="Times New Roman">DLL</font>用自定义窗口<font FACE="Times New Roman">?</font></a></font> 
+</p>
+
+<p><font SIZE="+0"><a HREF="#tip75"><font FACE="Times New Roman">75. </font>如何让<font
+FACE="Times New Roman">TOOLTIP</font>的字体变大<font FACE="Times New Roman">?</font></a></font> 
+</p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip68"></a><b><font SIZE="+2"><font FACE="Times New Roman">68.VC1.5</font><font
+FACE="黑体">下如何跳到第一事例</font><font FACE="Times New Roman">?</font></font></b> 
+</p>
+
+<p><font SIZE="+0">各位大虾<font FACE="Times New Roman">: CWinApp::InitInstance()</font>中可知是第二事例<font
+FACE="Times New Roman">,</font>但如何在<font FACE="Times New Roman">return FALSE;</font></font> 
+</p>
+
+<p><font SIZE="+0">之前<font FACE="Times New Roman">FindWindow()</font>到第一事例呢<font
+FACE="Times New Roman">? </font>主要困难是<font FACE="Times New Roman">:</font></font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">1).</font>主窗口类名可否得到 <font
+FACE="Times New Roman">( </font>主窗口<font FACE="Times New Roman">==MainFrame ? </font>若是<font
+FACE="Times New Roman">,</font>怎知<font FACE="Times New Roman">MainFrame</font>类名<font
+FACE="Times New Roman">?</font></font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">2).Title</font>因含有文档名<font
+FACE="Times New Roman">, </font>是一不确定串<font FACE="Times New Roman">.</font></font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">1. </font>类名是动态的，所以应该不易得到。（不知是否如此？）</font> 
+</p>
+
+<p><font SIZE="+0">类名不是动态的，如果不作处理， <font
+FACE="Times New Roman">MFC </font>总是使用 <font FACE="Times New Roman">AfxFrameOrView 
+</font>为类名，</font> </p>
+
+<p><font SIZE="+0">只有 <font FACE="Times New Roman">MainFrame, </font>和 <font
+FACE="Times New Roman">View </font>等等才会用 <font FACE="Times New Roman">AfxFrameOrView,</font></font> 
+</p>
+
+<p><font SIZE="+0">我刚用 <font FACE="Times New Roman">spy </font>看了我的一个程序，主窗口的<font
+FACE="Times New Roman">Class </font>为 <font FACE="Times New Roman">Afx:b:13ce:6:3be7</font></font> 
+</p>
+
+<p><font SIZE="+0">至于如何注册自己定义的类，我还没有学会，望高手指教。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxRegisterWndClass()</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">2. </font>我用的方法是只查<font
+FACE="Times New Roman">Title</font>中前半部分和你的要求串一致即可，忽略后面的文档<font
+FACE="Times New Roman">?</font></font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">FindWindow() </font>函数需要给定窗口类名和窗口标题（<font
+FACE="Times New Roman">Title</font>），不知你是怎样做到只查前半部分的？</font> 
+</p>
+
+<p><font SIZE="+0">用<font FACE="Times New Roman">EnumWindows()</font>一个窗口一个窗口查，不能用 
+<font FACE="Times New Roman">FindWindow()</font></font> </p>
+
+<p><font SIZE="+0">这里我有另外一个问题：</font> </p>
+
+<p><font SIZE="+0">找到第一事例的窗口后，如何激活它，使它成为当前窗口？</font> 
+</p>
+
+<p><font SIZE="+0">极小状态时，才能把它激活出来，否则也是没有动静，不知何故？</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if (IsIconic(hwndMain))</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">ShowWindow(hwndMain, SW_RESTORE);</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">else</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">SetActiveWindow(hwndMain);</font> </p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip69"></a><b><font SIZE="+2"><font FACE="黑体">69.关于</font><font
+FACE="Times New Roman">VC++2.0</font><font FACE="黑体">中使用文件对话框的求助</font></font></b> 
+</p>
+
+<p><font SIZE="+0">在<font FACE="Times New Roman">VC++2.0</font>中使用了标准文件对话框以后<font
+FACE="Times New Roman">,</font>编译联接都能正常通过，而且使用<font
+FACE="Times New Roman">Ctrl+F5</font>执行<font FACE="Times New Roman">EXE</font>文件也完全正常<font
+FACE="Times New Roman">,</font>但是一旦用<font FACE="Times New Roman">F5</font>调试进入， 
+使用该对话框的代码时<font FACE="Times New Roman">,Win95</font>就会异常中止<font
+FACE="Times New Roman">,</font>请问各位高手<font FACE="Times New Roman">,</font>为什么<font
+FACE="Times New Roman">?</font></font> </p>
+
+<p><font SIZE="+0">文件对话框，改变了执行程序的当前路径，从而干扰了调试系统。如果是为了调试，可以使文件对话框定位在当前目录，并且运行时不要在其中改变目录。</font> 
+</p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip70"></a><b><font SIZE="+2"><font FACE="黑体">70.如何用</font><font
+FACE="Times New Roman">VC2.0</font><font FACE="黑体">编写能</font><font
+FACE="Times New Roman">Edit</font><font FACE="黑体">超过</font><font
+FACE="Times New Roman">64K</font><font FACE="黑体">的类</font></font></b> </p>
+
+<p><font SIZE="+0">我要用 <font FACE="Times New Roman">VC2.0 </font>编写一个 <font
+FACE="Times New Roman">Editor, </font>要求能编辑超过 <font FACE="Times New Roman">64K 
+</font>的文本<font FACE="Times New Roman">.</font>我的 <font FACE="Times New Roman">Edit 
+</font>类从 <font FACE="Times New Roman">CEdit </font>类派生出来 <font
+FACE="Times New Roman">, </font>但编辑超过 <font FACE="Times New Roman">64K </font>的文本就显示不出来<font
+FACE="Times New Roman">. </font>原知道在 <font FACE="Times New Roman">VC1.5 </font>中 
+<font FACE="Times New Roman">CEdit </font>类只能编辑小于 <font
+FACE="Times New Roman">64K </font>的文本<font FACE="Times New Roman">,</font>不知 <font
+FACE="Times New Roman">VC2.0 </font>是否也一样<font FACE="Times New Roman">?</font></font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">.</font> </p>
+
+<p><font SIZE="+0">自己从<font FACE="Times New Roman">CWnd</font>类派生，管理内存、输入、显示等（其实不累）。至于从<font
+FACE="Times New Roman">CEdit</font>中派生，我也没有头绪。</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">VC2.0</font>会有这事？我没试过，但我不相信。<font
+FACE="Times New Roman">VC2.0</font>是运行在<font FACE="Times New Roman">Win95</font>或<font
+FACE="Times New Roman">WindowsNT </font>上的开发工具，是<font
+FACE="Times New Roman">Win32</font>的开发工具。<font FACE="Times New Roman">Windows 
+95</font>及<font FACE="Times New Roman">NT</font>对应用程序在内存上没有段的限制，应用程序最多可利用高达<font
+FACE="Times New Roman">4G</font>的内存<font FACE="Times New Roman">(</font>包括系统占用<font
+FACE="Times New Roman">)</font>。你所说的限制大概是<font FACE="Times New Roman">VC1.5</font>的限制吧。盖因<font
+FACE="Times New Roman">VC1.5</font>运行于<font FACE="Times New Roman">Win16</font>上，每个段不能超过<font
+FACE="Times New Roman">64K</font>。</font> </p>
+
+<p><font SIZE="+0">的确如此，<font FACE="Times New Roman">VC2.0 </font>有两个例子 
+<font FACE="Times New Roman">samples\mfc\multipad </font>和 <font FACE="Times New Roman">samples\mfc\superpad 
+</font>也是如此。不信你看看。</font> </p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip71"></a><b><font SIZE="+2"><font FACE="黑体">71.在</font><font
+FACE="Times New Roman">VC++1.5</font><font FACE="黑体">中如何</font><font
+FACE="Times New Roman">new</font><font FACE="黑体">一个大数组</font></font></b> </p>
+
+<p><font SIZE="+0">我想在用<font FACE="Times New Roman">VC++1.5</font>编程时，<font
+FACE="Times New Roman">new</font>一个<font FACE="Times New Roman">[512][512]</font>的大数组，却总是不行．</font> 
+</p>
+
+<p><font SIZE="+0">哪位专家可以指点一下．</font> </p>
+
+<p><font SIZE="+0">选用<font FACE="Times New Roman">Larger and Huger</font>模式的库编译</font> 
+</p>
+
+<p><font SIZE="+0">我用过<font FACE="Times New Roman">Large</font>模式，好象不行呀！我用<font
+FACE="Times New Roman">Huge</font>模式，头文件编译时就出错了！</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">VC++ 1.5 </font>毕竟是<font
+FACE="Times New Roman">16</font>的<font FACE="Times New Roman">, 512*512 </font>是多少？做链表好了否则就用<font
+FACE="Times New Roman">VC++2.0, </font>全<font FACE="Times New Roman">32</font>位就不该有这问题了</font> 
+</p>
+
+<p><font SIZE="+0">这样的做法并不十分好<font FACE="Times New Roman">,</font>要分配如此大的内存最好用全局的内存分配函数<font
+FACE="Times New Roman">.</font>直接用指针操作<font FACE="Times New Roman">,</font>效率也会提高<font
+FACE="Times New Roman">.</font></font> </p>
+
+<p><font SIZE="+0">用<font FACE="Times New Roman">MFC</font>类不行吗<font
+FACE="Times New Roman">?</font>如<font FACE="Times New Roman">CObArray</font></font> </p>
+
+<p><font SIZE="+0">请用<font FACE="Times New Roman">GlobalAllocPtr</font>和<font
+FACE="Times New Roman">GlobalFreePtr</font>这一对函数，如下：</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">DWORD dwSize ;;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">hpsStr =(char huge *)GlobalAllocPtr( 
+GMEM_MOVEABLE , dwSize ) ;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">...</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">GlobalFreePtr( hpsStr ) ;</font> </p>
+
+<p><font SIZE="+0">不管多大数组，都保证没有问题。</font> </p>
+
+<p><font SIZE="+0">在<font FACE="Times New Roman">VC1.5</font>中，如何得到子窗口在主窗口中的相对坐标？</font> 
+</p>
+
+<p><font SIZE="+0">比较笨的方法是先<font FACE="Times New Roman">ClientToScreen</font>转成屏幕坐标<font
+FACE="Times New Roman">,</font>然后<font FACE="Times New Roman">ScreenToClient</font>转成主窗口坐标<font
+FACE="Times New Roman">,</font>不知有没有更方便的方法<font
+FACE="Times New Roman">.</font></font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">MapWindowPoints(hwndChild, hwndParent, 
+(POINT FAR *)lprc, 2)lprc </font>设成子窗口内的坐标<font FACE="Times New Roman">(0,0, 
+width, height)</font></font> </p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip72"></a><b><font SIZE="+2"><font FACE="Times New Roman">72.VC1.5 </font><font
+FACE="黑体">如何调用进程</font><font FACE="Times New Roman">?</font></font></b> </p>
+
+<p><font SIZE="+0">我用<font FACE="Times New Roman">VC1.52</font>编<font
+FACE="Times New Roman">Windows</font>程序，中间想执行一个其他<font
+FACE="Times New Roman">Windows</font>应用程序，并且让我的程序挂起等应用程序执行完后再继续，请问如何实现？</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">exec( ) </font>和 <font
+FACE="Times New Roman">spawn( )</font>与<font FACE="Times New Roman">Windows</font>不兼容，所以它们肯定不行了．</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">WinExec()</font> </p>
+
+<p><font SIZE="+0">挂起的一个简单方法是得到新进程的主窗口句柄，然后进入死循环，直到此句柄变为无效。</font> 
+</p>
+
+<p><font SIZE="+0">不知道还有什么更漂亮一些的手法。</font> </p>
+
+<p><font SIZE="+0">请问，怎么得到进程的主窗口句柄呢？</font> </p>
+
+<p><font SIZE="+0">是呀，我也正想问呢．例如我执行的是<font
+FACE="Times New Roman">PSpice for Windows.</font>用<font FACE="Times New Roman">WinExec()</font></font> 
+</p>
+
+<p><font SIZE="+0">可以如下<font FACE="Times New Roman">:</font></font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">int nWinRun = WinExec(&quot;wpspice 
+test.cir&quot;, SW_SHOWNORMAL);</font> </p>
+
+<p><font SIZE="+0">可是如何得到新进程的主窗口句柄呢？能不能截取新进程的消息呢</font> 
+</p>
+
+<p><font SIZE="+0">紧接着用 <font FACE="Times New Roman">GetActiveWindow() </font>就可以<font
+FACE="Times New Roman">.</font></font> </p>
+
+<p><font SIZE="+0">当然还是在<font FACE="Times New Roman">win3.1 </font>下才有用<font
+FACE="Times New Roman">....</font></font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">win95 </font>下由于有输入的局部化问题<font
+FACE="Times New Roman">,</font>所以只能得到本线程的<font FACE="Times New Roman">Activate 
+Window</font>或<font FACE="Times New Roman">Focus Window,</font>对于其他情况返回都是<font
+FACE="Times New Roman">NULL.</font>这问题还是不知道怎么办<font
+FACE="Times New Roman">,alas...</font></font> </p>
+
+<p><font SIZE="+0">所 以 最 根 本 的 办 法 是 如 何 读 写 <font
+FACE="Times New Roman">Windows </font>消 息 总 库 <font FACE="Times New Roman">.</font></font> 
+</p>
+
+<p><font SIZE="+0">哪 位 高 手 看 得 懂 <font FACE="Times New Roman">SPY </font>的 
+源 程 序 <font FACE="Times New Roman">(</font>在 <font FACE="Times New Roman">C++ </font>或 
+<font FACE="Times New Roman">Delphi </font>之 类 的 <font FACE="Times New Roman">Sample 
+</font>中 有 <font FACE="Times New Roman">).</font></font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">Use &quot;FindWindow()&quot;. according to 
+window title, get window handle.</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">then use Window Declassing method. that is write 
+your own procedure</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">to process the message you want to capture. 
+&quot;CallWindowProc() is</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">executed before DefWindowProc()&quot;. (sorry 
+can not type chinese now.)</font> </p>
+
+<p><font SIZE="+0">我在<font FACE="Times New Roman">Vc 4.0 </font>下用<font
+FACE="Times New Roman">_exec, _spawn, </font>以及<font FACE="Times New Roman">WinExec</font>都没问题的！</font> 
+</p>
+
+<p><font SIZE="+0">　</font> </p>
+
+<p><a NAME="tip73"></a><b><font SIZE="+2"><font FACE="Times New Roman">73.VC++1.5</font><font
+FACE="黑体">编</font><font FACE="Times New Roman">Win3.1</font><font FACE="黑体">程序能否实现全局跳转</font><font
+FACE="Times New Roman">?</font></font></b> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">setjmp</font>即可，和<font
+FACE="Times New Roman">DOS</font>下一样。</font> </p>
+
+<p><font SIZE="+0">用<font FACE="Times New Roman">Windows API </font>中的 <font
+FACE="Times New Roman">Catch() </font>和 <font FACE="Times New Roman">Throw() </font>可能会更好些。不过我也不知道和<font
+FACE="Times New Roman">setjmp</font>有些什么区别。</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">setjmp </font>恐怕不行<font
+FACE="Times New Roman">, </font>它好象只能用来编写 <font FACE="Times New Roman">C 
+</font>程序，而不能用来编写 <font FACE="Times New Roman">C++ </font>程序<font
+FACE="Times New Roman">!</font></font> </p>
+
+<p><font SIZE="+0">我的感觉是，只要是代码段，可以不受函数和应用的限制，随便乱跳的。其实是数据段，也可以跳过去的。换句话说，在<font
+FACE="Times New Roman">WINDOW</font>中，可以跳到任何地方，只要我乐意。</font> 
+</p>
+
+<p><b><font SIZE="+2">　</font></b> </p>
+
+<p><a NAME="tip74"></a><b><font SIZE="+2"><font FACE="黑体">74.在</font><font
+FACE="Times New Roman">DLL</font><font FACE="黑体">用自定义窗口</font></font></b> </p>
+
+<p><font SIZE="+0">我在<font FACE="Times New Roman">DLL</font>中用如下窗口，</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">class CMyWin:public CWnd</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">public:</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CMyWin() ;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">} ;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">CMyWin::CMyWin()</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">{</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">if( !CreateEx( WS_EX_TOPMOST ,</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxRegisterWndClass( CS_SAVEBITS ) ,</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">&quot;mywin&quot; , WS_POPUP ,</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">0 , 0 , 100 , 100 , NULL , NULL ) )</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">AfxMessageBox( &quot;CreateEx error&quot; ) ;</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0">请问有谁知道是什么原因？谁在<font FACE="Times New Roman">DLL</font>中做过类似工作，望赐教。<font
+FACE="Times New Roman">ror</font>”，</font> </p>
+
+<p><font SIZE="+0">我记得<font FACE="Times New Roman">AfxRegisterWndClass</font>好象应该在<font
+FACE="Times New Roman">PreCreateWindow</font>中调用<font FACE="Times New Roman">,</font></font> 
+</p>
+
+<p><font SIZE="+0">在构造函数中用这个函数似乎有问题<font
+FACE="Times New Roman">,</font>你再试试吧<font FACE="Times New Roman">!</font></font> 
+</p>
+
+<p><font SIZE="+0">用<font FACE="Times New Roman">C++</font>作<font
+FACE="Times New Roman">DLL</font>可以吗<font FACE="Times New Roman">?</font>好象名字分裂回有些负作用吧<font
+FACE="Times New Roman">?</font></font> </p>
+
+<p><font SIZE="+0">用<font FACE="Times New Roman">MFC C</font>＋＋是可以做传统的<font
+FACE="Times New Roman">DLL</font>的。只要将回调函数定义成如下格式就行了：</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">#ifdef __cplusplus</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">extern &quot;C&quot; {</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">#endif</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">void __export FAR PASCAL fun() ;</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">#ifdef __cplusplus</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">}</font> </p>
+
+<p><font SIZE="+0" FACE="Times New Roman">#endif</font> </p>
+
+<p><font SIZE="+0">其它与普通<font FACE="Times New Roman">MFC</font>程序一样。当然，在例程类的定义上也有点特别的地方</font> 
+</p>
+
+<p><font SIZE="+0">我如果在正常的执行程序中这样用<font
+FACE="Times New Roman">CreateEx</font>就没有任何问题，而在<font
+FACE="Times New Roman">DLL</font>中</font> </p>
+
+<p><font SIZE="+0">就有问题。并且这问题也只发生在<font
+FACE="Times New Roman">WIN3.1</font>上，在<font FACE="Times New Roman">WIN95</font>上却可以正常执行。</font> 
+</p>
+
+<p><font SIZE="+0" FACE="Times New Roman">-</font> </p>
+
+<p><a NAME="tip75"></a><b><font SIZE="+2"><font FACE="黑体">75.如何让</font><font
+FACE="Times New Roman">TOOLTIP</font><font FACE="黑体">的字体变大</font></font></b> 
+</p>
+
+<p><font SIZE="+0">前几天有个虫虫问如何让<font FACE="Times New Roman">vc4.0</font>的<font
+FACE="Times New Roman">Tooltip</font>的字体变大<font FACE="Times New Roman">,</font>可现在文章没有了<font
+FACE="Times New Roman">.</font>不过现在我</font> </p>
+
+<p><font SIZE="+0">有个方法<font FACE="Times New Roman">:</font>在<font
+FACE="Times New Roman">Windows 95 Desktop </font>属性中有<font FACE="Times New Roman">desktop 
+scheme</font>中有<font FACE="Times New Roman">Tooltip</font>一项<font
+FACE="Times New Roman">,</font>可以该变</font> </p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">TOOLTIP</font>的字体和大小<font
+FACE="Times New Roman">.</font>不过这样做所有程序的<font FACE="Times New Roman">Tooltip</font>都变大了<font
+FACE="Times New Roman">.</font>这可能不是你的本意<font FACE="Times New Roman">.</font></font> 
+</p>
+
+<p><font SIZE="+0">但<font FACE="Times New Roman">Tooltip</font>是<font
+FACE="Times New Roman">Windows 95 Common Control,</font>由<font FACE="Times New Roman">Windows</font></font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">95</font>内部实现<font
+FACE="Times New Roman">,VC4.0</font>的<font FACE="Times New Roman">CTooltip</font>类并不实现<font
+FACE="Times New Roman">Tips</font>的显示<font FACE="Times New Roman">,</font>所以要实现针对某个程序的</font> 
+</p>
+
+<p><font SIZE="+0"><font FACE="Times New Roman">Tooltip</font>的特殊显示<font
+FACE="Times New Roman">,</font>有一定难度<font FACE="Times New Roman">.</font>我以前曾经试图实现<font
+FACE="Times New Roman">Tooltip</font>的多行显示<font FACE="Times New Roman">,</font>做到了当<font
+FACE="Times New Roman">Toolt.</font></font> </p>
+
+<p><font SIZE="+0">显示时触发我的函数<font FACE="Times New Roman">,</font>消失时触发我的函数<font
+FACE="Times New Roman">,</font>但在显示时却出<font FACE="Times New Roman">GP</font>错误<font
+FACE="Times New Roman">.</font>现在我认为最简</font> </p>
+
+<p><font SIZE="+0">单的方法是从头自己实现<font FACE="Times New Roman">Tooltip</font>类<font
+FACE="Times New Roman">.</font>一切随心所欲<font FACE="Times New Roman">.*</font></font> 
+<font SIZE="+0">　</font> </p>
+</body>
+</html>

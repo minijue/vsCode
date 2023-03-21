@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>CSS 第一节</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="home_idx.htm">主页制作</a> 
+    &gt;</b> CSS 第一节: CSS Basic</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><b>CSS 第一节: CSS 
+    Basic</b></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<p>从这一节开始我们将要讨论 CSS (Cascading Style Sheet). 
+    中文大概叫试样纸吧. 在我们这个教程中还是把它叫做CSS 方便点儿. </p>
+    <h3><font size="4"><span style="font-size: 9pt">什么是 CSS 以及它的功能</span></font></h3>
+    <p>虽然 CSS 在网页里是和 HTML 在一起的. 但它不算 HTML. 
+    它的使用可以扩展 HTML 的功能. 使得我们可以重新定义 HTML 
+    元素的显示方式. CSS 所能改变的性质如下 <ul>
+      <li>字体 </li>
+      <li>文字间的空间 </li>
+      <li>列表 </li>
+      <li>颜色 </li>
+      <li>背景 </li>
+      <li>Margin </li>
+      <li>位置 </li>
+    </ul>
+    <p>我们将会在后面的七节里讨论上面的每一个性质的改变. 
+    在这一节我们给你提供 CSS 的基础. </p>
+    <h3><span style="font-size: 9pt"><font size="2">CSS 的定义 (rules) </font></span></h3>
+    <p>CSS 的每一条定义都有如下的形式 </p>
+    <pre>
+  selector {property:value; property:value; ...}
+</pre>
+    <ul>
+      <li>selector: 第一种是 HTML 的 tag, 比如 P, BODY, A 等等.第二种叫 class, 
+        第三种叫 ID. 你这里先知道有这么三种具体的咱们以后在谈. </li>
+      <li>property: 就是那些将要被修改的性质, 比如 color </li>
+      <li>value: 给 property 的值, 比如给 color 的可以是 red </li>
+    </ul>
+    <p>请看下面的一个典型定义 </p>
+    <pre>
+  A {color: red}
+</pre>
+    <p>用这条定义所有的联接都变成红色的了. 
+    一般来说我们把所有的定义全包括在 STYLE 元素里面放到 HEAD 里面.请试验下面的网页 
+    </p>
+    <pre>
+&lt;HTML&gt;
+&lt;HEAD&gt;
+  &lt;STYLE&gt;
+    A {color: red}
+    P {background-color:blue; color:white}
+  &lt;/STYLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+  &lt;A href=&quot;http://www.nease.net/~haidian&quot;&gt;动态网页制作&lt;/A&gt;
+  &lt;P&gt;你注意到这一段文字的颜色和背景颜色了吗?&lt;/P&gt; 怎么样?
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+    <p>怎么样? 很简单把. 
+    你只要知道所有可以改动的元素和它们的性质灵活的运用 CSS 的定义, 
+    你就可以使得你的网页制作更上一层楼. 
+    下面一节我们将要告诉你其他两种 selector 以及其他一些基础. </p>
+    <p align="center"><a href="css2.htm">下一节</a></p>
+    <p align="right">本教程转自<a href="http://www.chinajinyang.com/yl/yl.htm"
+    target="_blank">雨菲软件园</a> </td>
+  </tr>
+</table>
+</body>
+</html>

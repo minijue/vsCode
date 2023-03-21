@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" width="100%">
+<TBODY>
+  <tr>
+    <td width="100%"><div align="center"><center><table border="0" cellspacing="2"
+    cellpadding="0" width="95%" style="font-size: 9pt" height="28">
+      <tr bgcolor="#CCFFCC">
+        <td height="10"><span style="font-size: 9pt">现在的位置是： <b><a
+        href="tech_idx.htm">实用技术</a>--&gt;</b> </span>WINDOWS NT组网经验(一)</td>
+      </tr>
+      <tr>
+        <td height="14"></td>
+      </tr>
+    </table>
+    </center></div><div align="center"><center><table border="1" width="95%"
+    style="font-size: 9pt" bgcolor="#E8E8E8" bordercolor="#C48C59" cellpadding="2">
+      <tr>
+        <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+        cellspacing="0" cellpadding="2">
+          <tr>
+            <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+            class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+            style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+      <tr>
+        <td width="100%"><p align="center"><strong>WINDOWS NT组网经验(一)</strong></p>
+        <font face="宋体" lang="ZH-CN"><p align="justify">　　复旦大学BBS供稿</p>
+        <p align="justify">　　前不久，做了一个10M的局域网，软硬件基本配置如下：服务器采用惠普LC系列的服务器，WINDOWSNT4．0中文版操作系统，各工作站采用WINDOWS95平台；另外，在服务器上还加挂IBM的LOTUSNOTES4．5的DOMINO群件服务器。由于系统软件繁杂，在调试中出现了一些问题，解决之后现将其总结如下，以期得到各位同行的指教：</p>
+        <p align="justify">　　1．WINDOWS95网上邻居中找不到域及服务器，但可找到其它的上网工作站。</p>
+        <p align="justify">　　我们怀疑是WINDOWS95本身的不足，在网上邻居中虽然找不到服务器，但是通过“开始”菜单中的计算机查找项来查寻“服务器的计算机名”，却可以找到，此时打开资源管理器便可以进行对服务器上的共享资源进行操作了。</p>
+        <p align="justify">　　解决的办法是：在“控制面板”－“网络”－“Micsoft网络客户”中将登录时WINDOWS95与网络的连接由慢速改为快速连接。</p>
+        <p align="justify">　　2．在WINDOWS95中设置文件共享，在选择用户时出现提示“此时网络不可浏览，请稍后再试”，而稍后试了多次仍显示同样信息。</p>
+        <p align="justify">　　由于该NT网络域中的服务器只有一个，而WINDOWS95在进行网络连接时，对于域名和计算机名区别不是十分严格，而且一般以计算机名为优先，在这种情况发生时，不妨尝试一下指定计算机名。其方法是：在“控制面板”－“网络”－“存取控制”中将“要取得用户列表的NT域或服务器名”由“域名”改为“服务器的计算机名”，此时系统会提示将从某某域中获取用户列表。这样重启机后，应该可以解决此问题。－－这好象也是WINDOWS95本身的问题。</p>
+        <p align="justify">　　3．WINDOWS95启动后再登录后提示“此时没有域服务器能证实您的口令，某些网络功能将受到限制”。</p>
+        <p align="justify">　　产生此问题不外乎这几个方面：检查网线是否正确连接，确保可靠连接；检查网卡是否工作正常；查问系统管理员是否已开启服务器；检查各级HUB是否已上电；检查口令是否拼写错误。</p>
+        <p align="justify">　　4．在重新安装WINDOWS95后，再安装LOTUSNOTESDESKTOP时，出现了与主服务器挂接不上的问题，而LOTUSDOMINO服务器中仍然保留着该用户的帐户。</p>
+        <p align="justify">　　首先检查服务器上的LOTUSDOMINO服务器是否已开启，而且工作正常。其方法是：在原来可以正常工作的机器上向其它机器或服务器上的管理员发送一封邮件，看是否可以收到，此时会有两种可能：</p>
+        <p align="justify">　　1）如不能收到，则表示DOMINO工作不正常，应重新启动DOMINO服务器，其方法是，选中DOMINO窗口，输入“EXIT”并回车，此时可能有两种情况产生：</p>
+        <p align="justify">　　A．DOMINO顺利退出，这时再重新启动DOMINO服务器即可。</p>
+        <p align="justify">　　B．然而在大多数情况下，DOMINO服务器将不能正常退出，如果用NT强行关闭此任务，随后在这种情况下再重新启动DOMINO服务器时，又会显示“DOMINO服务器已经启动”的错误信息，这说明该进程并未被完全清除，在这种情况下，需要重新启动NT，再重新启动DOMINO服务器。</p>
+        <p align="justify">　　2）如可以收到，则表示DOMINO工作正常，说明问题出在工作站端。首先检查本地工作站是否已经正常登录上网，其方法很简单，只要在“开始”菜单上选择“查找”－“计算机”，再输入“装DOMINO服务器的计算机名”，此时有两种情况：</p>
+        <p align="justify">　　A．如不能找到，则说明本地工作站还未上网，这时只要运行“开始”－“关闭计算机”－“以其它身份重新登录”。经此步骤确保上网以后，再运行LOTUSNOTESDESKTOP，进行第一次运行的设置工作。</p>
+        <p align="justify">　　B．如能找到，说明本地工作站已正常上网，但是在此情况下应检查一下WINDOWS95的TCP／IP协议是否已经安装并工作正常。其方法是：启动MSDOS命令窗口，运行PING命令来探测，在DOS提示符下输入：</p>
+        <p align="justify">　　　PINGxxx．xxx．xxx．xxx（IP地址）；</p>
+        <p align="justify">　　　或PING计算机名</p>
+        <p align="justify">　　如所探测的地址有回应，则说明TCP／IP协议工作正常，这时在服务器运行LOTUSNOTESDESKTOP，选择“文件”－“服务器管理”－“注册个人”，对该用户进行重新注册即可；如果所探测的地址没有回应，或者出现错误信息，则说明WINDOWS95中没有挂接TCP／IP协议，其挂接的方法是：“我的电脑”－“控制面板”－“网络”－“添加”－“协议”－选择MICOSOFTTCP／IP协议即可。</p>
+        <p align="justify">　　5．在不重新安装LOTUSNOTES的情况下重新设置工作台，即DESKTOP。</p>
+        <p align="justify">　　在很多情况下有可能进行工作台面的重新设置，比如说上一次设置错误或用户名的更改等等。其实在这种情况下是不需要重新安装NOTESDESKTOP的，只要删除位于ιNOTESιDATA目录下的USER．ID、DESKTOP．DSK，再手工编辑位于WINDOWS95目录下的NOTES．INI就可以进行重新设置了，其方法是：</p>
+        <p align="justify">　　首先，应确保关闭所有WINDOWS95下的应用程序，尤其是LOTUS公司NOTES的系列产品，如SMARTSUITE、NOTES等。</p>
+        <p align="justify">　　进入MSDOS窗口，进行删除上述几个文件的操作。</p>
+        <p align="justify">　　用EDIT编辑NOTES．INI，只保留下列三行，其余全部删除：</p>
+        <p align="justify">　　［notes］</p>
+        <p align="justify">　　　KEYTYPEΚ．．．</p>
+        <p align="justify">　　　DIRECTORYΚ．．．</p>
+        <p align="justify">　　　这样，在重新进入NOTES时，系统又会象第一次安装完毕后那样提示用户进行设置了。</p>
+        <p align="justify">　　最后，在网络施工当中，客户有三个节点在远在三百多米远的楼外，原打算用粗缆铺设，但客户觉得成本太高，不划算，经调研，发现用Belden的超五类线可以解决此问题。众所周知，一般五类双绞线从HUB引出时撑死了能到150米，而在100M的情况下则不应超过100米，而Belden这种超五类双绞线据说带宽可达345M，远远超过了普通五类双绞线的标准。所以，损失带宽为代价，来换取更长的传输距离完全是可行的。通过用这种线连接，这三个节点工作正常，在与服务器连接时，也感觉不出有明显的时间上的延迟，这样既达到了目的，又避免了大兴土木地铺设粗缆，从而节省不少开支。</p>
+        </font><p align="justify">　</td>
+      </tr>
+    </table>
+    </center></div></td>
+  </tr>
+</TBODY>
+</table>
+</body>
+</html>

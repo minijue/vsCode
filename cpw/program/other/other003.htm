@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Java Script 高级技巧</title>
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>JavaScript高级技巧</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.07</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>JavaScript是功能强大而又简单的脚本语言，使用它可以极大地丰富网页内容和提高性能。很多网页使用了JavaScript，但一般都仅仅是显示一行滚动文本或弹出一个警告窗口，下面介绍几个高级技巧。<br>
+一、判断用户的浏览器是否支持JavaScript<br>
+尽管目前被绝大多数人使用的浏览器都支持JavaScript，但仍应该防止你的页面正被不支持的浏览器装入，请看下面的HTML例子：<br>
+〈html〉〈head〉〈BR&gt; 〈script language=&quot;JavaScript&quot; 
+src=&quot;gotonext.js&quot;〉〈/script〉<br>
+〈/head〉〈body〉<br>
+本网页需要你的浏览器支持JavaScript！<br>
+〈/body〉〈/html〉<br>
+上面这个HTML网页相当简单，如果用户的浏览器不是全面支持JavaScript则只会看到一行警告信息，而如果支持（例如Navigator 
+3.0或IE 4.0）则将会执行外部JavaScript文件gotonext.js中的代码，在gotonext.js中包含如下JavaScript代码：<br>
+&quot;location = next.html&quot;<br>
+当用户的浏览器支持时则自动转到另一个页面－－next.html中去，这样就保证了你精心编制的JavaScript不会引起某些浏览器的混乱。比如IE 
+3.0对JavaScript只是部分支持，因此上例将它也排斥在外。<br>
+利用JavaScript外部文件的好处还在于可以隐藏自己编制的源代码，而且一些公用代码可以在不同的页面之间共享。<br>
+二、在用户提交表单之前检查<br>
+用JavaScript可以在用户提交表单之前就先检查一下各字段的值是否合法，如果不是则可以警告用户并阻止表单的提交。<br>
+〈html〉〈head〉<br>
+〈script language=&quot;JavaScript&quot;〉〈!－－<br>
+function CheckForm(obj){<br>
+if (objectname.value==“&quot;){<br>
+alert(&quot;你忘记留下姓名了！&quot;);<br>
+objectname.focus();<br>
+return false;<br>
+}<br>
+return true;<br>
+}<br>
+// －－&gt;〈/script〉 〈/head〉〈body〉<br>
+〈form action=“cgibin/mycgi.pl&quot; method=“post&quot; onSubmit=“return 
+CheckForm(this)&quot;〉<br>
+你的姓名：〈input type=“text&quot; name=“name&quot;〉〈input type=“submit&quot; 
+value=“OK&quot;〉<br>
+〈/form〉〈/body〉 〈/html〉”<br>
+上例中为表单定义了一个事件onSubmit，当这个事件被触发（用户单击了提交按钮）时调用函数CheckForm并提供表单对象。当onSubmit返回假时将禁止该表单被提交。<br>
+三、 用JavaScript实现Cookie<br>
+利用JavaScript可以将信息存储在客户端（称之为Cookie技术），例如客户姓名、喜欢的栏目等资料。设置Cookie时应注意：<br>
+1、cookie都是字符串，一般设置为“name=value&quot;等格式，例如：<br>
+document.cookie =“UserName=Guest&quot;;<br>
+这将会设置一个cookie，由于未指定cookie路径则为当前HTML文档的路径，该路径子目录中的所有HTML文档都能利用这个cookie，因此可以将路径设定为根，这样可以使所有的HTML页都能共享这个cookie。而上例中未设置cookie的失效时间，则默认为当前时间，所以该cookie在设置后已经立即失效，从页未达到预期效果。<br>
+var expires = new Date();<br>
+expires.setTime(expires.getTime() ＋ 1000＊60＊60＊24＊10);<br>
+document.cookie=“UserName=Guest;expires=&quot;＋expires.toGMTString()＋“;path=/&quot;;<br>
+上述代码将失效日期设置为当前时间的10天以后，路径为根。如果每一次进入页面时都执行上述代码则该cookie可保最近10天内不会失效。<br>
+2、JavaScript提供两个函数来将字符串进行编码和解码，在使用cookie时应该利用：<br>
+var UserName = prompt(“Enter your name:&quot;, “None&quot;);<br>
+document.cookie(“UserName=&quot; ＋ escape(UserName));<br>
+var szCookie = document.cookie;<br>
+document.write(“Your name is &quot;＋unescape(szCookie.substring(9, szCookie.length));<br>
+3、当JavaScript设置cookie时可能被用户禁止，因此可以在设置之后立即读取并给出相应信息：<br>
+document.cookie =“TEST&quot;);<br>
+if (document.cookie != “TEST&quot;)<br>
+alert(“Failed to cookie!&quot;);<br>
+else alert(“OK!&quot;);<br>
+如果善于利用cookie，可以极大地提高网页的交互能力，比如记录用户最常去的栏目以便提供一个快捷按钮来方便用户转到此页面，或者记录用户来访次数当超过某一值时提供特殊服务，甚至可以用来在不同的页面之间进行数据传递。<br>
+以上三例只是JavaScript的几个方面，实际上还有很多功能因篇幅关系不能一一列举，有兴趣的朋友可以到我的个人主页 
+http://www.nease.net/～seawave 看看，说不定会有收获。<br>
+</p>
+</body>
+</html>

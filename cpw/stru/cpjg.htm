@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>重排九宫</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>重排九宫</strong></p>
+
+<p>/*重排九宫<br>
+012345678<br>
+101012345<br>
+325134767<br>
+4 658 8<br>
+7<br>
+*/<br>
+#include &lt;stdlib.h&gt;<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;conio.h&gt;<br>
+#include &lt;fstream.h&gt;<br>
+ofstream output(&quot;123.txt&quot;);<br>
+void dayin(int n);<br>
+void Mv(int n,int s,int kg);<br>
+void Go(int n,int kg);<br>
+int gz[100][9];<br>
+int lkj;<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i;<br>
+&nbsp;&nbsp;&nbsp; for(i=8;i&gt;=1;i--)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gz[0][i-1]=8-i+1;<br>
+// for(i=1;i&lt;=8;i++)<br>
+//&nbsp;&nbsp;&nbsp;&nbsp; gz[0][i-1]=i;<br>
+&nbsp;&nbsp;&nbsp; gz[0][8]=0;<br>
+<br>
+&nbsp;&nbsp;&nbsp; Go(0,8);<br>
+}<br>
+void Mv(int n,int s,int kg)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,temp;<br>
+&nbsp;&nbsp;&nbsp; for(i=0;i&lt;9;i++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; gz[n+1][i]=gz[n][i];<br>
+}<br>
+temp=gz[n+1][s];<br>
+gz[n+1][s]=gz[n+1][kg];<br>
+&nbsp;&nbsp;&nbsp; gz[n+1][kg]=temp;<br>
+}<br>
+void Go(int n,int kg)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int lj=0,i,k;<br>
+if(n&gt;30)return;<br>
+&nbsp;&nbsp;&nbsp; for(i=0;i&lt;8;i++)<br>
+{<br>
+// cout&lt;&lt;gz[n][i];<br>
+&nbsp;&nbsp;&nbsp; if(gz[n][i]==i+1)lj++;<br>
+if(lj==8){cout&lt;&lt;&quot; 
+adsgasdgjaldgjak&quot;&lt;&lt;endl;dayin(n);lkj++;cout&lt;&lt;lkj;}//exit(0);}<br>
+}<br>
+// cout&lt;&lt;&quot; &quot;&lt;&lt;n&lt;&lt;endl;//getch();<br>
+for(i=0;i&lt;n;i++)<br>
+{<br>
+lj=0;<br>
+&nbsp;&nbsp;&nbsp; for(k=0;k&lt;9;k++)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(gz[i][k]==gz[n][k])lj++;<br>
+}<br>
+if(lj==9){<br>
+// cout&lt;&lt;&quot;sdagakslgjkalshdg&quot;&lt;&lt;endl;<br>
+return;<br>
+}<br>
+}<br>
+switch(kg)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; case 0:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,1,kg);<br>
+Go(n+1,1);<br>
+Mv(n,3,kg);<br>
+Go(n+1,3);<br>
+break;<br>
+case 1:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,0,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,0);<br>
+Mv(n,2,kg);<br>
+Go(n+1,2);<br>
+Mv(n,4,kg);<br>
+Go(n+1,4);<br>
+break;<br>
+case 2:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,1,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,1);<br>
+Mv(n,5,kg);<br>
+Go(n+1,5);<br>
+break;<br>
+case 3:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,0,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,0);<br>
+Mv(n,4,kg);<br>
+Go(n+1,4);<br>
+Mv(n,6,kg);<br>
+Go(n+1,6);<br>
+break;<br>
+case 4:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,1,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,1);<br>
+Mv(n,3,kg);<br>
+Go(n+1,3);<br>
+Mv(n,5,kg);<br>
+Go(n+1,5);<br>
+Mv(n,7,kg);<br>
+Go(n+1,7);<br>
+break;<br>
+case 5:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,2,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,2);<br>
+Mv(n,4,kg);<br>
+Go(n+1,4);<br>
+Mv(n,8,kg);<br>
+Go(n+1,8);<br>
+break;<br>
+case 6:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,3,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,3);<br>
+Mv(n,7,kg);<br>
+Go(n+1,7);<br>
+break;<br>
+case 7:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,4,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,4);<br>
+Mv(n,6,kg);<br>
+Go(n+1,6);<br>
+Mv(n,8,kg);<br>
+Go(n+1,8);<br>
+break;<br>
+case 8:<br>
+&nbsp;&nbsp;&nbsp; Mv(n,5,kg);<br>
+&nbsp;&nbsp;&nbsp; Go(n+1,5);<br>
+Mv(n,7,kg);<br>
+Go(n+1,7);<br>
+break;<br>
+}<br>
+<br>
+}<br>
+<br>
+void dayin(int n)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i,k;<br>
+cout&lt;&lt;n&lt;&lt;endl;<br>
+output&lt;&lt;n&lt;&lt;endl;<br>
+for(k=0;k&lt;=n;k++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; for(i=0;i&lt;9;i++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; if(i%3==0)output&lt;&lt;endl;<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;gz[k][i];<br>
+output&lt;&lt;gz[k][i];<br>
+}<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;endl;<br>
+output&lt;&lt;endl;<br>
+}<br>
+}</p>
+
+<p>　</p>
+</body>
+</html>

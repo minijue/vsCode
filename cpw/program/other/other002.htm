@@ -1,0 +1,282 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>如 何 从JAR 和ZIP 包 中 析 取Java 源 文 件 摘 要</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>如何从JAR和ZIP包中析取Java源文件</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.07</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>摘 要： <br>
+<br>
+将Java 源 文 件 打 包 成JAR 文 件， 可 以 减 少 下 载 时、 增 强 安 
+全 性 和 易 管 理 性。 本 文 将 讨 论 如 何 从JAR 文 件 中 提 取Java 
+源 文 件。 <br>
+<br>
+绝 大 多 数Java 程 序 员 非 常 善 于 利 用JAR 文 件 的 优 势 将 各 种 
+包 含Java 解 决 方 案 的 资 源 进 行 打 包。 面 对JAR 文 件， 人 们 
+询 问 的 一 个 普 遍 问 题 是：“ 我 何 从 一 个JAR 文 件 中 提 取 
+出 一 个 图 象 文 件 ？”。 本 文 将 回 答 这 个 问 题， 并 且 提 
+供 一 个Java 类， 它 可 以 容 易 地 从 一 个JAR 文 件 中 析 取 出 任 
+意 一 个 文 件。 <br>
+<br>
+加 载 一 个GIF 文 件<br>
+<br>
+假 设 我 们 有 一 个 包 含 一 些.GIF 图 象 文 件 的JAR 文 件， 这 些 
+图 象 文 件 将 在 应 用 程 序 中 被 使 用。 以 下 是 我 们 使 用 
+JarResources 类 从JAR 文 件 中 析 取 一 个 图 象 文 件 的 代 码： <br>
+<br>
+JarResources jar = new JarResources (&quot;Images.jar&quot;); <br>
+<br>
+Image logo = <br>
+<br>
+Toolkit.getDefaultToolkit().createImage (jar.getResource (&quot;logo.gif&quot;);<br>
+<br>
+上 面 代 码 的 含 义 是： 我 们 建 立 一 个JavaResources 对 象， 并 将 
+它 初 始 化 为 一 个 包 含 我 们 感 兴 趣 资 源 的JAR 文 件 -- 
+Images.jar。 然 后 我 们 使 用JavaResources 类 的getResource() 方 法 从logo.gif 
+取 出 原 始 数 据， 然 后 调 用AWT 工 具 箱 的createImage() 方 法 从 原 
+始 数 据 建 立 一 个Image 对 象 实 例。 <br>
+<br>
+有 关 命 名 的 注 释<br>
+<br>
+JarResource 是 一 个 相 当 容 易 理 解 的 例 子， 它 解 释 了 如 何 使 
+用Java 1.1 提 供 的 各 种 功 能 处 理JAR 和ZIP 压 缩 文 档 文 件。 <br>
+<br>
+关 于 命 名 的 的 简 单 解 释。Java 对 压 缩 文 档 的 支 持 实 际 上 
+起 源 于 使 用 一 般 的ZIP 压 缩 文 档 格 式。 因 此，Java 中 实 现 
+压 缩 档 案 操 作 的 类 都 被 放 入java.util.zip 包 中； 这 些 类 一 
+般 以“Zip .” 开 始。 但 是Java 升 级 到 了1.1 版 以 后， 压 缩 文 
+档 的 命 名 变 得 以Java 为 中 心 了。 从 此， 我 们 所 说 的JAR 压 
+缩 文 档 基 本 上 还 是zip 文 件。 <br>
+<br>
+代 码 具 体 的 工 作 流 程<br>
+<br>
+JavaResources 类 中 的 一 些 重 要 字 段 用 来 跟 踪 和 存 储 指 定JAR 
+文 件 的 内 容。 <br>
+<br>
+public final class JarResources {<br>
+<br>
+public boolean debugOn=false;<br>
+<br>
+private Hashtable htSizes=new Hashtable();<br>
+<br>
+private Hashtable htJarContents=new Hashtable();<br>
+<br>
+private String jarFileName;<br>
+<br>
+在 类 进 行 实 例 化 时 设 置JAR 的 文 件 名， 然 后 调 用init() 方 
+法 完 成 所 有 的 初 始 化 工 作。 <br>
+<br>
+public JarResources(String jarFileName) {<br>
+<br>
+this.jarFileName=jarFileName;<br>
+<br>
+init();<br>
+<br>
+}<br>
+<br>
+现 在，init() 方 法 把 指 定JAR 文 件 的 全 部 内 容 装 入 到 一 个 
+杂 凑 表(hashtable) 中( 杂 凑 表 名 可 以 从 资 源 名 进 行 访 问) <br>
+<br>
+init() 是 一 个 功 能 相 当 强 大 的 方 法， 让 我 们 来 逐 步 理 解 
+它 的 功 能。ZipFile 类 使 我 们 基 本 上 能 访 问JAR/Zip 压 缩 文 档 
+的 头 部 信 息。 这 和 一 个 文 件 系 统 的 目 录 信 息 相 似。 在 
+这 里 我 们 列 出Zip 文 件 的 所 有 条 目(entry)， 并 且 按 照 文 档 
+中 的 每 个 资 源 的 尺 寸 创 建htSizes 杂 凑 表(hashtable)。 <br>
+<br>
+private void init() {<br>
+<br>
+<br>
+try {<br>
+<br>
+ZipFile zf=new ZipFile(jarFileName);<br>
+<br>
+Enumeration e=zf.entries();<br>
+<br>
+while (e.hasMoreElements()) {<br>
+<br>
+ZipEntry ze=(ZipEntry)e.nextElement();<br>
+<br>
+if (debugOn) {<br>
+<br>
+System.out.println(dumpZipEntry(ze));<br>
+<br>
+}<br>
+<br>
+htSizes.put(ze.getName(),new Integer((int)ze.getSize()));<br>
+<br>
+}<br>
+<br>
+zf.close();<br>
+<br>
+下 一 步， 我 们 使 用ZipInputStream 类 访 问 压 缩 文 档。 ZipInputStream 
+类 完 成 了 所 有 的 工 作 以 使 我 们 能 读 出 压 缩 文 档 中 任 
+意 一 个 资 源。 我 们 从 包 含 每 个 资 源 的 压 缩 文 档 中 读 出 
+准 确 数 目 的 字 节， 并 将 它 们 存 储 在 一 个 可 由 资 源 名 访 
+问 的 htJarContents 杂 凑 表 中。 <br>
+<br>
+FileInputStream fis=new FileInputStream(jarFileName);<br>
+<br>
+BufferedInputStream bis=new BufferedInputStream(fis);<br>
+<br>
+ZipInputStream zis=new ZipInputStream(bis);<br>
+<br>
+ZipEntry ze=null;<br>
+<br>
+while ((ze=zis.getNextEntry())!=null) {<br>
+<br>
+if (ze.isDirectory()) {<br>
+<br>
+continue;<br>
+<br>
+}<br>
+<br>
+if (debugOn) {<br>
+<br>
+System.out.println(<br>
+<br>
+&quot;ze.getName()=&quot;+ze.getName()+&quot;,&quot;+&quot;getSize()=&quot;+ze.getSize()<br>
+<br>
+);<br>
+<br>
+}<br>
+<br>
+int size=(int)ze.getSize();<br>
+<br>
+// -1 means unknown size.<br>
+<br>
+if (size==-1) {<br>
+<br>
+size=((Integer)htSizes.get(ze.getName())).intValue();<br>
+<br>
+}<br>
+<br>
+<br>
+byte[] b=new byte[(int)size];<br>
+<br>
+int rb=0;<br>
+<br>
+int chunk=0;<br>
+<br>
+while (((int)size - rb) &gt; 0) {<br>
+<br>
+chunk=zis.read(b,rb,(int)size - rb);<br>
+<br>
+if (chunk==-1) {<br>
+<br>
+break;<br>
+<br>
+}<br>
+<br>
+rb+=chunk;<br>
+<br>
+}<br>
+<br>
+// add to internal resource hashtable<br>
+<br>
+htJarContents.put(ze.getName(),b);<br>
+<br>
+if (debugOn) {<br>
+<br>
+System.out.println(<br>
+<br>
+ze.getName()+&quot; rb=&quot;+rb+<br>
+<br>
+&quot;,size=&quot;+size+<br>
+<br>
+&quot;,csize=&quot;+ze.getCompressedSize()<br>
+<br>
+);<br>
+<br>
+}<br>
+<br>
+}<br>
+<br>
+} catch (NullPointerException e) {<br>
+<br>
+System.out.println(&quot;done.&quot;);<br>
+<br>
+} catch (FileNotFoundException e) {<br>
+<br>
+e.printStackTrace();<br>
+<br>
+} catch (IOException e) {<br>
+<br>
+e.printStackTrace();<br>
+<br>
+}<br>
+<br>
+}<br>
+<br>
+<br>
+注 意， 用 来 确 定 每 个 资 源 的 名 字 是 压 缩 文 档 中 资 源 的 
+实 际 路 径 名， 而 不 是 包(package) 中 类 的 名 字。 也 就 是 说， 
+java.util.zip 包 中 的ZipEntry 类 的 名 字 应 为“java/util/zip.ZipEntry ”， 
+而 不 是&quot;java.util.zip.ZipEntry&quot;。 <br>
+<br>
+这 段 代 码 最 后 一 个 重 要 部 分 是 一 个 简 单 测 试 程 序。 这 
+个 测 试 程 序 能 提 取 一 个 压 缩 文 档 名 和 资 源 名。 它 寻 找 
+压 缩 文 档 中 的 资 源 并 报 告 运 行 成 功 与 否。 <br>
+<br>
+public static void main(String[] args) throws IOException {<br>
+<br>
+if (args.length!=2) {<br>
+<br>
+System.err.println(<br>
+<br>
+&quot;usage: java JarResources &quot;<br>
+<br>
+);<br>
+<br>
+System.exit(1);<br>
+<br>
+}<br>
+<br>
+JarResources jr=new JarResources(args[0]);<br>
+<br>
+byte[] buff=jr.getResource(args[1]);<br>
+<br>
+if (buff==null) {<br>
+<br>
+System.out.println(&quot;Could not find &quot;+args[1]+&quot;.&quot;);<br>
+<br>
+} else {<br>
+<br>
+System.out.println(&quot;Found &quot;+args[1]+ &quot; 
+(length=&quot;+buff.length+&quot;).&quot;);<br>
+<br>
+}<br>
+<br>
+}<br>
+<br>
+} // End of JarResources class.<br>
+<br>
+现 在 你 知 道 怎 么 做 了。 这 个 易 于 使 用 的 类 隐 藏 了 所 有 
+使 用 压 缩 文 档 中 的 资 源 的 复 杂 实 现 细 节。 <br>
+<br>
+结 论<br>
+<br>
+如 果 你 急 于 想 知 道 怎 样 从 一 个JAR 压 缩 文 档 中 解 出 一 个 
+图 象， 那 么 现 在 你 已 拥 有 了 一 种 方 法。 你 不 仅 能 处 理 
+和JAR 文 件 相 关 的 图 象， 而 且 你 还 能 使 用 这 篇 文 章 提 供 
+了 新 类， 在JAR 中 的 任 何 资 源 上 表 演 你 的 解 压 魔 术。 <br>
+</p>
+</body>
+</html>

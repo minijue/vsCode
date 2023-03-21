@@ -1,0 +1,410 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">Visual Basic控制与Visual C++开发&nbsp;<br>
+      <br>
+                青岛建筑工程学院(266033) 吴曼 曾魁&nbsp;      
+      <p>&nbsp;&nbsp;&nbsp; Visual Basic 是一个易于掌握,方便灵活的 Windows可视化开发系统, 开放性是它的一个重要特点,可通过Visual Basic 控制来实现对Basic 语言的扩充。Visual Basic 控制既可以由Microsoft公司提供,也可以由其他软件开发者提供,如同利用封装了一些成员函数和数据成员的C++ 对象一样,为开发者提供许多方便。另外在界面设计中,许多三维Visual Basic 控制可方便地美化界面,节省大量开发工作。Visual C++ 的基础类库MFC提供CVBC ontrol 类,支持Visual Basic 控制,其AppStudio 支持Visual Basic 控制的使用和其属性的设置。另外Visual C++的 Class Wizard 也支持Visual Basic 控制的消息框架代码自动生成,为Visual C++开发者使用Visual Basic 控制提供了极大的方便。&nbsp;<br>
+      <br>
+      &nbsp;&nbsp;&nbsp; 可以把调用的Visual Basic 控制看成一个非常灵活的窗口,一些控制可以接收输入,但所有的控制都提供一些可见的输出。常用于描述Visual Basic 控制的概念是"方法","属性 " 和"事件"。Visual Basic 控制的"方法"与C++类成员函数非常类似,但这些方法被限制在预先定义好的集合之内。其中大多包括Ad-dItem,RemoveItem,Move和Refresh。Visual Ba sic 控制的属性相当于C++类数据成员,每一个Visual Basic控制都可以定义自己的属性集合。Visual C++的CVBControl 类成员函数GetFloatProperty,GetNumProperty,GetPictureProper-ty,GetStrProperty分别可用于获得Visual Basic 控制的<br> 
+      浮点属性值,整数属性值,图形属性值,字符串属性值。标准 Visual Basic 控制作为对事件的反应,会向对话框发送通知消息。在AppStudio中(假设已选中一个对话框)使用ClassWiz-ard,能自动在程序的主模块中产生对AfxRegisterVBXEvent的调用。登记一个指定名字的VB事件并返回一个识别此事件的单元,此函数通常使用一全程初始程序为信息映射定义VB事件。在主模块头文件中应包含相应的 extern 语句。例如我们在使用GRID控制中的SelChange事件,那么 Cla ss Wizard 会产生类似如下的消息入口代码:在类头文件中原型声明afx_msg void OnSe lChangeGrid(UINT, int, CWnd*, LPVOID);&nbsp;<br>
+      通过以下消息映射宏将函数和应用框架联系在一起:&nbsp;<br>
+      <br>
+      BEGIN_MESSAGE_MAP(CGridEntry, CFormView)&nbsp;<br>
+      ON_VBXEVENT(VBN_SELCHANGE, IDC_GRID, OnSelChangeGrid)&nbsp;<br>
+      END_MESSAGE_MAP()&nbsp;<br>
+      <br>
+      并在主程序模块头文件中生成: extern UINT NEAR VBN_SELCHANGE;&nbsp;<br>
+      在主程序模块CPP文件中生成:&nbsp;<br>
+      UINT NEAR VBN_SELCHANGE= AfxRegisterVBEvent("SELCHANGE");&nbsp;<br>
+      由于这些代码是借助工具产生的,在Visual C++中使用VB控制是方便&nbsp;<br>
+      有力的。下面主要谈谈在利用Visual C++ 基础类库开发编程中使用&nbsp;<br>
+      Visual Basic 控制的几个技巧:&nbsp;<br>
+      <br>
+      界面功能&nbsp;<br>
+      <br>
+      在VB 3.0 专业版中提供了一组三维Visual Basic 控制,在AppStudio中通过<br> 
+      File\Inc lude Controls命令装入 VB 3.0的控制后,便在AppStudio 工具箱<br> 
+      上添加了一些新的控制, 均可在对话框中使用,其中常用于界面设计的有以下<br> 
+      几个方面。&nbsp;<br>
+      <br>
+      Gange Control (标尺度量控制)&nbsp;<br>
+      <br>
+      类似于滚动条,可在界面设计中设置度量数据变化状态并显示,可作为一种动<br>
+      态显示方式替代滚动条。它通过picture属形显示不同的图形,如表盘形状态,<br>
+      温度计形状等。通过指针运动比较形象地显示数据的变化情况。&nbsp;<br>
+      <br>
+      三维旋钮(spin button control)&nbsp;<br>
+      <br>
+      该旋钮可作二维显示,也可作三维显示。用于替代滚动操作数据的输入及控制<br>
+      数据的变化。它不同于标尺度量控制,必须依靠与其他控制联系起来共同对数<br>
+      据进行控制和显示。&nbsp;<br>
+      <br>
+      键盘状态控制(key status control)&nbsp;<br>
+      <br>
+      该控制用于在应用程序的窗口中显示capslock,unlock,ins,scrolllock 的状态。&nbsp;<br>
+      <br>
+      三维控制 3D control&nbsp;<br>
+      <br>
+      VB三维控制提供了界面设计的立体效果,利用这些三维控制可很容易地制作出具<br>
+      有艺术效果的三维外观图形用户界面。其中三维检查框,单选钮和框架,类似于<br>
+      二维的属性,只有一些三维字体及阴影,网格及颜色等属性,提供给用户直接在属<br>
+      性窗口中设计其三维外观并观察其效果。&nbsp;<br>
+      <br>
+      改造Visual Basic 控制实例:&nbsp;<br>
+      <br>
+      1.GRID 控制&nbsp;<br>
+      <br>
+      GRID 控制包含一个可寻址单元的矩形阵列,程序设置其行列数及初始值,并且负<br> 
+      责从各个单元存取数据。运行时只能通过鼠标来选择一个或一组单元。由于用<br> 
+      户不能直接往单元上输入数据,与其说GRID是一种输入控制,不如说它是一种输<br> 
+      出控制。在Visual C++ 中对G RID控制进行改造,并封装于一个CEntryGrid类中,<br> 
+      实现类似电子表格一样的,可直接往单元中输入数据和键盘方向键控制单元焦点<br> 
+      转移等操作。GRID控制除了能够支持大多数标准Vi sual Basic控制的属性、事<br> 
+      件和方法之外,还具有一些独特的属性和事件,本篇中所用到的事件和属性如下:&nbsp;<br>
+      <br>
+      Col ( Row ) 数值属性,当前列(行)&nbsp;<br>
+      Cols ( Rows ) 数值属性,总列(行)数&nbsp;<br>
+      ColWidth ( RowHeigtht ) 数值(索引)属性,用逻辑twip 表示的列宽度(行高度)&nbsp;<br>
+      FixedCols ( FixedRows ) 数值属性,固定列(行)数&nbsp;<br>
+      Text 字符串属性,由Col 和Row所表示单元中的字符串&nbsp;<br>
+      SelStartCol ( SelEndCol ) 数值属性,选择起始(终止)列&nbsp;<br>
+      SelStartRow ( SelEndRow ) 数值属性,选择起始(终止)行&nbsp;<br>
+      SelChange事件, 当用户选中一个新的单元时,负责通知程序&nbsp;<br>
+      RowColChange 事件, 当单元的当前行列号改变时,负责通知程序&nbsp;<br>
+      <br>
+      2. CMyEdit 类:&nbsp;<br>
+      <br>
+      CMyEdit window 移动窗口类是CEdit的派生类,完成过滤所需的键盘信息给GRID<br> 
+      控制,其成员函数 ProcessKeys(UINT nChar) 先获取 GRID 控制的行列信息,再<br> 
+      根据nChar表示的键盘信息 ,相应地移动GRID 控制的单元焦点,这是CMyEdit类的<br> 
+      核心功能函数。重载了的成员函数 O nGetDlgCode()为编辑窗口选择一种特定种<br> 
+      类的输入风格:DLGC_WANTALLKEYS(接收所有的键盘输入)。成员函数OnKeyDown实<br> 
+      现当非系统键被按下时,过滤上下方向键 信息。成员函数 OnChar通过调用<br> 
+      ProcessKeys实现完成过滤所需的键盘信息给GRID控制。CMyEdit 类定义如下:&nbsp;<br>
+      <br>
+      class CMyEdit : public CEdit&nbsp;<br>
+      {&nbsp;<br>
+      public:&nbsp;<br>
+      BOOL ProcessKeys(UINT nChar);&nbsp;<br>
+      protected:&nbsp;<br>
+      afx_msg UINT OnGetDlgCode();&nbsp;<br>
+      afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);&nbsp;<br>
+      afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);&nbsp;<br>
+      DECLARE_MESSAGE_MAP()&nbsp;<br>
+      };&nbsp;<br>
+      //框架消息映射的实现&nbsp;<br>
+      BEGIN_MESSAGE_MAP(CMyEdit, CWnd)&nbsp;<br>
+      ON_WM_GETDLGCODE()&nbsp;<br>
+      ON_WM_KEYDOWN()&nbsp;<br>
+      ON_WM_CHAR()&nbsp;<br>
+      END_MESSAGE_MAP()&nbsp;<br>
+      UINT CMyEdit::OnGetDlgCode()&nbsp;<br>
+      {&nbsp;<br>
+      return CEdit::OnGetDlgCode() | DLGC_WANTALLKEYS;&nbsp;<br>
+      }&nbsp;<br>
+      void CMyEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)&nbsp;<br>
+      {&nbsp;<br>
+      if (nChar == VK_UP || nChar == VK_DOWN)&nbsp;<br>
+      ProcessKeys(nChar);&nbsp;<br>
+      else&nbsp;<br>
+      CEdit::OnKeyDown(nChar, nRepCnt, nFlags);&nbsp;<br>
+      }&nbsp;<br>
+      void CMyEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)&nbsp;<br>
+      {&nbsp;<br>
+      if (!ProcessKeys(nChar))&nbsp;<br>
+      CEdit::OnChar(nChar, nRepCnt, nFlags);&nbsp;<br>
+      }&nbsp;<br>
+      BOOL CMyEdit::ProcessKeys(UINT nChar)&nbsp;<br>
+      {&nbsp;<br>
+      //本移动窗口和GRID控制都是对话框的子窗口,先获取GRID控制的指针&nbsp;<br>
+      CGridEntry* pParent = (CGridEntry*) GetParent();&nbsp;<br>
+      CVBControl* pGrid = pParent-＞m_pGrid;&nbsp;<br>
+      //获取GRID控制的一些状态信息&nbsp;<br>
+      int nRow = (int)pGrid-＞GetNumProperty("Row");&nbsp;<br>
+      int nCol = (int)pGrid-＞GetNumProperty("Col");&nbsp;<br>
+      int nRows = (int)pGrid-＞GetNumProperty("Rows");&nbsp;<br>
+      int nCols = (int)pGrid-＞GetNumProperty("Cols");&nbsp;<br>
+      int nFirstRow = (int)pGrid-＞GetNumProperty("FixedRows");&nbsp;<br>
+      int nFirstCol = (int)pGrid-＞GetNumProperty("FixedCols");&nbsp;<br>
+      int nOldCol = nCol;&nbsp;<br>
+      switch (nChar)&nbsp;<br>
+      {&nbsp;<br>
+      case VK_TAB:&nbsp;<br>
+      // Shift + Tab 表示退后一列&nbsp;<br>
+      if (GetKeyState(VK_SHIFT) &amp; 0x8000) nCol--;&nbsp;<br>
+      else&nbsp;<br>
+      nCol++;&nbsp;<br>
+      break;&nbsp;<br>
+      case VK_RETURN:&nbsp;<br>
+      nCol++;&nbsp;<br>
+      break;&nbsp;<br>
+      case VK_UP:&nbsp;<br>
+      nRow--;&nbsp;<br>
+      break;&nbsp;<br>
+      case VK_DOWN:&nbsp;<br>
+      nRow++;&nbsp;<br>
+      break;&nbsp;<br>
+      default:&nbsp;<br>
+      return FALSE;&nbsp;<br>
+      }&nbsp;<br>
+      if (nCol ＞= nCols)&nbsp;<br>
+      // 移到GRID的右边时换下一行&nbsp;<br>
+      {&nbsp;<br>
+      nCol = nFirstCol;&nbsp;<br>
+      nRow++;&nbsp;<br>
+      }&nbsp;<br>
+      if (nCol ＜ nFirstCol) // 移到GRID的左边时换上一行&nbsp;<br>
+      {&nbsp;<br>
+      nCol = nCols - 1;&nbsp;<br>
+      nRow--;&nbsp;<br>
+      }&nbsp;<br>
+      if (nRow ＜ nFirstRow)&nbsp;<br>
+      // 移到GRID的上端时换下端&nbsp;<br>
+      nRow = nRows - 1;&nbsp;<br>
+      if (nRow ＞= nRows)&nbsp;<br>
+      // 移到GRID的下端时换上端&nbsp;<br>
+      nRow = nFirstRow;&nbsp;<br>
+      //设置移动后GRID的当前单元&nbsp;<br>
+      pParent-＞m_bEventLockout = (nCol != nOldCol); //only allow one change event&nbsp;<br>
+      pGrid-＞SetNumProperty("Row", nRow);&nbsp;<br>
+      pParent-＞m_bEventLockout = FALSE;&nbsp;<br>
+      pGrid-＞SetNumProperty("Col",nCol); // generate Row/Col change event&nbsp;<br>
+      return TRUE;&nbsp;<br>
+      }&nbsp;<br>
+      <br>
+      改造后的Grid 类CGridEntry :&nbsp;<br>
+      CGridEntry 类是CFormView的派生类,数据成员m_pGrid指向GRID控制,实现可直<br> 
+      接在GRID单元上输入的"电子表格"。m_edit是CMyEdit 类对象。成员函数<br> 
+      SizeToFit()用于调整编辑窗口大小,使其与网格单元一致。成员函数PositionEdit()<br> 
+      用于调整编辑窗口位置,接收新的输入焦点。函数FindCellPosition 实现根据网<br> 
+      格的行列号,返回单元的左上角坐标。&nbsp;<br>
+      今后使用CGridEntry 类,仅仅需在App studio 中定制&nbsp;<br>
+      class CGridEntry : public CFormView&nbsp;<br>
+      {&nbsp;<br>
+      DECLARE_DYNCREATE(CGridEntry)&nbsp;<br>
+      protected:&nbsp;<br>
+      CGridEntry();&nbsp;<br>
+      public:&nbsp;<br>
+      enum { IDD = IDD_GRIDENTRY };&nbsp;<br>
+      //对话框资源ID值&nbsp;<br>
+      CVBControl* m_pGrid;&nbsp;<br>
+      CMyEdit&nbsp;<br>
+      m_edit;&nbsp;<br>
+      public:&nbsp;<br>
+      BOOL&nbsp;<br>
+      m_bInitialized;&nbsp;<br>
+      protected:&nbsp;<br>
+      void SizeToFit();&nbsp;<br>
+      void PositionEdit();&nbsp;<br>
+      CPoint FindCellPosition(int nRow, int nCol);&nbsp;<br>
+      virtual void DoDataExchange(CDataExchange* pDX);&nbsp;<br>
+      virtual void OnInitialUpdate();&nbsp;<br>
+      // first time after construct&nbsp;<br>
+      afx_msg void OnRowColChangeGrid(UINT, int, CWnd*, LPVOID);&nbsp;<br>
+      afx_msg void OnChangeGridEdit();&nbsp;<br>
+      afx_msg void OnClickGrid(UINT, int, CWnd*, LPVOID);&nbsp;<br>
+      DECLARE_MESSAGE_MAP()&nbsp;<br>
+      };&nbsp;<br>
+      IMPLEMENT_DYNCREATE(CGridEntry, CFormView)&nbsp;<br>
+      BEGIN_MESSAGE_MAP(CGridEntry, CFormView)&nbsp;<br>
+      ON_VBXEVENT(VBN_ROWCOLCHANGE, IDC_GRID, OnRowColChangeGrid)&nbsp;<br>
+      ON_EN_CHANGE(IDC_GRIDEDIT, OnChangeGridEdit)&nbsp;<br>
+      ON_VBXEVENT(VBN_CLICK, IDC_GRID, OnClickGrid)&nbsp;<br>
+      END_MESSAGE_MAP()&nbsp;<br>
+      CGridEntry::CGridEntry(): CFormView(CGridEntry::IDD)&nbsp;<br>
+      {&nbsp;<br>
+      m_pGrid = NULL;&nbsp;<br>
+      m_bInitialized = FALSE;&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::OnInitialUpdate()&nbsp;<br>
+      // first time after construct&nbsp;<br>
+      {&nbsp;<br>
+      // 动态划分一个控件的子集,并使m_edit从属于CGridEntry对象&nbsp;<br>
+      m_edit.SubclassDlgItem(IDC_GRIDEDIT, this);&nbsp;<br>
+      CFormView::OnInitialUpdate();&nbsp;<br>
+      //设置GRID控制窗口的风格包含 WS_CLIPSIBLINGS风格&nbsp;<br>
+      HWND hWndGrid = m_pGrid-＞GetSafeHwnd();&nbsp;<br>
+      DWORD dwStyles = ::GetWindowLong(hWndGrid, GWL_STYLE);&nbsp;<br>
+      ::SetWindowLong(hWndGrid, GWL_STYLE, dwStyles | WS_CLIPSIBLINGS);&nbsp;<br>
+      if (!m_bInitialized)&nbsp;<br>
+      {&nbsp;<br>
+      m_bEventLockout = TRUE;&nbsp;<br>
+      int nRows = (int)m_pGrid-＞GetNumProperty("Rows");&nbsp;<br>
+      int nCols = (int)m_pGrid-＞GetNumProperty("Cols");&nbsp;<br>
+      char buf[80];&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Col", 0); //设置GRID的行号&nbsp;<br>
+      for (int nRow = 1; nRow ＜ nRows; nRow++)&nbsp;<br>
+      {&nbsp;<br>
+      wsprintf(buf, "%d", nRow);&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Row", nRow);&nbsp;<br>
+      m_pGrid-＞SetStrProperty("Text", buf);&nbsp;<br>
+      }&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Row", 0); //设置GRID的列号&nbsp;<br>
+      for (int nCol = 1; nCol ＜ nCols; nCol++)&nbsp;<br>
+      {&nbsp;<br>
+      wsprintf(buf, "%c", `A` + nCol - 1);&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Col", nCol);&nbsp;<br>
+      m_pGrid-＞SetStrProperty("Text", buf);&nbsp;<br>
+      }&nbsp;<br>
+      for (nRow = 1; nRow ＜ nRows; nRow++)&nbsp;<br>
+      {&nbsp;<br>
+      //在此添加初始GRID单元的代码&nbsp;<br>
+      }&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Row", 1);&nbsp;<br>
+      m_pGrid-＞SetNumProperty("Col", 1);&nbsp;<br>
+      // force edit to reposition&nbsp;<br>
+      m_bEventLockout = FALSE;&nbsp;<br>
+      }&nbsp;<br>
+      SizeToFit();&nbsp;<br>
+      PositionEdit();&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::DoDataExchange(CDataExchange* pDX)&nbsp;<br>
+      {&nbsp;<br>
+      CFormView::DoDataExchange(pDX);&nbsp;<br>
+      DDX_VBControl(pDX, IDC_GRID, m_pGrid);&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::OnRowColChangeGrid(UINT, int, CWnd*, LPVOID)&nbsp;<br>
+      {&nbsp;<br>
+      PositionEdit();&nbsp;<br>
+      }&nbsp;<br>
+      #define TWIPS_PER_INCH 1440&nbsp;<br>
+      void CGridEntry::SizeToFit()&nbsp;<br>
+      {&nbsp;<br>
+      m_pGrid-＞SetNumProperty("LeftCol", m_pGrid-＞GetNumProperty("FixedCols"));&nbsp;<br>
+      m_pGrid-＞SetNumProperty("TopRow", m_pGrid-＞GetNumProperty("FixedRows"));&nbsp;<br>
+      //ptSize 为GRID的逻辑尺寸&nbsp;<br>
+      CPoint ptSize = FindCellPosition((int)m_pGrid-＞GetNumProperty("Rows"),(int)<br> 
+      m_pGrid-＞GetNumProperty("Cols"));&nbsp;<br>
+      if (ptSize.x != (int)m_pGrid-＞GetNumProperty("Width") ||&nbsp;<br>
+      ptSize.y != (int)m_pGrid-＞GetNumProperty("Height"))&nbsp;<br>
+      {//GRID的大小与逻辑尺寸不一致时,调用Move 方法重新设置GRID的大小及尺寸&nbsp;<br>
+      CRect rect;&nbsp;<br>
+      rect.left = (int)m_pGrid-＞GetNumProperty("Left");&nbsp;<br>
+      rect.top&nbsp;<br>
+      = (int)m_pGrid-＞GetNumProperty("Top");&nbsp;<br>
+      rect.right = rect.left + ptSize.x;&nbsp;<br>
+      rect.bottom = rect.top + ptSize.y;&nbsp;<br>
+      m_pGrid-＞Move(rect);&nbsp;<br>
+      ptSize.x += 2 * rect.left;&nbsp;<br>
+      ptSize.y += 2 * rect.top;&nbsp;<br>
+      //设置滚动条&nbsp;<br>
+      SetScrollSizes(MM_TEXT, (CSize)ptSize);&nbsp;<br>
+      }&nbsp;<br>
+      }&nbsp;<br>
+      // 返回单元左上角的相对逻辑坐标,&nbsp;<br>
+      // 当 nRow == maxRow and nCol == maxCol 时,返回值即为GRID的大小&nbsp;<br>
+      CPoint CGridEntry::FindCellPosition(int nRow, int nCol)&nbsp;<br>
+      {&nbsp;<br>
+      ASSERT(nRow＞= 0 &amp;&amp; nRow ＜= m_pGrid-＞GetNumProperty("Rows"));&nbsp;<br>
+      ASSERT(nCol ＞= 0 &amp;&amp; nCol ＜= m_pGrid-＞GetNumProperty("Cols"));&nbsp;<br>
+      CPoint ptPos(0, 0);&nbsp;<br>
+      // Get left edge of requested cell by summing widths of previous cells&nbsp;<br>
+      int nLeftCol = (int)m_pGrid-＞GetNumProperty("LeftCol");&nbsp;<br>
+      int nLeftFix = (int)m_pGrid-＞GetNumProperty("FixedCols");&nbsp;<br>
+      for (int i = 0; i ＜ nCol; i++)&nbsp;<br>
+      {&nbsp;<br>
+      //累加列宽度&nbsp;<br>
+      if (i ＜ nLeftFix || i ＞= nLeftCol) // only count displayed cells&nbsp;<br>
+      ptPos.x += (int)m_pGrid-＞GetNumProperty("ColWidth", i);&nbsp;<br>
+      }&nbsp;<br>
+      // Get top edge of requested cell by summing Heights of previous cells&nbsp;<br>
+      int nTopRow = (int)m_pGrid-＞GetNumProperty("TopRow");&nbsp;<br>
+      int nTopFix = (int)m_pGrid-＞GetNumProperty("FixedRows");&nbsp;<br>
+      for (i = 0; i ＜ nRow; i++ i++)&nbsp;<br>
+      { //累加行高度&nbsp;<br>
+      if (i ＜ nTopFix || i ＞= nTopRow)&nbsp;<br>
+      // only count displayed cells&nbsp;<br>
+      ptPos.y += (int)m_pGrid-＞GetNumProperty("RowHeight", i);&nbsp;<br>
+      }&nbsp;<br>
+      // ptPos 为逻辑twips单位,需转变为点象素单位&nbsp;<br>
+      CClientDC dc(this);&nbsp;<br>
+      ptPos.x = MulDiv(ptPos.x, dc.GetDeviceCaps(LOGPIXELSX), TWIPS_PER_INCH);&nbsp;<br>
+      ptPos.y = MulDiv(ptPos.y, dc.GetDeviceCaps(LOGPIXELSY), TWIPS_PER_INCH);&nbsp;<br>
+      ptPos.x += nCol;&nbsp;<br>
+      // add one pixel per column for gap&nbsp;<br>
+      ptPos.y += nRow;&nbsp;<br>
+      // add one pixel per row&nbsp;<br>
+      for gap&nbsp;<br>
+      return ptPos;&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::PositionEdit()&nbsp;<br>
+      {&nbsp;<br>
+      //移动编辑窗口到适当位置,并从GRID单元取出文本添充当前编辑窗口&nbsp;<br>
+      int nRow = (int)m_pGrid-＞GetNumProperty("Row");&nbsp;<br>
+      int nCol = (int)m_pGrid-＞GetNumProperty("Col");&nbsp;<br>
+      CPoint ptPos = FindCellPosition(nRow, nCol);&nbsp;<br>
+      // ptPos为相对坐标需加上GRID的左上角坐标&nbsp;<br>
+      ptPos.x += (int)m_pGrid-＞GetNumProperty("Left");&nbsp;<br>
+      ptPos.y += (int)m_pGrid-＞GetNumProperty("Top");&nbsp;<br>
+      CClientDC dc(this);&nbsp;<br>
+      int nWidth= MulDiv((int)m_pGrid-＞GetNumProperty("ColWidth", nCol),&nbsp;<br>
+      (int)dc.GetDeviceCaps(LOGPIXELSX), TWIPS_PER_INCH) + 2;&nbsp;<br>
+      int nHeight= MulDiv((int)m_pGrid-＞GetNumProperty("RowHeight", nRow),&nbsp;<br>
+      (int)dc.GetDeviceCaps(LOGPIXELSY), TWIPS_PER_INCH) + 2;&nbsp;<br>
+      //移动编辑窗口位置及调整其大小,并添充当前编辑窗口&nbsp;<br>
+      m_edit.MoveWindow(ptPos.x, ptPos.y, nWidth, nHeight, TRUE);&nbsp;<br>
+      CString s = m_pGrid-＞GetStrProperty("Text");&nbsp;<br>
+      m_edit.SetWindowText(s);&nbsp;<br>
+      // Set to reflect cell`s data&nbsp;<br>
+      m_edit.ShowWindow(SW_SHOW);&nbsp;<br>
+      m_edit.SetSel(0, -1);&nbsp;<br>
+      m_edit.Invalidate();&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::OnChangeGridEdit()&nbsp;<br>
+      {&nbsp;<br>
+      CString str;&nbsp;<br>
+      BOOL bValid;&nbsp;<br>
+      int nValue = GetDlgItemInt(IDC_GRIDEDIT, &amp;bValid, TRUE);&nbsp;<br>
+      if (!bValid)&nbsp;<br>
+      return;&nbsp;<br>
+      // must be a valid int in order to copy.&nbsp;<br>
+      m_edit.GetWindowText(str);&nbsp;<br>
+      m_pGrid-＞SetStrProperty("Text", str);&nbsp;<br>
+      int nRow = (int)m_pGrid-＞GetNumProperty("Row");&nbsp;<br>
+      int nCol = (int)m_pGrid-＞GetNumProperty("Col");&nbsp;<br>
+      }&nbsp;<br>
+      void CGridEntry::OnClickGrid(UINT, int, CWnd*, LPVOID)&nbsp;<br>
+      {&nbsp;<br>
+      SizeToFit();&nbsp;<br>
+      PositionEdit();&nbsp;<br>
+      }      
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

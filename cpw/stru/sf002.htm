@@ -1,0 +1,153 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" width="100%">
+<TBODY>
+  <tr>
+    <td width="100%"><div align="center"><center><table border="0" cellspacing="2"
+    cellpadding="0" width="95%" style="font-size: 9pt">
+      <tr bgcolor="#CCFFCC">
+        <td><span style="font-size: 9pt">现在的位置是： <b><a href="mystru.htm">算法结构</a>--&gt;</b> 
+        </span>16色BMP格式图像的压缩算法的改进</td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+    </table>
+    </center></div><div align="center"><center><table border="1" width="95%"
+    style="font-size: 9pt" bgcolor="#E8E8E8" bordercolor="#C48C59" cellpadding="2">
+      <tr>
+        <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+        cellspacing="0" cellpadding="2">
+          <tr>
+            <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+            class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+            style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+      <tr>
+        <td width="100%"><p align="center"><strong>16色BMP格式图像的压缩算法的改进</strong></p>
+        <font face="宋体" lang="ZH-CN"><p align="center">　　颜士刚　孙浩军</p>
+        <p align="justify">　　摘要：</p>
+        <p align="justify">　　数据压缩技术一直是多媒体发展的瓶颈，提高图像压缩比无疑具有现实意义。本文对16色BMP图像的BI_RLE8压缩算法进行了改进，把压缩比提高到原来的 
+        4/3倍。并针对源图像文件和已压缩的图像文件给出了两种新的压缩算法描述。</p>
+        <p align="justify">　　　</p>
+        <p align="justify">　　关键词：图像 压缩 游程编码 算法改进 压缩比</p>
+        <p align="justify">　　随着WINDOWS95的推出，WINDOWS逐渐成为个人电脑使用最为广泛的操作系统，它已经成为PC机窗口系统的事实上的工业标准，由于BMP格式是WINDOWS环境中交换与图有关的数据的一种标准，因此BMP图像文件格式也越来越受到重视。WINDOWS支持的BMP图像的压缩格式有两种，BI_RLE8和BI_RLE4。本文对BI_RLE8的压缩算法进行了改进，改进后的压缩算法把压缩比提高了 
+        4/3。为了说明这个问题，我们有必要先来了解一下BMP图像文件的组成。</p>
+        <p align="justify">　　一、16色BMP格式图像文件的组成</p>
+        <p align="justify">　　16色BMP格式图像文件共有四部分组成：</p>
+        <p align="justify">　　１、文件头</p>
+        <p align="justify">　　这部分共14个字节。从这里我们可以得到文件的大小以及图像数据部分开始处的字节偏移。</p>
+        <p align="justify">　　２、图像头</p>
+        <p align="justify">　　这部分共40个字节。这儿都是有关图像性质的参数，如：图像的宽、高度像素值、压缩类型等等。</p>
+        <p align="justify">　　３、色彩对应表</p>
+        <p align="justify">　　这部分共64个字节。每种颜色分配四个字节，前三个字节分别表示该颜色的B、G、R值，第四个字节保留未用。图像存储时仅仅存的是这儿的颜色编号，从 
+        0--15。因此，仅用 4位二进制数就能够表示这16种颜色，一个字节能够存储两种颜色，高四位、低四位各一种。</p>
+        <p align="justify">　　４、数据</p>
+        <p align="justify">　　如果文件没有压缩，数据部分存储的是这16种颜色的编号。按照WINDOWS中图像的扫描顺序（从下到上从左到右）对像素的颜色进行存储，一个字节存储两个像素。如果文件是压缩文件，数据部分的内容会根据压缩格式的不同而不同。</p>
+        <p align="justify">　　二、BI_RLE8压缩算法</p>
+        <p align="justify">　　１、游程编码游程编码是一种非常简单的编码方法，它将数据流中连续出现的数据（称为游程）用该数据以及它连续出现的个数来表示。例如，假设有一段数据流是这样的：</p>
+        <p align="justify">　　… 0A0A0A0A0D0D0D0F0F0F0F0F0F0F …</p>
+        <p align="justify">　　经过游程编码后，该数据流可以表示为：</p>
+        <p align="justify">　　… 040A030D070F …</p>
+        <p align="justify">　　很显然，这种编码方法实现了数据的压缩。由于这种方法编码和解码的算法都非常简单，因此得到了广泛的应用。</p>
+        <p align="justify">　　２、BI_RLE8压缩过程</p>
+        <p align="justify">　　BI_RLE8 
+        这种压缩方法属于无损压缩类型。它根据图像的局部性原理，对图像文件的数据部分进行游程编码。具体压缩过程如下：</p>
+        <ol>
+          <li>　　打开待压缩的源图像文件以及目标文件，并把源文件的指针定位到文件的数据部分 
+          </li>
+        </ol>
+        <dir>
+          <p align="justify">　　(2) 
+          把源文件的数据部分读出来进行游程编码，然后，再把编码后形成的数据流写入目标文件。假如源图像文件的一段数据流如下：… 
+          EEEEEEEEEEEEEBBBBBBBBBBBBBBBBBBB … </p>
+          <p align="justify">　　(I)这段数据表示有13个连续像素的颜色编号均为 E，紧接着有19个连续像素的颜色编号均为 
+          B。经编码后，写入目标文件的数据流应为：</p>
+        </dir>
+        <p align="justify">　　… 0D0E130B … </p>
+        <p align="justify">　　(II)其中0D和13表示连续像素的个数，0E和0B则表示两个颜色编号。就这样，原来用16个字节表示的数据流，经过编码后，用 
+        4个字节就可以表示。这就是BI_RLE8的压缩思想。</p>
+        <p align="justify">　　(3) 关闭源文件和目标文件。</p>
+        <p align="justify">　　三、BI_RLE8压缩算法的不足及改进</p>
+        <p align="justify">　　１、不足</p>
+        <p align="justify">　　采用BI_RLE8压缩算法压缩16色BMP格式的图像的不足之处主要表现在压缩以后的数据还存在一定程度的浪费。让我们再来分析一下(II)式表示的数据流，第一、三两个字节表示连续像素的个数，从1--255都有可能，它们是不可预见的；第二、四两个字节表示像素的颜色编号，虽然它们的值也是不可预见的，但是颜色编号范围是从 
+        0--15，也就是说，颜色编号只占用了这两个字节的低四位，高四位全是 
+        0，没有利用起来，造成了压缩数据的浪费。这就是它的不足之处。</p>
+        <p align="justify">　　２、算法改进算法改进的关键是如何把表示颜色编号的那个字节的高四位利用起来。我们采用了如下处理方法：把两个相邻的颜色段看成一组，用三个字节就可以表示，第一个字节表示第一种颜色的连续像素个数，第二个字节表示第二种颜色的连续像素的个数，第三个字节的高四位存储的是第一种颜色的编号，低四位存储的是第二种颜色的编号，它是原来那两个表示颜色编号字节的合成（合成的方法见算法描述）。这样我们用三个字节就可以表示这个颜色段；而原算法却用了四个字节。从而，每一组都能节省一个字节，这样，改进后的压缩比就比原算法提高了4/3。例如，我们把（I）式表示的数据看成一组，就可以把它重新编码为：</p>
+        <p align="justify">　　... 0D13EB ... </p>
+        <p align="justify">　　(III)其中0D和第三个字节的高四位 E对应，13和第三个字节的低四位 
+        B对应。这样，对(I)式所表示的数据流，经过新的编码方法编码后，用(III)式所示的三个字节就能够表示出来，而使用BI_RLE8游程编码方法，只能压缩成(II)式所示的四个字节。显然，采用新的编码方法能够把压缩比提高 
+        4/3。</p>
+        <p align="justify">　　３、新算法的压缩过程</p>
+        <p align="justify">　　这种新算法可以对未压缩的源图像文件进行压缩，也可以压缩已经使用BI_RLE8 
+        压缩算法压缩过的16色BMP图像文件。下面我们就分别说明一下。</p>
+        <p align="justify">　　(1) 压缩源图像文件</p>
+        <p align="justify">　　压缩源图像文件是指把文件的数据流直接采用新的编码方法进行编码，编码形成的数据流组成压缩文件。它的压缩对象是未压缩过的源图像文件。压缩过程和BI_RLE8 
+        压缩算法的压缩过程基本类似。其中第一、三两步完全相同，第二步编码处理要复杂一些，把(I)式表示的数据流直接编码为(III)式。压缩算法如下：PackYuan(FILE 
+        *sf,FILE *df)/*sf和df分别表示指向源文件和目标文件的指针*/{sf=fopen(sfname,&quot;rb&quot;); 
+        df=fopen(dfname,&quot;wb&quot;);</p>
+        <p align="justify">　　fseek(sf,number,0);/*定位到数据部分,number表示偏移量*/<br>
+        　　temp=第一个像素的颜色值;<br>
+        　　do {ch=fread(sf);<br>
+        　　/*处理高字部分*/<br>
+        　　ch1=高字部分的颜色值;<br>
+        　　if(ch1==temp) count++;<br>
+        　　else /*改进部分即是下面这个if语句*/<br>
+        　　if(tag==FALSE) {c1=temp;ic1=count; tag=TRUE;} <br>
+        　　else {c2=temp;ic2=count;<br>
+        　　c1=c1&lt;&lt;4;c1=c1|c2;/*两色存到一个字节中*/<br>
+        　　fputc(ic1,df);fputc(ic2,df);fputc(c1,df);<br>
+        　　temp=ch1;count=1;tag=FALSE; <br>
+        　　}</p>
+        <p align="justify">　　/*处理低字部分，这部分处理和高字部分基本相同，故略去*/<br>
+        　　ch1=低字部分的颜色值;<br>
+        　　……<br>
+        　　}while(!feof(sf))<br>
+        　　fclose(sf); fclose(df);<br>
+        　　}</p>
+        <p align="justify">　　(2) 压缩已压缩过的图像文件</p>
+        <p align="justify">　　这里所说的已压缩的图像文件是专指采用BI_RLE8压缩算法压缩的16色BMP格式的图像文件，由于游程编码后的压缩数据还存在一定程度的浪费，所以我们要进行再压缩。压缩过程如下：</p>
+        <p align="justify">　　①打开待压缩的压缩文件和目标文件，把压缩文件的指针定位到数据部分。</p>
+        <p align="justify">　　②把压缩文件的数据流每四个字节划为一组，分成若干组，然后，对每组进行再编码。编码后形成的数据流再顺序写入目标文件。再编码就是把(II)式那样的数据流全部用(III) 
+        式的样子表达。这就实现了压缩文件的再压缩。</p>
+        <p align="justify">　　③关闭待压缩文件和目标文件。</p>
+        <p align="justify">　　压缩算法简述如下：PackYa(FILE sf, FILE df)/*sf和df分别表示指向源文件和目标文件的指针*/{</p>
+        <p align="justify">　　sf=fopen(sfname,&quot;rb&quot;); df=fopen(dfname,&quot;wb&quot;);<br>
+        　　fseek(sf,number,0);/*定位到数据部分,number表示偏移量*/<br>
+        　　do /*从待压缩的文件中读出一组数据*/<br>
+        　　{ count1=fread(sf); color1=fread(sf);<br>
+        　　count2=fread(sf); color2=fread(sf);<br>
+        　　/*利用color1的高四位,把color1和color2合成一个字节*/<br>
+        　　color1=color1&lt;&lt;4; color1=color1|color2;<br>
+        　　/*写入目标文件*/<br>
+        　　fputc(count1,df); fputc(count2,df);<br>
+        　　fputc(color1,df);<br>
+        　　}while(!feof(sf)) /*若文件未结束,转到do语句*/<br>
+        　　fclose(sf); fclose(df);<br>
+        　　}</p>
+        <p align="justify">　　参考文献：</p>
+        <ol>
+          <li>　　董士海、郑全战、徐曦、余晓萍编著&lt;&lt;图象格式编程指南&gt;&gt;，清华大学出版社，1994年4月 
+          </li>
+          <li>　　[2]黄荣怀、樊磊、张晓静编著&lt;&lt;多媒体技术基础&gt;&gt;，北京师范大学出版社，1996年2月</font></li>
+        </ol>
+        </td>
+      </tr>
+    </table>
+    </center></div></td>
+  </tr>
+</TBODY>
+</table>
+</body>
+</html>

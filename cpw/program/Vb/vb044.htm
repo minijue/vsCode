@@ -1,0 +1,216 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>软件完全手册</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progmenu.htm">编程技巧</a> --&gt; 
+      <a href="Vbidx099.htm">Visual Basic</a> --&gt;</b></span><b> </b><big>VB5.0调用Office97技巧</big></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">
+    <span style="FONT-FAMILY: 宋体; FONT-SIZE: 9pt; LETTER-SPACING: 1px; LINE-HEIGHT: 20px"><p
+    align="center" class="ourfont"></span><b><big>VB5.0调用Office97技巧</big></b> 
+    </p>
+    <p align="left" class="ourfont"><span
+    style="FONT-FAMILY: 宋体; FONT-SIZE: 9pt; LETTER-SPACING: 1px; LINE-HEIGHT: 20px"><font
+    color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;袁津生</font><br>
+    <br>
+    　　Visual Basic 5.0具有简单、易学等特点，深受初学者的欢迎，但也有一些不如人意的地方。例如，不能像Word  
+    97那样进行拼写检查，不能像Excel 97那样具有很多的函数。如果我们能将Word  
+    97和Exce l97的功能使用在Visual Basic 5.0中，就可以使VB达到锦上添花的目的。<br> 
+    <br> 
+    　　我们知道所有Office 97 应用程序都提供了ActiveX对象，我们可以在Visual  
+    Basic 5.0中使用它们。<br> 
+    <br> 
+    　　调用Word 97<br> 
+    <br> 
+    　　要想在VB中调用Word 97，首先要打开VB的“工程”菜单中的“引用”项目，并在该项目对话框中选定“Microsoft  
+    Word 8.0 Object Library”就可以了。<br> 
+    <br> 
+    　　下面我们举例说明调用Word 97中的“拼写检查”和“单词统计”功能。首先新建一个工程并在窗体上放置一个TextBox控件和两个CommandButton控件，然后添入如下的代码：<br> 
+    <br> 
+    　　 Option Explicit<br> 
+    <br> 
+    　　 Dim Doc As New Document <br> 
+    <br> 
+    　　 Dim Visi As Boolean<br> 
+    <br> 
+    　　图1 调用Word 97<br> 
+    <br> 
+    　　 ′拼写检查<br> 
+    <br> 
+    　　 Private Sub Command1－Click()<br> 
+    <br> 
+    　　 Form1.Caption = “拼写检查&quot;<br> 
+    <br> 
+    　　 Doc.Range.Text = Text1 <br> 
+    <br> 
+    　　′确定范围<br>
+    <br>
+    　　 Doc.Application.Visible = True ′将Word 97变为可见<br> 
+    <br> 
+    　　 AppActivate Doc.Application.Caption <br> 
+    <br> 
+    　　′激活Word 97<br> 
+    <br> 
+    　　 Doc.Range.CheckSpelling <br> 
+    <br> 
+    　　′拼写检查<br>
+    <br>
+    　　 Text1 = Doc.Range.Text<br> 
+    <br> 
+    　　 Text1 = Left(Text1, Len(Text1) － 1)<br> 
+    <br> 
+    　　 AppActivate Caption<br> 
+    <br> 
+    　　 End Sub<br> 
+    <br> 
+    　　 ′统计单词数<br> 
+    <br> 
+    　　 Private Sub Command2－Click()<br> 
+    <br> 
+    　　 Dim Dlg As Word.Dialog<br> 
+    <br> 
+    　　 Doc.Range = Text1.Text<br> 
+    <br> 
+    　　 Set Dlg = Doc.Application.Dialogs<br> 
+    <br> 
+    　　 (wdDialogDocumentStatistics)<br> 
+    <br> 
+    　　 Dlg.Execute ′统计单词和字符<br> 
+    <br> 
+    　　 Form1.Caption =“单词数:&quot; ＆ Str(Dlg.Words) ＆ “词&quot;<br> 
+    <br> 
+    　　 ＆ Str(Dlg.Characters) ＆ “字符&quot; ′显示统计结果<br> 
+    <br> 
+    　　 End Sub<br> 
+    <br> 
+    　　 Private Sub Form－Load()<br> 
+    <br> 
+    　　 Form1.Caption =“调用Word 97&quot;<br> 
+    <br> 
+    　　 Text1.Text = “&quot;<br> 
+    <br> 
+    　　 Command1.Caption = “拼写检查&quot;<br> 
+    <br> 
+    　　 Command2.Caption = “统计单词&quot;<br> 
+    <br> 
+    　　 ′使应用程序可见<br> 
+    <br> 
+    　　 Visi = Doc.Application.Visible<br> 
+    <br> 
+    　　 End Sub<br> 
+    <br> 
+    　　 ′关闭应用程序<br> 
+    <br> 
+    　　 Private Sub Form－Unload(Cancel As Integer)<br> 
+    <br> 
+    　　 If Visi Then ′关闭文件<br> 
+    <br> 
+    　　 Doc.Close savechanges:=False<br> 
+    <br> 
+    　　 Else<br> 
+    <br> 
+    　　 Doc.Application.Quit savechanges:=False ′关闭 Word 97<br> 
+    <br> 
+    　　 End If<br> 
+    <br> 
+    　　 End Sub<br> 
+    <br> 
+    　　 运行中的窗体如图1所示。<br> 
+    <br> 
+    <br> 
+    <br> 
+    　　图2 调用Excel 97<br> 
+    <br> 
+    　　调用Excel 97<br> 
+    <br> 
+    　　使用Excel Sheet对象的技术可以处理可变数量的数据，并将结果最后送到你的Visual  
+    Basic 应用程序中。例子如下：<br> 
+    <br> 
+    　　新建一个工程并在新建的窗体上放置两个TextBox控件和一个CommandButton控件及六个Label控件。建设中的窗体如图2所示。<br>
+    <br>
+    　　程序代码如下：<br>
+    <br>
+    　　 Option Explicit<br> 
+    <br> 
+    　　 Private Sub Command1－Click()<br> 
+    <br> 
+    　　 Dim xObject As Object<br> 
+    <br> 
+    　　 ′调用Excel 97<br> 
+    <br> 
+    　　 Set xObject = CreateObject(“Excel.Sheet&quot;)<br> 
+    <br> 
+    　　 Set xObject = xObject.Application.ActiveWorkbook.ActiveSheet<br> 
+    <br> 
+    　　 xObject.Range(“A1&quot;).Value = Text1.Text ′将数值送入Excel 97的A1单元格<br> 
+    <br> 
+    　　 xObject.Range(“A2&quot;).Value = Text2.Text ′将数值送入Excel 97的A2单元格<br> 
+    <br> 
+    　　 xObject.Range(“A3&quot;).Formula = “=MAX(A1,A2)&quot; ′将最大值送入A3单元格<br> 
+    <br> 
+    　　 xObject.Range(“A4&quot;).Formula = “=ATAN(A1/A2)＊180/PI()&quot; ′将反正切值送入A4单元格<br> 
+    <br> 
+    　　 ′显示计算的结果<br> 
+    <br> 
+    　　 Label1.Caption = xObject.Range(“A3&quot;).Value<br> 
+    <br> 
+    　　 Label2.Caption = xObject.Range(“A4&quot;).Value<br> 
+    <br> 
+    　　 Set xObject = Nothing<br> 
+    <br> 
+    　　 End Sub<br> 
+    <br> 
+    　　 Private Sub Form_Load()<br> 
+    <br> 
+    　　 Text1.Text = “&quot;<br> 
+    <br> 
+    　　Text2.Text = “&quot;<br> 
+    <br> 
+    　　Label1.Caption = “&quot;<br> 
+    <br> 
+    　　Label2.Caption = “&quot;<br> 
+    <br> 
+    　　End Sub<br> 
+    <br> 
+    　　该程序的作用是：首先在两个文本框（Text1和Text2）输入数值并分别将输入的数值送入Excel  
+    97的“A1”和“A2”单元格中，然后用Excel 97中的“Max()”函数将计算的结果送入“A3”  
+    单元格中；用反正切函数“ATAN()”进行计算并将结果送入“A4”  
+    单元格中，最后输出。</span> 
+      <p>　</p> 
+    </td> 
+  </tr> 
+</table> 
+</center></div> 
+ 
+<p align="center">　</p> 
+</body> 
+</html> 

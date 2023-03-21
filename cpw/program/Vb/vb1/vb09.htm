@@ -1,0 +1,94 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">用VB将命令行软件Windows化<br>
+      <br>
+                           刘强    
+      <p><br>
+      &nbsp;&nbsp;&nbsp; 有很多深受欢迎的软件，如ARJ,UNDISK等都是在DOS环境下以命令行的形式出现的。其特点就是依靠大量的参数和开关变量来实现其丰富的功能。利用Visual Basic可以简单地把此类软件改写成WINDOWS版本，其中大量的开关参数可用菜单、列表框、组合框和复选框等一一映射成图形界面。而命令的调用。可以用VB提供的SHELL函数，其语法为：<br> 
+      <br> 
+        shell（命令字符串[，窗口风格]）<br> 
+      <br> 
+    如以下VB小程序：<br> 
+      <br> 
+        Sub Command3D1_Click ()<br> 
+      <br> 
+        Dim x<br> 
+      <br> 
+        x = Shell("c:	oolsarj.exe a a:demo c:demo*.*")<br> 
+      <br> 
+        End Sub<br> 
+      <br> 
+    但使用SHELL函数 会出现WINDOWS界面和DOS黑色界面的突然切换，显得不美观。如何解决这个问题呢？使用WINDOWS的API函数WinExec,可以在隐含的窗体中启动应用程序，使命令行程序完全在后台执行。下面给出一例，将ARJ完全WINDOWS化，其效果完全可以乱真。<br> 
+      <br> 
+        Sub Command1_Click ( )<br> 
+      <br> 
+        Dim cmd As String<br> 
+      <br> 
+        Dim hWnd As Integer<br> 
+      <br> 
+        cmd = "c:dosARJ.pif " &amp; list1.Text &amp; " -" &amp; LIST2.Text &amp;<br> 
+      " " &amp; text2.Text &amp; " " &amp; text1.Text ’list1、list2输入参数，text1,text2输入文件路径<br> 
+      <br> 
+        hWnd = WinExec(cmdline, 0) ’参数为0则隐藏窗体<br> 
+      <br> 
+        If HWND &lt; 32 Then ’hWin&lt;32则启动应用程序失败<br> 
+      <br> 
+        MsgBox "error!"<br> 
+      <br> 
+        Exit Sub<br> 
+      <br> 
+        End If<br> 
+      <br> 
+        While GetModuleUsage(HWND%)<br> 
+      <br> 
+        mousepointer = 11 ‘鼠标呈沙漏状<br> 
+      <br> 
+        WAIT% = DoEvents()<br> 
+      <br> 
+        Wend<br> 
+      <br> 
+        mousepointer = 1 ’鼠标复原为箭头<br> 
+      <br> 
+        End Sub<br> 
+      <br> 
+      &nbsp;&nbsp;&nbsp; 在此例中，笔者使用了WINDOWS的PIF编辑器将ARJ.EXE编辑成ARJ.PIF,是因为类似ARJ这样的软件是以全屏方式执行的，而WINEXEC函数只能隐藏以窗体方式运行的程序。在编辑PIF文件时显示方式选择“窗口”，执行方式选择“后台”，这样就解决了上面提到的界面突换的问题。而调用API函数GetModuleUsage以获得应用程序结束的标志，若运行完毕则返回TRUE，若未运行完毕则让出CPU控制权，为运行ARJ提供时机。这样的小程序完全可以实现命令行软件的WINDOWS化，而且运行起来真假难辨，有兴趣的读者不妨试一试。    
+    </td>    
+  </tr>    
+</table>    
+</center></div>    
+
+</body>
+
+</html>

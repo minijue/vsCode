@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>CGI简明教程五</title>
+</head>
+
+<body background="../../res/back.JPG">
+
+<table border="0" width="100%" height="60" cellspacing="0" cellpadding="0"
+style="font-size: 9pt">
+  <tr>
+    <td width="86%" height="54"><p align="center"><em>CGI简明教程五<br>
+    </em></p>
+    <p align="left">服务器与CGI程序交换信息的协作方式是通过环境变量实现的。无论什么请求，CGI程序总能在特定位置找到某些信息。无论环境变量怎样定义，总有一些变量有着特定含义。<br>
+    环境变量是一写保存用户信息的内存区。例如，所有的机器都有一个PATH环境变量，当在当前目录找布道文件时就要查找PATH变量。当服务器收到一个请求后，它首先要收集它能得到的所有相关信息，并把它放入内存。那么，服务器要收集什么信息呢？</p>
+    <p>关于服务器自身的详细信息<br>
+    关于用户的信息信息<br>
+    关于用户请求的信息</p>
+    <p align="left">服务器不知道CGI程序到底需要那些信息，所以它把这些信息一起收集，那么如果有什么重要的东西就不会遗漏了。<br>
+    为了向你展示服务器收集那些环境变量，在上一期的教程里我已经为各位写了一个程序，该程序将几乎所有的信息都反映在了浏览器里。所以在进一步学习变量的时候，请首先把程序调试好。</p>
+    <p align="left">环境变量<br>
+    1.与服务器相关的环境变量</p>
+    <table border="1" width="100%">
+      <tr>
+        <td width="50%">GATEWAY_INTERFACE</td>
+        <td width="50%">服务器遵守的CGI版本</td>
+      </tr>
+      <tr>
+        <td width="50%">SERVER_NAME</td>
+        <td width="50%">服务器的IP或名字</td>
+      </tr>
+      <tr>
+        <td width="50%">SERVER_PORT</td>
+        <td width="50%">主机的端口号</td>
+      </tr>
+      <tr>
+        <td width="50%">SERVER_SOFTWARE</td>
+        <td width="50%">服务器软件的名字</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+
+<p><a href="default.html" tppabs="http://202.96.217.5/~xiaoyi/default.html">返回CGI目录 
+</a></p>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（五）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （五）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计 —— ASP 篇 （五）<font
+    size="-1"> </p>
+    <p align="right"></font><span style="font-family: 宋体; font-size: 9pt">作者 ： 天 
+    骄 创 作 室　书 生 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 本 文 上 两 篇 
+    中，我 们 学 习 了 脚 本 语 言 VBScript 的 变 量、函 数、过 程 和 条 
+    件 语 句，本 篇 将 继 续 给 大 家 介 绍 VBScipt 的 循 环 语 句，并 
+    对 脚 本 语 言 在 ASP 中 的 应 用 加 以 总 结。&nbsp; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">如 果 有 人 告 诉 你 学 习 
+    ASP 不 需 要 任 何 编 程 知 识，那 么 他 错 了；如 果 我 告 诉 你 
+    学 习 ASP 必 须 掌 握 一 门 编 程 语 言，那 么 我 错 了。ASP 动 态 
+    服 务 器 页 面 环 境 的 特 点 就 在 于 它 是 通 过 一 种 或 几 种 
+    脚 本 语 言 而 写 成 的，脚 本 语 言 可 以 看 作 是 编 程 语 言 的 
+    简 化 版，它 易 于 学 习 和 掌 握，这 给 广 大 动 态 网 站 的 设 
+    计 者 们 提 供 了 相 当 大 的 便 利。可 以 这 么 说 : 脚 本 语 言 
+    运 用 的 得 当 与 否 直 接 关 系 到 ASP 应 用 程 序 的 优 与 劣。继 
+    上 一 篇 我 们 学 习 了 脚 本 语 言 VBScript 的 函 数 和 条 件 语 句 
+    后，今 天 我 们 继 续 来 看 看 VBScript 中 的 循 环 语 句。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 循 环 语 句 的 作 用 
+    就 是 重 复 执 行 程 序 代 码，循 环 可 分 为 三 类：一 类 在 条 
+    件 变 为“假”之 前 重 复 执 行 语 句，一 类 在 条 件 变 
+    为“真”之 前 重 复 执 行 语 句，另 一 类 按 照 指 定 的 次 数 重 
+    复 执 行 语 句。在 VBScript 中 可 使 用 下 列 循 环 语 句： <br>
+    　 　Do...Loop: 当（或 直 到）条 件 为“真”时 循 环。 <br>
+    　　 While...Wend: 当 条 件 为“真”时 循 环。 <br>
+    　　 For...Next: 指 定 循 环 次 数，使 用 计 数 器 重 复 运 行 语 
+    句。 <br>
+    　　 For Each...Next: 对 于 集 合 中 的 每 项 或 数 组 中 的 每 个 元 
+    素，重 复 执 行 一 组 语 句。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 我 们 先 来 看 看 
+    Do...Loop，它 是 可 以 多 次（次 数 不 定）运 行 语 句 块。当 条 件 
+    为“真”时 或 条 件 变 为“真”之 前，重 复 执 行 语 句 块。请 
+    看 下 例： 　　&lt; html&gt;&lt; head&gt;<br>
+    　　&lt; title&gt;DoLoop.asp&lt; /title&gt;&lt; body bgcolor=&quot;#FFFFFF&quot;&gt;&lt; 
+    /head&gt;&lt; p&gt;&lt; /p&gt;<br>
+    &lt; p&gt; 请 将 今 年 到 本 月 为 止 的 每 个 月 份 的 销 售 结 算 记 
+    录 填 写 在 本 页 之 上。&lt; P&gt;<br>
+    　　&lt; %<br>
+    　　counter = 1<br>
+    thismonth = month(now())<br>
+    Do while counter &lt; thismonth + 1<br>
+    response.write &quot; &quot; &amp; counter &amp; &quot; 月 份 : &quot;<br>
+    response.write &quot;______________________________&quot; &amp; &quot;&lt; BR&gt;&lt; 
+    br&gt;&quot;<br>
+    If counter &gt;13 then<br>
+    　　exit do<br>
+    　　end if<br>
+    　　counter = counter+1<br>
+    Loop<br>
+    　　%&gt;<br>
+    　　&lt; hr&gt;&lt; /body&gt;&lt; /html&gt;<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 这 段 ASP 程 序 运 用 
+    循 环 语 句 制 作 了 一 张 销 售 结 算 记 录 表，将 以 上 代 码 剪 
+    贴 至 记 事 簿 保 存 为 DoLoop.asp，并 在 浏 览 器 中 以 HTTP 方 式 进 
+    行 浏 览，根 据 当 前 的 月 份 的 不 同，你 将 看 到 如 下 图 的 
+    结 果。 <br>
+    <img src="images/asp5a.gif" WIDTH="200" HEIGHT="102"> <br>
+    　 　 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　我 们 来 分 析 一 下 此 
+    段 程 序，我 们 的 目 的 是 要 根 据 当 前 的 月 份 打 印 一 张 表 
+    格，首 先 我 们 建 立 一 个 计 数 器“count”并 将 其 值 设 为 1，然 
+    后 我 们 用 函 数 month() 和 now() 得 到 当 前 的 月 份，最 后 建 立 
+    循 环，当 count 的 值 小 于 当 前 月 份 的 值 加 1 的 时 候，即 显 
+    示 月 份 值 及 一 条 横 线 并 将 count 的 值 加 1，循 环 语 句 重 复 
+    执 行 直 到 以 上 条 件 为 假 时 退 出 循 环。其 中 如 果 count 大 
+    于 13 则 用 exit do 立 即 退 出 循 环。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　Do Loop 语 句 还 可 以 使 
+    用 以 下 语 法： </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　Do </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　[statements][Exit Do] </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　[statements]Loop [{While | 
+    Until} condition] </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 While...Wend 语 句 是 为 
+    那 些 熟 悉 其 用 法 的 用 户 提 供 的。但 是 由 于 While...Wend 缺 少 
+    灵 活 性，所 以 建 议 最 好 使 用 Do...Loop 语 句。下 面 我 们 来 看 
+    看 For Next 语 句。For...Next 语 句 用 于 将 语 句 块 运 行 指 定 的 次 
+    数，在 循 环 中 使 用 计 数 器 变 量，该 变 量 的 值 随 每 一 次 
+    循 环 增 加 或 减 少。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 的 示 例 将 过 
+    程 MyProc 重 复 执 行 50 次。For 语 句 指 定 计 数 器 变 量 x 及 其 起 
+    始 值 与 终 止 值。Next 语 句 使 计 数 器 变 量 每 次 加 1。 　　 Sub 
+    DoMyProc50Times()<br>
+    　　 Dim x<br>
+    　　 For x = 1 To 50<br>
+    　　 MyProc<br>
+    　　 Next<br>
+    　　 End Sub<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 关 键 字 Step 用 于 指 
+    定 计 数 器 变 量 每 次 增 加 或 减 少 的 值。在 下 面 的 示 例 
+    中，计 数 器 变 量 j 每 次 加 2。循 环 结 束 后，total 的 值 为 2、4、6、8 
+    和 10 的 总 和。 　　 Sub TwosTotal()<br>
+    　　 Dim j, total<br>
+    　　 For j = 2 To 10 Step 2<br>
+    　　 total = total + j<br>
+    　　 Next<br>
+    　　 MsgBox &quot; 总 和 为 &quot; &amp; total &amp; &quot;。&quot;<br>
+    　　 End Sub<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 要 使 计 数 器 变 量 
+    递 减，可 将 Step 设 为 负 值。此 时 计 数 器 变 量 的 终 止 值 必 
+    须 小 于 起 始 值。在 下 面 的 示 例 中，计 数 器 变 量 myNum 每 次 
+    减 2。循 环 结 束 后，total 的 值 为 16、14、12、10、8、6、4 和 2 的 
+    总 和。　　 Sub NewTotal()<br>
+    　　 Dim myNum, total<br>
+    　　 For myNum = 16 To 2 Step -2<br>
+    　　 total = total + myNum<br>
+    　　 Next<br>
+    　　 MsgBox &quot; 总 和 为 &quot; &amp; total &amp; &quot;。&quot;<br>
+    　　 End Sub<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Exit For 语 句 用 于 在 
+    计 数 器 达 到 其 终 止 值 之 前 退 出 For...Next 语 句。因 为 通 常 
+    只 是 在 某 些 特 殊 情 况 下（例 如 在 发 生 错 误 时）要 退 出 
+    循 环，所 以 可 以 在 If...Then...Else 语 句 的 True 语 句 块 中 使 用 
+    Exit For 语 句。如 果 条 件 为 False，循 环 将 照 常 运 行。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 最 后，让 我 们 来 看 
+    看 For Each...Next 语 句 ,For Each...Next 循 环 与 For...Next 循 环 类 似。For 
+    Each...Next 不 是 将 语 句 运 行 指 定 的 次 数，而 是 对 于 数 组 中 
+    的 每 个 元 素 或 对 象 集 合 中 的 每 一 项 重 复 一 组 语 句。这 
+    在 不 知 道 集 合 中 元 素 的 数 目 时 非 常 有 用。它 的 语 法 如 
+    下： 　　 For Each element In group<br>
+    　　 [statements]<br>
+    　　 [Exit For]<br>
+    　　 [statements]Next [element]<br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 如 果 group 中 有 至 少 
+    一 个 元 素，就 会 进 入 For Each 块 执 行。一 旦 进 入 循 环，便 首 
+    先 对 group 中 第 一 个 元 素 执 行 循 环 中 的 所 有 语 句。只 要 
+    group 中 还 有 其 他 的 元 素，就 会 对 每 个 元 素 执 行 循 环 中 
+    的 语 句。当 group 中 没 有 其 他 元 素 时 退 出 循 环，然 后 从 Next 
+    语 句 之 后 的 语 句 继 续 执 行。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 至 此，我 们 已 经 完 
+    成 了 对 脚 本 语 言 VBScript 所 有 的 基 本 知 识 的 学 习，但 是 仅 
+    凭 阅 读 现 有 的 这 几 篇 文 章 你 是 无 法 熟 练 运 用 VBScript 
+    的，你 必 须 通 过 不 断 的 实 践 来 提 高 自 己 的 等 级。当 
+    然，如 果 你 熟 悉 C，你 也 可 以 选 择 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 JavaScript 来 作 为 ASP 应 
+    用 程 序 的 脚 本 语 言。不 知 大 家 有 没 有 发 现 ASP 程 序 的 调 
+    试 比 较 困 难，因 为 没 有 什 么 现 成 的 工 具，在 这 里 我 向 
+    大 家 简 要 介 绍 一 下 Microsoft Script Debugger，我 们 可 以 运 用 它 
+    来 进 行 一 定 量 的 程 序 调 试 工 作。IIS4.0 所 包 括 的 Microsoft 
+    Script Debugger（Script 侦 错 工 具），提 供 脚 本 程 序 的 侦 错 功 
+    能。您 可 以 使 用 Microsoft Script 侦 错 工 具 来 进 行 对 使 用 
+    VBScript、JScript 编 写 的 脚 本 程 序，以 及 Java applets、beans 和 ActiveX 
+    组 件 的 侦 错 工 作。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 有 的 脚 本 程 序 在 
+    用 户 端 浏 览 器 执 行，有 的 脚 本 程 序（&lt; % … %&gt; 中 的 部 
+    份）在 服 务 器 端 执 行。Microsoft Script Debugger，可 以 侦 错 用 户 
+    端 执 行 的 脚 本 程 序 以 及 服 务 器 端 执 行 脚 本 程 序。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 用 户 端 浏 览 器 
+    执 行 的 脚 本 程 序 是 在 用 户 端 的 浏 览 器 当 中 执 行，包 括 
+    在 标 准 HTML 代 码 中 的 VBScript、Jscript 部 份。在 浏 览 器 载 入 此 
+    HTML 代 码 或 譬 如 按 下 按 钮 触 发 事 件 时，将 执 行 此 包 括 脚 
+    本 程 序 的 HTML 代 码。用 户 端 浏 览 器 执 行 的 脚 本 程 序，主 
+    要 用 于 对 HTML 表 单 输 入 的 基 本 检 查 等 功 能。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 服 务 器 端 执 行 
+    的 脚 本 程 序 是 在 IIS 服 务 器 端 执 行，包 括 在 .asp 程 序 
+    中。先 在 IIS 服 务 器 上 执 行，执 行 结 果 产 生 标 准 的 HTML 代 
+    码，再 传 送 到 用 户 端 浏 览 器。服 务 器 端 执 行 的 脚 本 程 
+    序，主 要 用 于 多 个 网 页 之 间 的 连 结，HTML 表 单 输 入 的 处 
+    理，以 及 存 取 服 务 器 上 数 据 库 的 资 料 等。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Microsoft Script Debugger 提 
+    供 以 下 的 除 错 功 能： </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、设 定 中 断 点 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、逐 步 追 踪 脚 本 
+    程 序。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 3、设 定 书 签。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 4、检 视 呼 叫 堆 叠。 
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 5、检 视 和 更 改 变 
+    数 值。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 6、执 行 脚 本 指 令。 
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 从 下 一 篇 开 始，我 
+    们 将 开 始 学 习 ASP 的 内 建 对 象，敬 请 关 注。 </span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

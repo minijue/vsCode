@@ -1,0 +1,219 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VB的API编程精粹（二）</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" bordercolor="#DED8CD" width="100%">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> VB的API编程精粹（二）</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 9pt"></span></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong><span style="font-size: 9pt">VB的API编程精粹（二）</span></strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td style="font-size: 9pt">在上篇的中我们介绍了API编程的基础知识和一些比较“酷”的API调用，这期我们将配合专题介绍关于注册表编程的API函数及其应用实例，使读者朋友何能够将前面学到的注册表知识推广到VB编程中，继续向VB高手迈进（路漫漫……）。当然，上期说过要介绍更“酷”的API调用，可不能食言，后半部分介绍的平面工具条的生成定会使您的程序更“炫”！<br>
+    <strong>一. 注册表的API编程</strong><br>
+    &nbsp;&nbsp; 
+    关于注册表的知识相信您通过前面专题的介绍已经有了较深入的了解。系统有六个预定义好的关键字，这六个关键字是用户或系统访问注册表的入口点。我们常用到的只有前四个关键字。而在编程时我们一般用到只是HKEY_CURRENT_USER和HKEY_LOCAL_MACHINE这两个关键字，因为与应用程序相关的数据存在于这两个关键字下。<br>
+    &nbsp;&nbsp; 
+    许多商品化的软件或专业化的软件在您的机器上首次安装的时候都会通过改写注册表来完成软件的正确安装运行，梦想成为编程高手的你当然需要掌握读写注册表这一技术。利用好注册表会为您的应用程序增色不少。<br>
+    &nbsp;&nbsp; 虽然VB本身提供了四个关于注册表的函数GetSetting，SaveSetting、GetAllSettings、DeleteSetting（这四个函数的使用比较简单读者可以参考VB的联机帮助），但是这四个函数只能在“HKEY_CURRENT_USER\Software\VB 
+    and VBA ProgramSettings”下读取、删除、修改键值。对于一般的应用程序利用它们可以达到您的目的，对于特殊的要求利用它们就显的无能为力了。下面举一个例子说明它们的局限性。<br>
+    &nbsp;&nbsp; 熟悉DOS操作系统的读者都知道，可以编写一个“Autoexec.bat”的批处理文件来实现某一个应用程序在系统启动的时候自动运行，在Win95中我们可以把应用程序的快捷方式放到系统的启动组中来达到同样的效果。但是，假如我需要在我的应用程序首次安装以后就能自动达到这种效果，那该如何呢？其实，注册表中提供了三个这样的键：<br>
+    &nbsp;&nbsp; HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run<br>
+    &nbsp;&nbsp; HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce<br>
+    &nbsp;&nbsp; HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunServices<br>
+    这三个键字的区别是：<br>
+    &nbsp;&nbsp; Run：此键字下的应用程序在系统启动的时候会自动运行；<br>
+    &nbsp;&nbsp; RunOnce：此键字下的应用程序在系统下一次启动的时候会自动运行，以后不再运行；<br>
+    &nbsp;&nbsp; RunServices：功能和“Run”一样，只是应用程序被启动的时候不同而已。<br>
+    &nbsp;&nbsp; 
+    现在您一定知道该如何利用注册表达到您的要求了。实际上许多安装软件在安装向导完成后要您重新启动才能完成最终的安装。它就是把安装向导所需做的最后工作的程序写到“RunOnce”下实现的。但是，若只利用VB本身的那四个函数显然是无法实现此功能的。笔者在实践中通过调用API函数很好地解决了VB本身访问注册表的局限性，并把它做成了一个类模块。所以调用起来非常方便。由于篇幅有限我只能从中抽取一部分来讲，这一部分也是可以独立运行的。读者想要完整的源代码请与我联系（yue_xiang@263.net）。<br>
+    下面是应该放到您的模块中的声明部分代码：<br>
+    Option Explicit<br>
+    '注册表的入口常量<br>
+    Public Const HKEY_CLASSES_ROOT = &amp;H80000000<br>
+    Public Const HKEY_CURRENT_USER = &amp;H80000001<br>
+    Public Const HKEY_LOCAL_MACHINE = &amp;H80000002<br>
+    Public Const HKEY_USERS = &amp;H80000003<br>
+    '注册表的访问权限常量<br>
+    Public Const KEY_QUERY_VALUE = &amp;H1<br>
+    Public Const KEY_SET_VALUE = &amp;H2<br>
+    Public Const KEY_CREATE_SUB_KEY = &amp;H4<br>
+    Public Const KEY_ENUMERATE_SUB_KEYS = &amp;H8<br>
+    Public Const KEY_NOTIFY = &amp;H10<br>
+    Public Const KEY_CREATE_LINk = &amp;H20<br>
+    Public Const KEY_ALL_ACCESS = &amp;H3F<br>
+    '打开/建立键值的可选项常量<br>
+    Public Const REG_OPTION_NON_VOLATILE = 0&amp;<br>
+    Public Const REG_OPTION_VOLATILE = &amp;H1<br>
+    '建立新键或打开已存在的键常量<br>
+    Public Const REG_CREATED_NEW_KEY = &amp;H1<br>
+    Public Const REG_OPENED_EXISTING_KEY = &amp;H2<br>
+    '预先定义的访问注册表的权限常量<br>
+    Public Const STANDARD_RIGHTS_ALL = &amp;H1F0000<br>
+    Public Const SPECIFIC_RIGHTS_ALL = &amp;HFFFF<br>
+    'API的返回代码常量<br>
+    Public Const ERROR_SUCCESS = 0&amp;<br>
+    Public Const ERROR_ACCESS_DENIED = 5<br>
+    Public Const ERROR_NO_MORE_ITEMS = 259<br>
+    '返回数值类型常量<br>
+    Public Const REG_NONE = (0)<br>
+    Public Const REG_SZ = (1)<br>
+    Public Const REG_EXPAND_SZ = (2)<br>
+    Public Const REG_BINARY = (3)<br>
+    Public Const REG_DWORD = (4)<br>
+    PubliC ConSt REG_DWORD_LITTLE_ENDIAN = (4)<br>
+    Public Const REG_DWORD_BIG_ENDIAN = (5)<br>
+    Public Const REG_LINK = (6)<br>
+    Public Const REG_MULTI_SZ = (7)<br>
+    Public Const REG_RESOURCE_LIST = (8)<br>
+    Public Const REG_FULL_RESOURCE_DESCRIPTOR = (9)<br>
+    Public Const REG_RESOURCE_REQUIREMENTS_LIST = (10)<br>
+    '访问注册表的API函数要用到的结构类型<br>
+    Type SECURITY_ATTRIBUTES<br>
+    nLength As Long<br>
+    lpSecurityDescriptor As Long<br>
+    bInheritHandle As Boolean<br>
+    End Type<br>
+    Type FILETIME <br>
+    dwLowDateTime As Long<br>
+    dwHighDateTime As Long<br>
+    End Type<br>
+    '要用到的API函数声明<br>
+    ………… <br>
+    （鉴于篇幅这里只介绍一下各API的作用而不再一一列其声明；相关声明请读者查阅API浏览器）<br>
+    下面简单地介绍一下这几个API：<br>
+    &nbsp;&nbsp; RegOpenKeyEx()：打开指定的关键字（32位）；<br>
+    &nbsp;&nbsp; RegSetValueEx()：在打开的注册表关键字的值域中存储数据；<br>
+    &nbsp;&nbsp; RegCloseKey():释放指定的关键字的句柄；<br>
+    &nbsp;&nbsp; RegQueryValueEx()：在注册表中查找与您指定的键值相关的值；<br>
+    &nbsp;&nbsp; RegCreateKeyEx()：建立并打开指定的关键字，若已存在则打开它；<br>
+    &nbsp;&nbsp; RegEnumKeyEx()：枚举指定的打开注册表关键字的子关键字（32位）；<br>
+    &nbsp;&nbsp; RegEnumKey()：同上功能一样，区别在于它是16位的；<br>
+    &nbsp;&nbsp; RegEnumValue()：每次调用枚举指定的打开注册表关键字的值复制一个带索引的值的名称和数据块；<br>
+    &nbsp;&nbsp; RegDeletekey():删除一个关键字以及它的子关键字；<br>
+    &nbsp;&nbsp; RegDeleteValue()：在指定的注册表关键字中删除一个带名字的值。<br>
+    &nbsp;&nbsp; 通过调用这些API我们可以轻松实现注册表的任意关键字的读取、查询、建立、删除。笔者在这里只打算介绍一下如何建立和删除一个特定的关键字。其它操作读者可以自己去发挥。<br>
+    &nbsp;&nbsp; 例如：要在HKEY_LOCAL_MACHINE\Network下建一个“MyApi”子键并在它的下面建立一个称为“yx”的值域，把它的值设为“yue1975”。我们应该按如下的方法调用API：<br>
+    &nbsp;&nbsp; Dim phkResult As Long '保存建立的关键字句柄<br>
+    &nbsp;&nbsp; Dim IResult As Long<br>
+    &nbsp;&nbsp; Dim SA As SECURITY_ATTRIBUTES<br>
+    &nbsp;&nbsp; Dim 1Create As Long<br>
+    &nbsp;&nbsp; '建立一个指定的关键字<br>
+    &nbsp;&nbsp; caII 
+    RegCreateKeyEx(HKEY_LOCAL_MACHINE,&quot;Network\MyApi&quot;,0,&quot;&quot;,REG_OPTION_NON_VOLATILE, 
+    _<br>
+    &nbsp;&nbsp; KEY_ALL_ACCESS,SA,phkResult,1Create)<br>
+    &nbsp;&nbsp; 
+    1Result=RegSetValueEx(phkResult,&quot;yx&quot;,0,REG_SZ,&quot;yue1975&quot;,Clng(Len(&quot;yue1975&quot;)+1))<br>
+    &nbsp;&nbsp; '关闭关键字<br>
+    &nbsp;&nbsp; RegCloseKey phkResult<br>
+    现在用注册表编辑器去查看一下注册表，一定生成了您所需的键值。<br>
+    再例如：现在我想把刚才建立的键值删掉，那您只需如下调用即可：<br>
+    &nbsp;&nbsp; dim success as long<br>
+    &nbsp;&nbsp; sucess=RegDeleteKey(HKEY_LOCAL_MACHINE,&quot;Network\MyApi&quot;)<br>
+    <strong>二. 用API生成平面工具条</strong><br>
+    &nbsp;&nbsp; 相信许多VB爱好者都曾千方百计地想使自己的工具条像Word97中的工具条一样COOL起来。往往我们不得不去借用别人做好的ActiveBar控件，这样先不说自己的程序变得大了，而且说实话那个控件并不好用。笔者在用VC5编程的时候用基类函数SendMessageLong()、FindWindowEx()轻松实现了这种COOL的效果。受此启发在VB5中调用这两个API也实现了同样的效果。下面是源代码：<br>
+    把以下程序加到您的模块中：<br>
+    '----------------------<br>
+    '常量声明<br>
+    '----------------------<br>
+    Public Const WM_USER = &amp;H400<br>
+    '用户自定义消息的起点<br>
+    Public Const TB_SETSTYLE = WM_USER + 56<br>
+    '设置工具条风格消息<br>
+    Public Const TB_GETSTYLE = WM_USER + 57<br>
+    '取得工具条风格消息<br>
+    Public Const TBSTYLE_FLAT = &amp;H800<br>
+    '使工具条COOL起来<br>
+    Public Const TBSTYLE_TOOLTTPS = &amp;H100<br>
+    Public Const TBSTYLE_WRAPABLE = &amp;H200<br>
+    Public Const TBSTYLE_ALTDRAG = &amp;H400<br>
+    Public Const TBSTYLE_LIST = &amp;H1000<br>
+    Public Const TBSTYLE_CUSTOMERASE = &amp;H2000<br>
+    '-----------------<br>
+    'API函数声明<br>
+    '-----------------<br>
+    Public Declare Function SendMessageLong Lib &quot;user32&quot; Alias 
+    &quot;SendMessageA&quot; (ByVal hwnd As Long,<br>
+    ByVal wMsg As Long,ByVal wParam As Long,ByVal 1Param As Long) As Long<br>
+    Public Declare Function FindWindowEx Lib &quot;user32&quot; Alias 
+    &quot;FindWindowExA&quot; (ByVal hWnd1 As Long,<br>
+    ByVal hWnd2 As Long,ByVal 1psz1 As String,ByVal 1psz2 As String) As Long<br>
+    '-----------------------<br>
+    '通用生成平面工具条过程<br>
+    '入口:工具条的名字<br>
+    '-----------------------<br>
+    Public Sub FlatBar(ByVal tb As Toolbar)<br>
+    Dim style As Long<br>
+    Dim hToolbar As Long<br>
+    Dim r As Long<br>
+    '获的工具条窗口句柄<br>
+    hToolbar = FindWindowEx(tb.hwnd,0&amp;,&quot;ToolBarWindow32&quot;,vbNullString)<br>
+    '获的当前工具条的风格<br>
+    style = SendMessageLong(hToolbar,TB_GETSTYLE,0&amp;, 0&amp;)<br>
+    If style And TBSTYLE_FLAT Then<br>
+    &nbsp; style = style Xor TBSTYLE_FLAT<br>
+    Else<br>
+    &nbsp; style = style or TBSTYLE_FLAT<br>
+    End If<br>
+    '设置工具条的平面风格<br>
+    r=SendMessageLong(hToolbar,TB_SETSTYLE,0, style)<br>
+    tb.Refresh<br>
+    End Sub<br>
+    过程FlatBar()的调用方法：<br>
+    1 . 在你的窗体上添加Toolbar控件（命名为：myTB）和ImageList控件。按通常的方法一样在ImageList中播入几个图标并和Toolbar绑定建立一个平常的工具条。<br>
+    2 . 在窗体的Load()事件中调用FlatBar()<br>
+    Call FlatBar(myTB)<br>
+    3. 运行，您的工具条一定COOL起来了。</td>
+  </tr>
+  <tr>
+    <td width="100%"><hr>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">中国程序员网站版权所有</td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

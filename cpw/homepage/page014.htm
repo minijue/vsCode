@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>ASP编写的字计数器</title>
+</head>
+
+<body bgcolor="#8080C0">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="home_idx1.htm">主页制作</a> 
+    --&gt; </b></span><font color="#000000">ASP编写的字计数器</font></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><strong><font color="#000000">ASP编写的字计数器</font></strong></p>
+    <p>　　这是ASP编写的一个最简单的计数器,把他存到你的服务器上的可执行目录,每刷新一次,他就自动加一,<br>
+    当然,你较贪心让他加2 也可以。不过，服务器关掉，他又从0开始，若想让他永远计数，那得让他自动<br>
+    判断服务器关闭事件，自动写入硬盘。那要多学一写 ASP 
+    和更多的脚本编程才行了！！</p>
+    <p>&lt;%<br>
+    Dim NumVisits <br>
+    NumVisits=0<br>
+    Application(&quot;NumVisits&quot;) = Application(&quot;NumVisits&quot;) + 1<br>
+    Application.Unlock<br>
+    %&gt;<br>
+    &lt;p&gt;欢迎光临本网页，您是第&lt;%= Application(&quot;NumVisits&quot;) %&gt; 
+    个访问者!&lt;/p&gt;<br>
+    </td>
+  </tr>
+</table>
+</center></div>
+
+<p>　　　　　　　　　<font size="5" color="#0000FF"><strong> 　　　</strong></font></p>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>利 用IE 控 件 访 问Internet</title>
+</head>
+
+<body style="font-size: 9pt" background="../../res/back.JPG">
+
+<table border="0" width="100%" style="font-size: 9pt">
+  <tr>
+    <td width="100%" align="center"><strong>利用IE控件访问Internet</strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">文/陈锐 录入/江湖小子</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center">1999.08.07</td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"></td>
+  </tr>
+</table>
+
+<p>这 里 向 大 家 介 绍 另 外 一 种 方 法： 利 用IE3.X 提 供 的 控 件 
+编 程 访 问。 <br>
+<br>
+IE 控 件 <br>
+如 果 机 器 中 安 装 了IE3.X， 在VB5.0 的 控 件（Component） 列 表 窗 
+口 中 就 会 有 一 个 名 为Microsoft Internet Controls 的 控 件， 选 取 该 
+控 件， 并 将 它 加 到Form 中。 <br>
+该 控 件 有 以 下 几 个 重 要 的 方 法: <br>
+<br>
+GoHome ： 装 入IE 设 定 的 起 始 页。 <br>
+用 法: object.GoHome <br>
+<br>
+Navigate : 装 入 页 面。 <br>
+用 法: object.Navigate url <br>
+url 为URL 地 址， 如&quot;http://www.microsoft.com&quot; <br>
+<br>
+GoBack : 返 回 上 一 个 页 面。 <br>
+用 法: object.GoBack <br>
+<br>
+GoForward: 进 入 下 一 个 页 面。 <br>
+用 法: object.GoForward <br>
+<br>
+Stop : 停 止 载 入 页 面。 <br>
+用 法: object.Stop <br>
+该 控 件 有 以 下 重 要 事 件: <br>
+BeforNavigate Event: 在 每 次 装 入 页 面 前 调 用， 声 明 如 下： <br>
+Private Sub object_BeforeNavigate(ByVal URL As String, ByVal Flags As Long, ByVal 
+TargetFrameName As String, PostData As Variant, ByVal Headers As String, Cancel As 
+Boolean) <br>
+其 中 的URL 参 数 为 将 要 装 入 的 页 面 地 址。 <br>
+<br>
+StatusTextChang Event: 每 次 浏 览 器 的 操 作 状 态 改 变 时 调 用， 声 
+明 如 下： <br>
+Private Sub WebBrowser1_StatusTextChange(ByVal Text As String) <br>
+Text: 浏 览 器 的 操 作 状 态。 <br>
+访 问 方 法 <br>
+下 面 介 绍 如 何 通 过 编 程 实 现 对WWW 的 访 问。 <br>
+在Form 中 添 加Microsoft Internet Control 控 件 显 示 页 面。 <br>
+在Form 中 添 加4 个CommandButton 控 件,Name 属 性 分 别 为:GoButton、BackButton、ForwardButton、StopButton， 
+用 这4 个CommandButton 可 以 实 现 对 浏 览 器 的 操 作。 <br>
+在Form 中 添 加 一 个TextBox 控 件, 用 来 输 入 和 显 示 当 前 的 页 
+面 地 址。 <br>
+在Form 中 添 加Label 控 件, 用 来 显 示 当 前 浏 览 器 操 作 状 态。 <br>
+程 序 如 下:<br>
+Private Sub BackButton_Click()<br>
+' 返 回 上 一 个 页 面<br>
+WebBrowser1.GoBack<br>
+End Sub<br>
+<br>
+Private Sub Form_Load()<br>
+' 程 序 装 入 后 进 入IE 设 定 的 起 始 页<br>
+WebBrowser1.GoHome<br>
+End Sub<br>
+<br>
+Private Sub Form_Resize()<br>
+' 改 变 窗 口 大 小 后 同 时 改 变 控 件 的 大 小<br>
+WebBrowser1.Width = Form1.ScaleWidth<br>
+WebBrowser1.Height = Form1.ScaleHeight - 900<br>
+Label1.Width = Form1.ScaleWidth<br>
+Label1.Top = Form1.ScaleHeight - 300<br>
+End Sub<br>
+<br>
+Private Sub ForwardButton_Click()<br>
+' 进 入 下 一 个 页 面<br>
+WebBrowser1.GoForward<br>
+End Sub<br>
+<br>
+Private Sub GOButton_Click()<br>
+' 浏 览 输 入 的 页 面<br>
+WebBrowser1.Navigate (Text1.Text)<br>
+End Sub<br>
+<br>
+Private Sub StopButton_Click()<br>
+' 停 止 浏 览<br>
+WebBrowser1.Stop<br>
+End Sub<br>
+<br>
+Private Sub Text1_KeyPress(KeyAscii As Integer)<br>
+' 浏 览 输 入 的 页 面<br>
+If KeyAscii = 13 Then<br>
+WebBrowser1.Navigate (Text1.Text)<br>
+End If<br>
+End Sub<br>
+<br>
+Private Sub WebBrowser1_BeforeNavigate<br>
+(ByVal URL As String, ByVal Flags As Long, <br>
+ByVal TargetFrameName As String, PostData As Variant,<br>
+ByVal Headers As String, Cancel As Boolean)<br>
+' 将 当 前 显 示 的 页 面 的URL 地 址 显 示 在Text1 上<br>
+Text1.Text = URL<br>
+End Sub<br>
+<br>
+Private Sub WebBrowser1_StatusTextChange(ByVal Text As String)<br>
+'Label1 显 示 当 前 页 面 装 入 情 况<br>
+Label1.Caption = Text<br>
+End Sub <br>
+该 程 序 在Win95、VB5.0 下 运 行 通 过。<br>
+<br>
+</p>
+</body>
+</html>

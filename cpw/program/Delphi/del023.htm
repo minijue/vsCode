@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是：<a href="../progidx.htm"> <b>编程技巧 
+      </b></a> <b> --&gt; <a href="Del_idx.htm">delphi</a></b></span></td>    
+  </tr>    
+</table>    
+</center></div><div align="center"><center>    
+    
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"    
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">    
+  <tr>    
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"    
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"    
+    bordercolordark="#FFFFFF">    
+      <tr>    
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font    
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"    
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>    
+      </tr>    
+    </table>    
+      <p align="center">用Delphi制作欢迎屏幕    
+      <p align="center">                           （山东　许振华）    
+      <p>　　大家对WIN95的欢迎屏幕可能都很熟悉了，安装完毕后第一次启动WIN95时就会出现欢迎屏幕，提供一些信息，而且很好的一个功能是提供了许多WIN95的使用技巧。如果用户对WIN95熟悉了，就可以将“下次启动时显示此屏幕” 前的复选框不选择，那么以后启动时就不再出现欢迎屏幕了，这种欢迎屏幕在其他一些软件中也有使用。本文给出一种用Delphi实现的方法，你也可以在自己的程序中实现这种功能了。<br> 
+      　　这种欢迎屏幕应具有的特点是：1.每次启动时提示一条使用技巧，按“下一条”按钮可显示下一条技巧，下次启动程序时显示的技巧应是本次最后显示技巧的下一条，这样才能提供给用户新技巧而不是已看过的技巧。2.用户不想使用时欢迎屏幕要能关闭它，以后需要使用时应能再恢复它。<br>
+      　　第一步，制作欢迎屏幕中需要使用的技巧文件<br>
+      　　这种文件一般采用文本文件，每条技巧占用一行，简明扼要，不宜太长。可用记事簿等来编写，注意若一行写不下应由记事簿自动换行，不可用硬回车换行。对于如何让程序知道下次是否出现欢迎屏幕，我们可采用一种简单的方法来实现：在技巧文件的第一行写下标志TRUE或者FALSE，如果为TRUE说明欢迎屏幕是激活的，下面的程序注释将说明如何切换状态。下面就开始制作欢迎程序，设计思路见程序详细注释。<br>
+      　　第二步，制作程序的主界面<br>
+      　　本文目的是做欢迎屏幕，所以本程序没任何实际功能，主要是为了给大家一个完整的示例。在窗体FORM1中添加两个命令按钮：Button1、Button2，Caption属性分别为“欢迎屏幕开关”、“退出”。在窗体的代码单元UNIT1中写如下代码：<br>
+      　　在private部分添加如下语句：<br>
+      　　Tips:TStringList;//用来读取技巧文件中的技巧<br>
+      　　在窗体的onshow事件中写如下代码：<br>
+      　　procedure TForm1.FormShow(Sender: TObject);<br> 
+      　　begin<br>
+      　　Tips:=TStringList.Create;<br>
+      　　//读取技巧文件中的技巧<br>
+      　　Tips.LoadFromFile(`C:myprog	ip.txt`);<br> 
+      　　//如果第一条技巧内容为TRUE,说明欢迎屏幕是处于激活状态，那么就显示欢迎屏幕，<br>
+      　　//并且将<br>
+      　　 if Tips[0]=`True`<br> 
+      　　 then form2.showmodal;<br> 
+      　　end;<br>
+      　　 双击命令按钮Button1写如下代码：<br> 
+      　　procedure TForm1.Button1Click(Sender:TObject);<br> 
+      　　begin<br>
+      　　//将欢迎屏幕显示出来，供用户选择下次是否出现欢迎屏幕<br>
+      　　form2.show;<br>
+      　　end;<br>
+      　　 双击命令按钮Button2写如下代码：<br> 
+      　　procedure TForm1.Button2Click(Sender: TObject);<br> 
+      　　begin<br>
+      　　close; //关闭程序<br> 
+      　　end;<br>
+      　　第三步，制作欢迎屏幕窗体。在窗体中放置一个面板Panel1，在面板中放置一个小图片，比如一个灯泡或一个问号，在图片旁边放置一个标签Label1，标题为“你知道吗？”，再在面板中标签Label1下方放置一个标签（名字TIP）用来显示技巧信息。在面板的下方放置一个复选框，供用户选择是否在下次启动时使用欢迎屏幕，Caption属性为“每次启动时显示此屏幕”，NAME属性：OnStartup。在窗体中再放置两个按钮，name=Okbtn, caption=“ok”，name=Nextbtn, caption=“下一条技巧”。欢迎屏幕的界面参见本文的附图。下面是程序代码<br> 
+      　　在private部分添加如下语句：<br>
+      　　Tips: TStringList; //用来读取技巧文件中的技巧<br> 
+      　　“下一条技巧”按钮的事件代码：<br>
+      　　procedure TForm2.NextBtnClick(Sender: TObject);<br> 
+      　　begin<br>
+      　　//显示下一条技巧，循环显示<br>
+      　　Tips.Move(1, Tips.Count － 1);<br> 
+      　　 Tip.Caption := Tips[1];<br> 
+      　　end;<br>
+      　　“OK”按钮的代码：<br>
+      　　procedure TForm2.OKBtnClick(Sender: TObject);<br> 
+      　　begin<br>
+      　　//如果复选框选中，那么将一条信息置为True，否则置为False<br>
+      　　if OnStartup.Checked<br> 
+      　　 then Tips[0] :=`True`<br> 
+      　　 else Tips[0]:=`False`;//将下次要显示的技巧放在第二行（第一行为显示标志）<br> 
+      　　 Tips.Move(1, Tips.Count － 1);<br> 
+      　　//保存当前的设置，下次有效<br>
+      　　 Tips.SaveToFile(`c:myprog	ip.txt`);<br> 
+      　　 Tips.Free;<br> 
+      　　 Close;<br> 
+      　　end;<br>
+      　　//欢迎窗体的ONSHOW代码：<br>
+      　　procedure TForm2.FormShow(Sender: TObject);<br> 
+      　　begin<br>
+      　　Tips := TStringList.Create;<br> 
+      　　 Tips.LoadFromFile(`c:myprog	ip.txt`);<br> 
+      　　//显示技巧，显示欢迎屏幕的设定标志<br>
+      　　 Tip.Caption := Tips[1];<br> 
+      　　 if Tips[0]=`True`<br> 
+      　　 then OnStartup.Checked := True<br> 
+      　　 else OnStartup.Checked := False;<br> 
+      　　end;<br>
+      　　第四步，保存和运行。运行此程序时，会有一个提示，大意是将UNIT2包含到UNIT1中，选择YES，则会在UNIT1中的implementation部分自动添加代码uses Unit2; 
+      如果没有错误的话就会看到欢迎屏幕了，当然你的tip.txt文件的第一行最初必须是True，再试一试其他的功能吧。<br>
+      　　本程序在Delphi 3.0、WIN9X下调试通过。     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+ 
+</body> 
+ 
+</html> 

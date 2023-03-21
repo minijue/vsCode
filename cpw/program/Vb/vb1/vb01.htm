@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://person.zj.cninfo.net/~yao/document/vb/vb002.HTM -->
+<HTML><HEAD><TITLE>Visual Basic 的数据库编程</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR></HEAD>
+<BODY background="">
+<DIV align=center>
+<CENTER>
+<TABLE border=0 width="90%">
+  <TBODY>
+  <TR>
+    <TD width="100%">　
+      <P align=center>Visual Basic 的数据库编程</P>
+      <P align=center>□孙志刚</P>
+      <HR>
+
+      <P>　　Visual 
+      Basic作为应用程序的开发“利器”也表现在数据库应用程序的开发上，它良好的界面和强大的控件功能使数据库编程变得简单多了。但即便如此，数据库应用程序的开发仍然算得上是VB编程中的难点，这是因为你不仅要熟悉VB中关于数据库编程方面的知识（当然这是十分简单的）还要了解数据库的知识。所以我们先介绍一下数据库的基本知识，算是学习数据库编程前的热身运动吧！<BR><BR>一、热身运动<BR>　　首先需要声明是，我们这里介绍的数据库知识都是指的关系数据库。所谓关系数据库就是将数据表示为表的集合，通过建立简单表之间的关系来定义结构的一种数据库。<BR>　　不管表在数据库文件中的物理存储方式如何，它都可以看作一组行和列，与电子表格的行和列类似。在关系数据库中，行被称为记录，而列则被称为字段。下面是一个客户表的例子。<BR>　　<STRONG>表1 
+      客户表</STRONG></P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=1 height=83 width=619>
+        <TBODY>
+        <TR>
+          <TD height=21 width=94>客户号</TD>
+          <TD height=21 width=129>姓名</TD>
+          <TD height=21 width=155>地址</TD>
+          <TD height=21 width=122>城市</TD>
+          <TD height=21 width=56>街道</TD>
+          <TD height=21 width=63>邮编</TD></TR>
+        <TR>
+          <TD height=21 width=94>1723</TD>
+          <TD height=21 width=129>Doe John</TD>
+          <TD height=21 width=155>1234 Ffth Avenue</TD>
+          <TD height=21 width=122>New York</TD>
+          <TD height=21 width=56>NY</TD>
+          <TD height=21 width=63>1004</TD></TR>
+        <TR>
+          <TD height=21 width=94>3391</TD>
+          <TD height=21 width=129>Smith Mary</TD>
+          <TD height=21 width=155>9876 Myrtle Lavee</TD>
+          <TD height=21 width=122>Bosten</TD>
+          <TD height=21 width=56>MA</TD>
+          <TD height=21 width=63>6078</TD></TR>
+        <TR>
+          <TD height=20 width=94>3765</TD>
+          <TD height=20 width=129>Blasel Mortimer</TD>
+          <TD height=20 width=155>2296j River Road</TD>
+          <TD height=20 width=122>peoria</TD>
+          <TD height=20 width=56>IL</TD>
+          <TD height=20 width=63>7011</TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　此表中每一行是一个记录，它包含了特定客户的所有信息，而每个记录则包含了相同类型和数量的字段：客户号、姓名等等。<BR>　　<STRONG>表</STRONG> 
+      是一种按行与列排列的相关信息的逻辑组，类似于工作单表。<BR>　　<STRONG>字段</STRONG> 
+      数据库表中的每一列称作一个字段。表是由其包含的各种字段定义的，每个字段描述了它所含有的数据。创建一个数据库时，须为每个字段分配一个数据类型、最大长度和其它属性。字段可包含各种字符、数字甚至图形。<BR>　　<STRONG>记录</STRONG> 
+      各个客户有关的信息存放在表的行，被称为记录。一般来说，数据库表创建时任意两个记录都不能相同。<BR>　　<STRONG>键</STRONG> 
+      键就是表中的某个字段（或多个字段），它（们）为快速检索而被索引。键可以是唯一的，也可以是非唯一的，取决于它（们）是否允许重复。唯一键可以指定为主键，用来唯一标识表的每行。例如，在前面的例子中，客户标识号 
+      (客户号) 是表的主键，因为客户号唯一地标识了一个客户。<BR>　　<STRONG>关系</STRONG> 
+      数据库可以由多个表组成，表与表之间可以以不同的方式相互关联。例如，客户数据库还可以有一个包含某个客户的所有定单的表。它只用“客户号”字段来引用该定单的客户，而不在定单表中的每项重复所有客户信息，如下表所示:<BR>　　<STRONG>表2 
+      定货表</STRONG></P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=1 height=54 width=429>
+        <TBODY>
+        <TR>
+          <TD height=14 width=81>定货</TD>
+          <TD height=14 width=92>客户号</TD>
+          <TD height=14 width=86>日期</TD>
+          <TD height=14 width=79>内容</TD>
+          <TD height=14 width=91>数量</TD></TR>
+        <TR>
+          <TD height=14 width=81>14764</TD>
+          <TD height=14 width=92>3391</TD>
+          <TD height=14 width=86>2/23/94</TD>
+          <TD height=14 width=79>27</TD>
+          <TD height=14 width=91>$22.95</TD></TR>
+        <TR>
+          <TD height=13 width=81>14932</TD>
+          <TD height=13 width=92>3391</TD>
+          <TD height=13 width=86>3/17/94</TD>
+          <TD height=13 width=79>46</TD>
+          <TD height=13 width=91>$9.57</TD></TR>
+        <TR>
+          <TD height=13 width=81>15108</TD>
+          <TD height=13 width=92>8765</TD>
+          <TD height=13 width=86>2/15/96</TD>
+          <TD height=13 width=79>27</TD>
+          <TD height=13 width=91>$22.95</TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　在这个表中，客户号字段引用了客户表中的 客户号字段，从而把定单和客户联系起来了。可以看到，客户 3391 (Mary Smith) 在 
+      94 年 2 月 23 日订购了 27 项，在 94 年 3 月 17 日订购了 46 
+      项。用来建立关系的键叫做外部键，因为它与“外部”表（客户表）的主键关联。<BR>　　一对多和多对多关系 
+      上表中的关系类型叫做一对多关系，因为一个客户可以发出多个定单，而某个特定的定单只能是一个客户所发。也可以建立多对多的关系。例如，列出所有可以销售的项（存货）的盘存表:<BR>表3 
+      盘存表</P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=1 height=63 width=471>
+        <TBODY>
+        <TR>
+          <TD height=16 width=70>内容</TD>
+          <TD height=16 width=124>描述</TD>
+          <TD height=16 width=140>供应商</TD>
+          <TD height=16 width=78>费用</TD>
+          <TD height=16 width=59>盘存</TD></TR>
+        <TR>
+          <TD height=16 width=70>27</TD>
+          <TD height=16 width=124>Straw Hat</TD>
+          <TD height=16 width=140>Garden Supply Co.</TD>
+          <TD height=16 width=78>$14.00</TD>
+          <TD height=16 width=59>50</TD></TR>
+        <TR>
+          <TD height=16 width=70>46</TD>
+          <TD height=16 width=124>Garden gloves</TD>
+          <TD height=16 width=140>Garden Supply Co.</TD>
+          <TD height=16 width=78>$4.50</TD>
+          <TD height=16 width=59>75</TD></TR>
+        <TR>
+          <TD height=15 width=70>102</TD>
+          <TD height=15 width=124>hanging</TD>
+          <TD height=15 width=140>floral industries</TD>
+          <TD height=15 width=78>$6.00</TD>
+          <TD height=15 width=59>137</TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　从盘存表中，可以看到在客户和存货项之间存在多对多的关系。也就是说，一个客户可以订购多个存货项，而一个存货项又能够被多个客户订购。多对多关系是通过两个独立的一对多关系来定义的，公共的“多”表包含了两个其它表的外部键。在该例中，定货s 
+      表与 盘存 表（通过 “内容”）与 Customer 表（通过 客户号）都相关联。通过这三个表，我们可以看到，Mary Smith (客户号 
+      3391) 订购了 Straw Hat (“内容” 27) 和Garden Gloves (“内容” 46)，而 Mary Smith (客户号 
+      3391) 和 Mortimer Blaselflatz (客户号 8765) 都订购了Straw Hat (“内容” 
+      27)。如果把客户表和盘存表的相关字段与 定货表的“定货”字段联结起来，建立一个“关联”表，那么这个关系就更清楚了。<BR>表4 
+      关联表:按客户号和内容排序</P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=1 height=31 width=515>
+        <TBODY>
+        <TR>
+          <TD height=8 width=103>定货号</TD>
+          <TD height=8 width=99>客户号</TD>
+          <TD height=8 width=148>姓名</TD>
+          <TD height=8 width=62>内容</TD>
+          <TD height=8 width=103>描述</TD></TR>
+        <TR>
+          <TD height=8 width=103>14764</TD>
+          <TD height=8 width=99>33391</TD>
+          <TD height=8 width=148>Smith Mary</TD>
+          <TD height=8 width=62>27</TD>
+          <TD height=8 width=103>Straw Hat</TD></TR>
+        <TR>
+          <TD height=8 width=103>14932</TD>
+          <TD height=8 width=99>33391</TD>
+          <TD height=8 width=148>Smith Mary</TD>
+          <TD height=8 width=62>46</TD>
+          <TD height=8 width=103>Garden Gloves</TD></TR>
+        <TR>
+          <TD height=7 width=103>15168</TD>
+          <TD height=7 width=99>8765</TD>
+          <TD height=7 width=148>Blaselfatz Mortimer</TD>
+          <TD height=7 width=62>27 </TD>
+          <TD height=7 width=103>Straw Hat</TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　规范化 
+      数据库设计者的任务就是组织数据，而组织数据的方法，应能消除不必要的重复，并为所有必要信息提供快速查找路径。为了达到这种目标而把信息分离到各种独立的表中去的过程，叫作规范化。<BR>　　规范化是用许多指定的规则和不同级别的范式来进行规范的复杂过程。该过程的研讨已超出了本文的范围。但是，大多数简单数据库的规范化可以用下面简单的经验规则来完成:包含重复信息的表必须分成独立的几个表来消除重复。<BR>　　例如，使学生和课程对应的学生数据库，包含了下表所示的信息。<BR>表5</P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=1 height=6 width=474>
+        <TBODY>
+        <TR>
+          <TD height=2 width=82>学生</TD>
+          <TD height=2 width=69>课程</TD>
+          <TD height=2 width=207>描述</TD>
+          <TD height=2 width=116>教授</TD></TR>
+        <TR>
+          <TD height=1 width=82>1</TD>
+          <TD height=1 width=69>4</TD>
+          <TD height=1 width=207>Introduction to Physiology</TD>
+          <TD height=1 width=116>Dawson</TD></TR>
+        <TR>
+          <TD height=1 width=82>2</TD>
+          <TD height=1 width=69>3</TD>
+          <TD height=1 width=207>Applied Basketweaing</TD>
+          <TD height=1 width=116>Carruth</TD></TR>
+        <TR>
+          <TD height=1 width=82>3</TD>
+          <TD height=1 width=69>1</TD>
+          <TD height=1 width=207>Physics for Short-定货 cooks</TD>
+          <TD height=1 width=116>Adms</TD></TR>
+        <TR>
+          <TD height=1 width=82>4</TD>
+          <TD height=1 width=69>2</TD>
+          <TD height=1 width=207>Introduction to Physiology</TD>
+          <TD height=1 width=116>Dawsons</TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　如果有选学了十二门课程的 1000 个学生，每门课程的说明和教师将显示100多次─ 
+      对选了那门课程的每个学生都要重复一次。要避免这种低效率，应当把表分成两个独立的表来规范化，一个用来表示学生，另一个用来表示课程，如表6，表7所示。<BR></P>
+      <DIV align=center>
+      <CENTER>
+      <TABLE border=0 cellPadding=0 cellSpacing=1 height=87 width=619>
+        <TBODY>
+        <TR>
+          <TD height=68 vAlign=top width=179>
+            <TABLE border=1 height=58 width="100%">
+              <TBODY>
+              <TR>
+                <TD height=11 width="100%">学生</TD>
+                <TD height=11 width="100%">课程</TD></TR>
+              <TR>
+                <TD height=11 width="100%">1</TD>
+                <TD height=11 width="100%">4</TD></TR>
+              <TR>
+                <TD height=10 width="100%">2</TD>
+                <TD height=10 width="100%">3</TD></TR>
+              <TR>
+                <TD height=10 width="100%">3</TD>
+                <TD height=10 width="100%">1</TD></TR>
+              <TR>
+                <TD height=10 width="100%">4</TD>
+                <TD height=10 width="100%">4</TD></TR></TBODY></TABLE></TD>
+          <TD height=68 vAlign=top width=15></TD>
+          <TD height=68 vAlign=top width=419>
+            <TABLE border=1 width="100%">
+              <TBODY>
+              <TR>
+                <TD width="24%">课程</TD>
+                <TD width="51%">描述</TD>
+                <TD width="25%">教授</TD></TR>
+              <TR>
+                <TD width="24%">1</TD>
+                <TD width="51%">Physics for Short-定货 cooks</TD>
+                <TD width="25%">Adms</TD></TR>
+              <TR>
+                <TD width="24%">2</TD>
+                <TD width="51%">Counterculture Sociology</TD>
+                <TD width="25%">Beckely</TD></TR>
+              <TR>
+                <TD width="24%">3</TD>
+                <TD width="51%">Applied Basketweaing</TD>
+                <TD width="25%">Carruth</TD></TR>
+              <TR>
+                <TD width="24%">4</TD>
+                <TD width="51%">Introduction to Physiology</TD>
+                <TD width="25%">Dawsons</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD height=15 vAlign=top width=179>
+            <P align=center>表６</P></TD>
+          <TD height=15 vAlign=top width=15></TD>
+          <TD height=15 vAlign=top width=419>
+            <P align=center>表７</P></TD></TR></TBODY></TABLE></CENTER></DIV>
+      <P>　　现在表被规范化了，所以，要改变特定课程的课程描述或“数据”，只要改变一个记录就可以了。<BR>以上是关于数据库的基本知识，这是学习数据库编程所必须的。虽然数据库技术作为一门学科，其深度和广度不是这点篇幅能描述的，但作为入门和简单数据库编程应该是足够了。<BR>　　好了，下面我们就可以开始练练了。我们经常遇到数据库系统是登记系统，不管你是在单位，或是参加什么组织，登记是免不了的，而且它的结构比较简单，我们就以一个登记系统为例吧。分析一下该系统所涉及到的数据。<BR><BR><U><STRONG>二、磨刀不误砍柴功<BR></STRONG></U><BR>　　对于登记，要跟踪的信息包括：<BR>● 
+      　&nbsp; 姓名 　　●&nbsp;&nbsp;&nbsp; 性别<BR>●&nbsp;&nbsp;&nbsp;&nbsp; 籍贯 
+      　　●&nbsp;&nbsp;&nbsp; 年龄<BR>●&nbsp; 　 出生年月 ●&nbsp;&nbsp;&nbsp; 
+      单位<BR>●&nbsp;&nbsp; 　地址 　　●&nbsp;&nbsp;&nbsp; 邮政编码<BR>● 　&nbsp; 电话　　 
+      ●&nbsp;&nbsp;&nbsp; 
+      传真<BR>　　当然，可以简单地创建一个表，使得上述的每个数据项对应一个字段。<BR>　　现在需要给表指派主键,用以唯一标识每一条记录,在登记表中分别添加登记号作为唯一键,这样就保证数据库中的任两条记录都不同了。<BR>　　对数据库作出以上分析后，我们就可以开始建立数据库了。<BR><BR><U><STRONG>三、建营扎寨</STRONG></U><BR>　　在这里我们学习怎样建立数据库，首先需要确定要建立数据库的类型。在Visual 
+      Basic中通过数据访问控件或数据访问对象（DAO）可以访问下列数据库：<BR>　　1． JET数据库，即Microsoft 
+      Access<BR>　　2． ISAM数据库，如：dBase，FoxPro等<BR>　　3． 
+      ODBC数据库，凡是遵循ODBC标准的客户/服务器数据库。如：Microsoft SQL 
+      Server、Oracle<BR>　　一般来说，如果要开发个人的小型数据库系统，用Access数据库比较合适，要开发大、中型的数据库系统用ODBC数据库更为适宜。而dBase和FoxPro数据库由于已经过时，除非特别的情况，否则不要使用。在我们的例子中，当然选用Access数据库了。建立Access数据库有两种方法：一是在Microsoft 
+      Access中建立数据库。点击“新建”按钮就可以建立新的表了（如图1）。这里我们主要介绍第二种方法：使用可视化数据管理器，不需要编程就可创建数据库。可视化数据管理器是一个非常有用的应用程序，它是VB企业版和专业版附带的，在目录\..\DevStudio\vb\samples\Visdata下，其界面如下图。<BR>　　点击菜单“文件”项下“新建”子项“Microsoft 
+      ACCESS”子项的“版本7.0 
+      MDB”项。在弹出窗口中输入新建数据库的名称“登记”，出现下面图3所示窗口:<BR>　　要生成新的表，右键单击数据库窗口弹出菜单，然后选择“新表”命令，在随后出现的“表结构”对话框中建立所要的字段。每次向表中加入新的字段，单击“增加字段”按钮，会出现图4 
+      的“增加字段”对话框。<BR>　　“增加字段”对话框中的选项如表10所示，根据字段的类型，有些选项是无效的，无法读取。<BR>在我们建立的登记数据库中，各个字段的类型如表11。<BR><BR>　　要注意的是，由于字段登记号用来唯一标志记录的，因此，它不能由用户输入。所以在定义该字段时需要定义为Long数据类型，“自动生成字段”项有效，并选中这一项。这样当用户每输入一条新记录时，系统就会在该字段上自动输入一个与其它记录不同的值。<BR>在ACCESS数据库中，关键字是用索引实现的，作为编程人员在对表类型的记录集编程时，只需调用索引名。在查询时，Rushmore技术自动用索引信息优化查询。完成表定义后，点击“增加索引”按钮，弹出如图5所示窗口。<BR>　　在窗口中右边有三个选项，其意义如表 
+      12。<BR>　　添加索引对话框选项<BR>　　完成之后如图6。<BR>　　当然，学会数据库的建立也并非一朝一夕的事，读者不妨多练习一下。下面你就可以运行VB开始我们的编程了。<BR><BR>四、千里相会<BR>　　Visual 
+      Basic 
+      数据库应用程序有三个部分，如图7所示。<BR>　　用户程序是程序员开发的，也是我们即将用VB来编写的部分。数据库引擎是数据库驱动程序，使用它程序员可以用统一的格式访问各种数据库，不管这个数据库是本地的 
+      Visual Basic 
+      数据库，还是所支持的其它任何格式的数据库格式，所使用的数据访问对象和编程技术都是相同的。数据库则是我们上面完成的部分。从这个结构可以看出用户与正在访问的特定数据库无关。那我们在用VB编写数据库程序时，就需要使程序能够访问指定的数据库。<BR>　　如果是简单的数据库应用，可以使用 
+      Data 控件来执行大部分数据访问操作，而根本不用编写代码。与 Data 控件相捆绑的控件自动显示来自当前记录的一个或多个字段的数据。 
+      <BR><BR>DATA数据控件<BR>属性<BR>CONNECT属性 
+      指定打开的数据库类型，并且包括参数，如用户和口令等。<BR>例如：<BR>打开Access数据库（缺省）<BR>CONNECT=“ACCESS”<BR>打开ODBC数据库<BR>CONNECT=“ODBC；DATABASE=？？；UID=？？；PWD=？？；DSN=？？”<BR>DATABASENAME属性 
+      确定数据控件访问哪一个数据库。<BR>对于多表数据库它为具体的数据库文件名，例如：ACCESS数据库<BR>DATABASENAME=“D：\...\DEMO.MDB"<BR>　　对于单表数据库它为具体的数据库文件所在的目录，而具体文件名放在RECORDSOURCE属性中，例如:访问FOXPRO数据库文件D：\FOX\DEMO.DBF<BR>DATABASENAME=“D:\FOX”<BR>RECORDSOURCE=“DEMO”不带文件扩展名<BR>RECORDSOURCE属性<BR>　　确定数据控件的记录集,即:所要访问的数据内容。它可以是一个表名、存储查询名或SQL语句。例如：访问Register表所有数据 
+      ：<BR>RECORDSOURCE=“Register”访问RC表中1973年以前出生的数据：<BR>RECORDSOURCE=“SELECT 
+      *FROM Register WHERE 
+      [BIRTHDAY]&lt;#1/1/1973#"<BR>注意：当我们在运行时修改了该属性后，需要调用REFRESH方法刷新记录集。<BR><BR>方法<BR>REFRESH方法 
+      当我们在运行时修改了Record-<BR>Source属性后，需要调用该方法刷新记录集。<BR>UPDATERECORD方法 
+      将绑定在数据控件上的控件的数据写入数据库中。即:当我们修改了数据后调用该方法确定修改。<BR>CANCELUPDATE方法 
+      将数据库中的数据重新读到绑定在数据控件上的控件中。即:当我们修改了数据后调用该方法放弃修改。<BR><BR>事件<BR>　　VALIDATE事件 
+      当我们移动记录集记录指针时发生。例如：我们将记录集记录指针从A移动到记录B时当产生VALIDATE事件时，记录指针仍在记录A上。<BR>Sub 
+      XXXX_Validate（Action As integer，Save As integer）<BR>其中：<BR>Action 
+      指出如何产生了该事件，如：移动，增加，查询等。<BR>Save 
+      表示是否保存已修改的数据。当我们修改了绑定在数据控件的数据，又没有UPDATERECORD，则移动指针时，Save=True。如果在事件中令Save=False，则放弃修改。<BR>例如：<BR><BR>Sub 
+      XXXX_Validate(Action As integer,Save As integer)<BR>If Save then<BR>I= 
+      MsgBox("Dada changed,Save?",vbYesNo)<BR>If I = vbNo then<BR>Save = 
+      False<BR>End if<BR>End　if<BR>End Sub <BR><BR>Reposition事件 
+      当我们移动记录集指针时发生。例如：我们将记录集记录指针从A移动到记录B 
+      时，当产生Reposition事件时，记录指针已移动到B上。<BR>通常我们在该事件中显示当前的指针位置。例如：<BR>Sub 
+      XXXX_Reposition()<BR>XXXX.Caption=??<BR>XXXX.RecordSet.AbsolutePosition + 
+      1<BR>End 
+      Sub<BR><BR>　　了解了DATA控件之后我们就可以连接数据库了。现在我们可以编写一个应用程序。因为虽然我们建立了Register数据库，但是数据库中却没有数据，我们程序的目的就是向数据库中输入数据。它的运行情况如图8。<BR>　　各个文本框正好对应着表Register的各个字段，在文本框中输入数据，点击“增加”按钮，就完成了一条记录的输入。我们看一下，DATA控件是怎样和数据库连接起来的，各个文本框又是怎样和DATA控件捆绑起来的。<BR>　　在DATA控件的CONNECT属性中，选中“ACCESS”项，在DatabaseName属性中，输入“C:\TEMP\登记.mdb”，在RecordSource属性中，选中“Register”，这样就完成了数据库与DATA控件的连接，也就是完成了与应用程序的连接。<BR><BR>　　数据库中各个字段又是怎样和文本框连接起来的呢？在VB中，我们可以将普通控件绑定在数据控件上，来完成自动地显示、更新记录集的数据。常用的可绑定的控件有：Label,Text,checkBox,Image等。通过设置这些控件的DataSource和DataField属性来完成绑定。<BR><BR>DataSource 
+      属性 表示绑定到哪一个数据控件上，程序中我们可能使用多个数据控件。<BR>DataField 属性 
+      表示绑定到记录集的哪一个记录上。<BR>　　现在我们需要把Text1与表“登记”中的姓名字段连接起来。完成DATA控件的连接之后，在Text1控件的DataSource属性中，选中“Data1”，在DataField属性中，选中“姓名”值。用同样的方法，将各个文本框分别绑定到对应的字段上，就完成了文本框的捆绑。<BR>　　下面我们编写两个按钮命令，完成其相应的操作了。喂！别着急，还有一个重要的对象没讲呢！<BR>　　当应用程序启动时，Data 
+      控件被自动地初始化。如果 Connect、DatabaseName、Options、RecordSource、Exclusive、ReadOnly 
+      和 RecordsetType 属性是合法的， Microsoft Jet 数据库引擎就会试图创建一个新的基于这些属性的 Recordset 
+      记录集对象。Recordset 对象可以表示表中的记录或者作为查询结果的记录，使用 Recordset 
+      对象可以在记录一级上对数据库中的数据进行处理。这在数据库编程中是一个十分重要的，也是比较复杂的对象。 &nbsp;&nbsp;&nbsp; 
+      <BR>　　Recordset 对象有三种类型：表、动态集、快照，它们之间存在明显的区别。<BR>　　表类型的 Recordset 
+      对象是指当前数据库中的表在创建表类型的记录集时，数据库引擎打开的表。后续的数据操作都是直接对表进行的。只能对单个的表打开表类型的记录集，而不能对联接或者联合查询打开表类型的记录集。与其它类型的 
+      Recordset 对象相比，表类型的搜索与排序速度最快。<BR>　　动态集类型的 Recordset 
+      对象可以是本地的表，也可以是返回的行查询结果。它实际上是对一个或者几个表中的记录的一系列引用。可用动态集从多个表中提取和更新数据，其中包括链接的其它数据库中的表。动态集类型具有一种与众不同的特点：不同数据库的可更新联接。利用这种特性，可以对不同类型的数据库中的表进行可更新的联接查询。动态集和它的基本表可以互相更新。如果动态集中的记录发生改变，同样的变化也将在基本表中反映出来。在打开动态集的时候，如果其他的用户修改了基本表，那么动态集中也将反映出被修改过的记录。动态集类型是最灵活的Recordset 
+      类型，也是功能最强的。不过，它的搜索速度与其它操作的速度不及表类型的 Recordset。<BR>　　快照类型的 Recordset 
+      对象包含的数据是固定的，它反映了在产生快照的一瞬间数据库的状态。从 Microsoft Jet 数据源得到的快照是不可更新的，从开放数据库互连 
+      (ODBC) 数据源得到的某些快照是可以更新的，这取决于数据库系统本身的能力。与动态集类型和表类型的 Recordset 
+      对象相比，快照的处理开销较少。因此，它执行查询和返回数据的速度更快，特别是在使用 ODBC 数据源时。快照类型保存了表中所有记录的完整复本，因此，如 
+      果记录的个数很多，快照的性能将比动态集慢得多。为了确定快照与动态集哪一个更快，可以先以动态集方式打开记录集，然后再以快照方式打开它。<BR>　　具体使用什么记录集，取决于需要完成的任务:是要更改数据呢，还是简单地查看数据。例如，如果必须对数据进行排序或者使用索引，可以使用表。因为表类型的 
+      Recordset 
+      对象是做了索引的，它定位数据的速度是最快的。如果希望能够对查询选定的一系列记录进行更新，可以使用动态集。如果在特殊的情况下不能使用表类型的记录集，或者只须对记录进行扫描，那么使用快照类型可能会快一些。<BR>　　一般来说，尽可能地使用表类型的 
+      Recordset 对象，它的性能通常总是最好的。<BR>　　为选择特定的 Recordset 类型，把 Data 
+      控件的RecordsetType属性设成:<BR><BR>RecordSet记录集属性<BR>BOF属性 
+      当记录集记录指针指向第一条记录时返回True<BR>EOF属性 
+      当记录集记录指针指向最后一条记录时返回True<BR>AbsloutePosition属性 
+      返回当前记录集记录指针，第一条记录为0，是只读属性<BR>Bookmark属性 
+      String类型，返回或设置当前记录集记录指针的书签，是可读写属性。每一条记录都有自己唯一的书签，它与记录在记录集中的顺序无关。将Bookmark属性存放到变量中，后面可以通过将该变量赋值给Bookmark属性，并返回到这个记录。<BR>注意：程序中使用BookMark属性重定位记录指针，而不能使用Abslouteposition<BR>NoMatch属性 
+      当我们使用Find方法查询时如果未找到则返回True。常与BookMark属性同时使用。<BR>例如：查找[NAME]字段中第一个姓李的人<BR><BR>Dim 
+      S As String<BR>With XXXX.RecordSet<BR>S = .BookMark<BR>.FindFirst "[NAME] 
+      Like '李*'"<BR>if .NoMatch then<BR>MsgBox "数据未找到“<BR>.BookMark = S<BR>End 
+      if<BR>End With<BR><BR>记录集方法<BR>AddNew方法 向记录集增加一条新记录<BR>Delete方法 
+      从记录集中将当前记录删除。在删除后常使用MoveNext方法移动指针。<BR>例如：<BR><BR>With 
+      XXXX.RecordSet<BR>.Delete<BR>.MoveNext<BR>if .EOF then .MoveLast<BR>End 
+      With<BR><BR>MoveXXXX方法<BR>MoveFirst 将记录集指针移动到第一条记录上<BR>MoveLast 
+      将记录集指针移动到最后一条记录上<BR>MovePrevious 将记录集指针移动到前一条记录上<BR>MoveNext 
+      将记录集指针移动到下一条记录上<BR>FindXXXX方法<BR>FindFirst在记录集中查询符合条件的第一条记录<BR>FindLast 
+      在记录集中查询符合条件的最后一条记录<BR>FindPrevious 在记录集中查询符合条件的前一条记录<BR>FindNext 
+      在记录集中查询符合条件的下一条记录<BR>　　好了，有了这么充分的知识了，编写两个按钮命令简直是小菜一碟，先来试一下，添一个“增加”命令按钮吧。<BR><BR>Private 
+      Sub Command1_Click()<BR>Data1.Recordset.AddNew<BR>End 
+      Sub<BR><BR>　　哇！怎么这么简单，再看一下“删除”命令按钮<BR><BR>Private Sub 
+      Command2_Click()<BR>Data1.Recordset.Delete<BR>Data1.Recordset.AddNew<BR>End 
+      Sub<BR><BR>　　就这样行了吗？运行程序吧，OK！一切正常，迫不及待地输入一条记录，点击“增加”按钮，怎么？出问题了！因为你只有在进行了AddNew方法后才可以输入数据，好吧，在窗口的初始化时就增加一条新记录吧。<BR><BR>Private 
+      Sub Form_Initialize()<BR>Data1.Recordset.AddNew<BR>End 
+      Sub<BR>　　输入完了数据，我们打算退出程序，很自然的我们执行关闭窗口操作，就顺利地结束了输入工作。真的很顺利吗？打开数据库，看看数据库中的数据，我们发现刚才输入的最后一条记录没有存入数据库中。这个很好解释，每当我们调用AddNew方法时，它就将输入的记录存入数据库中，而当我们关闭窗口时，刚输入的记录并没有保存到数据库中，那么在关闭窗口之前对DATA控件进行一次刷新就可以将数据存入数据库中了。<BR><BR>Private 
+      Sub Form_QueryUnload(Cancel As Inte 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      ger, UnloadMode As Integer)<BR>Data1.Refresh<BR>End 
+      Sub<BR><BR>　　到了这里，我们似乎可以稍稍轻松了一点，这个窗口的功能差不多完成了。但是我不得不给你提出一个忠告：在数据库系统中，应尽量将错误在应用级上处理。这句话看起来似乎有点抽象，实际上用在这个程序中就简单多了。在表Register中，我们将出生日期定义为Date/Time类型，如果在程序运行时，在该字段对应的文本框中输入的不是Date/Time格式，在向数据库提交数据时会出现什么情况呢？数据库会向用户报告错误信息。然而这样对应用程序并不好，这样的错误应该由用户程序处理，而不是交给数据库去处理，所以在数据提交之前就应该检查该字段的输入是否合法。<BR><BR>Private 
+      Sub Text3_LostFocus()<BR>If IsDate(Text3.Text) Or Text3.Text = "" Then 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '检查是否输入合法数据<BR>Exit 
+      Sub<BR>End If<BR>MsgBox 
+      ("输入错误，请输入你出生的年月日！")<BR>,将选取不合法的数据，以便重新输入，并使控制焦点不动<BR>Text3.SetFocus<BR>Text3.SelStart 
+      = 0<BR>Text3.SelLength = Len(Text3.Text)<BR>End 
+      Sub<BR><BR>　　上面虽是应用程序处理错误的一个小例子，可是这种在应用级处理错误的思想是十分重要的。<BR><BR>五、寻寻觅觅<BR>　　在数据库管理系统中，输入和查询就象两个孪生姐妹不可或缺，下面将介绍如何创建查询窗口。查询窗口的设计分为两部分：查询结果和查询条件。查询结果是指用户所需要的数据，它包括根据查询条件查询出来的记录，但并非表中每个字段里的数据都需要提供给用户。比如在我们这个例子中，登记表中的登记号的值是用户不感兴趣的，所以在查询结果中，我们不希望显示RegID字段的值。查询条件是用户提出的查询要求。比如在我们这个系统中，可以有姓名条件，当用户想知道某个人的具体情况，他可以输入此人的姓名，就查询出此人各方面的情况;也可以有年龄条件，当用户输入某个年龄段，就会查询出处于这个年龄段的所有人的信息。到底采用哪些查询条件，这需要开发者根据用户和系统的要求进行设计，其具体实现过程大都大同小异。为了节省篇幅，我们就仅以年龄为条件进行查询。查询窗口运行情况如图9。<BR>在这个程序中我们使用了一个控件DBGrid，这个控件用来显示查询结果，选中VB的“工程”菜单下的“部件……”项，在控件标签中，选中“Microsoft 
+      Data Bound Grid Control 
+      5.0”即可，在工具箱中就会出现DBGrid控件的小图标。其使用和其它控件一样。<BR>　　为了和数据库连接，DATA控件是不可少的，回忆一下，该怎样设置它的属性，OK！同输入窗口一样，在CONNECT属性中，选中“ACCESS”项。在DatabaseName属性中，输入“C:\TEMP\登记.mdb”。在RecordSource属性中，选中......嘿，嘿，这里稍微有点不同，如果按输入窗口那样的设置，查询结果中就会包含登记号字段了。在此属性中我们应该输入SQL语句:<BR>　　select 
+      name as 姓名,sex as 性别,hometown as 籍贯,age as 年龄,birthday as 生日,company as 
+      单位,address as 地址,zip as 邮编,telephone as 电话,fax as 传真 from 
+      Register。别着急，尽管这条语句有点长，实际上却比较简单。这条语句的语法是：<BR>　　SELECT 字段名，字段名，……FROM 表名 
+      WHERE 
+      条件；<BR>　　对照语法，我们可以看出输入的SQL语句的含义：从表Register中查询姓名，性别，籍费，……字段的值。只要在字段列表中不选中登记号字段，在查询结果中，就不会显示登记号的值了。如果你够细心的话就会注意到我们所写的SQL语句中在字段列表中并不仅仅输入字段名，在其后面还增加了as……项，如“name 
+      as 
+      姓名”，这是为name字段取一个别名“姓名”，以便在DBGrid控件中显示字段名时，就会显示“姓名”而不是“name”。<BR>　　完成了DATA控件属性的设置就可以将DBGrid控件捆绑到DATA控件上，其方法同输入窗口。对了，将“DataSource”属性设置为“DATA1”即可。现在不妨运行一下程序，真令人兴奋，DBGrid显示出表中所有的信息。可是怎样显示符合条件的数据呢？再看一看上面的SQL语法，WHERE段后可以输入查询条件，比如：需要年龄在20到30岁之间的人员信息，其语句为：Select 
+      name,... from register where age&gt;20 and 
+      age&lt;30;<BR>　　我们只要根据用户输入的条件构成新的SQL语句，并利用DATA控件的Refrensh方法刷新数据库，就可以完成条件查询了。<BR>　　整个程序十分简单，当用户在文本框中输入年龄段后，点按“查询”命令，就会显示符合条件的查询结果。程序代码如下：<BR><BR>Option 
+      Explicit<BR>Const allinfo = "select name as 姓名,sex as 性别,hometown as 
+      籍贯,age as 年龄,birthday as 生日,company as 单位,address as 地址,zip as 
+      邮编,telephone as 电话,fax as 传真 from 登记" '定义不带条件的SQL查询语句<BR><BR>Private Sub 
+      Command1_Click()<BR>Dim t1, m, n As String<BR>'构造SQL语句的WHERE条件段<BR>If 
+      IsNumeric(Text1.Text) Then<BR>m = " age &gt;" + Text1.Text<BR>End If<BR>If 
+      IsNumeric(Text2.Text) Then<BR>n = " age &lt; " + Text2.Text<BR>End 
+      If<BR>If m = "" And n = "" Then<BR>t1 = ""<BR>Else<BR>If m = "" Then<BR>t1 
+      = n<BR>Else<BR>If n = "" Then<BR>t1 = m<BR>Else<BR>t1 = m + " and " + 
+      n<BR>End If<BR>End If<BR>End If<BR>If t1 &lt;&gt; "" Then<BR>t1 = " where 
+      " + t1<BR>End If<BR>Data1.RecordSource = allinfo + 
+      t1<BR>'将RecordSource属性的值设置为新的SQL语句<BR>Data1.Refresh<BR>‘刷新数据库，获得符合当前条件的查询结果<BR>End 
+      Sub<BR><BR>　　在这个程序中，你还可以加上姓名查询、籍贯查询等，其设计过程都是通过构造SQL语句来实现的。另外，还需要注意的一点是既然是查询窗口，当然允许修改，将DBGrid控件的AllowUpdate属性值设为False。OK！运行程序吧，啊！万事大吉。看一看应用程序，再看一看你编写的代码，不可思议，这么短的代码居然完成了这么强大的功能。事实就是这样，数据库编程中最重要的是对概念的清楚，与之相比，技巧好象摆在了次要位置。让我们闭上眼睛，想一想我们需要了解那些东西吧：DATA控件，RECORDSET对象、控件的捆绑、简单的SQL查询语句。熟悉了这些东西，你就可以进行数据库编程了，如果你对开发数据库系统比较感兴趣，可以再加强一下在数据库设计和SQL语句方面的知识。但数据库编程真的总是这样简单吗？如果已经熟悉了上面的内容，建议你看一下下面这一节。<BR><BR>六、拨云见雾<BR>　　还记得我们在前面说过Visual 
+      Basic 提供了两种与 Jet 数据库引擎接口的方法吗？Data 
+      控件和数据访问对象。我们已经见识了DATA控件，确实给人意想不到的方便，但Data 控件只给出有限的访问现存数据库的功能。而 DAO 
+      模型则可以全面控制数据库的完整编程接口。这两种方法事实上并不是互斥的，实际上，它们常同时使用。<BR>　　DAO 
+      模型是设计关系数据库系统结构的对象类集合。它们提供了完成管理这样一个系统所需的全部操作属性和方法，包括创建数据库，定义表、字段和索引，建立表间的关系，定位和查询数据库等工具。DAO结构的主要对象如图10所示。<BR>　　Visual 
+      Basic 中的数据库编程就是创建DAO（数据访问对象）。这些对象对应于被访问物理数据库的不同部分，如 
+      Database、TableDef、Field 和 Index 对象，用这些对象的属性和方法来实现对数据库的操作，能够在 Visual Basic 
+      窗体中使用绑定和非绑定控件来显示操作结果并接收用户输入。这样就简化了代码，它赋予程序员很大的灵活性。因为可以使用同样的对象、属性和方法来处理各种不同的数据库格式。同时，如果从一种数据库格式变到另一种格式（例如，将本地的 
+      Microsoft Access 数据库转换为网络上的 SQL Server 
+      数据库），只需变动少量的代码就可以适应这种改变。甚至可以创建这样的应用程序，在单一的查询或报表中连接来自多个不同数据库的表。<BR>　　我们先介绍DAO对象，从上图中我们可以看到，DAO对象中最关键的是DBEngine对象，所有的数据库操作都要通过它来完成。<BR><BR>DBEngine对象<BR>DBEngine对象相当于jet数据库引擎，不需要创建该对象。<BR>CreateWorkspace方法:创建一个工作区对象<BR>例如 
+      ：<BR>Dim ws As Workspace<BR>Set ws = DbEngine.CreateWorkspace 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      (SpName,UserID,password",SpType)<BR>其中<BR>SpName 工作区名称String<BR>UserID 用户名 
+      String<BR>Password 口令String<BR>SpType 工作区类型 = dbUsejet jet工作区<BR>= 
+      dbUseODBCODBC工作区<BR><BR>Workspace对象<BR>　　Workspace对象为用户定义一个会话，通过与之关联的用户名和口令建立一个安全级别。当不需要安全级别时可使用缺省的工作区DBEngine.Workspace。<BR>方法：<BR>OpenDatebase&nbsp;&nbsp;&nbsp; 
+      打开一个数据库<BR>Close&nbsp;&nbsp;&nbsp; 关闭当前工作区<BR>BeginTrans&nbsp;&nbsp;&nbsp; 
+      启动一个事务<BR>CommitTrans&nbsp;&nbsp;&nbsp; 
+      提交当前事务<BR>RollBack&nbsp;&nbsp;&nbsp; 
+      回滚当前事务<BR>例如我们需要打开一个数据库。<BR>我们调用Workspace的OpenDatabase方法打开一个数据库。<BR>例如：<BR>Dim 
+      db As DataBase<BR>Set 
+      db=OpenDatabase(dbname,exc,readonly,source)<BR>其中：<BR>dbname&nbsp;&nbsp;&nbsp; 
+      数据库文件名（对于单表数据库为路径） <BR>exc = TRUE 
+      表示打开数据库后，该数据库不能被其它应用程序访问。<BR>&nbsp;&nbsp;&nbsp; FALSE 
+      表示共享地打开数据库<BR>Readonly=TRUE 表示打开数据库后，只能对数据库进行读操作<BR>=FALSE 
+      表示打开数据库后，可对数据库进行读写操作<BR>source数据源名，用于指定打开地数据库类型。<BR><BR>创建记录集<BR>　　我们使用DataBase对象的OpenRecordSet方法打开一个记录集。<BR>例如：<BR>Dim 
+      rs As RecordSet<BR>Set rs=db.OpenRecordSet(source，type)<BR>其中：<BR>source 
+      指定记录集的内容，它可以是一个表名，查询名或SQL语句<BR>type 
+      创建记录集的类型<BR>=dbOpenTable表型记录集<BR>=dbOpenDynaset动态型记录集<BR>=dbOpenSnapshot快照型记录集<BR><BR>访问ODBC数据库<BR>　　Visual 
+      Basic 通过 DAO 和 Jet 引擎可以识别三类数据库：Visual Basic 数据库，外部数据库，ODBC 
+      数据库。在开发大中型数据库系统中一般都采用ODBC 数据库，如 Microsoft SQL Server等。DAO（数据访问对象）的 
+      ODBCDirect 模式允许直接访问 ODBC 数据。另外，远程数据对象 (RDO) 库和远程数据控件 (RDC)也 允许直接访问 ODBC 
+      数据。<BR>要访问ODBC数据库需要两步，首先需要在WINDOWS 95 或WINDOWS 
+      NT的控制面板中设置ODBC数据源名（DSN）。然后在OpenDatabase方法的Source参数中使用该数据源名。<BR>例如：访问Microsoft 
+      SQL 
+      Server<BR>Source="ODBC;DSN=MyDSN;UID=sa;PWD=xx;DataBase=pubs"<BR>在程序中使用DAO<BR>　　DAO的强大功能确实让人兴奋，只是较之DATA控件要复杂得多。在复杂的数据库处理中，这两种方法常常同时使用。要使用DAO，必须选中VB的“工程”菜单下的“部件……”项，在控件标签中选中"Microsoft 
+      DAO 3.5 Object 
+      Library"之后就可以在程序中定义DAO变量了。在这篇文章中我们所举的数据库例子比较简单，有兴趣的朋友不妨采用数据访问对象（DAO）来实现这个程序。<BR><BR>七、高屋建瓴<BR>　　到了这里，似乎VB数据库编程的内容也差不多完整了，但是你完全可以再往前走一步。在目前的数据库开发过程中，客户/服务器体系结构占这个领域的主体地位，利用VB进行客户/服务器应用程序的开发是完全可行的。同时,在程序开发过程中，还可以利用面向对象技术，提高你的程序的可重用性和可维护性。总之，数据库应用程序的开发始终是技术上和理论上的热点。使用最高级的方法,最先进的技术,你会变得越来越COOL！</P></TD></TR></TBODY></TABLE></CENTER></DIV></BODY></HTML>

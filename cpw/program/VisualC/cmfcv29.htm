@@ -1,0 +1,276 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><a href="Vc_idx.htm">Visual 
+    C++/C++</a> &gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第二十九期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%">　</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>MFC邮递表的中文翻译-第二十九期</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%">　</td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font color="#FF0000">第二十九期目录</font> <font size="2">杨晓东 
+    1999.3.15</font></h3>
+    <ol>
+      <li><a href="#volq1">直接调用DAO</a> </li>
+      <li><a href="#volq2">关于列表框</a> </li>
+      <li><a href="#volq3">隐藏浏览控件</a> </li>
+      <li><a href="#volq4">可调大小的对话框</a> </li>
+      <li><a href="#volq5">显示顶级窗口</a> </li>
+      <li><a href="#volq6">有多个CListCtrl的CListView</a> </li>
+      <li><a href="#volq7">编译错误</a> </li>
+      <li><a href="#volq8">位图</a> </li>
+    </ol>
+    <p><a name="volq1"></a></p>
+    <p><br>
+    </p>
+    <font color="Red"><h3>直接调用DAO</h3>
+    </font><p>问:我用下列代码打开一个数据库以及一个表单,这是个顺序型表单,我想做如下查询: 
+    </p>
+    <pre>COleVariant varFilter(_T(&quot;[Ship Name] = Reese&quot;), VT_BSTRT);
+DAO_CHECK(m_prs-&gt;m_pDAORecordset-&gt;put_Filter(V_BSTR(&amp;varFilter)));</pre>
+    <p>但没有成功,在第二句上程序停留了下来,有谁能给我展示一下该怎么做吗?<br>
+    </p>
+    <p>答:如果过滤的条件是关于文本的话,过滤器值必须是相关引证的: </p>
+    <pre>Change:  _T(&quot;[Ship Name] = Reese&quot;)
+To: _T(&quot;[Ship Name] = 'Reese'&quot;)
+Or: _T(&quot;[Ship Name] = &quot;&quot;&quot;Reese&quot;&quot;&quot;)</pre>
+    <p>然而我是从不用过滤器的,相反,我发现用SQL语句来开打一个表单更简单更快,而且能 
+    包含过滤器的.<br>
+    </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq2"></a><br>
+    </p>
+    <font color="Red"><h3>关于列表框</h3>
+    </font><p>问：怎样使鼠标移过列表框时能够显示鼠标所在项目的文字的小的提示框，不是当前所 
+    选择的文本。<br>
+    </p>
+    <p>答：1）你可以通过CListBox::ItemFromPoint()函数来得到鼠标所指的位置，它将会返回鼠标 
+    所指项目的索引值，从返回的值上可以很容易的得到该值所对应的文本（使用CListBox::GetText() 
+    函数）然后你就可以使用ShowToolTip函数或者你自己所处理所要完成的。<br>
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2）取得鼠标的X/Y值，发送消息LB_ITEMFROMPOINT来得到鼠标所指项目的索引值，然后 
+    发送消息LB_GETITEMRECT来得到项目的范围就可以了。<br>
+    </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq3"></a><br>
+    </p>
+    <font color="Red"><h3>隐藏浏览控件</h3>
+    </font><p>问：我有一个使用分隔窗口的程序，在右边的区域里有一个网页浏览控件，与一个CWnd对象 
+    相关联……，问题是当我想临时隐藏控件时，用m_pBrowser-&gt;put_Visible(FALSE)但什么也没 
+    有发生，网页依然显示，java scripts依然运行，我也试着使用m_wndBrowser.ShowWindow(FALSE) 
+    这种方式，图象确实消失了，但m_wndBrowser成员变量被置成0，无法恢复。<br>
+    </p>
+    <p>答：1）试试用m_wndBrowser.ShowWindow(SW_HIDE)来隐藏窗口， 用m_wndBrowser.ShowWindow(SW_SHOW)来显示窗口，后者调用时将会重画你的 
+    程序。当恢复浏览器时，你必须重新指定所要去的。<br>
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2）我也有过同样的问题，我的解决方法是，用子窗口替换掉生成的浏览器！我建立一个 
+    子窗口放置网页控件，然后就可以隐藏/显示了。<br>
+    </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq4"></a><br>
+    </p>
+    <font color="Red"><h3>可调大小的对话框</h3>
+    </font><p>问：我想建立一个对话框，里面包含不确定的控件，特别是有些CEdit控件，在程序运行时 
+    才能确定数目，所以我希望对话框能够自我调整，以容纳下控件，或者以滚动条出现。<br>
+    </p>
+    <p>答：1）下面的说明可能对你有所帮助，放置一个静态控件在对话框模板中，在运行时取得 
+    它的位置（因为随着系统设置的不同而不同，比如大字体，小字体等），使用下面的代码 
+    你能计算出在对话框里的控件的精确位置，对话框的尺寸就可以用SetWindowPos()来调节。<br>
+    </p>
+    <pre>dialog::function()
+{
+    CRect rect;
+    CStatic* pPreviewArea =static_cast<CStatic*>(GetDlgItem(IDC_PREVIEWAREA));
+    pPreviewArea-&gt;GetWindowRect(rect);
+    ScreenToClient(rect);
+    // and a bit of extra tweeking for the NC areas.
+}</pre>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2）这是我最近做的，我觉得不错。首先你要在启动时建立控件，并做以下工作。 
+    </p>
+    <pre>    // Create
+    CEdit *pEdit;
+    pEdit =3D new CEdit;
+    pEdit-&gt;CreateEx (WS_EX_CLIENTEDGE,=20
+        &quot;edit&quot;,
+        &quot;&quot;,
+        WS_CHILD | WS_TABSTOP | ES_LEFT | ES_AUTOHSCROLL,
+        rcTemp,                         // see below for rectangle comments
+        this,=20
+        ID_OF_FIRST_EDIT_CONTROL + EditCtr);     // EditCtr =increments for each control added
+
+    // Set the font for the control to Dialog's font
+    pPopEdit-&gt;SetFont (GetFont ());
+
+    // Now store pointer so you can delete it later
+    m_editArray.Add (pEdit);</pre>
+    <p>你所用的控件的大小是非常重要的，如果你使用大字体，显示界面将会非常大。这时 
+    可以用一个图形控件放置到对话框模板中（放置适当的位置），使该控件不可见，你的 
+    编辑控件只要与之相对应就可以了，我是这样做的。 </p>
+    <pre>    CRect rcTemp;
+    GetDlgItem (IDC_PLACEHOLDER)-&gt;GetClientRect (rcTemp);</pre>
+    <p>用rcTemp直接取得图形控件的大小，对于以后的控件，你只需要往下移一点就可以了。 
+    </p>
+    <pre>// use half =control height between controls for example
+    ControlHSpacing =3D rcTemp.Height () * 3 / 2;
+    rcTemp.OffsetRect (0, ControlHSpacing);</pre>
+    <p>决定对话框尺寸时，确定对话框模板是放置后的尺寸，调用GetWindowRect将给出单个控件 
+    的尺寸，如果你有超过9个以上的控件，也可以按下面方法做。 </p>
+    <pre>    CRect rcDialogWindow;
+    GetWindowRect (rcDialogWindow);
+    rcDialogWindow.bottom +=3D (9 * ControlHSpacing);
+    SetWindowPos (0,=20
+        0,
+        0,
+        rcDialogWindow.Width (),
+        rcDialogWindow.Height (),
+        SWP_NOZORDER | SWP_NOMOVE);
+</pre>
+    <p>最后可能给让你担心的事情是在编辑控件下还有别的控件，如果是这样的话，还需要做些 
+    小小的调整。<br>
+    </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq5"></a><br>
+    </p>
+    <font color="Red"><h3>显示顶级窗口</h3>
+    </font><p>问：怎样才能在线程中实现对话框的顶层显示。<br>
+    </p>
+    <p>答：这个问题我也遇上过，不知为什么设置成WS_EX_TOPMOST并不能实现，可能我们还 
+    没有真正理解它该怎样使用。但我用另外的方法实现了： </p>
+    <pre>SetWindowPos (&amp;wndTopMost, 0, 0, 0, 0,SWP_NOMOVE | SWP_NOSIZE)。</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq6"></a><br>
+    </p>
+    <font color="Red"><h3>有多个CListCtrl的CListView</h3>
+    </font><p>问：一个CListView的视，在一个报表系统中当我想要将一些东西放入列表中时，首先要 
+    清空原先已经存在的东西，然后再将新的数据放入。这个程序大约有五个关于数据的列表。 
+    每次改动，我都要改变其它的设置，我需要先清空列表数据，然后再将其它的列表的内容 
+    置入，我认为这个方法效率实在是太差了，而且很耗时间，有什么方法更容易一些。<br>
+    </p>
+    <p>答：1）较好的方法是实现一个带有多个CListView的CFrameWnd，当其中一个被激活时，其它将 
+    会自动隐藏。<br>
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2）你的方法是：在列表控件先保存了所有的栏目，然后当使用InsertColumn()来插入 
+    栏目时必须要用DeleteColumn()来删除已经存在的栏目。如果有一个办法能够统计栏目 
+    数量（象GetItemCount()返回表的行数一样）就会容易一些了。但要实现它不可避免的 
+    要保存该控件的变化以及栏目，要改变它就不得不依靠一个新的列表控件。这里如果你 
+    使用RecordSet类来保存你的数据时，在插入新的列表项时为了得了当前的栏目数和（为 
+    了保持正确）删除栏目时就会再一次保存栏目。也许你应该忘记这个方法，通常情况下这 
+    种方法效率是不高的，除了所有的列表控件都拥有相同的栏目，这样你就不用改变而只需 
+    要刷新一下就可以了。<br>
+    </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq7"></a><br>
+    </p>
+    <font color="Red"><h3>编译错误</h3>
+    </font><p>问:请问下面的错误提示什么意思: </p>
+    <pre>fatal error C1852: 'Debug/test1.pch' is not a valid precompiled header file</pre>
+    <p>答:1）一般情况下,出现 这种错误是因为发生下面原因之一: 1.一个.pch文件不能被编译器认识 
+    2.存在一个不正确的.pch 
+    解决上面两种情况的方法我是采用删除有问题的.pch文件,然后全部重新建立就可以了.<br>
+    </p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2）试下改变'Automatic use of precompiled headers'将'through 
+    header'置为空, </p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq8"></a><br>
+    </p>
+    <font color="Red"><h3>位图</h3>
+    </font><p>问：对一个图形对象，我想用一种颜色来替换原位图调色板中的某一颜色。另外不管 
+    系统是处于16位，32位，256色是不是都可以用上面的方法解决。 
+    答：我认为你必须对每种情况作出不同的处理，256色可以通过调色板来改变某一颜色，但在 
+    真彩系统中必须重绘图中的相应的点才可以。（位图是真彩色的） </p>
+    <pre>#define DSPDxax   0x00E20746
+
+void CSJSizeBar::SwapBitmapColor(CDC* pDC, CBitmap* pBitmap,
+       COLORREF rgbNew, COLORREF rgbOld)
+{
+ BITMAP bm;
+ CBitmap bmMask;
+ CDC memDC,maskDC;
+
+ // create memory dc for drawing
+ memDC.CreateCompatibleDC( pDC );
+ CPalette* pOldPalette = (CPalette*)memDC.SelectPalette(
+ pDC-&gt;GetCurrentPalette(),FALSE );
+ memDC.RealizePalette();
+ CBitmap* Bitmap = memDC.SelectObject( pBitmap );
+
+ // fill out bitmap structure
+ pBitmap-&gt;GetBitmap( &amp;bm );
+
+ // create mask
+ bmMask.CreateBitmap( bm.bmWidth,bm.bmHeight,1,1,NULL );
+
+ maskDC.CreateCompatibleDC( &amp;memDC );
+ CBitmap* bmOld = maskDC.SelectObject( &amp;bmMask );
+
+ CBrush brush( rgbNew );
+ CBrush* brOld = (CBrush*)memDC.SelectObject( &amp;brush );
+
+ memDC.SetBkColor( rgbOld );
+ maskDC.BitBlt( 0,0,bm.bmWidth,bm.bmHeight,&amp;memDC,0,0,SRCCOPY );
+
+ memDC.SetBkColor( RGB(255,255,255) );
+ memDC.SetTextColor( RGB(0,0,0) );
+ memDC.BitBlt( 0,0,bm.bmWidth,bm.bmHeight,&amp;maskDC,0,0,DSPDxax );
+
+ maskDC.SelectObject( bmOld );
+ memDC.SelectObject( &amp;brOld );
+ memDC.SelectObject( Bitmap );
+ memDC.SelectPalette( pOldPalette,FALSE );
+}</pre>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <hr>
+    <a href="cmfcv30.htm"><p align="center">前一期</a>|<a href="cmfcv28.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+
+<p><a name="PageBegin"></a></p>
+</body>
+</html>

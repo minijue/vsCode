@@ -1,0 +1,108 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>显示器节能状态的自动调节</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <strong><a href="Vc_idx.htm">Visual 
+    C++/C++</a></strong><b>&gt;</b> <font color="#000000">显示器节能状态的自动调节</font></span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><span style="font-size: 9pt"><strong>显示器节能状态的自动调节</strong></span></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>在Win98中，我们可以在电源管理（控制面板内）中自动设置显示器的节能状态。当设置好后，在指定时间内若没有键盘输入或鼠标移动时，显示器自动进入节能状态。这样，当较长时间没有使用显示器时，可以起到节约电源功耗作用，而且其节约的功耗还不少。要知道，显示器的功耗占计算机功耗的一半以上。但设置了节能状态后也有不利之处，例如你在播放VCD时，由于没有键盘输入和鼠标拖动，结果显示器同样进入节<br>
+    能状态，屏幕一片漆黑，造成不便；而当你进入节能状态时，若不小心碰了一下键盘，就会取消节能状态，而此时也许你并不希望取消节能状态。另外，在DOS6.22和Win3.2下，无法进入节能状态。因此，最好能自己编制一个程序，可以随时在正常显示状态和节能状态之间切换。本程序通过调用中断0X10中AX=0X4F10来实现，程序在Turbo 
+    C2.0中编译通过。运行video.exe程序（可在DOS提示符下运行，也可以在Windows中做成快捷方式运行），在任何时候输入“W”，就可以进入等待状态；输入“S”，就可以在前一状态下进入挂起状态；输入“C”，就可以切换到关闭状态；输入“T”就可以打开显示器；按下ESC键则退出本程序。需要提醒的是，当处于等待、挂起或关闭状态时，显示器一片漆黑，什么也看不见，但只要输入相应的字符，就可以切换到指定的节能或正常显示状态，你可以通过显示器的指示灯查看到变化。特别要注意的是，一定要在按下“T”键进入正常显示状态后再退出本程序，否则无法从节能状态进入正常显示状态，屏幕上什么也看不见，而只有重新启动了。<br>
+    &nbsp;&nbsp; 运行本程序，你可以随时进入节能状态，并同Win98的节能状态设置相结合，效果就更好了。下面就<br>
+    是源程序video.c。<br>
+    #include &quot;stdio.h&quot;<br>
+    #include &quot;sidlib.h&quot;<br>
+    #include &quot;dos.h&quot;<br>
+    #include &quot;conio.h&quot;<br>
+    unsigned char detect_video();<br>
+    void Set_Mede(unsigned char mode);<br>
+    main()<br>
+    { unsigned char ch;<br>
+    &nbsp; if(detect_video()!=0x4f) / * 判断是否支持节能功能 * /<br>
+    &nbsp;&nbsp;&nbsp; { printf(&quot;This video not suppot PM!&quot;);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);<br>
+    &nbsp;&nbsp;&nbsp; }<br>
+    &nbsp; again:<br>
+    &nbsp; clrscr();<br>
+    &nbsp; printf(&quot; T - - - - - Video Turn On.\n&quot;);<br>
+    &nbsp; printf(&quot; W - - - - - Video Waiting.\n&quot;);<br>
+    &nbsp; printf(&quot; S - - - - - Video Suspend.\n&quot;);<br>
+    &nbsp; printf(&quot; C - - - - - Video Close off.\n&quot;);<br>
+    &nbsp; printf(&quot; ESC - - - - Quit program.\n&quot;);<br>
+    &nbsp; ch = getch();<br>
+    &nbsp; if(ch = =27) exit(0); / * 按 ESC 退出 * /<br>
+    &nbsp; else if(ch = = 't' || ch = = 'T' ) Set_Mode(0); / * 
+    设置显示器为正常显示状态 * /<br>
+    &nbsp; else if(ch = = 'w' || ch = = 'W') Set_Mode(1); / * 设置显示器为等待状态 * 
+    /<br>
+    &nbsp; else if(ch = = 's' || ch = = 'S') Set_Mode(2); / * 设置显示器为挂起状态 * 
+    /<br>
+    &nbsp; else if(ch = = 'c' || ch = = 'C') Set_Mode(3); / * 设置显示器为关闭状态 * 
+    /<br>
+    &nbsp; goto again;<br>
+    }<br>
+    unsigned char detect-video() / * 判断显示器是否支持节能功能 * /<br>
+    { union REGS inregs, outregs;<br>
+    &nbsp; inregs.x.ax = 0x4f10;<br>
+    &nbsp; inregs.x.bx = 0;<br>
+    &nbsp; int86(0x10, &amp;inregs, &amp; outregs);<br>
+    &nbsp; return (outregs.h.al); / * 当AL = 0X4F 时支持节能能，否则不支持 * /<br>
+    }<br>
+    { union REGS inregs,outregs;<br>
+    &nbsp; inregs.x.ax=0x4f10;<br>
+    &nbsp; inregs.h.bl=1;<br>
+    &nbsp; inregs.h.bh=mode; / * 设置模式号 * /<br>
+    &nbsp; int86(0x10,&amp; inregs, &amp; outregs);<br>
+    }</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

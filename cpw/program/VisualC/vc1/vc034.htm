@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vcidx098.htm">VC</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">模拟键盘输入实现程序的自动演示<br>
+      <br>
+                            (安徽 王翼)       
+      <p>　　许多优秀的软件都有出色的DEMO(演示)功能，给人留下深刻的印象。DEMO程序或许多CAI(计算机辅助教学)软件经常需要模拟键盘输入所需的文件名，来实现程序的自动运行。要实现键盘的模拟输入，必须了解键盘缓冲区的结构及相应编程机理。键盘缓冲区在内存中的地址分配如下：<br>
+      004：001AH0040：001BH存放键盘缓冲区首指针；<br>
+      004：001CH0040：001DH存放键盘缓冲区尾指针；<br>
+      004：001AH0040：001BH键盘缓冲区，存放击键字符。<br>
+      　　每次击键用2字节存放。若为功能键，则第一个字节为0，第二个字节为该键的扩展码；若为普通键，则第一个字节为该健的ASCCII码，第二字节为0。每击一次键，数据送入键盘缓冲区中尾指针指向的单元，同时尾指针加2；从键盘缓冲区读出键时，数据从缓冲区队列中首指针指示的单元取出，首指针同时加2。若首尾指针相等，表示缓冲区为空。要实现对键盘缓冲区的自动操作，这里利用C语言的对内存直接读库<br>
+      函数peek()和对内存直接写函数pokeb()，从而实现模拟键盘输入功能。<br>
+      　　程序中的关键函数是keyboard(int choice,char key[])，若choice参数不为0，则key字符串中的字符的ASCII码逐个送入键盘缓冲区；如果choice参数为0，则将功能键的扩展码送键盘缓冲区主程序运行后，如果5秒钟内不通过键盘输入所需的文件名，则调用keyboard函数利用模拟键盘输入功能输入bar3d.c(CR)，由此实现程序自<br> 
+      动运行。<br> 
+      程序在P133多媒体机上采用Turbo C 2.0编译连接通过，运行正常。<br> 
+      /＊filename:demo－kbd.c＊/<br> 
+      /＊模拟键盘输入使程序自动运行 ＊/<br> 
+      ＃include&lt;stdio.h><br> 
+      ＃include&lt;conio.h><br> 
+      ＃include&lt;dos.h><br> 
+      keyboard(int choice,char key[])<br> 
+      {<br> 
+      int offset,i;<br> 
+      offset=peek(0x40,0x1c);<br> 
+      for(i=0;key[i]!=``;i＋＋)<br> 
+      {<br> 
+      if(choice==0)<br> 
+      {<br> 
+      pokeb(0x40,offset,0x00);<br> 
+      pokeb(0x40,offset,key[i]);<br> 
+      }<br> 
+      if(choice!=0)<br> 
+      <br> 
+      {<br> 
+      pokeb(0x40,offset,key[i]);<br> 
+      pokeb(0x40,offset＋1,0x00);<br> 
+      }<br> 
+      offset=offset＋2;<br> 
+      if(offset==0x3e)offset=0x1e;<br> 
+      }<br> 
+      pokeb(0x40,0x1c,offset);<br> 
+      }<br> 
+      main()<br> 
+      {<br> 
+      struct time tt;<br> 
+      char name[10];<br> 
+      int t,t1,t2,flag=0;<br> 
+      gettime(＆tt);<br> 
+      t1=tt.ti_sec;<br> 
+      printf("input files name");<br> 
+      while(!kbhit())<br> 
+      {<br> 
+      gettime(＆tt);<br> 
+      t2=tt.ti_sec;<br> 
+      t=t2－t1;<br> 
+      if(t>5)<br> 
+      {<br> 
+      flag=1;<br> 
+      break;<br> 
+      }<br> 
+      }<br> 
+      if(flag==1)keyboard(1,"mljp.cx0D");<br> 
+      gets(name);<br> 
+      printf("s",name);<br> 
+      }      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

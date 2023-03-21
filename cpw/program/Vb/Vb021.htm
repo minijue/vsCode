@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>现在的位置是</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td height="10"><span style="font-size: 9pt">现在的位置是： <a href="Vb_idx.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> </span>用VB控制WIN95光驱的开关</td>
+  </tr>
+  <tr>
+    <td height="18"></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><strong>用VB控制WIN95光驱的开关</strong></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">&nbsp;&nbsp;&nbsp; 在WINDOWS95环境下，对光驱门需要手动打开和关闭，不能不说是WINDOWS的一个不足。但我们可以利用VBS．0中的多媒体控件．自己编写出一个用鼠标轻轻一点,即可开关光驱门的程序。<br>
+    &nbsp;&nbsp;&nbsp; 首先，从PROJECT菜单下选取COMPONENTS，单击后选取CONTROL，在框体中将MICROSOFT 
+    MULTIMEDIA CONTROU5.0前的复选框选中，点击OK，在PROJECT中就加入了多媒体控件。然后，为窗体加入下列代码<br>
+    &nbsp;&nbsp;&nbsp; Private Sub Formload（）<br>
+    &nbsp;&nbsp;&nbsp; Form1.MMControl1.DeviceType=&quot;CDAudio&quot;<br>
+    &nbsp;&nbsp;&nbsp; Form1.MMControl1.Command=&quot;open&quot;<br>
+    &nbsp;&nbsp;&nbsp; Form1.MMControl1.Command=&quot;play&quot;<br>
+    &nbsp;&nbsp;&nbsp; Form1.MMControl1.Command=&quot;eject&quot;<br>
+    &nbsp;&nbsp;&nbsp; Form1.MMControl1.Command=&quot;close&quot;<br>
+    &nbsp;&nbsp;&nbsp; End <br>
+    &nbsp;&nbsp;&nbsp; End sub<br>
+    最后，选取FILE菜单下的MAKE EXE顶，将其编译为EXE文件。如此一来，我们就拥有了一个软件方法开关光驱门的程序。将其拖到桌面上，创建一个快捷方式。以后在WINDOWS95下运用时，我们对光驱门的开关只需要鼠标点击这个快捷方式就能实现了。本程序在WIN95,VB5.S下通过.</td>
+  </tr>
+</table>
+</body>
+</html>

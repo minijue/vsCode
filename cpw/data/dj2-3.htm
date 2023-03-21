@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<title>等级考试上机模拟题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+</head>
+
+<body leftmargin="3">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><font color="#0000FF"><a
+    href="data_idx.htm">资料文档</a></font>--&gt;</b><strong><a href="djtest.htm"><font
+    color="#0000FF">全国计算机等级考试新大纲</font></a>--&gt;</strong></span>等级考试上机模拟题（二级C语言）</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><strong>等级考试上机模拟题（二级C语言）</strong></p>
+    <p align="center">陆桂荣</p>
+    <p>&nbsp;&nbsp;&nbsp; 说明：满分为100分，60分及格。前两题为DOS操作题，每题15分，共计30分；后两题为C语言编程题或调试题，共计70分； 
+    测试时间60分钟。<br>
+    &nbsp;&nbsp;&nbsp; 一、DOS操作题<br>
+    &nbsp;&nbsp;&nbsp; 1 删除当前目录下的目录ZSF\DAS。<br>
+    &nbsp;&nbsp;&nbsp; 答案：RD ZSF\DAS<br>
+    &nbsp;&nbsp;&nbsp; 2 将当前目录下的目录KUY\GWE中的文件BTY.EXE改名为KJH.EXE。<br>
+    &nbsp;&nbsp;&nbsp; 答案：REN KUY\GWE\BTY.EXE KJH.EXE<br>
+    &nbsp;&nbsp;&nbsp; 二、调试修改程序题<br>
+    &nbsp;&nbsp;&nbsp; 下面程序中函数fun的功能是：根据整型形参m，计算如下公式的值：y=1＋1/2!＋1/3!＋1/4!＋...＋1/m!<br>
+    &nbsp;&nbsp;&nbsp; 例如：若m=6，则应输出：1.718056。<br>
+    &nbsp;&nbsp;&nbsp; 请改正函数fun中的错误，使它能得出正确的结果。注意：不要改动main函数，不得增行或删行，也不得更改程序的结构!<br>
+    ＃include&lt;conio.h&gt;<br>
+    ＃include&lt;stdio.h&gt;<br>
+    / ＊错误在fun函数中 ＊ /<br>
+    double fun(int m)<br>
+    {int y=1, t=1; <br>
+    int i;<br>
+    for(i=2; i&lt;=m; i＋＋)<br>
+    {t=t＊1/i; y＋= t; }<br>
+    return(y);<br>
+    }<br>
+    main()<br>
+    {int n;<br>
+    clrscr();<br>
+    printf(&quot;Enter n: &quot;);<br>
+    scanf(&quot;％d&quot;, ＆n);<br>
+    printf(&quot;\nThe result is ％1f\n&quot;, fun(n));<br>
+    }<br>
+    &nbsp;&nbsp;&nbsp; 答案：对fun子程序进行修改，修改以后的程序如下：<br>
+    double fun(int m)<br>
+    { double y=1, t=1; /＊类型应为 double＊/<br>
+    int i;<br>
+    for(i=2; i&lt;=m; i＋＋)<br>
+    {t=t＊1.0/i; y＋= t; }<br>
+    /＊ 此处应为 double 类型的数据进行运算＊/<br>
+    return(y);<br>
+    }<br>
+    &nbsp;&nbsp;&nbsp; 三、编程题<br>
+    &nbsp;&nbsp;&nbsp; 请编一个函数int fun(int pm)，它的功能是：判断pm是否是素数。若pm是素数，返回1；若不是素数，返回0。pm的值由主函数从键盘读入。<br>
+    &nbsp;&nbsp;&nbsp; 请勿改动主函数main和其它函数中的任何内容，仅在函数fun的花括号中填入你编写的若干语句。<br>
+    ＃include &lt;conio.h&gt;<br>
+    ＃include &lt;stdio.h&gt;<br>
+    ＃include &lt;math.h&gt;<br>
+    int fun(int a)<br>
+    { /＊答案开始 ＊/<br>
+    ┇<br>
+    ┇<br>
+    /＊答案结束 ＊/<br>
+    }<br>
+    main() / ＊ 主函数＊ /<br>
+    { int x;<br>
+    clrscr();<br>
+    printf(&quot;\nPlease enter a number:&quot;); <br>
+    scanf(&quot;％d&quot;, ＆x);<br>
+    printf(&quot;％d\n&quot;, fun(x));<br>
+    }<br>
+    答案：在函数fun中添加程序段如下：<br>
+    int fun(int a)<br>
+    { /＊参考答案开始 ＊/<br>
+    int i;<br>
+    if(a==2) return 1;<br>
+    i=2;<br>
+    while ((a％i)!=0 ＆＆ i&lt;=sqrt((float) a)) i＋＋; <br>
+    if ((a％i)==0)<br>
+    { printf(&quot;％d not is a prime!&quot;,a); return 0; }<br>
+    printf(&quot;％d is a prime!&quot;,a); return 1;<br>
+    /＊参考答案结束 ＊/<br>
+    } 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    </p>
+    <p>　</td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

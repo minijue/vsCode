@@ -1,0 +1,275 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（十三）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （十 三）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计 —— ASP 篇 （十 三）<font
+    size="-1"> </p>
+    <p align="right"></font><font size="1"><span style="font-family: 宋体; font-size: 9pt">作者 
+    ： 天 骄 创 作 室：书 生 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　当 你 用 ASP 
+    编 写 服 务 器 端 应 用 程 序 时， 必 须 依 靠 ActiveX 组 件 来 强 大 
+    Web 应 用 程 序 的 功 能， 譬 如： 你 需 要 连 接 数 据 库， 对 数 
+    据 库 进 行 在 线 操 作 等 等，本 文 从 本 篇 开 始 将 陆 续 给 大 
+    家 介 绍 ASP ActiveX 组 件 的 使 用 方 法。&nbsp; </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　从 今 天 开 
+    始 我 们 将 正 式 学 习 ASP 的 精 华 部 分 --ActiveX 组 件。 事 实 
+    上， 当 你 用 ASP 编 写 服 务 器 端 应 用 程 序 时， 必 须 依 靠 
+    ActiveX 组 件 来 强 大 Web 应 用 程 序 的 功 能， 譬 如： 你 需 要 连 
+    接 数 据 库， 对 数 据 库 进 行 在 线 操 作 或 者 对 WEB 服 务 器 上 
+    的 文 件 系 统 进 行 操 作， 亦 或 你 需 要 一 个 WEB 广 告 交 换 程 
+    序， 所 有 这 一 切 你 都 必 须 通 过 调 用 ASP 内 建 的 ActiveX 组 件 
+    或 自 己 编 写 所 需 的 组 件 来 完 成。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 那 么， 究 
+    竟 什 么 是 ActiveX 组 件 呢？ 它 又 是 如 何 运 作 的 呢？ 其 实 
+    ActiveX 组 件 是 一 个 存 在 于 WEB 服 务 器 上 的 文 件， 该 文 件 包 
+    含 执 行 某 项 或 一 组 任 务 的 代 码， 组 件 可 以 执 行 公 用 任 
+    务， 这 样 就 不 必 自 己 去 创 建 执 行 这 些 任 务 的 代 码。 例 
+    如， 股 票 行 情 收 报 机 组 件 可 以 在 Web 页 上 显 示 最 新 的 股 
+    票 报 价。 当 你 在 WEB 服 务 器 上 安 装 完 ASP 环 境 后， 就 可 以 
+    直 接 使 用 它 自 带 的 几 个 常 用 组 件， 如 Database Access 组 件。 
+    当 然 你 也 可 以 从 第 三 方 开 发 者 处 获 得 可 选 的 组 件 , 也 
+    可 以 编 写 自 己 的 组 件。 你 可 以 利 用 组 件 作 为 脚 本 和 基 
+    于 Web 应 用 程 序 的 基 本 构 造 块， 只 要 知 道 如 何 访 问 组 件 
+    提 供 的 对 象， 即 使 你 是 位 编 写 脚 本 的 新 手， 也 可 以 在 
+    不 了 解 组 件 运 作 方 式 的 情 况 下 编 写 ASP 程 序。 总 而 言 
+    之， ActiveX 组 件 使 您 不 用 学 习 复 杂 的 编 程 就 能 够 写 出 强 
+    大 的 WEB 服 务 器 端 脚 本。 如 果 您 是 位 Web 应 用 程 序 的 开 发 
+    者， 可 以 使 用 任 何 支 持 组 件 对 象 模 型（COM） 的 语 言 来 
+    编 写 组 件， 如， C、 C++、 Java 或 Visual Basic。 如 果 你 熟 悉 COM 编 
+    程， ActiveX 组 件 就 是 Automation 服 务 器。 但 是 要 在 Web 服 务 器 
+    上 运 行， ActiveX 组 件 不 能 有 图 形 用 户 接 口 元 素， 如 Visual 
+    Basic 的 MsgBox 函 数。 组 件 是 可 以 重 复 使 用 的。 在 Web 服 务 器 
+    上 安 装 了 组 件 后， 就 可 以 从 ASP 脚 本、 ISAPI 应 用 程 序、 服 
+    务 器 上 的 其 他 组 件 或 由 另 一 种 COM 兼 容 语 言 编 写 的 程 
+    序 中 调 用 该 组 件。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 那 么 我 们 
+    在 ASP 中 应 该 如 何 调 用 组 件 呢？ 如 前 所 述， 组 件 是 包 含 
+    在 动 态 链 接 库 (.dll) 或 可 执 行 文 件 (.exe) 中 的 可 执 行 代 
+    码。 组 件 可 以 提 供 一 个 或 多 个 对 象 以 及 对 象 的 方 法 和 
+    属 性。 要 使 用 组 件 提 供 的 对 象， 我 们 首 先 要 创 建 对 象 
+    的 实 例 并 将 这 个 新 的 实 例 分 配 变 量 名。 使 用 ASP 的 
+    Server.CreateObject 方 法 可 以 创 建 对 象 的 实 例。 接 着， 使 用 脚 
+    本 语 言 的 变 量 分 配 指 令 为 对 象 实 例 命 名。 创 建 对 象 实 
+    例 时， 必 须 提 供 实 例 的 注 册 名 称“PROGID”。 如 下 要 创 建 
+    一 个 Ad Rotator 对 象 的 实 例 : </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 &lt; % Set 
+    MyAds = Server.CreateObject(&quot;MSWC.AdRotator&quot;) %&gt; </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 我 们 必 须 
+    使 用 ASP 的 Server.CreateObject 方 法 来 创 建 对 象 实 例， 否 者 ASP 无 
+    法 跟 踪 脚 本 语 言 中 对 象 的 使 用。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 使 用 
+    HTML&lt; OBJECT&gt; 标 签 同 样 可 以 创 建 对 象 实 例， 但 必 须 为 
+    RUNAT 属 性 提 供 服 务 器 值， 同 时 也 要 为 将 在 脚 本 语 言 中 
+    使 用 的 变 量 名 提 供 ID 属 性 组。 使 用 注 册 名 (PROGID) 或 注 册 
+    号 码 (CLSID) 可 以 识 别 该 对 象。 下 面 的 例 子 使 用 注 册 名 
+    (PROGID) 创 建 Ad Rotator 对 象 的 实 例： </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 &lt; OBJECT 
+    RUNAT=Server ID=MyAd PROGID=&quot;MSWC.AdRotator&quot;&gt;&lt; /OBJECT&gt; </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 下 面 列 出 
+    了 ASP 可 安 装 的 常 用 组 件。 </span></font></p>
+    <table width="500">
+<TBODY>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Ad Rotator</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">创 建 一 个 <b>AdRotator</b> 
+        对 象， 该 对 象 可 按 指 定 计 划 在 同 一 页 上 自 动 轮 换 显 示 
+        广 告。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Browser 
+        Capabilities</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">创 建 一 个 <b>BrowserType</b> 
+        对 象， 该 对 象 决 定 访 问 Web 站 点 的 每 个 浏 览 器 的 性 能、 
+        类 型 及 版 本。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Database Access</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">提 供 用 ActiveX 
+        Data Objects (ADO) 对 数 据 库 的 访 问。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Content Linking</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">创 建 一 个 <b>NextLink 
+        </b>对 象， 该 对 象 可 生 成 Web 页 内 容 列 表， 并 象 书 一 样 将 
+        各 页 顺 续 连 接。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>File Access 组 
+        件 </b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">提 供 文 件 的 
+        输 入 输 出 访 问。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Collaboration Data 
+        Objects for NTS 组 件 </b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">可 以 快 速、 
+        简 便 的 在 Web 页 上 添 加 收 发 邮 件 功 能。 该 组 件 只 适 用 于 
+        Internet Information Server for Windows NT&reg; Server 。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>MyInfo</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">创 建 一 个 <b>MyInfo</b> 
+        对 象， 该 对 象 追 踪 个 人 信 息， 例 如 站 点 管 理 员 的 姓 
+        名、 地 址 及 显 示 选 择。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Counters</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">创 建 一 个 <b>Counters</b> 
+        对 象， 该 对 象 可 以 创 建、 保 存、 增 加 或 检 索 任 意 数 量 
+        的 独 立 计 数 器。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Content Rotator</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">自 动 翻 转 Web 
+        主 页 上 的 HTML 内 容 字 符 串。 </span></font></td>
+      </tr>
+      <tr vAlign="top">
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt"><b>Page Counter</b></span></font></td>
+        <td><font size="1"><span style="font-family: 宋体; font-size: 9pt">记 录 并 显 示 
+        Web 页 被 打 开 的 次 数。 </span></font></td>
+      </tr>
+</TBODY>
+    </table>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 现 在 WEB 广 
+    告 几 乎 充 斥 了 整 个 网 络， 那 么 究 竟 如 何 在 你 自 己 的 网 
+    站 上 建 立 一 个 符 合 广 告 领 域 标 准 功 能 的 广 告 系 统 呢？ 
+    答 案 是 利 用 ASP AD Rotator 组 件 ! 它 允 许 在 每 次 访 问 ASP 页 面 
+    时 在 页 面 上 显 示 新 的 广 告， 并 且 提 供 了 很 强 的 功 能， 
+    例 如 : 旋 转 显 示 在 页 面 上 的 广 告 图 象 的 能 力、 跟 踪 特 
+    定 广 告 显 示 次 数 的 能 力 以 及 跟 踪 客 户 端 在 广 告 上 单 
+    击 次 数 的 能 力。 AD Rotator 组 件 的 工 作 是 通 过 读 取 AD Rotator 
+    计 划 文 件 来 完 成 的， 该 文 件 包 括 与 要 显 示 的 图 象 文 件 
+    的 地 点 有 关 的 信 息 以 及 每 个 图 象 的 不 同 属 性， 下 面 就 
+    是 一 个 标 准 的 AD Rotator 计 划 文 件 : <br>
+    ---ADROT.TXT---<br>
+    REDIRECT /scripts/adredir.asp<br>
+    WIDTH 440 <br>
+    HEIGHT 60 <br>
+    BORDER 1 <br>
+    *<br>
+    ads/homepage/chinabyte.gif <br>
+    http://www.chinabyte.com/<br>
+    Check out the IT site<br>
+    2<br>
+    ads/homepage/gamichlg.gif <br>
+    -<br>
+    Sponsored by Flyteworks<br>
+    3<br>
+    ads/homepage/asp.gif <br>
+    http:// www.aspallian.com/<br>
+    Good ASP site on net<br>
+    3<br>
+    ads/homepage/spranklg.gif <br>
+    http://www.clocktower.com/<br>
+    The #1 Sports site on the net <br>
+    2<br>
+    </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 该 段 代 码 
+    的 前 四 行 包 含 广 告 的 全 局 设 置。 Redirect 行 指 出 广 告 将 
+    成 为 其 热 连 接 的 URL, 注 意 这 里 不 是 为 广 告 本 身 指 定 的 
+    URL， 而 是 将 调 用 的 中 间 页 面 的 URL， 这 样 我 们 就 可 以 通 
+    过 这 个 中 间 页 面 跟 踪 单 击 广 告 的 次 数。 该 Redirect URL 将 
+    与 包 含 两 个 参 数 的 查 询 字 符 串 一 起 调 用 : 特 定 广 告 主 
+    页 的 URL 和 图 象 文 件 的 URL。 星 号 上 面 的 其 余 三 行 简 单 说 
+    明 如 何 显 示 广 告。 前 两 行 以 像 素 为 单 位 指 定 网 页 上 广 
+    告 的 宽 度 和 高 度， 默 认 值 是 440 和 60 个 像 素。 后 一 行， 
+    同 样 是 以 像 素 为 单 位 指 定 广 告 四 周 超 链 接 的 边 框 宽 
+    度 , 默 认 值 是 1 个 像 素。 如 果 将 该 参 数 设 置 为 0， 则 将 
+    没 有 边 框。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 星 号 下 面 
+    的 行 以 每 四 行 为 一 个 单 位 描 述 每 个 广 告 的 细 节。 在 此 
+    例 中 共 有 16 行， 描 述 四 个 广 告。 每 个 广 告 的 描 述 包 含 
+    图 象 文 件 的 URL、 广 告 的 主 页 URL（如 果 广 告 客 户 没 有 主 
+    页， 请 在 该 行 写 上 一 个 连 字 符“-”， 指 出 该 广 告 没 有 
+    链 接） 和 图 象 的 替 代 文 字 以 及 指 定 该 页 与 其 他 页 交 替 
+    显 示 频 率 的 数 值。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 图 象 是 重 
+    定 向 页 面 的 热 连 接， 它 在 查 询 字 符 串 中 设 置 了 两 个 
+    值， url=/scripts/adredir.asp 以 及 image=/ads/homepage/asp.gif。 要 确 定 广 告 
+    显 示 的 频 率， 可 以 将 计 划 文 件 中 所 有 广 告 的 权 值 相 
+    加， 在 该 例 中 总 数 是 10， 那 么 aspallian 的 广 告 权 值 为 3， 
+    这 意 味 着 AdRotator 组 件 每 调 用 十 次， 它 则 显 示 3 次。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 重 定 向 文 
+    件 是 用 户 创 建 的 文 件。 它 通 常 包 含 用 来 解 析 由 AdRotator 
+    对 象 发 送 的 查 询 字 符 串 的 脚 本 并 将 用 户 重 定 向 到 与 
+    用 户 所 单 击 的 广 告 所 相 关 的 URL。 用 户 也 可 以 将 脚 本 包 
+    含 进 重 定 向 文 件 中， 以 便 统 计 单 击 某 一 特 定 广 告 的 用 
+    户 的 数 目 并 将 这 一 信 息 保 存 到 服 务 器 上 的 某 一 文 件 
+    中。 增 加 计 数 器 和 重 定 向 用 户 是 通 过 下 面 两 行 ASP 脚 本 
+    来 实 现 的 : <br>
+    &lt; %<br>
+    Counter.Increment(request.querystring(&quot;url&quot;))<br>
+    response.redirect(request.querystring(&quot;url&quot;))<br>
+    %&gt;<br>
+    </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 现 在 我 们 
+    看 一 下 Ad Rotator 组 件 是 如 何 在 页 面 中 使 用 的， 首 先 必 须 
+    使 用 Server.CreateObject 方 法 实 例 化 Ad Rotator 对 象。 Ad Rotator 组 件 
+    的 PROGID 属 性 是 MSWC.AdRotator。 完 整 的 代 码 如 下 : <br>
+    &lt; % Set ad = Server.CreateObject(&quot;MSWC.AdRotator&quot;) %&gt;<br>
+    &lt; %= ad.GetAdvertisement(&quot;/ads/adrot.txt&quot;) %&gt; <br>
+    </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 Ad Rotator 组 
+    件 支 持 的 唯 一 方 法 是 GetAdvertisement， 它 只 有 一 个 参 数 
+    :AdRotator 计 划 文 件 的 名 称。 注 意 指 向 文 件 的 路 径 是 从 当 
+    前 虚 拟 目 录 的 相 对 路 径， 物 理 路 径 是 不 允 许 的。 
+    GetAdvertisement 方 法 从 Rotator 计 划 文 件 中 获 取 下 一 个 计 划 广 
+    告 的 详 细 说 明 并 将 其 格 式 化 为 HTML 格 式。 下 面 的 HTML 由 
+    GetAdvertisement 方 法 生 成 且 被 添 加 到 网 页 的 输 出 中， 以 便 
+    显 示 Rotator 计 划 文 件 中 的 下 一 个 广 告。 <br>
+    &lt; A 
+    HREF=&quot;http://www.chinabyte.com/scripts/adredir.asp?http://www.aspallian.com/&quot;&gt;&lt; 
+    IMG <br>
+    SRC=&quot;http://www.chinabyte.com/ads/homepage/asp.gif&quot; ALT=&quot;Good ASP site on 
+    net&quot; WIDTH=440 HEIGHT=60 BORDER=1&gt;&lt; /A&gt; <br>
+    </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 使 用 
+    AdRotator 组 件 我 们 可 以 直 接 通 过 对 象 属 性 而 不 是 计 划 文 
+    件 中 的 设 置 来 直 接 控 制 某 些 广 告 特 性， 其 可 用 属 性 如 
+    下 : </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 Border 指 定 
+    广 告 边 框 的 大 小。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 Clickable 指 
+    定 广 告 是 否 为 超 链 接。 </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 TargetFrame 指 
+    定 显 示 广 告 的 框 架 的 名 称。 <br>
+    &lt; %<br>
+    Set ad = Server.CreateObject(&quot;MSWC.AdRotator&quot;)<br>
+    ad.Border = 0<br>
+    ad.Clickable = true<br>
+    ad.TargetFrame = AdFrame<br>
+    ad.GetAdvertisement(&quot;/ads/adrot.txt&quot;)<br>
+    %&gt; </span></font></p>
+    <p><font size="1"><span style="font-family: 宋体; font-size: 9pt">　　 通 过 上 面 
+    的 学 习， 相 信 你 已 经 能 够 熟 练 运 用 ASP 的 内 建 AdRotator 组 
+    件 为 自 己 的 网 站 建 立 一 个 标 准 的 广 告 显 示 程 序 了。 你 
+    是 否 难 以 相 信 一 切 竟 是 如 此 的 简 单？ 其 实 真 正 能 令 你 
+    震 惊 的 还 在 后 头 呢， 敬 请 关 注 下 一 篇 ASP ActiveX 组 件 大 揭 
+    密 ! </span></font></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">用VB开发CAI软件的小经验<br>
+      <br>
+                                 作者：余鑫铭</p>
+      <p><br>
+      &nbsp; 由于近年来计算机应用在学校的普及，CAI软件十分流行。许多教育工作者在初尝学习VB的甜头后，也跃跃欲试，急于把自己的教学经验变成软件，提高教学效率。<br>
+      <br>
+      大部分教学软件都有一个“自动/手动”按钮，学习者可以选择系统自动一步一步往下执行，也可由自己手动控制是否进入到下一步。同时，还应该提供向上向下翻页功能，以使学习者能够自由控制学习流程。<br>
+      <br>
+      下面先谈一谈怎样使系统一步一步自动运行。<br>
+      <br>
+      首先要将教学过程分解为若干步，每一步由一段程序控制。设一整型变量(如StepCo-unt)，在窗体装载时赋初值为0，用来指明将运行哪一段程序。在窗体中另设一定时器(如Timer—step)，在预定时间后产生一触发事件，使程序转入下一步。<br>
+      <br>
+      主程序设计成如下格式：<br>
+      <br>
+      Private Sub Run—Step(bz As Integer)<br> 
+      Select Case bz<br> 
+      Case 1<br> 
+      Timer—step.Interval=20000 ′这一步停留的时间<br> 
+      Timer—step.Enabled=True<br> 
+      (本步的教学过程控制程序)<br> 
+      　　 Case 2<br> 
+      　　 ……<br> 
+      　　 Case 3<br> 
+      　　 ……<br> 
+      　　 End Select<br> 
+      　　End sub<br> 
+      　　Private Sub Timer—step.Timer() ′计时器事件<br> 
+      　　StepCount=StepCount＋1<br>
+      　　 Run—Step StepCount ′调用主程序<br> 
+      　　End Sub<br> 
+      这样，计时器Timer—Step每触发一次，将使变量StepCount的值增1，在调用过程Run—Step时进入下一步学习，而Timer—Step的触发时间可在上一步的程序中设定，具体的Interval值需要根据实际情况确定。<br> 
+      如要实现“自动/手动”切换，只需在窗体中适当位置放上一按钮，并在程序中定义一逻辑变量(如auto，其值为True时自动运行，为False时手动操作)，将上面的Timer—Step中事件修改如下：<br> 
+      <br> 
+      　　Private Sub Timer—step.Timer()<br> 
+      　　 If auto then ′变量值为真时自动执行，否则计时器失效<br> 
+      　　 StepCount=StepCount＋1<br> 
+      　　 Run—Step StepCount<br> 
+      　　 Else<br> 
+      　 Timer—Step.Enable=False<br> 
+      　　 EndIf<br> 
+      　　End Sub<br> 
+      　　这样，只要在该按钮的Click事件中执行语句：auto=Notauto，鼠标点击时，将对应的逻辑变量值取反，即可在“自动/手动”间切换。<br>
+      <br>
+      　　有了上述功能还不够，因为学习者不一定一步一步进行到底，有可能需要返回到上一步，或是跳过某一步。由于我们在程序设计中使用了SelectCase语句来决定运行哪一步，使控制变得十分灵活。只需设置“上一步”按钮，在其Click事件中使变量StepCount的值减1，并调用Run—Step过程，即可返回至上一步：进入下一步可照样处理，只是应将StepCount的值加1。当然，具体实现时要注意上一步的现场与下一步之间有什么不同，以便在程序中得到有效控制，如窗体中各控件的属性、位置等。</p>
+      <p>　     
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

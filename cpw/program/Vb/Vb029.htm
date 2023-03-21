@@ -1,0 +1,170 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>功能强大的SendMessage函数</title>
+<link rel="stylesheet" href="my.css"
+tppabs="http://person.zj.cninfo.net/~lifu/images/my.css">
+</head>
+
+<body style="font-size: 9pt" bgcolor="#FFFFFF">
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <a href="Vbidx099.htm"
+    tppabs="http://person.zj.cninfo.net/~lifu/index.html">Visual Basic</a><b>&gt;</b> 
+    功能强大的SendMessage函数</span></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><span style="font-size: 9pt"><strong>功能强大的SendMessage函数</strong></span></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td>Windows API（应用程序接口）是Windows系列软件为程序开发人员提供的火力强大的“武器库”，在这个武器库中，有很多极具威力的武器，SendMessage就是其中之一，它的功能非常丰富，灵活使用这个函数，会给编程工作带来很多便利。本文以Visual 
+    Basic为例，结合几个具体的例子介绍该函数的功能。<br>
+    <strong>一、SendMeaasge函数简介</strong><br>
+    &nbsp;&nbsp; 顾名思义，SendMessage函数的功能是“发送消息”，即将一条消息发送到指定对象（操作系统、窗口或控件等）上，以产生特定的动作（如滚屏、修改对象外观等）。<br>
+    SendMessage函数在VB中的函数说明如下：<br>
+    Declare Function SendMessage Lib &quot;user32&quot; Alias &quot;SendMessageA&quot; (Byval 
+    hwnd As Long, Byval wMsg As Long,Byval wParam As Long,lParam As Any) As Long<br>
+    其中四个自变量的含义和说明如下：<br>
+    hWnd：对象的句柄。希望将消息传送给哪个对象，就把该对象的句柄作为实参传送，在VB中可以简单地用“对象.hWnd”获得某个对象的句柄，如Text1.hWnd和Form1.hWnd分别可以得到Text1和Form1的句柄。<br>
+    wMsg：被发送的消息。根据具体需求和不同的对象，将不同的消息作为实参传送，以产生预期的动作。<br>
+    wParam、lParam：附加的消息信息。这两个是可选的参数，用来提供关于wMsg消息更多的信息，不同的wMsg可能使用这两个参数中的0、1或2个，如果不需要哪个附加参数，则将实参赋为NULL（在VB中赋为0）。<br>
+    在简单了解了SendMessage函数的格式和功能后，让我们以几个例子来看看它的威力。<br>
+    <strong>二、SendMessage函数使用实例</strong><br>
+    <strong>例1</strong>&nbsp; 多行TextBox中的快速处理功能在处理多行TextBox时我们经常会碰到以下几种情况：<br>
+    &nbsp;&nbsp; 希望了解多行TextBox中目前共有多少行文字。<br>
+    &nbsp;&nbsp; 想快速返回第N行的文字。<br>
+    &nbsp;&nbsp; 对于上面的情况，如果用VB自身的语句或函数来实现的话，要写不短的代码，而且由于要采用顺序查找的办法来完成，因此代码的执行效率也很低。如果使用SendMessage函数则可以大大减少代码量，并大幅度的提高执行效率。<br>
+    &nbsp;&nbsp; 用SendMessage函数完成上面两个任务的方法非常简单，每个任务只需简单地发送一条消息给多行TextBox即可，两个消息分别为：EM_GETLINECOUNT、EM_GETLINE，其它参数和返回值见附表。<br>
+    &nbsp;&nbsp; 下面用一个简单的实例演示这两个功能：<br>
+    新建工程，在Form1上添加三个TextBox（名称分别为Text1、txtLineCount、TxtString，将Text1的Multi<br>
+    Line属性置为True）、三个标签和一个命令按钮。为工程添加一个模块Moudle1，在其中写如下声明（其中<br>
+    SendMessage函数的声明可以从VB的“API浏览器”中复制）：<table border="1"
+    cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td width="20%" align="center"><span style="font-size: 9pt">消息常量名</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">消息值</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">wParam</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">lParam</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">返回值</span></td>
+      </tr>
+      <tr>
+        <td width="20%" align="center"><span style="font-size: 9pt">EM_GETLINECOUNT</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">&amp;HBA</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">未用</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">未用</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">行数</span></td>
+      </tr>
+      <tr>
+        <td width="20%" align="center"><span style="font-size: 9pt">EM_GETLINE</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">&amp;HC4</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">要找的行号</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">存结果的字节串</span></td>
+        <td width="20%" align="center"><span style="font-size: 9pt">结果字节串的字节数</span></td>
+      </tr>
+    </table>
+    <p>Declare Function SendMessage Lib &quot;user32&quot; Alias &quot;SendMessageA&quot; 
+    (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long,lParam As Any) As Long<br>
+    Public Const EM_GETLINECOUNT=&amp;HBA<br>
+    Public Const EM_GETLINE=&amp;HC4<br>
+    在Form1的代码模块中写如下代码：<br>
+    &nbsp;&nbsp;&nbsp; Private Sub Command1_Click()<br>
+    &nbsp;&nbsp;&nbsp; Dim str(256) As Byte<br>
+    &nbsp;&nbsp;&nbsp; str(1)=1 '最大允许存放256个字符<br>
+    &nbsp;&nbsp;&nbsp; '获取总行数，结果显示在文本框txtLineCount中<br>
+    &nbsp;&nbsp;&nbsp; txtlineCount=SendMessage(Text1.hwnd,EM_GETLINECOUNT,0,0)<br>
+    &nbsp;&nbsp;&nbsp; '获取第3行的数据放在str中，转换为字符串后显示在文本框txtString中<br>
+    &nbsp;&nbsp;&nbsp; SendMessage Text1.hwnd,EM_GETLINE,2,str(0)<br>
+    &nbsp;&nbsp;&nbsp; txtString= StrConv(str,vbUnicode)<br>
+    End Sub<br>
+    &nbsp;&nbsp; 之后，按F5运行程序，在多行文本框中随便键入几行文字，然后按下[确定]按钮，出现如图画面，说明程序正确统计出了总行数和第3行的文字。<br>
+    <img src="send-vb1.jpg" tppabs="http://person.zj.cninfo.net/~lifu/images/send-vb1.jpg"
+    width="200" height="186" alt="图1"><br>
+    <br>
+    &nbsp;&nbsp; 两点补充说明：在调用SendMessage获取第N行字符串时，lParam需要说明为字节数组，在调用完成后，再将字节数组转换为字符串；另外，调用前必须在lParam的前两个字节指明允许存放的最大长度，其中第一个字节为低位，第二个字节为高位，本例将高位（即str(1)）置1．说明最大允许存放256个字符。<br>
+    <strong>例2&nbsp; 程序控制拉下或收起组合框的下拉列来</strong><br>
+    &nbsp;&nbsp; 
+    一般情况下，为了拉下或收起组合框的下拉列表，需要用键盘或鼠标进行操作，而有时我们希望程序运行的某个时刻自动拉出下拉列表（比如在一些演示程序中），为了实现这个目的，我们也只有借助于SendMessage函数，方法是发一个CB_SHOWDROPDOWN(&amp;H14F)消息给组合框。<br>
+    &nbsp;&nbsp; 在发CB_SHOWDROPDOWN消息时，wParam参数决定了是拉下列表（=True时）还是收起列表（＝False时），lParam无用（设为0）。<br>
+    &nbsp;&nbsp; 
+    为说明具体的使用方法，下面提供简单的程序片段。首先在代码模块中做如下声明：<br>
+    Declare Function SendMessage Lib &quot;user32&quot; Alias &quot;SendMessageA&quot; (ByVal 
+    hwnd As Long,ByVal wMsg As Long，ByVal wParam As Long,lParam As Any) As Long<br>
+    Const CB_SHOWDROPDOWN=&amp;H14F<br>
+    &nbsp;&nbsp; 当程序中某处需要拉下组合框Combol的列表时，写如下调用语句：<br>
+    SendMessage Combol.hwnd,CB_SHOWDROPDOWN,True,0<br>
+    &nbsp;&nbsp; 当需要收起组合框Combol的列表时，写如下语句：<br>
+    SendMessage Combol.hwnd,CB_SHOWDROPDOWNN,False,0<br>
+    <strong>例3&nbsp; 在列表框中查找匹配的项目</strong><br>
+    &nbsp;&nbsp; 在Win95风格的帮助系统中一般都有一个“索引”页，索引页含有一个文本框和一个列表框，当用户在文本框中输入文字时，下拉列表会动态地显示与文本框中文字最匹配的项目，为用户提供了最大的方便。这种效果在应用程序的帮助系统中很容易实现（只要按照Win95帮助系统的正常制作过程制作就可以实现），如果想在应用程序的其它地方实现这种特性就需费一番心思了。<br>
+    &nbsp;&nbsp; 而使用SendMessage函数实现上述特性则非常简单，甚至只需一条语句就足够了，那就是在文本框的Change事件中给列表框发一条LB_FINDSTRING(&amp;H18F）消息，该消息告诉列表框在列表中查找匹配的项目。<br>
+    &nbsp;&nbsp; 在发LB_FINDSTRING消息时，wParam参数代表从列表框的哪一个项目后面开始查找，一般情况下该参数可定为-1，表示从List1(0)即第一项开始向后循环查找，lParam则传进欲搜索的字符串（必须采用值传递）。<br>
+    &nbsp;&nbsp; 具体的代码和运行画面与后面的例4合并在一起演示。<br>
+    <strong>例4&nbsp; 为ListBox添加水平滚动条</strong><br>
+    &nbsp;&nbsp; 在VB中，列表框控件仅提供垂直滚动条，没有设置水平滚动条的能力，当某些项目的文本宽度较长时，超出列表框宽度部分的文本就无法显示出来，因此，很有必要为ListBox添加一个水平滚动条来方便操作。<br>
+    &nbsp;&nbsp; 为添加水平滚动条，只需发一条LB_SETHORIZONTALEXTENT(&amp;H194)消息给列表框即可。发送消息时，wParam为滚动条的长度（以像素为单位，可通过计算得出准确的长度，也可随便给一个大于最大文本宽度的数字，如本例的250），lParam无用。下面是例3和例4合并在一起的代码和运行画面<br>
+    <img src="send-vb2.jpg" tppabs="http://person.zj.cninfo.net/~lifu/images/send-vb2.jpg"
+    width="239" height="186" alt="图2"><br>
+    <br>
+    Declare Function SendMessage Lib &quot;user32&quot; Alias &quot;SendMessageA&quot;(ByVal 
+    hwnd As Long,ByVal wMsg As Long,ByVal wParam As Long,lParam As Any) As Long<br>
+    Public Const LB_FINDSTRING=&amp;H18F<br>
+    Public Const LB_SETHORIZONTALEXTENT=&amp;H194<br>
+    Private Sub Form_Load()<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;软件&quot;<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;电脑游戏&quot;<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;电视机&quot;<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;电视台&quot;<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;电脑&quot;<br>
+    &nbsp;&nbsp;&nbsp; List1.AddItem &quot;电脑游戏软件&quot;<br>
+    &nbsp;&nbsp;&nbsp; '下一句为列表框添加水平滚动条<br>
+    &nbsp;&nbsp;&nbsp; SendMessage List1.hwnd,LB_SETHORIZONTALEXTENT,250,0<br>
+    End Sub<br>
+    Private Sub Text1_Change()<br>
+    &nbsp;&nbsp;&nbsp; '注意！当lParam传入的是字符串时，必须用ByVal传递<br>
+    &nbsp;&nbsp;&nbsp; List1.ListIndex ＝ SendMessage(List1.hwnd,LB_FINDSTRING,-1,ByVal 
+    Text1.Text)<br>
+    End Sub<br>
+    &nbsp;&nbsp; 通过上面几个例子，想必您已经对SendMessage函数的强大功能有了初步的了解。事实上利用该函数我们还可以完成更多更好的任务，如控制文本框的自动滚屏、实现文字编辑过程中的Undo功能、操纵应用程序的窗体控制菜单等等，感兴趣的读者请参阅有关Windows 
+    API的资料。<br>
+    &nbsp;&nbsp; 本文程序均用Visual Basic 5.0企业版编写，在Pwin95环境下运行正常。</td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+</table>
+
+<p><br>
+<br>
+</p>
+</body>
+</html>

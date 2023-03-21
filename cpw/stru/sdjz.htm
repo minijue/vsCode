@@ -1,0 +1,57 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>三对角阵问题</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body background="../res/back.JPG">
+
+<p align="center"><strong>三对角阵问题</strong></p>
+
+<p>//三对角阵问题<br>
+#include &lt;iostream.h&gt;<br>
+#include &lt;iomanip.h&gt;<br>
+#define n 10<br>
+#define nn 5<br>
+/*void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i=0,j=1,m,k=0,lj=1;<br>
+m=3*n-2;<br>
+int a[n+1][n+1]={{0}};<br>
+&nbsp;&nbsp;&nbsp; do<br>
+{<br>
+&nbsp;&nbsp;&nbsp; k++;i++;lj++;<br>
+a[j][i]=k;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(lj==3){i=i-2;j++;lj=0;}<br>
+}while(k!=m);<br>
+<br>
+for(i=1;i&lt;=n;i++)<br>
+{&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++)<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;setw(4)&lt;&lt;a[j][i];<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;endl;<br>
+}<br>
+cin&gt;&gt;m;<br>
+}*/<br>
+void main()<br>
+{<br>
+&nbsp;&nbsp;&nbsp; int i=0,j=1,m,k=0,lj=1,sbj=1,xbj=n;<br>
+m=nn*n-2;<br>
+int a[n+1][n+1]={{0}};<br>
+&nbsp;&nbsp;&nbsp; do<br>
+{<br>
+&nbsp;&nbsp;&nbsp; k++;i++;lj++;sbj++;xbj--;<br>
+a[j][i]=k;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(lj==3){i=i-2;j++;lj=0;}<br>
+}while(k!=m);<br>
+<br>
+for(i=1;i&lt;=n;i++)<br>
+{&nbsp;&nbsp;&nbsp; for(j=1;j&lt;=n;j++)<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;setw(4)&lt;&lt;a[j][i];<br>
+&nbsp;&nbsp;&nbsp; cout&lt;&lt;endl;<br>
+}<br>
+cin&gt;&gt;m;<br>
+}</p>
+</body>
+</html>

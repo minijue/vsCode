@@ -1,0 +1,278 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../../progidx.htm">编程技巧</a> --&gt; 
+      <a href="../Vbidx099.htm">VB</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">Visual Basic设计多媒体应用程序<br> 
+      <br> 
+                             □王向阳</p> 
+      <p><br> 
+      一、前言<br> 
+      　　随着多媒体硬件环境和软件环境的不断完善，目前，大部分计算机软件开发中都涉及多媒体软件技术的应用。<br>
+      　　进行多媒体应用程序设计，从原理上说，可以采用从C++到多媒体专用开发系统（如TOOLBOOK、AUTHORWARE、DIRECTOR）等多种层次的工具。然而，由于多媒体软件涉及的媒体复杂多样、开发周期短并且需要多种专业人员参与，因此，为了能进行实用高效的开发，必须选用简单易用、开发效率高的软件。<br>
+      　　Visual Basic是Microsoft公司开发的Windows编程工具软件。由于它具有先进的设计思想、快速易掌握的使用方法及控制媒体对象手段灵活多样等特点，受到了多媒体软件开发人员的关注和青睐，也因此成为多媒体应用程序开发的理想工具。<br> 
+      <br> 
+      二、Visual Basic的多媒体控件MCI.OCX<br> 
+      <br> 
+      　　MCI（媒体控制接口）是Microsoft公司为实现Windows系统下设备无关性而提供的媒体控制接口标准。用户可以方便地使用MCI控制标准的多媒体设备。<br>
+      <br>
+      　　MCI包含在Windows多媒体扩展的MMSYSTEM模块中，用来协调事件间以及MCI设备驱动程序间的通讯，提供了与设备无关的接口属性。通常应用程序是通过指定一个MCI设备类型来区分MCI设备，设备类型指明了当前实际使用设备的物理类型，不同的设备类型使用不同的控件属性来进行描述(见附表1)。<br>
+      <br>
+      　　从使用的控制方式上来说，MCI设备分为复合和简单两类。一个简单MCI设备并不需要设备元素。例如，CD音频和音碟机就是在一个已经安装好了的硬盘上工作的，它们不需要应用程序为其操作的媒体内容提供任何信息。但对于复合的MCI设备，就需要应用程序提供设备元素，即一个包含全部路径名的源数据文件或目的文件。<br>
+      <br>
+      　　Visual Basic语言的Custom Control（用户控制部件）概念体现了当今软件设计的发展潮流--面向对象技术，编程者可以在Visual Basic的工具箱（Toolbox）中嵌入各式各样五花八门的用户控件，每个用户控制部件都有一定的属性和操作方法，编程者通过属性的设置和方法的控制完成特定的功能。为了方便地控制多媒体，在专业版Visual Basic工具箱中提供了一个用于多媒体目的的用户控件--MCI.OCX。<br> 
+      <br> 
+      　　多媒体MCI控件MCI.OCX专用于对多媒体控制接口MCI设备的多媒体数据文件实施记录和回放，从目的效果上来说，该控件通过一组按钮来发出种种设备控制命令以实现对诸如:音频面板、MIDI音序器、CD-ROM驱动器、音频CD播放机、录像带播放、录音带录放等设备的控制。在Visual Basic程序设计时，当在表中加入多媒体MCI控件时（在工具箱内双击MCI控件），则出现下列按钮群：向前（Prev）、向后（Next）、播放（Play）、暂停（Pause）、返回（Back）、单步（Step）、停止（Stop）、记录（Record）和出带（Eject）。<br> 
+      <br> 
+      　　应用程序对MCI的这组按钮操作非常灵活方便，如当我们打开一个MCI设备后，就<br>
+      可以根据该设备类型的属性随时从控件中选择合适的状态按钮来表示即刻设备的物理<br>
+      状态。所有MCI控件可以有下列几种方式来编程：⑴控件及其各按钮的可见性和使能性；<br>
+      ⑵可变或完全对控件进行重新定义；⑶在一个窗口表格中可以同时控制多个设备。<br>
+      <br>
+      三、多媒体控制部件MCI.OCX的调用<br>
+      　　在Visual Basic3.0专业版中，多媒体控件MCI.OCX（在Visual Basic 3.0和4.0中，<br> 
+      多媒体控件的扩展名为.VBX）是作为可选用部件提供的。为了使用它，首先要执行<br> 
+      FileAdd File菜单命令，把Windowssystem目录下的MCI.OCX加入到工具箱（Toolbox）<br> 
+      中，这时会在工具箱中出现相应的MCI.OCX图标。如果使用的是Visual Basic4.0版（或<br> 
+      5.0版），选择ToolsCustom Controls菜单或直接键入Ctrl+T，即可出现对话框，在<br> 
+      Available Controls列表框中选中Microsoft Multimedia Controls条目旁边的检查框，<br> 
+      同样会在工具箱中出现MCI.OCX图标。<br> 
+      　　双击工具箱中的多媒体控件MCI.OCX图标，调用MCI.OCX控件之后，表单FORM中将出<br>
+      现一排灰色的媒体控制按钮（九个）。<br>
+      <br>
+      四、Visual Basic多媒体应用程序设计步骤<br> 
+      　　多媒体控件MCI.OCX包含有一组高级的与设备无关的控制命令。在使用该多媒体控<br>
+      件时，首先用OPEN命令打开MCI设备（多媒体设备）并建立一个与之对应的文件,以便来<br>
+      进行录或放等操作（但是对诸如CDAudio、VCR和录像带不能使用相应文件）。一旦设备<br>
+      打开成功，就可以向它发出各种操作命令（见附表的按钮命令）来完成指定的工作任务。<br>
+      最后记住，要用Close命令来关闭设备和数据文件。<br>
+      　　使用MCI.OCX来进行多媒体应用程序开发是很方便的，因为大多数属性都是容易理<br>
+      解的，其中Command属性尤为重要，它是在运行过程中向多媒体设备发命令。格式为:<br>
+      　　Form.MMcontrol.Command＝cmdstring$<br>
+      　　其中，cmdstring$变量是如下可执行命令名:Open、Close、Play、Pause、Stop、<br>
+      Back、Step、Prev、Next、Seek、Record、Eject、Sound和Save。一旦给其命令设置，<br>
+      它就立刻执行，所发生的错误存在Error属性中。<br>
+      　　下面以播放DEMO.WAV（波形文件）文件为例，说明Visual Basic多媒体应用程序设<br> 
+      计步骤。<br> 
+      　　首先，创建一个包含有多媒体控件（MCI.OCX）的表格（Form），于是屏幕上显示<br>
+      出形状类似录音机的控制键，不过这时多媒体控制部件是不能马上拿来用的（各键呈灰<br>
+      色），须通过程序代码来改变键的状态。<br>
+      　　其次，在Form_Load过程中，插入相应程序代码。如下<br>
+      　　Sub Form_Load()<br> 
+      　　‘在发出 OPEN 命令前要设置多媒体设备的属性<br> 
+      　　Form1.MMControl1.Notify=False<br>
+      　　Form1.MMControl1.Wait=True<br>
+      　　Form1.MMControl1.Shareable=False<br>
+      　　Form1.MMControl1.DeviceType="WaveAudio"<br>
+      　　Form1.MMControl1.FileName="c:windowss<br>
+      牋?  mmdatademo.wav"<br> 
+      　　Form1.MMControl1.Command="Open"<br>
+      　　End Sub<br> 
+      <br> 
+      　　最后，运行上述程序，控制键呈黑色，这时就可以使用Play、Record等键操作数据<br>
+      文件DEMO.WAV了。例如用鼠标点按Play键就能听到.WAV音效（计算机应装有发音设备）。<br>
+      　　通过上面陈述，不难发现，Visual Basic利用多媒体控件MCI.OCX设贫嗝教逵τ贸?序很容易掌握。<br> 
+      <br> 
+      五、Visual Basic多媒体应用程序设计实例<br> 
+      　　1、播放CD音乐<br>
+      　　在很多多媒体软件系统中，都提供了激光唱盘的播放软件，利用多媒体控件MCI.OCX，<br>
+      我们可以轻松地编制出符合自己使用要求的简易激光唱盘播放机。<br>
+      　　表1给出了简易CD播放器的主要控制部件定义，其后是对应于各个触发事件的源程序<br>
+      代码。<br>
+      完整的源程序清单如下:<br>
+      　　`CD播放机实用程序<br>
+      　　`运行程序前请在CD-ROM驱动器中装入一张激光唱碟’“LOAD”按钮触发事件<br>
+      　　Private Sub Command1_Click()<br> 
+      　　`装入CD唱片<br>
+      　　On Error GoTo MCI_ERROR<br> 
+      　　MMControl1.Command = "Open"<br> 
+      　　On Error GoTo 0<br> 
+      　　`设置时间格式<br>
+      　　MMControl1.TimeFormat = vbMCIFormatTmsf<br> 
+      　　`关闭LOAD按钮，显示图片<br>
+      　　Command1.Enabled = False<br> 
+      　　Picture1.Picture = Picture3.Picture<br> 
+      　　` 设置初始轨道数<br> 
+      　　Label1.Caption = "1"<br> 
+      　　Exit Sub<br> 
+      　　MCI_ERROR:<br>
+      　　DisplayErrorMessageBox<br>
+      　　Resume MCI_EXIT<br> 
+      　　MCI_EXIT:<br>
+      　　Unload CD<br> 
+      　　End Sub<br> 
+      <br> 
+      　　Private Sub Form_Load()<br> 
+      　　MMControl1.Wait = True<br> 
+      　　MMControl1.UpdateInterval = 0<br> 
+      　　` 设置设备类型<br> 
+      　　MMControl1.DeviceType = "CDAudio"<br> 
+      　　`设置缺省轨道数为0<br>
+      　　Label1.Caption = "0"<br> 
+      　nd Sub<br> 
+      <br> 
+      　　Private Sub Form_Unload(Cancel As Integer)<br> 
+      　　MCITest.Show<br>
+      　　End Sub<br> 
+      <br> 
+      　　’“出带”按钮触发事件<br>
+      　　Private Sub MMControl1_EjectClick(Cancel As Integer)<br> 
+      　　Command1.Enabled = True<br> 
+      　　Picture1.Picture = Picture2.Picture<br> 
+      　　MMControl1.UpdateInterval = 0<br> 
+      　　On Error GoTo MCI_ERROR2<br> 
+      　　MMControl1.Command = "Eject"<br> 
+      　　MMControl1.Command = "Close"<br> 
+      　　On Error GoTo 0<br> 
+      　　Label1.Caption = "0"<br> 
+      　　Label3.BackColor = &amp;H404040<br> 
+      　　Exit Sub<br> 
+      　　MCI_ERROR2:<br>
+      　　DisplayErrorMessageBox<br>
+      　　Resume Next<br> 
+      　　End Sub<br> 
+      <br> 
+      　　’“向前”按钮触发事件<br>
+      　　Private Sub MMControl1_NextCompleted(ErrorCode As Long)<br> 
+      　　Label1.Caption = Str$(MMControl1.Track)<br> 
+      　　End Sub<br> 
+      <br> 
+      　　’“暂停”按钮触发事件<br>
+      　　Private Sub MMControl1_PauseClick(Cancel As Integer)<br> 
+      　　MMControl1.UpdateInterval = 0<br> 
+      　　Label3.BackColor = &amp;H404040<br> 
+      　　End Sub<br> 
+      <br> 
+      　　’“播放”按钮触发事件<br>
+      　　Private Sub MMControl1_PlayClick(Cancel As Integer)<br> 
+      　　MMControl1.UpdateInterval = 1000<br> 
+      　　Label1.Caption = Str$(MMControl1.Track)<br> 
+      　　End Sub<br> 
+      <br> 
+      　　’“向后”按钮触发事件<br>
+      　　Private Sub MMControl1_PrevCompleted(ErrorCode As Long)<br> 
+      　　Label1.Caption = Str$(MMControl1.Track)<br> 
+      　　End Sub<br> 
+      　　<br>
+      　　Private Sub MMControl1_StatusUpdate()<br> 
+      　　Label1.Caption = Str$(MMControl1.Position And &amp;HFF)<br> 
+      　　If MMControl1.Mode = vbMCIModePlay Then<br> 
+      　　Label3.BackColor = &amp;H80FF&amp;<br> 
+      　　Else<br>
+      　　Label3.BackColor = &amp;H404040<br> 
+      　　End If<br> 
+      　　End Sub<br> 
+      　<br>
+      　　’“停止”按钮触发事件<br>
+      　　Private Sub MMControl1_StopClick(Cancel As Integer)<br> 
+      　　MMControl1.UpdateInterval = 0<br> 
+      　　Label3.BackColor = &amp;H404040<br> 
+      　　MMControl1.To = MMControl1.Start<br> 
+      　　MMControl1.Command = "Seek"<br> 
+      　　MMControl1.Track = 1<br> 
+      　　Label1.Caption = "1"<br> 
+      　　End Sub<br> 
+      <br> 
+      　　2、播放AVI（音频视频接口）文件<br>
+      　　电影（包括声音和图像）是广大计算机工作者最为关心的媒体信息之一，电影处理技<br>
+      术也是多媒体关键技术之一。而在多媒体系统中，AVI（Audio Video Interface，音频视<br> 
+      频接口）文件是存储电影（包括声音和图像）的标准格式，这些AVI文件一般是通过捕获<br> 
+      实时视频信号得来的，也可以通过扫描仪获取图像或者使用动画制作软件得到。于是，屏<br> 
+      幕窗口上的音频视频操作，就变成了对AVI文件（文件后缀为AVI）的处理。<br> 
+      在实际工作中，播放AVI文件（即影片）的方法有许多种，而其中以利用Visual Basic的<br> 
+      多媒体控件方法最为简单、方便。下面以一个具体实例来说明如何播放AVI文件：假设用<br> 
+      户当前目录下有名字为DEMO.AVI的视频音频文件，则利用Visul Basic播放该影片需要经<br> 
+      过如下步骤：<br> 
+      　　（1）在Visual Basic的窗体中加入一个MMControl多媒体控件、一个PictureBox图片<br> 
+      框控件和两个ComandButton命令按钮部件；<br> 
+      　　（2）设置各个控件的属性，其中窗体命名为Form1，MMControl多媒体控件命名为<br>
+      MMControl1、PictureBox图片框控件命名为Picture1、两个ComandButton命令按钮控件分<br>
+      别命名为Play和Close；<br>
+      　　（3）编写各触发事件源程序代码并且运行。源程序代码为：<br>
+      　　Private Sub Play_Click()<br> 
+      　　MMControl1.Filename = "DEMO.AVI"<br> 
+      　　MMControl1.DeviceType= = "AVIVIDEO"<br> 
+      　　MMControl1.hWndDisplay = Picture1.hWnd<br> 
+      　　MMControl1.Command = "OPEN"<br> 
+      　　MMControl1.To = 1<br> 
+      　　MMControl1.Command = "SEEK"<br> 
+      　　MMControl1.Command = "PLAY"<br> 
+      　　End Sub<br> 
+      　　Private Sub Close_Click()<br> 
+      　　MMControl1.Command = "STOP"<br> 
+      　　MMControl1.Command = "CLOSE"<br> 
+      　　End Sub<br> 
+      　　值得注意的是：在播放AVI文件之前，首先应该把AVI（音频视频）驱动程序安装在<br>
+      Windows下。AVI的驱动程序名为MCIAVI.DRV，必须将它拷贝到WINDOWSSYSTEM目录下，<br>
+      同时在SYSTEM.INI文件的[MCI]部分加上：<br>
+      　　AVIVIDEO=MCIAVI.DRV<br>
+      　　这样，运行Windows时，Windows会自动地将AVI的驱动程序安装好。<br>
+      　　以上仅描述了利用多媒体控制部件播放音频文件（.WAV）、CD唱片和音频视频文件<br>
+      （.AVI）的操作过程。实际上利用多媒体控制部件同样可以播放动画文件（.FLI、.FLC）、<br>
+      MIDI文件等其他媒体信息。<br>
+      <br>
+      六、结束语<br>
+      　　通过前面论述，不难看出：利用Visual Basic提供的多媒体控制部件MCI.OCX，广大计<br> 
+      算机用户可以方便、快捷、高效率地开发出各种多媒体应用程序。但需要强调的是：开发<br> 
+      设计Visual Basic多媒体应用程序，除了可以利用多媒体控制部件以外，还可以采用其他<br> 
+      手段，例如通过调用API函数等等（鉴于篇幅，这里未做讨论）。可见， Visual Basic确<br> 
+      实是专业与非专业多媒体软件开发人员共同拥有的理想开发工具。<br> 
+      <br> 
+      附表1 MCI设备类型定义<br> 
+      设备类型 　  设备描述<br> 
+      CDAudio 　　 激光唱盘播放设备<br> 
+      DAT 　 　　　数字化磁带音频播放机<br>
+      DigitalVideo  动态数字视频图像设备<br> 
+      Animation 　动画播放设备<br>
+      Other　　　   未给出标准定义的MCI设备<br> 
+      Overlay 　 　模拟视频图像叠加设备<br>
+      Sequence 　 　MIDI音序发生器<br>
+      VCR　　　　   可以使用程序控制的磁盘录像机<br> 
+      VideoDisc 　 可以使用程序控制的激光视盘机<br> 
+      WaveAudio 　播放数字化波形音频的设备???&nbsp;<br>
+      <br>
+      附表2 多媒体控制部件特有事件列表<br> 
+      事件 　　　　　　说明<br>
+      Done 　　　　　　 完成MCI命令动作（Notify为真）<br> 
+      ButtonClick 　　 单击按钮<br> 
+      ButtonCompleted    按钮执行命令完成&nbsp;<br>
+      ButtonGetFocus　   按钮获得输入焦点<br> 
+      ButtonLostFocus    按钮失去输入焦点<br> 
+      StatusUpdate 　　更新媒体控制对象的状态信息      
+    </td>     
+  </tr>     
+</table>     
+</center></div>     
+
+</body>
+
+</html>

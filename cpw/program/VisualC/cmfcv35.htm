@@ -1,0 +1,159 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb_2312-80">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title></title>
+</head>
+
+<body bgcolor="#8080C0">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="Vcidx098.htm">Visual 
+    C++/C++</a> --&gt;</b> MFC邮递表的中文翻译(第三十五期)</span></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<h2 align="center"><span style="font-size: 9pt">MFC邮递表的中文翻译</span></h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;我是一名mfc程序设计的爱好者,订阅了mfc的maillist,利用业余时间 
+    将它翻译出来,希望能对mfc编程的朋友有所帮助,请朋友们指正.<br>
+    </p>
+    <h3><font color="#FF0000">第三十五期目录</font> <fontsize="2">杨晓东 1999.4.27</h3>
+    <ol>
+      <li><a href="#volq1">改变树形控件字体</a> </li>
+      <li><a href="#volq2">视的边框</a> </li>
+      <li><a href="#volq3">加一个列表视类</a> </li>
+      <li><a href="#volq4">组合框问题</a> </li>
+      <li><a href="#volq5">在一个循环中使用PeekMessage</a> </li>
+      <li><a href="#volq6">在一个文档/视应用程序中使用MSCOMM ActiveX控件</a> </li>
+      <li><a href="#volq7">win95中的编辑框</a> </li>
+    </ol>
+    <p><a name="volq1"></a></p>
+    <p><br>
+    </p>
+    <font color="Red"><h3>改变树形控件字体</h3>
+    </font><p>问:我想改变一个树形视的字体,但我得不到期望的结果.我使用的是下面这个语句, 
+    m_TreeCtrl.SetFont(pFont,bRedraw),其中pFont指针指向一个有效的字体,bRedraw 
+    设置为true.而该控件也能接受到WM_SETFONT消息,但改变字体的属性完全不是我 
+    所设定的.现象如下:字体总是显示为系统粗体10号;两个结点之间则是按照我设定的 
+    字体大小来决定距离的....,为什么会这样?</p>
+    <p>答:从你的描述中可以知道,好象在调用方法SetFont()后CFont对象被删除了.你不能 
+    在这里使用局部句柄,否则CFont的析构函数会删除HFONT对象,所以树形控件得到了 
+    一个非法的字体对象.必须保证在这个树形控件的生命周期内CFont对象一直可用,比如你 
+    可以在视类中定义.</p>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq2"></a><br>
+    </p>
+    <font color="Red"><h3>视的边框.</h3>
+    </font><p>问:我想让一个视的边框有对话框边框的效果,有谁能帮助我?</p>
+    <p>答:我认为将一个视的外观感觉是一个对话框还没有固定的方法,但可以在视中的OnPaint() 
+    中对你的视用对话框的背景色填充背景,然后用绘制一些适当大小的线条来模拟对 
+    话框的边框(你应该用GetSystemMetrics来取得当前windows的设置).<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq3"></a><br>
+    </p>
+    <font color="Red"><h3>加一个列表视类.</h3>
+    </font><p>问:我在ClassWizard中从CListView类中继承了一个新类,然后我什么也没有做,开始编译 
+    很快就得到下面这个错误,为什么? 答: <ol>
+      <li>在你的stdafx.h文件中加一条:#include <afxtempl.h>只有在最初建立项目时才会包含 
+        所需要的,手工加入的类通常都要加入一个包含命令.<br>
+      </li>
+      <li>MFC有许多的头文件,应用程序向导(AppWizard)会根据你的设置在项目中插入相应 
+        的头文件,但它并不会对你以后的扩展加入头文件.<br>
+        &nbsp;&nbsp;看一下你项目中的stdafx.h文件,知道为什么里面会包含afxwin.h 
+        afxext.h等头文件? 你应该在这个头文件里加入你所指定的头文件,对于你这种情况,应该将其加入到一系列包含 
+        命令之后.<br>
+        &nbsp;&nbsp;我怎么会知道这个?看一下CListView的帮助,是overview,不是构造或类成员函数,看见在 
+        最下面有#include <afxcview.h>行,这在每个MFC类的overview中都有,如果在你这种类似的 
+        情况下将其粘贴到你的代码中就可以了.<br>
+        &nbsp;&nbsp;那么为什么应用程序向导不把每个可能用的头文件包含进来吧?因为编译时间的缘故, 
+        将文件包含在stdafx.h将会减少编译的时间,但预编译project.pdf文件(在你的DEBUG目录 
+        中)对一个小的项目就有近5兆大小,它会在你每次编译时被读取,包含每个可能的文件将会 
+        使文件变大,反而会增加你的编译时间.<br>
+        &nbsp;&nbsp;我还想请大家注意,如果想在建立一个新的视里加一些新的特性时,由于应用程序向导建立项 
+        目时分为文档与视,所以它提供了CMyView::GetDocument函数来取得指向文档类的指针,但 
+        ClassWizard不知道彼此之间的关系(那怕就只有一个),所以GetDocument需要返回一个指向 
+        当前视的指针,应该手工将原先GetDocument代码加入到新的视中.<br>
+      </li>
+    </ol>
+    <a href="#PageBegin"><p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq4"></a><br>
+    </p>
+    <font color="Red"><h3>组合框问题.</h3>
+    </font><p>问:在组合框中显示图标用ComboBoxEx好象是理想的解决方法(我仅仅想让它正常工作) 
+    但为什么无论我选择的是drop-down或drop-list类型,只有文字才能显示在下拉式菜单 
+    中?</p>
+    <p>答:你在声明m_ImageList变量时只在在OnInitDialog()函数内,当该函数结束时,m_ImageList 
+    也同时被清除,而CImageList的析构函数删除了HIMAGELIST,试试将m_ImageList作为对话 
+    框的成员变量.<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq5"></a><br>
+    </p>
+    <font color="Red"><h3>在一个循环中使用PeekMessage.</h3>
+    </font><p>问:我有一个工作线程,动态监视一个数据收集设备的状态.这是一个死循环,在这个循环 
+    里我用::PeekMessage()查找少量的消息来主调整数据收集设备的状态.但真正实行这个 
+    循环时,我似乎并没有方法将任何消息发送给它.</p>
+    <p>答:你调用PeekMessage函数时是否使用了正确的参数?(比如说将PM_REMOVE作为一个 
+    移动标志,将-1作为窗口的句柄?)不管怎样,PostThreadMessage()都返回真.除非你传送过 
+    线程ID是非法的,否则它永远返回真.你必须从线程的消息队列中移走消息,否则,就会出 
+    现你这样情况.<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq6"></a><br>
+    </p>
+    <font color="Red"><h3>在一个文档/视应用程序中使用MSCOMM ActiveX控件</h3>
+    </font><p>问:我在一个MFC应用程序中使用了MSCOMM ActiveX,这个控件是通过组件库加进去的, 
+    如果这个程序是基于对话框的而这个控件是这个对话框类的一个成员,那么工作一切 
+    正常,无论是调用成员还是发送comm事件.但如果该应用程序是一个普通的文档/视 
+    程序,控件对象是主窗口框架类的一个成员,程序总是出错.</p>
+    <p>答:参考一下MFC中的VCTERM样例,它在框架窗口中动态建立.看一下CMainFrame::OnCreate()<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <p><a name="volq7"></a><br>
+    </p>
+    <font color="Red"><h3>win95中的编辑框.</h3>
+    </font><p>问:为什么95中编辑框不能填满整行?</p>
+    <p>答:一个可能的原因是因为字体尺寸的不同,我建议你这样做,你尽可能的大些,因为你不可 
+    能知道你的用户会用那一种字体,理论上windows可以改变对话框和控件在大小,但是通 
+    过现用字符的宽度来决定的.<br>
+    <a href="#PageBegin"></p>
+    <p align="right">回到本期目录</a><br>
+    </p>
+    <hr>
+    <a href="cmfcv36.htm"><p align="center">前一期</a>|<a href="cmfcv34.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+</center></div>
+
+<p><a name="PageBegin"></a></p>
+</body>
+</html>

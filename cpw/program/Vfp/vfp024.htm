@@ -1,0 +1,102 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>您现在的位置是</title>
+</head>
+
+<body>
+
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="100%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      <a href="Vfp_idx.htm">VFP</a></b></span></td>      
+  </tr>      
+</table>      
+</center></div><div align="center"><center>      
+      
+<table border="1" width="100%" style="font-size: 9pt" bgcolor="#FFFFFF"      
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">      
+  <tr>      
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"      
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"      
+    bordercolordark="#FFFFFF">      
+      <tr>      
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font      
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"      
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>      
+      </tr>      
+    </table>      
+      <p align="center">一例字幕效果的制作&nbsp;<br>
+      <br>
+                            (成都 关涛)       
+      <p>　　在影视剧中，我们常见到这样的字幕效果：在单色的背景画面下，文字渐渐显现出来，然后又渐渐消失在背景中。要实现这个效果并不难，今天我们就用程序来模仿一下这个文字渐入渐出的动画过程。<br>
+      　　进入中文版Visual FoxPro 3.0，在菜单中选择“文件—新建”，在随后出现的窗口中选“表单—新文件”，其中主要有包含空白表单的表单设计器、表单控制工具栏和表单属性窗口，后两项如果没有出现，可通过系统菜单的“查看”调出。<br> 
+      　　“表单控制”工具栏包含了很多现成的控件，可以直接在表单上使用，而在表单属性窗口中可以重新调整设定表单中各项目的值。鉴于很多读者对它们的使用方法都很熟悉，这里就不再罗嗦了，让我们直接进入正题。<br>
+      　　（一）添加控件，制作表单<br>
+      　　1． 在空白表单中添加一个“标签”控件并选中它，然后在其对应的“属 性”窗口中依次进行如下设置：<br> 
+      　　AutoSize . T. 使标签大小与文本自动吻合<br> 
+      　　BackStyle 透明 使标签背景透明<br> 
+      　　Caption 渐入渐出效果演示 标签中的文本<br> 
+      　　FontBold .T. 设置文本为粗体<br> 
+      　　FontName 幼圆 设置文本字体<br> 
+      　　FontSize 18 设置字体大小<br> 
+      　　FontUnderline .T. 为文本加下划线<br> 
+      　　ForeColor 0,0,0 设置字体为黑色<br> 
+      　　其它设置保留默认值，以下同此。<br>
+      　　2． 在表单中添加一个“命令按钮”控件并选中它，然后在其对应的“属性”窗口中依次进行如下设置：<br> 
+      　　Caption 演示开始 设置按钮名称<br> 
+      　　FontName 仿宋_GB2312 设置按钮字体<br> 
+      　　FontSize 14 设置字体大小<br> 
+      　　Height 30 设置按钮高度<br> 
+      　　Width 217 设置按钮宽度<br> 
+      　　3． 在表单中添加一个“计时器”控件，它可以放在表单中的任何位置，表单运行时是不可见的。选中它，然后在其对应的“属性”窗口中进行如下设置：<br> 
+      　　Enabled . F. 表单开始运行时计时器并不随之启动<br> 
+      　　Interval 100（ms） 计时器所控制Timer事件的运行间隔<br> 
+      　　经过上面的步骤，再对控件的位置做些调整后，得到如图2所示的表单。<br>
+      　　（二）为控件添加代码<br>
+      　　方法：要给控件添加代码，只需在相应控件上点鼠标右键，然后在弹出的菜单中选“代码”就进入了代码编辑窗口，在选择需要的事件后即可进行代码输入。<br>
+      　　（1） 进入“效果演示”按钮的“Click”事件代码窗，输入以下代码：<br> 
+      　　If thisform.timer1.enabled=. F.<br> 
+      　　 thisform.timer1.enabled=. T.<br> 
+      　　 Endif<br> 
+      　　这段代码的作用是：当用鼠标左键单击该按钮后，计时器开始运行。<br>
+      　　（2） 进入“计时器”的“Timer”事件代码窗，输入以下代码：<br> 
+      　　i=i＋10<br>
+      　　If i>=255＊2<br> 
+      　　 Thisform.timer1.enabled=. F.<br> 
+      　　 i=0<br> 
+      　　Endif<br>
+      　　If i>=255<br> 
+      　　Thisform.label1.forecolor=RGB (255＊2－ i, 0,0)<br> 
+      　　Else<br>
+      　　 Thisform.label1.forecolor=RGB (i, 0,0)<br> 
+      　　Endif<br>
+      　　解释一下上面的代码。首先Timer事件的作用是，当计时器开始运行时（enabled值为.T.），以Interval所规定的值为时间间隔不断运行Timer中的代码，直到enabled值为.F.为止，如同一个while……do循环。<br>
+      　　RGB（）函数的意思很明显，通过其中红、绿、蓝三个参数的值（0～255）的不同组合可得到不同颜色。上面代码的作用就是逐渐改变标签（Lable1）中文字“淡入淡出效果演示”的颜色，使其从黑色（0，0，0）变为红色（255，0，0），再从红色变回黑色，因为前面将标签背景设为了透明，即与表单的颜色相同，所以如果表单的颜色为黑色的话，就实现了文字的淡入淡出效果。具体实现的代码很简单，这里就不再一一说明了。要注意的是，如果变量i每次循环的增量和计时器中Interval的值设置不当，会出现文字一现即逝或半天显不出来的情况。<br>
+      　　(3) 在表单空白处右击鼠标进入“form1”的“Activate”事件代码窗，为在计时器中使用的变量i进行定义：<br> 
+      　　Public i<br> 
+      　　i=0<br>
+      　　（三）最后的修改及表单的运行<br>
+      　　 在表单中除控件外的其它位置点击鼠标，使属性窗口中显示表单form1的属性，然后做如下修改，<br> 
+      　　BackColor 0,0,0 将表单设为黑色，此时标签<br> 
+      　　 中的文字会因颜色相同而<br> 
+      　　 看不见<br> 
+      　　Caption 字幕效果 设置表单标题<br> 
+      　　现在选择系统菜单中的“表单—运行表单”，按提示存盘后出现如图3所示窗口，单击“演示开始”按钮，会逐渐显现成如图4的窗口，然后又慢慢回到图3窗口，快动手试试吧。<br>
+      　　你当然也可以选择自己喜欢的颜色，然后把它用到你的程序当中，一定会使其锦上添花。<br>
+      　　该程序在中文Windows98、Visual FoxPro 3.0中文专业版中调试运行通过。      
+    </td>      
+  </tr>      
+</table>      
+</center></div>      
+<p>　</p> 
+ 
+</body> 
+ 
+</html> 

@@ -1,0 +1,331 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+<table border="0" cellspacing="2" cellpadding="0" width="100%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是：<a href="Vc_idx.htm">Visual C++/C++</a> 
+    &nbsp; <b>&gt;</b> </span><font color="#000000">MFC邮递表的中文翻译-第十九期</font></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table border="0" width="100%" style="font-size: 9pt" bgcolor="#E8E8E8">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<table border="0" width="100%" bgcolor="#E8E8E8">
+      <tr>
+        <td width="100%"></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%"><p align="center"><font color="#000000"><strong>MFC邮递表的中文翻译-第十九期</strong></font></td>
+  </tr>
+  <tr>
+    <td width="100%"></td>
+  </tr>
+  <tr>
+    <td width="100%">　<h3><font color="Red">第十九期目录</font> <font size="-1">杨晓东 
+    1998.12.20</font></h3>
+    <ol>
+      <li><a href="#vol19q1">TrackMouseEvent()怎么了</a> </li>
+      <li><a href="#vol19q2">奇怪的组合框控件</a> </li>
+      <li><a href="#vol19q3">关于使用MS SANS SERIF字体</a> </li>
+      <li><a href="#vol19q4">为什么DLL在字符串表中找不到字符串</a> </li>
+      <li><a href="#vol19q5">关于复选框的文本颜色</a> </li>
+      <li><a href="#vol19q6">系列化与版本的问题</a> </li>
+      <li><a href="#vol19q7">在一个控件内检测并使用ON_COMMAND消息</a> </li>
+    </ol>
+    <p><a name="vol19q1"></a> <font color="Red"></p>
+    <h3>TrackMouseEvent()怎么了</h3>
+    </font><p>问:我使用TrackMouseEvent()函数来跟踪鼠标是否已经离开我的窗口,但在MFC中,如果我使用 
+    ::TrackMouseEvent()系统告诉我没有定义,为</p>
+    <p>什么?<br>
+    </p>
+    <p>答:1).请使用_TrackMouseEvent<br>
+    2).在commctrl.h显示为_TrackMouseEvent(),请注意下划线.<br>
+    3).可能TrackMouseEvent()不支持Win98(在NT中工作得非常好),建议你结合WM_MOUSEMOVE消息和 
+    SetCapture()函数,当鼠标移出窗口时你依</p>
+    <p>然可以控制.<br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>奇怪的组合框控件</h3>
+    </font><p>问:我有一个对话框程序,里面只有几个下拉式给合框.但当鼠标箭头移动到组合框的上下按钮时,会 
+    变成&quot;6&quot;或&quot;9&quot;,一会儿又恢复到原状,这是</p>
+    <p>为什么?</p>
+    <p><br>
+    答:1)也许是你的操作系统有问题,不防重新起动一次也许就行了(概率非常小8%-())你也可以试一下 
+    系统清除工具,如果这事情经常发生,可</p>
+    <p>能你真的需要重装一下95或NT,这也是个好的建议,每隔半年 
+    左右可以重装一下系统.<br>
+    2).我猜想可能是comctl32.dll文件被破坏了.<br>
+    3).这个问题的原因很有可能是系统的资源不够，你可以试着关闭一些程序、减少屏幕的分辨率来增 
+    加一些系统资源。 </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>关于使用MS SANS SERIF字体</h3>
+    </font><p>问：我看过好多关于创建对话框、组合框等等使用MS SANS SERIF的例子，自己也做过多次。如： 
+    m_font.CreatePointFont (80, _T(&quot;MS</p>
+    <p> Sans Serif&quot;)); 或 m_font.Create (-8, ....., _T(&quot;MS Sans Serif&quot;)); 
+    那么想问一下：1）该字体是否在所有的版本中都能实现（包括</p>
+    <p>国际版本） 2）在控制面板上有没有更好的字体代替“SYSTEM”字体？如果有人这样做了，那又是怎样设置 
+    字体大小等相关设置的？我希望</p>
+    <p>有一个彻底的方法来选择组合框等的字体。<br>
+    </p>
+    <p>答：1)有件事情我做过,在我所有的程序界面中都改变了字体.消息框来显示用户选择的字体. 
+    菜单,工具条以及其他控件的字体都随用户意愿</p>
+    <p>改变.但在对话框中最好还是用对话框编辑器, 其基本字体都是MS 
+    SANS SERIF,所以我也以这种字体来作为所有的用户界面. 
+    以下为我所做的</p>
+    <p>代码:<br>
+    </p>
+    <pre>
+// here's the font I use:
+SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &amp;ncm, 0);
+m_fntUI.CreateFontIndirect(&amp;ncm.lfMessageFont);
+
+// here's the code to change the font for a wnd and all it's children, and
+resize the controls appropriately
+void ChangeDialogFont(CWnd* pWnd, CFont* pFont, int nFlag)
+{
+ CRect windowRect;
+
+ // grab old and new text metrics
+ TEXTMETRIC tmOld, tmNew;
+ CDC * pDC = pWnd-&gt;GetDC();
+ CFont * pSavedFont = pDC-&gt;SelectObject(pWnd-&gt;GetFont());
+ pDC-&gt;GetTextMetrics(&amp;tmOld);
+ pDC-&gt;SelectObject(pFont);
+ pDC-&gt;GetTextMetrics(&amp;tmNew);
+ pDC-&gt;SelectObject(pSavedFont);
+ pWnd-&gt;ReleaseDC(pDC);
+
+ long oldHeight = tmOld.tmHeight+tmOld.tmExternalLeading;
+ long newHeight = tmNew.tmHeight+tmNew.tmExternalLeading;
+
+ if (nFlag != CDF_NONE)
+ {
+  // calculate new dialog window rectangle
+  CRect clientRect, newClientRect, newWindowRect;
+
+  pWnd-&gt;GetWindowRect(windowRect);
+  pWnd-&gt;GetClientRect(clientRect);
+  long xDiff = windowRect.Width() - clientRect.Width();
+  long yDiff = windowRect.Height() - clientRect.Height();
+
+  newClientRect.left = newClientRect.top = 0;
+  newClientRect.right = clientRect.right * tmNew.tmAveCharWidth /
+tmOld.tmAveCharWidth;
+  newClientRect.bottom = clientRect.bottom * newHeight / oldHeight;
+
+  if (nFlag == CDF_TOPLEFT) // resize with origin at top/left of window
+  {
+   newWindowRect.left = windowRect.left;
+   newWindowRect.top = windowRect.top;
+   newWindowRect.right = windowRect.left + newClientRect.right + xDiff;
+   newWindowRect.bottom = windowRect.top + newClientRect.bottom + yDiff;
+  }
+  else if (nFlag == CDF_CENTER) // resize with origin at center of window
+  {
+   newWindowRect.left = windowRect.left -
+       (newClientRect.right - clientRect.right)/2;
+   newWindowRect.top = windowRect.top -
+       (newClientRect.bottom - clientRect.bottom)/2;
+   newWindowRect.right = newWindowRect.left + newClientRect.right + xDiff;
+   newWindowRect.bottom = newWindowRect.top + newClientRect.bottom + yDiff;
+  }
+  pWnd-&gt;MoveWindow(newWindowRect);
+ }
+
+ pWnd-&gt;SetFont(pFont);
+
+ // iterate through and move all child windows and change their font.
+ CWnd* pChildWnd = pWnd-&gt;GetWindow(GW_CHILD);
+
+ while (pChildWnd)
+ {
+  pChildWnd-&gt;SetFont(pFont);
+  pChildWnd-&gt;GetWindowRect(windowRect);
+
+  CString strClass;
+  ::GetClassName(pChildWnd-&gt;m_hWnd, strClass.GetBufferSetLength(32), 31);
+  strClass.MakeUpper();
+  if(strClass==_T(&quot;COMBOBOX&quot;))
+  {
+   CRect rect;
+   pChildWnd-&gt;SendMessage(CB_GETDROPPEDCONTROLRECT,0,(LPARAM) &amp;rect);
+   windowRect.right = rect.right;
+   windowRect.bottom = rect.bottom;
+  }
+
+  pWnd-&gt;ScreenToClient(windowRect);
+  windowRect.left = windowRect.left * tmNew.tmAveCharWidth /
+tmOld.tmAveCharWidth;
+  windowRect.right = windowRect.right * tmNew.tmAveCharWidth /
+tmOld.tmAveCharWidth;
+  windowRect.top = windowRect.top * newHeight / oldHeight;
+  windowRect.bottom = windowRect.bottom * newHeight / oldHeight;
+  pChildWnd-&gt;MoveWindow(windowRect);
+
+  pChildWnd = pChildWnd-&gt;GetWindow(GW_HWNDNEXT);
+ }
+}
+</pre>
+    <p><br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>为什么DLL在字符串表中找不到字符串</h3>
+    </font><p>问:我用向导生成器中的&quot;Use MFC in a Shared DLL&quot;选项建立一个DLL,在字符串表资源 
+    中加一个字符串,当我使用csMyString.LoadString</p>
+    <p>( IDS_MY_STRING ) csMyString 是空的,为什么会这样?<br>
+    </p>
+    <p>答:1)MFC是由AfxGetResourceHandle调用资源的.所以,如果你想在你的DLL中读出资源应该使用 
+    AfxSetResourceHandle.你也可以</p>
+    <p>在LoadLibrary的返回值中得到它,如果不想调用该DLL时也可以 使用DLLMain函数的hInstance参数.<br>
+    2)试一下在你函数打头处使用AFX_MANAGE_STATE(AfxGetStaticModuleState()) (事实上每个被外部DLL调用的每一个函数都会使用它)<br>
+    3)我记得先前的列表讲过这个问题,试一下以下两种方法: 如果你是用LoadLibrary()来调用DLL的,它会返回一个句柄,你可以在 
+    AfxSetResourceHandle()中使用它.如:<br>
+    </p>
+    <pre>
+   hinstnew = Loadbrary(...);
+   ...
+   hinstOld = AfxGetResourceHandle();
+   AfxSetResourceHandle(hinstnew);
+   LoadString(IDS_MY_STRING);
+   AfxSetResourceHandle(hinstOld); // remember to set this back,
+                           // or your night won't be nice.
+</pre>
+    <p>如果你不是用LoadLibrary来调用DLL又该怎样办呢?你可以使用 
+    GetModule(&quot;You DLL Name&quot;)来取得用户句柄,剩下的就好办了.<br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>关于复选框的文本颜色</h3>
+    </font><p>问:有谁知道怎样才能改变复选框中的文本选项的颜色?<br>
+    </p>
+    <p>答:1)你有没有试过在控件中使用OnCtlColor，它将在重画任何控件之前被调用，所以你可以 
+    有机会来改变文本选项的颜色。<br>
+    2）为什么你一定要用PreDrawItem()?你是想在里面做一些特定的代码？我认为DrawItem() 
+    也能处理。在调用重画函数之前取得索引号并改</p>
+    <p>变颜色。<br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>系列化与版本的问题</h3>
+    </font><p>问:我需要使用系列化来读取我的文件,为了保证文件能在各个版本中都能实现,我 
+    作了尽可能的努力,为什么会不成功.<br>
+    </p>
+    <p>答:下面的代码是我过去使用过的,希望能对你有所帮助<br>
+    </p>
+    <pre>
+// Use this macro to fix the versioning problem in the MFC
+// Place it at the beginning of your CMyObject::Serialize implementation -
+// it will guarantee that the correct version of the class is written to
+// and read from the archive
+//
+// Usage: SERIALIZE_VERSION(CMyObject)
+
+#define SERIALIZE_VERSION(this_class) \
+    ar.SerializeClass(this_class::GetRuntimeClass());
+
+// For classes which cannot use IMPLEMENT_SERIAL (such as abstract
+// base classes).  This guarantees the object can have
+[Read/Write][Class/Object]
+// called on it by placing a schema number in it.  It also puts it in the
+// list of known class names (AFX_CLASSINIT).
+// Note: this is almost the same as IMPLEMENT_SERIAL_ABC
+// in &quot;MFC Internals&quot;, but this version uses AFX_CLASSINIT,
+// with the result that it works!
+
+#define DECLARE_DYNAMIC_SERIAL(class_name) \
+    DECLARE_SERIAL(class_name)
+
+#define IMPLEMENT_DYNAMIC_SERIAL(class_name, base_class_name, wSchema) \
+    _IMPLEMENT_RUNTIMECLASS(class_name, base_class_name, wSchema, NULL)\
+    static const AFX_CLASSINIT
+_init_##class_name(RUNTIME_CLASS(class_name)); \
+    CArchive&amp; AFXAPI operator&gt;&gt;(CArchive&amp; ar, class_name* &amp;pOb) \
+        { pOb = (class_name*)
+ar.ReadObject(RUNTIME_CLASS(class_name)); \
+            return ar; }
+</pre>
+    <p>或者也可以这样实现:<br>
+    </p>
+    <pre>
+CMySerialRootDerivedClass::Serialize(CArchive&amp; ar)
+{
+    //CMySerialRoot::Serialize(ar);     
+    ar.SerializeClass(RUNTIME_CLASS(CMySerialRoot));
+    CMySerialRoot::Serialize( ar );
+}
+</pre>
+    <p><br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <font color="Red"><h3>在一个控件内检测并使用ON_COMMAND消息</h3>
+    </font><p>问:有一个控件(继承CWnd)在CRormView.可不可以将它的ID在ON_COMMAND消息中发出,如果 
+    用pCtrl-&gt;OnCommand(ID_VIEW_ZOOMIN,..), 编译</p>
+    <p>器会报告参数不匹配,该怎么办?<br>
+    </p>
+    <p>答:1)为什么不用pCtrl-&gt;Post/SendMessage (WM_COMMAND, ID_VIEW_ZOOMIN)<br>
+    2)通过重载CYourFormView::OnCmdMsg就可以.如:<br>
+    </p>
+    <pre>
+BOOL CYourFormView::OnCmdMsg(UINT nID, int nCode, void* pExtra,
+AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+return pCtrl-&gt;OnCmdMsg(nID, nCode, pExtra, pHandlerInfo)
+  || CFormView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+}
+</pre>
+    <p>3)使用WM_COMMAND消息,看一下关于WM_COMMAND和CWnd::PostMessage()的帮助.<br>
+    </p>
+    <pre>
+DWORD wParam;
+HIWORD(wParam) = wNotifyCode; // notification code
+LOWORD(wParam) = ID_VIEW_ZOOMIN;
+pCtrl-&gt;PostMessage(WM_COMMAND,(WPARAM)wParam, pCtrl-&gt;m_hWnd);
+</pre>
+    <p>4)能够这样做,但不是象你们做法,你们必须得到控件的句柄或CWnd指针 
+    然后在句柄中使用::SendMessage() or ::PostMessage();在CWnd中</p>
+    <p>使用 CWnd::SendMessage() or CWnd::PostMessage() 试一下这个.<br>
+    </p>
+    <pre>
+CMyCtrl *pCtrl;
+
+/* call GetDlgItem() from an instance of your form view */
+pCtrl = ( CMyCtrl * )GetDlgItem( IDC_MYCONTROL );
+
+if( pCtrl != NULL &amp;&amp; ::IsWindow( pCtrl-&gt;GetSafeHwnd( ) )
+pCtrl-&gt;SendMessage( WM_COMMAND, /*wParam*/, /*lParam*/ );
+// see WM_COMMAND description on help/MSDN for a detailed explanation of
+// {W|L}PARAM
+</pre>
+    <p><br>
+    </p>
+    <p align="right"><a href="#v19home">返回本期目录</a></p>
+    <hr>
+    <a href="cmfcv20.htm"><p align="center">前一期</a>|<a href="cmfcv18.htm">后一期</a><br>
+    <a href="http://mfc2000.yeah.net" target="_top">玉海园</a>[http://mfc2000.yeah.net]友情提供! 
+    </td>
+  </tr>
+</table>
+
+<p><a name="v19home"></a></p>
+</body>
+</html>

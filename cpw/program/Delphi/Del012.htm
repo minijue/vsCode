@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<style type="text/css">
+<!--
+        table{border="0";cellspacing="1";cellpadding="1"}
+        td{font-famliy:宋体;font-size:9pt}
+        p{font-famliy:宋体;font-size:9pt;line-height:18px}
+        big{font-famliy:宋体;font-size:12pt;line-height:18px}
+        A:link {text-decoration: underline; font-size:9pt;color: rgb(0,0,0)}
+        A:visited {text-decoration: underline;font-size:9pt; color: rgb(10,10,10)}
+        A:active {text-decoration: underline;font-size:9pt;color: rgb(0,40,100)}
+        A:hover {text-decoration: none;font-size:9pt; color: "#ff0000";background:rgb(220,220,220)}
+-->
+</style>
+<title>用Delphi“玩”编程（6）</title>
+</head>
+
+<body leftmargin="3"
+style="color: rgb(0,0,0); font-family: 宋体; font-size: 9pt; line-height: 17px"
+bgcolor="#FFFFFF">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="95%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">现在的位置是： <b><font color="#0000FF"><a
+    href="Del_idx.htm">Delphi</a></font> --&gt;</b> </span>用Delphi“玩”编程（6）解决方案 
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#E8E8E8"
+bordercolor="#C48C59" cellpadding="2">
+  <tr>
+    <td width="100%"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><font color="#FFFFFF">资料整理<span
+        class="f">&middot;</span><a href="http://fasoft.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%">　<p align="center"><strong>用Delphi“玩”编程<br>
+    </strong>（6）解决方案 作者 江伟芸</p>
+    <p>&nbsp;&nbsp;&nbsp; 
+    前面我们建立了一个应用程序。追求完美的你也许提出许多问题：如何使我的程序拥有专业的界面？如何令程序在大小窗口中都有美观的界面？如何控制窗口的大小？如何为我的程序设定一个个性化的图标？……这一期将为你解开种种疑问，教你让程序更漂亮的方法。<br>
+    &nbsp;&nbsp;&nbsp; 下面介绍一个使界面美观的精灵——元件Panel。你有没有发现Windows程序基本上都有一个特点：功能区分明。元件Panel就能帮你把界面分成多个区域，下面回到我们的程序里看一看。<br>
+    ●我们的程序主要有“放映按钮&quot;、“按钮&quot;、“Memo框&quot;等三部分；<br>
+    ●在Standard栏中选中放置在“窗体&quot;中；<br>
+    ●同时选定四个按钮（鼠标框选），按Ctrl＋X剪切；<br>
+    ●选中窗体中的Panel1,Ctrl＋V,把四个按钮放置在Panel1上；<br>
+    ●同法放置“放映按钮&quot;在Panel2，“Memo框&quot;在Panel3；<br>
+    ●属性设置如下表，界面效果如左图<br>
+    Panl1 Panel2 Panel3<br>
+    Align alRight alTop alClient<br>
+    Caption 空<br>
+    这个图是不是比原来好看了一点？我们再加工一下做出有点立体感的界面，如下图。<br>
+    <br>
+    ●设定属性如下：<br>
+    Panel1 Panel2 Panel3<br>
+    BevelWidth 3 3 3<br>
+    BorderWidth 0 0 5<br>
+    BevelInner bvNone BvLowered BvLowered<br>
+    BevelOuter bvRaised bvRaised bvRaised<br>
+    另一个关于界面的常见问题是：如何控制窗口的大小？在设计期原始窗口的大小是可以任意缩放的，并且运行时“普通窗口&quot;的大小和位置都与设计期原始窗口完全一样。而运行时“最大化窗口&quot;一般是全屏，也可以用语句控制。譬如：<br>
+    ●双击Form1的OnResize事件，在Begin与End之间键入<br>
+    if windowState=wsMaximized then top:=108;<br>
+    这时“最大化窗口&quot;只占大半屏，实现了运行期对屏幕大小的控制。与top类似的属性还有Width、Left、height，试着用他们代换Top看看运行结果。另外，若想程序一开始就是全屏，可以设置Form1. 
+    WindowState属性为WsMaximized。<br>
+    掌握了以上提供的技巧，你的程序应该可以拥有漂亮的界面了。那么如何为你的程序设定一个最合适的图标呢？<br>
+    ●制作或收集一个你喜欢的图标（.ico文件）；<br>
+    ●找到Project/Options/Application，选择Load Icon，读图标。<br>
+    经过六期的学习，你是否基本了解Delphi？Delphi的功能十分强大，六期下来也只描绘了它的一些皮毛，却也实现了不少功能。Delphi值得一用。各位朋友如果希望真正成为Delphi高手还要付出很大的努力，希望我的介绍能给大家一点帮助。<br>
+    <br>
+    </td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

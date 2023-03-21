@@ -1,0 +1,293 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>ASP篇（十五）</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#92B4F1" link="#8D5E32">
+<div align="center"><center>
+
+<table border="0" cellspacing="2" cellpadding="0" width="80%" style="font-size: 9pt">
+  <tr bgcolor="#CCFFCC">
+    <td align="left"><span style="font-size: 9pt">现在的位置是： <b><a
+    href="home_idx.htm">主页制作</a> &gt;</b> </span>动态网站设计—— ASP 篇 
+    （十五）<font size="-1"> </font></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="2" width="80%" bgcolor="#FFFFFF" bordercolor="#C48C59">
+  <tr>
+    <td width="100%"><p align="center">动态网站设计&nbsp; —— ASP 篇 （十 五）<font
+    size="-1"> </p>
+    <p align="right"></font><span style="font-family: 宋体; font-size: 9pt">作者 ： 天 
+    骄 创 作 室：书 生 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">教 学 纲 要 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　当 你 用 ASP 编 写 服 务 
+    器 端 应 用 程 序 时， 必 须 依 靠 ActiveX 组 件 来 强 大 Web 应 用 程 
+    序 的 功 能， 譬 如： 你 需 要 连 接 数 据 库， 对 数 据 库 进 行 
+    在 线 操 作 等 等，继 上 篇 介绍 了 Database Access 和 Content Linking 组 
+    件 后，本 篇 将 接 着 给 大 家 介 绍 其 它 一 些 常 用 的 ASP ActiveX 
+    组 件 的 使 用 方 法。&nbsp; </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 上 两 篇 中 作 者 给 
+    大 家 介 绍 了 AD Rotator、 Database Access 等 组 件 的 使 用 方 法， 今 
+    天 我 们 接 着 来 看 看 其 它 的 一 些 ASP 常 用 组 件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 一、 Browser Capabilities 
+    组 件 众 所 周 知， 并 不 是 所 有 浏 览 器 都 支 持 现 今 Internet 
+    技 术 的 方 方 面 面。 有 一 些 特 性， 某 些 浏 览 器 支 持 而 另 
+    一 些 浏 览 器 却 不 支 持， 如 : ActiveX 控 件、 影 像 流、 动 态 
+    HTML、 Flash 以 及 脚 本 程 序 等。 使 用 ASP 的 Browser Capabilities 组 
+    件， 就 能 够 设 计“智 能” 的 Web 页， 以 适 合 浏 览 器 性 能 的 
+    格 式 呈 现 内 容。 Browser Capabilities 组 件 能 够 创 建 一 个 
+    BrowserType 对 象， 该 对 象 提 供 带 有 客 户 端 网 络 浏 览 器 的 功 
+    能 说 明 的 用 户 脚 本。 该 组 件 之 所 以 能 识 别 客 户 浏 览 器 
+    的 版 本 等 信 息， 主 要 是 因 为 当 客 户 浏 览 器 向 服 务 器 发 
+    送 页 面 请 求 时， 会 自 动 发 送 一 个 User Agent HTTP 标 题， 该 标 
+    题 是 一 个 声 明 浏 览 器 及 其 版 本 的 ASCII 字 符 串。 Browser 
+    Capabilities 组 件 将 User Agent 映 射 到 在 文 件 Browscap.ini 中 所 注 明 
+    的 浏 览 器 , 并 通 过 BrowserType 对 象 的 属 性 来 识 别 客 户 浏 览 
+    器。 若 该 对 象 在 browscap.ini 文 件 中 找 不 到 与 该 标 题 匹 配 
+    的 项， 那 么 将 使 用 默 认 的 浏 览 器 属 性。 若 该 对 象 既 未 
+    找 到 匹 配 项 且 browscap.ini 文 件 中 也 未 指 定 默 认 的 浏 览 器 
+    设 置， 则 它 将 每 个 属 性 都 设 为 字 符 串 &quot;UNKNOWN&quot;。 在 
+    默 认 情 况 下， browscap.ini 文 件 被 存 放 在 WINDOWS\SYSTEM\INERSRV( 如 
+    果 是 95/98+PWS4) 或 NT\SYSTEM32\INERSRV( 如 果 是 NT) 目 录 中， 你 可 以 
+    自 己 编 辑 这 个 文 本 文 件， 以 添 加 自 己 的 属 性 或 者 根 据 
+    最 新 发 布 的 浏 览 器 版 本 的 更 新 文 件 来 修 改 该 文 件。 请 
+    看 以 下 checkCookie() 过 程， 使 用 BrowserCap 对 象 的 Cookie 属 性 来 判 
+    断 客 户 端 浏 览 器 是 否 支 持 Cookie， 并 返 回 信 息 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt"><br>
+    &lt; %<br>
+    Sub checkCookie()<br>
+    Set BrowserCap=Server.CreateObject(&quot;MSWC.BrowserType&quot;)<br>
+    if BrowserCap.Cookie=True then<br>
+    response.write &quot;你 的 浏 览 器 支 持 Cookie!&quot;<br>
+    else<br>
+    response.write &quot;对 不 起，你 所 使 用 的 浏 览 器 不 支 持 
+    Cookie!&quot;<br>
+    end if<br>
+    end Sub<br>
+    %&gt;<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 有 关 Browser Capabilities 
+    组 件 的 详 细 信 息， 请 参 见 动 态 网 站 设 计 十 八 般 武 艺 
+    --ASP 篇 (2)。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 二、 File Access 组 件 如 
+    果 你 的 网 龄 足 够 大 的 话， 你 一 定 见 过“恐 龙 时 代” 的 
+    CGI 留 言 簿， 那 是 WEB 留 言 簿 最 早 的 雏 形。 那 时 候 在 基 于 
+    Internet 的 WEB 应 用 程 序 中 连 接 服 务 器 后 端 数 据 库 还 十 分 
+    困 难， 因 此 留 言 簿 中 的 历 史 信 息 并 不 是 同 如 今 一 样 存 
+    储 在 后 端 数 据 库 中。 那 么 这 些 数 据 究 竟 是 保 存 在 哪 里 
+    的 呢？ 答 案 就 是“文 本 文 件”， CGI 程 序 可 以 将 从 客 户 端 
+    接 收 的 信 息 写 进 一 个 存 放 在 服 务 器 端 的 文 本 文 件 中， 
+    该 文 件 可 以 是 HTML 文 件 或 TXT 等 文 件， 这 样 就 使 得 程 序 
+    员 们 可 以 不 通 过 同 数 据 库 连 接 就 可 以 将 客 户 信 息 保 
+    存 下 来， 但 是 写 此 类 CGI 程 序 甚 是 烦 琐， 下 面 列 出 了 一 
+    个 此 类 程 序 的 最 简 单 的 样 本 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt"><br>
+    #!/usr/local/bin/perl<br>
+    # Perl Location one your server<br>
+    print &quot;Content-type: text/plain\n\n&quot;;<br>
+    if($ENV{'REQUEST_METHOD'}eq&quot;POST&quot;){<br>
+    read(STDIN,$buffer,$ENV{'CONTENT_LENGTH'});<br>
+    }elsif($ENV{'REQUEST_METHOD'}eq&quot;GET&quot;){<br>
+    $buffer=$ENV{'QUERY_STIRNG'}; <br>
+    }<br>
+    @pairs=split(/&amp;/,$buffer);<br>
+    foreach $pair(@pairs){<br>
+    ($name,$value)=split(/=/,$pair);<br>
+    $value=~tr/+//;<br>
+    $value=~s/%([a-f A-F 0-9][a-f A-f 0-9])/pack(&quot;C&quot;,hex($1))/eg;<br>
+    $FORM{$name}=$value;}<br>
+    $file_name=&quot;guestbook.txt&quot;;#File name<br>
+    #具体内容<br>
+    open(FILE,&quot;&gt;&gt;$file_name&quot;)||die &quot;打 开 文 件 错 误&quot;;<br>
+    print FILE &quot;记录时间&quot;:$date \n\n&quot;;<br>
+    print FILE &quot;姓名&quot;:$FORM{'name'}&quot;;<br>
+    print FILE &quot;单位&quot;:$FORM{'company'}\n&quot;;<br>
+    print FILE &quot;电话&quot;:$FORM{'phone'}<br>
+    print FILE &quot;地址&quot;:$FORM{'address'}\n&quot;;<br>
+    print FILE &quot;邮编&quot;:$FORM{'zip'}<br>
+    print FILE &quot;邮件地址&quot;:$FORM{'email'}\n&quot;;<br>
+    print FILE &quot;返回意见&quot;:$FORM{'content'}<br>
+    close (FILE)<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 大 家 可 以 感 觉 到， 
+    与 ASP 相 比 此 类 CGI 程 序 的 可 读 性 和 易 操 作 性 都 较 差。 那 
+    么 你 一 定 想 问 ASP 是 否 也 能 直 接 在 服 务 器 上 写 文 件 呢？ 
+    答 案 当 然 是 肯 定 的。 但 是 聪 明 的 朋 友 可 能 会 想 到， 既 
+    然 ASP 同 WEB 数 据 库 的 连 接 如 此 便 捷， 我 们 又 何 需 再 将 客 
+    户 信 息 写 在 文 本 文 件 中 呢， ASP 的 这 个 功 能 岂 不 是 画 蛇 
+    添 足？ 的 确， 对 于 那 些 我 们 常 见 的 留 言 簿、 BBS 等 WEB 应 
+    用 程 序 而 言， 无 论 是 在 程 序 的 执 行 效 率 还 是 易 用 性 
+    上， 我 们 都 不 可 能 再 用 写 文 本 文 件 来 替 代 数 据 库， 但 
+    是 在 某 些 WEB 应 用 领 域 里 写 文 本 文 件 既 是 一 种 规 范 也 
+    是 一 种 相 对 数 据 库 而 较 便 捷 的 方 法。 如 果 你 对 NT 较 熟 
+    悉 的 话， 你 一 定 知 道 NT 具 有 非 常 强 大 的 安 全 机 制， 它 
+    可 以 将 几 乎 所 有 的 服 务 器 操 作 和 连 接 的 信 息 自 动 保 
+    存 在 一 个 后 缀 名 为 .log 的 文 件 中， 其 实 这 种 技 术 也 完 
+    全 可 以 被 运 用 在 WEB 上， 用 来 记 录 一 些 的 客 户 登 陆 信 
+    息。 下 面 的 这 段 程 序 正 是 利 用 ASP 读 写 文 本 文 件 的 特 
+    性， 在 一 个 WEB BBS 程 序 中 创 建 自 动 记 录 每 个 用 户 发 言 记 
+    录 的 功 能。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt"><br>
+    &lt; %<br>
+    Set fs = CreateObject(&quot;Scripting.FileSystemObject&quot;)<br>
+    ForReading = 1<br>
+    '以只读模式打开文件。不能对此文件进行写操作。<br>
+    ForAppending = 8<br>
+    '打开文件并在文件末尾进行写操作。<br>
+    TristateUseDefault = -2<br>
+    TristateTrue = -1<br>
+    TristateFalse = 0<br>
+    <br>
+    '-----------写入系统log开始--------<br>
+    servermap=server.MapPath(&quot;\bbs\log\&quot;)<br>
+    '映射系统物理路径<br>
+    temp=servermap&amp;&quot;\&quot;&amp;year(date)&amp;month(date)&amp;&quot;\&quot;<br>
+    '获取系统物理路径和时间，并以此作为log文件存放的物理路径<br>
+    if Not fs.FolderExists(temp) then<br>
+    fs.CreateFolder(temp)<br>
+    end if<br>
+    '检测是否存在文件夹，否则自动创建<br>
+    dim syslog<br>
+    dim tempname<br>
+    tempname=date<br>
+    syslog=temp&amp;tempname&amp;&quot;.log&quot; <br>
+    '文件名为e:\bbs\log\月份\月日.log<br>
+    li=user&amp;&quot;&amp;&quot;&amp;Now&amp;&quot;&amp;&quot;&amp;Request.ServerVariables(&quot;REMOTE_ADDR&quot;)&amp;&quot;&amp;&quot;&amp;tempfile&amp;&quot;&amp;&quot;&amp;letter&amp;&quot;&amp;&quot;&amp;title<br>
+    'log文件记录的格式为:用户名&amp;发信时间&amp;用户ip&amp;文件路径&amp;信区&amp;信件标题<br>
+    if fs.FileExists(syslog) then<br>
+    Set ss = fs.OpenTextFile(syslog,ForAppending,true)<br>
+    else<br>
+    set ss = fs.CreateTextFile(syslog,ForWriting,false)<br>
+    end if<br>
+    '检测log文件是否存在，如果存在则追加文件内容，反之则直接写文件<br>
+    ss.WriteLine(li)<br>
+    ss.Close<br>
+    '-----------log文件写入结束---------<br>
+    %&gt;<br>
+    <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 如 果 你 没 有 完 全 
+    看 懂 上 面 的 这 段 程 序， 就 请 听 作 者 慢 慢 道 来。 File Access 
+    组 件 提 供 了 可 用 来 访 问 计 算 机 文 件 系 统 的 方 法 和 属 
+    性。 我 们 可 以 使 用 File Access 组 件 创 建 FileSystemObject 对 象， 以 
+    上 程 序 的 第 一 句 就 是 利 用 File Access 组 件 创 建 了 一 个 名 
+    为 fs 的 对 象 实 例。 在 对 象 被 创 建 后， 你 可 以 通 过 它 访 
+    问 文 件， 该 对 象 没 有 属 性， 它 唯 一 的 意 义 就 是 创 建、 
+    打 开 或 读 写 文 本 文 件。 FileSystemObject 对 象 有 两 种 最 常 用 
+    的 方 法， 一 种 用 来 创 建 文 件， 另 一 种 是 用 来 打 开 并 读 
+    写 文 本 文 件。 CreateTextFile 方 法 获 得 你 指 定 的 文 件 名 并 创 
+    建 该 文 件， 它 返 回 一 个 TextStream 对 象， 你 可 以 用 该 对 象 
+    在 文 件 被 创 建 后 操 作 该 文 件， CreateTextFile 方 法 的 语 法 如 
+    下 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Set 
+    objTextStream=FileSystemObject.CreateTextFile(Filename,[Overwrite],[Unicode]) </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 作 者 给 大 家 
+    解 释 一 下 CreateTextFile 方 法 的 参 数 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、 Filename 包 含 文 件 
+    路 径 名 的 字 符 串， 可 以 是 文 件 的 全 路 径 名， 包 括 驱 动 
+    器 名 和 目 录 名， 或 者 也 可 以 只 是 文 件 名， 如 果 只 包 含 
+    文 件 名 的 话， 文 件 将 被 创 建 在 站 点 的 根 目 录 下。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、 Overwrite 布 尔 量， 
+    设 置 成 False 时 可 以 防 止 FileSystemObject 对 象 在 创 建 一 个 新 文 
+    件 时 删 除 已 存 在 的 文 件， 该 参 数 是 可 选 的， 如 果 没 有 
+    赋 值 系 统 默 认 为 true， 具 有 相 同 文 件 名 的 已 有 文 件 会 
+    被 删 掉。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 3、 Unicode 可 选 参 
+    数。 布 尔 值 指 明 是 否 以 Unicode 或 ASCII 文 件 格 式 创 建 文 
+    件。 如 果 以 Unicode 文 件 格 式 创 建 文 件， 则 该 值 为 True； 如 
+    果 以 ASCII 文 件 格 式 创 建 文 件， 则 该 值 为 False。 如 果 省 略 
+    此 部 分， 则 假 定 创 建 ASCII 文 件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 前 面 的 程 序 中 
+    我 们 用 set ss=fs.CreateTextFile(syslog,ForWriting,false) 来 在 log 文 件 不 存 
+    在 的 情 况 下 创 建 文 件 并 对 文 件 进 行 写 操 作， 这 里 的“ForWriting” 
+    表 示 写 文 件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 与 CreateTextFile 方 法 不 
+    同， OpenTextFile 方 法 用 来 获 得 你 指 定 的 文 件 名 并 打 开 该 
+    文 件， 利 用 它 所 带 的 参 数 我 们 可 以 对 文 件 进 行 各 种 不 
+    同 的 操 作， 和 CreateTextFile 方 法 一 样， OpenTextFile 方 法 返 回 一 
+    个 TextStream 对 象， 使 得 你 可 以 在 文 件 被 打 开 后 操 作 该 文 
+    件。 OpenTextFile 方 法 的 语 法 如 下 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 Set 
+    objTextStream=FileSystemObject.OpenTextFile(Filename,[IOmode],[Create],[Format]) </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 参 数 说 明 如 下 : </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 1、 Filename 必 须 的 变 
+    量， 同 CreateTextFile 的 filename </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 2、 IOmode 可 选 的 常 
+    量， 取 值 为 下 列 两 个 常 数 之 一 ForReading 或 ForAppending， 如 果 
+    mode 为 1， 文 件 以 只 读 方 式 打 开， 如 果 为 8， 则 文 件 以 追 
+    加 的 方 式 打 开。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 3、 Create 可 选 的 布 
+    尔 量， 指 定 如 果 你 想 打 开 的 文 件 不 存 在 是 做 什 么 操 
+    作， 如 果 其 值 为 True， 当 文 件 不 存 在 时 就 自 动 创 建 一 个 
+    空 的 文 件。 如 果 为 False， 就 会 在 文 件 没 找 到 时 产 生 一 
+    个 出 错 信 息， 其 默 认 值 是 False， 建 议 将 其 设 为 True， 以 
+    避 免 在 打 开 文 件 时 检 查 是 否 出 错。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 4、 Format 可 选 值， 可 
+    以 选 择 三 种 Tristate 值 分 别 指 定 文 件 的 格 式， -2、 -1、 和 0 
+    分 别 对 应 于 系 统 缺 省、 unicode 和 ASCII。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 在 打 开 或 创 建 了 
+    文 本 文 件 后， 就 得 到 一 个 TextStream 对 象， 该 对 象 有 一 个 
+    光 标， 就 好 象 是 在 字 处 理 程 序 中 的 光 标 一 样， 指 出 接 
+    下 来 要 敲 入 的 字 符 将 出 现 的 位 置， 它 同 时 也 指 出 你 要 
+    读 取 的 字 符 的 位 置。 不 能 通 过 CreatObject 来 创 建 一 个 
+    TextStream 对 象， 得 到 TextStream 对 象 的 唯 一 方 法 是 如 前 所 述 
+    的 用 FileSystemObject 对 象 打 开 一 个 存 在 的 文 本 文 件 或 者 创 
+    建 一 个 新 的 文 件。 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 下 面 列 出 了 TextStream 
+    对 象 的 属 性 和 方 法 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.AtEndOfLine 只 读 
+    布 尔 量， 当 光 标 在 当 前 行 的 末 尾 时， 其 值 为 true， 反 之 
+    则 为 false </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.AtEndOfStream 只 
+    读 布 尔 量， 如 果 光 标 在 流 的 末 尾 时， 其 值 为 true， 否 则 
+    为 false </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.Column 只 读 的 
+    整 数， 统 计 从 行 首 到 当 前 光 标 位 置 之 间 的 字 符 数 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.Line 只 读 的 
+    整 数， 指 明 光 标 所 在 行 在 整 个 文 件 中 的 行 号 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.close() 关 闭 流 
+    以 及 对 应 的 文 本 文 件 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.read(Num) 指 定 
+    从 光 标 的 当 前 位 置 开 始 从 文 本 文 件 中 读 取 一 定 数 目 
+    的 字 符 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.readall() 将 整 
+    个 流 读 入 一 个 字 符 串 中 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.readline() 将 一 
+    整 行 的 字 符 读 入 一 个 字 符 串 中 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.write(text) 将 一 
+    个 字 符 串 写 入 流 中 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.writeline() 将 一 
+    个 文 本 串 写 入 流 中 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.skip(Num) 在 流 
+    中， 将 光 标 的 位 置 移 动 一 定 数 目 的 字 符 串 长 度 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.skiplines() 在 流 
+    中， 将 光 标 移 动 一 定 数 目 的 行 数 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 TextStream.writeblank 将 一 
+    定 数 目 的 空 行 写 入 流 中 </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 lines(num) </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">　　 相 信 大 家 现 在 已 
+    经 可 以 感 觉 到 ASP File Access 组 件 的 强 大 功 能 了， 其 实 它 远 
+    不 仅 仅 可 以 写 一 些 log 文 件， 通 过 它 你 甚 至 可 以 毫 不 费 
+    力 的 远 程 自 动 更 新 你 的 网 站， 你 只 要 把 固 定 格 式 的 文 
+    本 文 件 传 送 到 远 端 的 服 务 器 上， 通 过 File Access 组 件 读 取 
+    文 件， 并 自 动 生 成 全 新 HTML 页 面 即 可， 而 不 必 再 辛 辛 苦 
+    苦 地 一 个 一 个 地 更 新 HTML 文 件。 如 果 你 有 兴 趣， 你 完 全 
+    可 以 用 ASP 的 File Access 组 件 写 一 个 自 己 的 全 自 动 HTML 生 成 
+    器， 充 分 享 受 维 护 网 站 的 超 前 轻 松 感。 <br>
+    </span></p>
+    <p><span style="font-family: 宋体; font-size: 9pt">（未完待续） </span></td>
+  </tr>
+</table>
+</center></div>
+</body>
+</html>

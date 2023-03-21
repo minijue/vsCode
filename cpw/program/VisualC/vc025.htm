@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0053)http://person.zj.cninfo.net/~lifu/program/pal-gb5.htm -->
+<HTML><HEAD><TITLE>自制《仙剑》简体中文版</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type><LINK 
+href="自制《仙剑》简体中文版.files/my.css" rel=stylesheet>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY stylesrc="../../index1.htm" background="../../res/back.gif">
+<div align="center"><center>
+
+<table border="1" cellspacing="0" cellpadding="2" width="95%" style="font-size: 9pt"
+bordercolor="#000000" bordercolordark="#FFFFFF">
+  <tr bgcolor="#CCFFCC">
+    <td><span style="font-size: 9pt">您现在的位置是： <b><a href="../progidx.htm">编程技巧</a> --&gt; 
+      Visual C --&gt; </b> </span>自制《仙剑》简体中文版</td>
+  </tr>
+</table>
+</center></div><div align="center"><center>
+
+<table border="1" width="95%" style="font-size: 9pt" bgcolor="#FFFFFF"
+bordercolor="#000000" cellpadding="2" cellspacing="0" bordercolordark="#FFFFFF">
+  <tr>
+    <td width="15%" align="center" valign="top"><!--webbot bot="Include"
+      U-Include="../progmenu.htm" TAG="BODY" startspan -->
+
+<table border="1" width="13%" bordercolor="#000000" cellspacing="3" cellpadding="3" style="font-size: 9pt; border-style: solid; border-color: #FFFFFF">
+  <tr>
+    <td width="100%" align="center"><a href="Vcidx098.htm" target="_self"><strong>Visual 
+      C</strong></a></td> 
+  </tr> 
+  <tr> 
+    <td width="100%" align="center"><a href="../Vb/Vbidx099.htm" target="_self"><strong>VBasic</strong></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../Vfp/Vfp_idx.htm" target="_self">VFoxpro</a></strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../Delphi/Del_idx.htm" target="_self">Delphi</a></strong></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="../powerbuild/pow_idx.htm" target="_self"><b>PowerBuilder</b></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><a href="../linux/linuxidx.htm" target="_self"><b>Linux</b></a></td>
+  </tr>
+  <tr>
+    <td width="100%" align="center"><strong><a href="../other/oth_idx.htm" target="_self">其它</a></strong></td>
+  </tr>
+</table>
+<!--webbot bot="Include" endspan i-checksum="63606" -->
+
+    </td>
+    <td width="85%" align="left" valign="top"><table border="1" width="32%" style="font-size: 9pt" height="30"
+    cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" bordercolor="#000000"
+    bordercolordark="#FFFFFF">
+      <tr>
+        <td width="100%" bgcolor="#4264B5"><p align="center"><span style="font-size: 9pt"><font
+        color="#FFFFFF">资料整理&middot;<a href="http://chinaprog.yeah.net" target="_blank"
+        style="color: rgb(255,255,255)">中国程序员网站</a></font></span></td>
+      </tr>
+    </table>
+      <p align="center"><B>自制《仙剑》简体中文版</B>
+      <p>&nbsp;&nbsp; 《仙剑奇快传》是一个极老的游戏，关于它的修改方法也常见于各种电脑游戏刊物，各种不死版、暴富版相信各位也见得多了，不知还会不会对我的这个“简体中文版”感兴趣？本人玩游戏只能算菜青虫级，但一直对制作游戏很感兴趣，于是常爱分析一下游戏，终于摸索了一点经验。<BR>&nbsp;&nbsp; 
+      一般游戏中的文字显示常是由程序自己来实现，并不调用系统平台的显示功能，因此台湾人做的游戏始终只能看到繁体字，这一点连《东方快车》也没用。当然《仙剑》的“98柔情版”是重新修改编译过的，可以显示简化汉字了。但我更钟情于DOS版的《仙剑》，因为它对系统的要求很低，只要8MB内存和30MB硬盘就行了。可是美中不足的是它的繁体字，于是我花了一整夜，对《仙剑》的汉字显示方法作了一番解剖，终于找到了一个“简化”的方法。<BR>&nbsp;&nbsp; 
+      首先说明我选择的《仙剑》是DOS版的，磁盘版和CD版是一样的，只要将程序生成的字库文件拷贝并覆盖原来的同名文件即可。但如果你是“98柔情版”就别照做了，因为它本身就是简体中文版，而且字库文件好像也不兼容。不过如果有人想“反其道而行之”做一个“98柔情繁体中文版”也可以照此法做，至于程序如何修改就得靠自己了，当然得先理解本文。<BR>&nbsp;&nbsp;  
+      “简化”工作中最为重要的就是找出游戏中汉字的显示方法和相关的数据文件的结构。游戏的程序代码是不用改的，因为“简体”和“繁体”之间只是字模数据的差异而已，如果我们把游戏中的字库文件由繁体换成简体，游戏中相应的就会显示出简体中文。<BR>&nbsp;&nbsp; 
+      但是直接从UCDOS中把HZK16拷贝过来行不行呢？当然不行，原因在于：①  
+      DOS游戏对内存的使用都是斤斤计较的，且游戏中用到的汉字数目是有限的，制作者绝不会把整个字库都搬来，一定是使用小字库，那么这个小字库及其汉字存储格式等就要先弄清楚。②  
+      HZK16中的汉字字模使用的是16 X 16点阵，而《仙剑》是台湾出的软件，它们的中文系统中汉字常是BIGS内码 16 X  
+      15点阵，因此也得先仔细分析才能转化。<BR>&nbsp;&nbsp; 第一个问题先得靠观察和猎测，在\PAL下找找两个文件：WOR16.ASC和WOR16.FON，WOR像是Word，16又像HZK16，那么WOR16.FON就该是小字库了，  
+      WOR16.ASC又是什么呢？在CCDOS97下TYPE一看，乱码……不过有点眼熟，CTRL＋  
+      F8换成BIGS码，屏幕上顿时变得亲切起来--“经验值状态仙术物品系统新的故事旧回忆打败敌人得文钱……”哈哈哈，这不就是游戏中使用的汉字总表吗？然后是小字库中的汉字次序，我猜它就是按这张汉字表中的次序来存储的，可是究竟是不是呢，这就要自编一个程序来验证了。<BR>&nbsp;&nbsp; 
+      第二个问题，字库中的汉字字模是什么点阵显示的，又是如何存储的？打开《仙剑》，瞪大眼睛屏住呼吸数屏幕上汉字的点阵，说句实话我从没和逍遥兄挨这么近过，鼻子都快贴着屏幕了。终于让我数清楚了，15  
+      X 15点阵，但水平方向相邻两字之间有一点空隙，应该再加上一个点， 16 X 15才对，这才好存储，所以每个汉字字模占 16 X  
+      15/8=30字节。<BR>&nbsp;&nbsp; 开始写了一个程序PALHZ.CPP，它从WOR16.FON中指定位置读出32字节，按HZK16中的表示方法将字模显示在屏幕上，根据屏幕显示来推测汉字的具体存储方法。程序很简单，清单见后。<BR>&nbsp;&nbsp; 
+      用这个程序尝试了很多次，可总是一些莫名其妙的图案，于是试着输入了一个2000，结果出现了一个好像是“新”字的图案，逐渐逼近，1999、1998、1997，终于在1996处是完整的“新”字，再试前一个字，用1966，出现了“统”，1936，出现了“系”……果然是如我所料，30字节一个汉字字模，且按WOR16.ASC的次序存储，起始位置是W0R16.FON的1666字节处。<BR>&nbsp;&nbsp; 
+      现在就可以统正式的“简化”程序（MAKEPAL.CPP）了，简化汉字字模肯定是来自HZK16，而且WOR16.ASC也必须先转化成GB码才好处理，具体可见程序清单及注释。这里又有几个问题：1．如何把HZK16的16  
+      X 16点阵变成16 X 15点阵？这其实很容易，只须将16 X  
+      16字模中的顶行或底行去掉就行了，但这肯定会丢笔划，我是这样处理的，这两行中哪一行的16位中的“1”产少些就拿哪行开刀；2．用UCDOS和CCDOS97的内码转换工具转换WOR16.ASC时都有些字会转错，相比之下CCDOS97的GB5.EXE要好一些，但还是有一些字错或不合适，如把“舅”转成了“肝”，这些都要自己手工修改一下，工具最好用DE或UltraEdit（如果你想当游戏的主人公，只需此刻把“李逍遥”改成自己的大名就行了^_^）。还有一些字干脆成了“？？”，这个不好找，程序中对它们就还是取原来的繁体字模了。<BR>&nbsp;&nbsp; 
+      程序写好，编译调试通过（Turb C++3.0），就可以得到我们的《仙剑奇快传》“简体中文版”了。具体方法如下：<BR>&nbsp;&nbsp;  
+      1．在硬盘上任意位置建一个子目录如\Palhh。<BR>&nbsp;&nbsp;  
+      2．将\PAL\WOR16.ASC、\PAL\WOR16.FON和\UCDOS\HZK16拷贝到这个目录。WOR16.ASC是《仙剑》的所有汉字的内码表（BIG5），也是在小字库中直找字模的索引。WOR16.FON是《仙剑》的所有汉字的显示字库（16  
+      x  
+      15），在偏移1666处开始是汉字字模数据，每字占一记录，长度30字节（字模点阵接由上到下（0-14行）、由左到右（0-15点）存储），汉字记录按WOR16.FON中的次序存储。<BR>&nbsp;&nbsp;  
+      3．用CCDOS97的GB5.EXE或其它汉字内码转换工具，将WOR16.ASC转换成GB码（原来是BIG5码的）。然后，可以适当修改。<BR>&nbsp;&nbsp;  
+      4．执行自编程序MAKEPAL.CPP，生成WOR16.FOG，这个文件就是已将所有字模转化为简体字的字库。<BR>&nbsp;&nbsp;  
+      5．将WOR16.FOG改名拷贝为\PAL\WOR16.FON，一定要覆盖原来的WOR16.FON。<BR>&nbsp;&nbsp; 
+      现在，《仙剑》就是简体中文版了，CD\PAL，PAL，怎么样，耳目一新吧！^_^<BR>//文件名：PALHZ.CPP<BR>//用于显示WOR16.FON中指定偏移量处的汉字字模(16  
+      * 15)<BR>//在Turbo C++ V3.0 for DOS中调试通过<BR>#include  
+      &lt;stdio.h&gt;<BR>#include &lt;iostream.h&gt;<BR>#include  
+      &lt;conio.h&gt;<BR>// 显示一个字节的各位<BR>int PutBit(unsigned char dat, int x,  
+      int y)<BR>{int ix;<BR>for (ix = 0; ix &lt;8; ix + + )<BR>{gotoxy(ix + x,  
+      y);<BR>if (dat &amp;  
+      (0x80&gt;&gt;ix))<BR>cprintf("%c",'@');<BR>else<BR>cprintf("%c",'');}<BR>return  
+      0; }<BR>int main(void)<BR>{int x, y;<BR>long offset = 0;<BR>unsigned char  
+      buf[600];<BR>FILE * fP;<BR>fP = fopen("wor16.fon",  
+      "rb");<BR>clrscr();<BR>do<BR>{cout &lt;&lt; "Offset:";<BR>cin &gt;&gt;  
+      Offset;<BR>fseek(fp, offset, SEEK_SET);<BR>fread(buf,1,32,fp);<BR>for (x =  
+      0; x &lt;15; x + +)<BR>for (y =O; y &lt;2; y + + )<BR>PutBit(buf[x * 2 +  
+      y], 1 + y * 8, 3 + x);<BR>} while (offset! = 0);  
+      //输入0退退出<BR>fclose(tp);<BR>return 0;  
+      }<BR><BR>//文件名：MAKEPAL.CPP<BR>//此程序用于由WOR16.ASC生成小字库文件WOR16.FOG<BR>//在Turbo  
+      C+ + V3.0 for DOS 中调试通过。<BR>#include &lt;stdio.h&gt;<BR>#include  
+      &lt;conio.h&gt;<BR>#include &lt;iostream.h&gt;<BR>int BitCount(void *  
+      );<BR>int main(void)<BR>{FILE *fpi2, *fpi, *fpt, *fpo;<BR>long of1;<BR>int  
+      i, delline = 0, nochange;<BR>unsigned char buf[60], tbuf[4];<BR>fPi2 =  
+      fopen("wor16.fon", "rb");<BR>fpo = fopen("wor16.fog"，"wb");<BR>for (i =0;  
+      i &lt;1666; i+ +) //0 到1665字节原样复制<BR>{fread(buf, 1, 1,  
+      fpi2);<BR>fwrite(buf, 1, 1, fpo); }<BR>fpt = fopen("wor16.asc",  
+      "rb");<BR>fpi = fopen("hzk16", "rb");<BR>for(i = 0, nochange = 0;  
+      !feof(fpt); i + = 2) //开始替换字模<BR>{fseek(fpt, i, SEEK_SET);<BR>fread(tbuf,  
+      1, 2, fpt);<BR>if(tbuf[0] &lt;=0xa0)  
+      //如果是内码转换中无法识别的"??"竺，则用WOR16.FON中的繁体字模<BR>{fseek(fpi2, 1666L + i * 15L,  
+      SEEK_SET);<BR>fread(buf, 1, 30, fpi2);<BR>cout &lt; &lt; 1666L + i *  
+      15L;<BR>delline = 0;<BR>nochange + +; }<BR>else  
+      //是汉字则从HZK16中读出简化字模<BR>{of1 = (tbuf[0] - 161) * 94L + (tbuf[1] -  
+      161);<BR>cout &lt; &lt; tbuf[0] &lt; &lt; tbuf[1] &lt; &lt; of1 * 32 &lt;  
+      &lt; char<BR>(delline +'A');<BR>fseek(fpi, of1 * 32,  
+      SEEK_SET);<BR>fread(buf, 1, 32, fpi);<BR>if (BitCount(buf)  
+      &lt;BitCount(buf + 30)) //如果顶行的"1"比底行的少<BR>delline =2;  
+      //则用buf[02..31]的字模数据<BR>else<BR>delline =0; //否则用bfu[0..29]的字模数据  
+      }<BR>fwrite(buf + delline, 1, 30, fpo);  
+      }<BR>fclose(fpi);<BR>fclose(fpo);<BR>fclose(fpt);<BR>fclose(fpi2);<BR>cout  
+      &lt;&lt; "\n有"&lt;&lt; nochange &lt;&lt;"字未转换！\n";<BR>return 0;  
+      }<BR>//统计一个字中的各位的"1"的个数<BR>int BitCount(void * p)<BR>{int s = 0,  
+      i;<BR>unsigned int w;<BR>w = * ((unsigned int * )p);<BR>for (i =0; i  
+      &lt;16; i + + )<BR>if (w&gt; &gt; i &amp; 1)<BR>s + +;<BR>return s;  
+  } 
+    </td> 
+  </tr> 
+  <tr> 
+    <td width="100%" colspan="2" align="center" valign="top">　</td> 
+  </tr> 
+</table> 
+</center></div> 
+<p>　</p> 
+<BR><BR> 
+</BODY></HTML> 
