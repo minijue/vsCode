@@ -39,7 +39,7 @@ read_text(const char *fname, struct text *txt) {
 		file_opened = 1;
 	} else {
 		/* print a warning */
-		fprintf(Output_File, "File %s: >>>> cannot open <<<<\n", fname);
+		fwprintf(Output_File, L"File %s: >>>> cannot open <<<<\n", fname);
 		/* the file has still been opened with a null file
 		   for uniformity
 		*/
@@ -72,7 +72,7 @@ fprint_count(FILE *f, size_t cnt, const char *unit) {
 
 static void
 report_file(const char *fname, struct text *txt) {
-	fprintf(Output_File, "File %s: ", fname);
+	fwprintf(Output_File, L"File %s: ", fname);
 	fprint_count(Output_File, txt->tx_limit - txt->tx_start, Token_Name);
 	fprintf(Output_File, ", ");
 	fprint_count(Output_File,

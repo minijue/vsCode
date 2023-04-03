@@ -53,7 +53,7 @@ print_string(const char *str) {
 	/* assumes str to be UTF-8-correct */
 	const char *s = str;
 
-	fprintf(Output_File, "%s", str);
+	fwprintf(Output_File, L"%s", str);
 
 	/* compute the printed length */
 	pts len = 0;

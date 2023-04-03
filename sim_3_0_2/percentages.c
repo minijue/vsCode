@@ -176,8 +176,8 @@ print_perc_info(const struct match *m) {
 	int mp = (int)(match_percentage(m)*100.0 + 0.5 /* rounding */);
 
 	if (mp >= Threshold_Percentage) {
-		fprintf(Output_File,
-			"%s consists for %d %% of %s material\n",
+		fwprintf(Output_File,
+			L"%s consists for %d %% of %s material\n",
 			m->ma_fname0, mp, m->ma_fname1
 		);
 		fflush(Output_File);

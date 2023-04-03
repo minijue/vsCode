@@ -6,6 +6,7 @@
 #include	<stdio.h>
 //#include	<stdlib.h>
 #include	<string.h>
+#include <locale.h>
 
 #include	"system.par"
 #include	"settings.par"
@@ -137,6 +138,8 @@ main(int argc, const char *argv[]) {
 	Threshold_Percentage = 1;
 
 	/* Options, default string values given above */
+	
+	setlocale(LC_CTYPE, "");
 
 	/* override from language file */
 	Init_Language();

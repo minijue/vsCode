@@ -67,7 +67,7 @@
 #define	_UNICODE
 
 #include	<tchar.h>
-
+#include <wchar.h>
 #include	<sys/stat.h>
 #include	<dirent.h>
 

@@ -19,7 +19,8 @@ fopen_regular_file(const char *fname) {
 	struct stat buf;
 
 	if (Stat(str2Fname(fname), &buf) != 0) return 0;
-	if ((buf.st_mode & S_IFMT) != S_IFREG) return 0;
+	if ((buf.st_mode & S_IFMT) != S_IFREG)
+		return 0;
 	return Fopen(str2Fname(fname), "r");
 }
 

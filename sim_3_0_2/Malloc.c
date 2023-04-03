@@ -57,7 +57,7 @@ struct alloc {	/* corresponds to an allocated block */
 
 #define	HASH_SIZE	16381		/* largest prime under 2^16 */
 static struct alloc *alloc_bucket[HASH_SIZE];
-#define	alloc_bucket_for(x)	alloc_bucket[((unsigned int)(x)%HASH_SIZE)]
+#define	alloc_bucket_for(x)	alloc_bucket[((unsigned long)(x)%HASH_SIZE)]
 
 							/* MEMORY STATUS */
 

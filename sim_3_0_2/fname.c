@@ -244,69 +244,21 @@ CodePoint_to_UTF16_sequence(UTF32 cp) {
 const char *	/* transient */
 Fname2str(const Fchar *fn) {
 	/* converts a Fchar (wchar_t) string to an UTF-8 string */
-	static UTF8 res[1024];
-	UTF8 *rp = &res[0];
-	int i = 0;
-
-	if (fn == NULL) return NULL;
-
-	while (fn[i]) {
-		UTF32 cp;
-		const UTF8 *p;
-
-		/* get Codepoint from one or two Fchar chars */
-		i += UTF16_sequence_to_CodePoint(&fn[i], &cp);
-		if (cp == BAD_CodePoint) goto error;
-
-		/* convert code point to UTF8 sequence */
-		p = CodePoint_to_UTF8_sequence(cp);
-		if (p == NULL) goto error;
-
-		/* append it to the output */
-		while (*p) {
-			*rp++ = *p++;
-		}
-		continue;
-	error:
-		*rp++ = '?';
-	}
-
-	*rp = '\0';
-	return (const char *)res;
+	static char dest[512] = {0};
+	size_t converted = 0;
+	size_t len = strlen(fn) + 1;
+	wcstombs_s(&converted, dest, len, fn, _TRUNCATE);
+	return dest;
 }
 
 const Fchar *	/* transient */
 str2Fname(const char *s) {
 	/* converts a possibly UTF-8 string to an Fchar (wchar_t) string */
-	static Fchar res[512];
-	Fchar *rp = &res[0];
-	int i = 0;
-
-	if (s == NULL) return NULL;
-
-	while (s[i]) {
-		UTF32 cp;
-		const Fchar *p;
-
-		/* get Codepoint from one to four UTF-8s */
-		i += UTF8_sequence_to_CodePoint((const UTF8 *)&s[i], &cp);
-		if (cp == BAD_CodePoint) goto error;
-
-		/* convert code point to UTF-16 sequence */
-		p = CodePoint_to_UTF16_sequence(cp);
-		if (p == NULL) goto error;
-
-		/* append it to the output */
-		while (*p) {
-			*rp++ = *p++;
-		}
-		continue;
-	error:
-		*rp++ = '?';
-	}
-
-	*rp = '\0';
-	return res;
+	static Fchar dest[512] = {0};
+	size_t converted = 0;
+	size_t len = strlen(s) + 1;
+	mbstowcs_s(&converted, dest, len, s, _TRUNCATE);
+	return dest;
 }
 
 						/* OTHER UTF-16 ROUTINES */

@@ -79,7 +79,7 @@ pass2_txt(struct text *txt) {
 
 	/* Open_Text() initializes lex_nl_cnt and lex_tk_cnt */
 	if (!Open_Text(txt)) {
-		fprintf(stderr, ">>>> File %s disappeared <<<<\n",
+		fwprintf(stderr, L">>>> File %s disappeared <<<<\n",
 			txt->tx_fname
 		);
 		return;
