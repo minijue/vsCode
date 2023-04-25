@@ -2,11 +2,14 @@ package com.wangjue.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.wangjue.entity.BeerExpert;
 
 public class BeerSelect extends HttpServlet {
 
@@ -16,7 +19,11 @@ public class BeerSelect extends HttpServlet {
     PrintWriter out = resp.getWriter();
     out.println("Beer Selection Advice<br>");
     String c = req.getParameter("color");
-    out.println("<br>Got beer color " + c);
-  }
 
+    BeerExpert be = new BeerExpert();
+    List<String> result = be.getBrands(c);
+    for (String s : result) {
+      out.println("<br>try: <span style=\"color: " + c + ";\">" + s + "</span>");
+    }
+  }
 }

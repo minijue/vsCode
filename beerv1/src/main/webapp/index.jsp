@@ -7,10 +7,10 @@
 			<p>
 				Color:&nbsp;
 				<select name="color" size="1">
-					<option value="light">&nbsp;light&nbsp;</option>
-					<option value="amber">&nbsp;amber&nbsp;</option>
+					<option value="lightpink">&nbsp;lightpink&nbsp;</option>
+					<option value="antiquewhite">&nbsp;antiquewhite&nbsp;</option>
 					<option value="brown">&nbsp;brown&nbsp;</option>
-					<option value="dark">&nbsp;dark&nbsp;</option>
+					<option value="darkblue">&nbsp;darkblue&nbsp;</option>
 				</select>
 			</p>
 			<input type="submit" />
