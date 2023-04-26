@@ -11,6 +11,26 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Beer</servlet-name>
-    <url-pattern>/SelectBeer.do</url-pattern>
+    <url-pattern>/SelectBeer.html</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DogBreed</servlet-name>
+    <servlet-class>com.wangjue.controller.ListenerTester</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DogBreed</servlet-name>
+    <url-pattern>/GetDog.html</url-pattern>
+  </servlet-mapping>
+
+  <context-param>
+    <param-name>breed</param-name>
+    <param-value>Great Dane</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>
+      com.wangjue.listener.MyServletContextListener
+    </listener-class>
+  </listener>
 </web-app>

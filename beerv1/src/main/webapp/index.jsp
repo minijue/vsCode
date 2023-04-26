@@ -2,7 +2,7 @@
 <html>
 	<body>
 		<h1 style="text-align: center">Beer Selection Page</h1>
-		<form method="POST" action="SelectBeer.do">
+		<form method="POST" action="SelectBeer.html">
 			<p>Select beer characteristics</p>
 			<p>
 				Color:&nbsp;
@@ -15,5 +15,12 @@
 			</p>
 			<input type="submit" />
 		</form>
+		<br>
+		<p>
+		<form method="POST" action="GetDog.html">
+			<p>Get a Dog</p>
+			<input type="submit"/>
+		</form>
+		</p>
 	</body>
 </html>
