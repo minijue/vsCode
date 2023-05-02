@@ -23,6 +23,24 @@
     <url-pattern>/GetDog.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>CookieTest</servlet-name>
+    <servlet-class>com.wangjue.controller.CookieTest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CookieTest</servlet-name>
+    <url-pattern>/CookieTest.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CheckCookie</servlet-name>
+    <servlet-class>com.wangjue.controller.CheckCookie</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckCookie</servlet-name>
+    <url-pattern>/checkcookie.do</url-pattern>
+  </servlet-mapping>
+
   <context-param>
     <param-name>breed</param-name>
     <param-value>Great Dane</param-value>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
 <html>
 	<body>
 		<h1 style="text-align: center">Beer Selection Page</h1>
@@ -21,6 +22,15 @@
 			<p>Get a Dog</p>
 			<input type="submit"/>
 		</form>
+		</p>
+		<p>
+			<form method="POST" action="CookieTest.html">
+				<span>User: </span><input type="text" name="username"/>
+				<input type="submit"/>
+			</form>
+		</p>
+		<p>
+			<a href="checkcookie.do">Click here</a>
 		</p>
 	</body>
 </html>
