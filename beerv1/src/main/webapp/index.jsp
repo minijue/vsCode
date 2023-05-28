@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<%@ page import="com.wangjue.*" %>
 <html>
+	<head>
+		<% application.setAttribute("mail", config.getInitParameter("email")); %>
+	</head>
 	<body>
 		<h1 style="text-align: center">Beer Selection Page</h1>
+		<%! int count=0; %>
+		<p>My E-mail: 
+		<%--= application.getAttribute("mail") --%>
+		<%--= pageContext.getAttribute("mail", PageContext.APPLICATION_SCOPE) --%>
+		<%= pageContext.findAttribute("mail") %></p>
+		<p>The page count is: <%= ++count %></p>
 		<form method="POST" action="SelectBeer.html">
 			<p>Select beer characteristics</p>
 			<p>

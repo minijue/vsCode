@@ -51,4 +51,17 @@
       com.wangjue.listener.MyServletContextListener
     </listener-class>
   </listener>
+
+  <servlet>
+    <servlet-name>index</servlet-name>
+    <jsp-file>/index.jsp</jsp-file>
+    <init-param>
+      <param-name>email</param-name>
+      <param-value>jue952@126.com</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/index.html</url-pattern>
+  </servlet-mapping>
 </web-app>
