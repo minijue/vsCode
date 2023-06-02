@@ -2,6 +2,11 @@ package com.wangjue.entity;
 
 public class Dog {
   private String breed;
+  /**
+   * 
+   */
+  public Dog() {
+  }
 
   /**
    * @return the breed

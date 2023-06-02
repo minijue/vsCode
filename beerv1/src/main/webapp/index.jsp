@@ -39,8 +39,16 @@
 				<input type="submit"/>
 			</form>
 		</p>
-		<p>
+		<p>	
 			<a href="checkcookie.do">Click here</a>
 		</p>
+		<p>
+			<form action="dog.jsp">
+				<p>name: <input type="text" name="name" value="zhang3"></p>
+				<p>ID#: &nbsp;&nbsp;&nbsp;<input type="text" name="userID" value="li4"></p>
+				<input type="submit">
+			</form>
+		</p>		
+		
 	</body>
 </html>

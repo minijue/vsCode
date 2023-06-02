@@ -1,8 +1,8 @@
 package com.wangjue.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +14,10 @@ public class ListenerTester extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    resp.setContentType("text/html");
-    PrintWriter out = resp.getWriter();
-
-    out.println("<h1>Test context attributes set by listener</h1>");
     Dog dog = (Dog) getServletContext().getAttribute("dog");
-    out.println("Dog's breed is: " + dog.getBreed());
+    req.setAttribute("dog", dog);
+
+    RequestDispatcher view = req.getRequestDispatcher("dog.jsp");
+    view.forward(req, resp);
   }
 }

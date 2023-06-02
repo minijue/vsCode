@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangjue.entity.Person;
+
 public class CheckCookie extends HttpServlet {
 
   @Override
@@ -26,6 +28,9 @@ public class CheckCookie extends HttpServlet {
         }
       }
     }
+
+    Person person = (Person)req.getAttribute("person");
+    out.println("Hello " + person.getName());
   }
 
 }
