@@ -46,9 +46,12 @@
 			<form action="dog.jsp">
 				<p>name: <input type="text" name="name" value="zhang3"></p>
 				<p>ID#: &nbsp;&nbsp;&nbsp;<input type="text" name="userID" value="li4"></p>
+				<p>First Food: <input type="text" name="food" value="food one"></p>
+				<p>Second Food: <input type="text" name="food" value="food two"></p>
 				<input type="submit">
 			</form>
-		</p>		
+		</p>
+		<p>context-param in web.xml is ${initParam.breed}</p>		
 		
 	</body>
 </html>

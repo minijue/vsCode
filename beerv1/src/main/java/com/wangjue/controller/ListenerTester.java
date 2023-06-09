@@ -16,6 +16,7 @@ public class ListenerTester extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     Dog dog = (Dog) getServletContext().getAttribute("dog");
     req.setAttribute("dog", dog);
+    req.setAttribute("b", "breed");
 
     RequestDispatcher view = req.getRequestDispatcher("dog.jsp");
     view.forward(req, resp);
